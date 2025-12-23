@@ -26,47 +26,22 @@ import {
   SearchFilter,
 } from "../SparnaturalQueryIfc-v13";
 
-/**
- * Translates ObjectCriteria values from v13 format to v1 LabelledCriteria array.
- *
- * @param variableName - The name of the variable to extract from ValuePatternRow
- * @param obj - The ObjectCriteria containing the values to translate
- * @returns An array of LabelledCriteria with RdfTermCriteria for widget rendering
- */
-export function translateObjectValues(
-  variableName: string,
-  obj: ObjectCriteria
-): LabelledCriteria<Criteria>[] {
-  const values = obj.values;
-  if (!values || values.length === 0) return [];
+/* ===============================================================
+   Generic helpers
+   =============================================================== */
 
-  const first = values[0];
+type Mapper<I, O> = (input: I) => O;
 
-  // Case A — direct GraphTerm[] (detected by presence of 'subType' property)
-  if (typeof first === "object" && first !== null && "subType" in first) {
-    return (values as unknown as GraphTerm[])
-      .map(translateGraphTerm)
-      .filter((v): v is LabelledCriteria<RdfTermCriteria> => v !== null);
-  }
+/* ===============================================================
+   GraphTerm → v1 RdfTermCriteria
+   =============================================================== */
 
-  // Case B — VALUES rows (Record<string, GraphTerm>)
-  return translateValueRows(variableName, values as ValuePatternRow[]);
-}
-
-/**
- * Converts a single GraphTerm (IRI or Literal) to a LabelledCriteria<RdfTermCriteria>.
- *
- * @param term - The GraphTerm to convert (TermIri, TermLabelledIri, or TermLiteral)
- * @returns A LabelledCriteria wrapping the RdfTermCriteria, or null if subType is unknown
- */
-export function translateGraphTerm(
+export function graphTermToLabelledCriteria(
   term: GraphTerm
 ): LabelledCriteria<RdfTermCriteria> | null {
-  // Handle named nodes (IRIs)
   if (term.subType === "namedNode") {
     const iri = term as TermIri | TermLabelledIri;
     return {
-      // Use the label if available (TermLabelledIri), otherwise use the IRI value
       label: "label" in iri ? iri.label : iri.value,
       criteria: {
         rdfTerm: {
@@ -77,7 +52,6 @@ export function translateGraphTerm(
     };
   }
 
-  // Handle literals (strings with optional language tag or datatype)
   if (term.subType === "literal") {
     const lit = term as TermLiteral;
 
@@ -86,10 +60,8 @@ export function translateGraphTerm(
       value: lit.value,
     };
 
-    // Add language tag if langOrIri is a string (e.g., "en", "fr")
     const lo = lit.langOrIri;
     if (typeof lo === "string") rdfTerm["xml:lang"] = lo;
-    // Add datatype if langOrIri is an IRI object (e.g., xsd:date)
     if (lo && typeof lo === "object") {
       rdfTerm.datatype = (lo as TermIriFull).value;
     }
@@ -103,98 +75,194 @@ export function translateGraphTerm(
   return null;
 }
 
-/**
- * Translates an array of ValuePatternRow (VALUES clause rows) to LabelledCriteria.
- *
- * Each row is a Record mapping variable names to GraphTerm values.
- * This function extracts the term for the specified variable from each row.
- *
- * @param variableName - The variable name to look up in each row
- * @param rows - Array of ValuePatternRow records
- * @returns Array of LabelledCriteria for all successfully converted terms
- */
+/* ===============================================================
+   VALUES (v13) → LabelledCriteria (v1)
+   =============================================================== */
+
+export function translateObjectValues(
+  variableName: string,
+  obj: ObjectCriteria
+): LabelledCriteria<Criteria>[] {
+  const values = obj.values;
+  if (!values || values.length === 0) return [];
+
+  const first = values[0];
+
+  // Case A — GraphTerm[]
+  if (typeof first === "object" && first !== null && "subType" in first) {
+    return (values as unknown as GraphTerm[])
+      .map(graphTermToLabelledCriteria)
+      .filter(Boolean) as LabelledCriteria<Criteria>[];
+  }
+
+  // Case B — VALUES rows
+  return translateValueRows(variableName, values as ValuePatternRow[]);
+}
+
 export function translateValueRows(
   variableName: string,
   rows: ValuePatternRow[]
 ): LabelledCriteria<Criteria>[] {
-  const res: LabelledCriteria<Criteria>[] = [];
-
-  rows.forEach((row) => {
-    // Extract the term for this variable from the row
+  return rows.flatMap((row) => {
     const term = row[variableName];
-    if (!term) return;
+    if (!term) return [];
 
-    const converted = translateGraphTerm(term);
-    if (converted) res.push(converted);
+    const converted = graphTermToLabelledCriteria(term);
+    return converted ? [converted] : [];
   });
-
-  return res;
 }
 
-/**
- * Translates an array of LabelledFilter (v13 format) to LabelledCriteria (v1 format).
- *
- * @param filters - Array of LabelledFilter from the v13 query format
- * @returns Array of LabelledCriteria for widget rendering
- * @throws Error if an unknown filter type is encountered
- */
+/* ===============================================================
+   Filters v13 → Criteria v1 (GENERIC)
+   =============================================================== */
+
+const filterToCriteriaMap: Record<
+  LabelledFilter["filter"]["type"],
+  Mapper<LabelledFilter, Criteria>
+> = {
+  dateFilter: (lf) => {
+    const f = lf.filter as DateFilter;
+    return { start: f.start, stop: f.stop };
+  },
+
+  numberFilter: (lf) => {
+    const f = lf.filter as NumberFilter;
+    return { min: f.min, max: f.max };
+  },
+
+  searchFilter: (lf) => {
+    const f = lf.filter as SearchFilter;
+    return { search: f.search };
+  },
+
+  mapFilter: (lf) => {
+    const f = lf.filter as MapFilter;
+    return {
+      coordType: f.coordType,
+      coordinates: f.coordinates,
+    };
+  },
+};
+
 export function translateFilters(
   filters: LabelledFilter[]
 ): LabelledCriteria<Criteria>[] {
   return filters.map((lf) => {
-    const f = lf.filter;
-
-    // Date filter: start and/or stop date in ISO format
-    if (f.type === "dateFilter") {
-      const df = f as DateFilter;
-      const criteria: DateCriteria = {
-        start: df.start !== undefined ? String(df.start) : undefined,
-        stop: df.stop !== undefined ? String(df.stop) : undefined,
-      };
-      return { label: lf.label, criteria };
+    const mapper = filterToCriteriaMap[lf.filter.type];
+    if (!mapper) {
+      throw new Error(`Unknown filter type: ${lf.filter.type}`);
     }
-
-    // Number filter: min and/or max numeric values
-    if (f.type === "numberFilter") {
-      const nf = f as NumberFilter;
-      const criteria: NumberCriteria = {
-        min: nf.min,
-        max: nf.max,
-      };
-      return { label: lf.label, criteria };
-    }
-
-    // Search filter: fulltext or regex search string
-    if (f.type === "searchFilter") {
-      const sf = f as SearchFilter;
-      const criteria: SearchCriteria = {
-        search: sf.search,
-      };
-      return { label: lf.label, criteria };
-    }
-
-    // Map filter: geographic polygon or rectangle coordinates
-    if (f.type === "mapFilter") {
-      const mf = f as MapFilter;
-      const criteria: MapCriteria = {
-        coordType: mf.coordType,
-        coordinates: mf.coordinates,
-      };
-      return { label: lf.label, criteria };
-    }
-
-    throw new Error(
-      `Unknown filter type: ${(f as LabelledFilter["filter"]).type}`
-    );
+    return {
+      label: lf.label,
+      criteria: mapper(lf),
+    };
   });
 }
 
-/**
- * Converts a PatternBind (v13 aggregate expression) to a VariableExpression (v1 format).
- *
- * @param bind - The PatternBind containing the aggregate expression
- * @returns A VariableExpression compatible with the v1 query format
- */
+/* ===============================================================
+   Criteria v1 → Filters v13 (GENERIC)
+   =============================================================== */
+
+const criteriaToFilterRegistry: Array<{
+  match: (c: Criteria) => boolean;
+  build: (label: string, c: Criteria) => LabelledFilter;
+}> = [
+  {
+    match: (c): c is DateCriteria => "start" in c || "stop" in c,
+    build: (label, c) => ({
+      type: "labelledFilter",
+      label,
+      filter: {
+        type: "dateFilter",
+        start: (c as DateCriteria).start,
+        stop: (c as DateCriteria).stop,
+      },
+    }),
+  },
+  {
+    match: (c): c is NumberCriteria => "min" in c || "max" in c,
+    build: (label, c) => ({
+      type: "labelledFilter",
+      label,
+      filter: {
+        type: "numberFilter",
+        min: (c as NumberCriteria).min,
+        max: (c as NumberCriteria).max,
+      },
+    }),
+  },
+  {
+    match: (c): c is SearchCriteria => "search" in c,
+    build: (label, c) => {
+      const sc = c as SearchCriteria;
+      return {
+        type: "labelledFilter",
+        label,
+        filter: {
+          type: "searchFilter",
+          search: sc.search,
+        },
+      };
+    },
+  },
+  {
+    match: (c): c is MapCriteria => "coordinates" in c,
+    build: (label, c) => {
+      const mc = c as MapCriteria;
+
+      return {
+        type: "labelledFilter",
+        label,
+        filter: {
+          type: "mapFilter",
+          coordType: mc.coordType,
+          coordinates: mc.coordinates,
+        },
+      };
+    },
+  },
+];
+
+export function labelledCriteriaToFilters(
+  vals: LabelledCriteria<Criteria>[]
+): LabelledFilter[] {
+  return vals.flatMap((v) => {
+    const entry = criteriaToFilterRegistry.find((r) => r.match(v.criteria));
+    return entry ? [entry.build(v.label, v.criteria)] : [];
+  });
+}
+
+/* ===============================================================
+   Criteria v1 → VALUES v13
+   =============================================================== */
+
+export function labelledCriteriaToValues(
+  variable: string,
+  vals: LabelledCriteria<Criteria>[]
+): ValuePatternRow[] {
+  return vals
+    .filter((v) => "rdfTerm" in v.criteria)
+    .map((v) => {
+      const t = (v.criteria as RdfTermCriteria).rdfTerm;
+
+      return {
+        [variable]:
+          t.type === "uri"
+            ? { type: "term", subType: "namedNode", value: t.value }
+            : {
+                type: "term",
+                subType: "literal",
+                value: t.value,
+                langOrIri: t["xml:lang"] ?? undefined,
+              },
+      };
+    });
+}
+
+/* ===============================================================
+   PatternBind (v13) → VariableExpression (v1)
+   =============================================================== */
+
 export function patternBindToVariableExpression(
   bind: PatternBind
 ): VariableExpression {

@@ -2,6 +2,7 @@ import { getSettings } from "../../../sparnatural/settings/defaultSettings";
 
 import ActionStore from "../ActionStore";
 import { SparnaturalJsonGenerator } from "../../generators/json/SparnaturalJsonGenerator";
+import { SparnaturalJsonGeneratorV13 } from "../../generators/json/SparnaturalJson-v13Generator";
 import { Generator } from "sparqljs";
 import { SparnaturalElement } from "../../../SparnaturalElement";
 import { SparnaturalQueryIfc } from "../../SparnaturalQueryIfc";
@@ -35,6 +36,24 @@ export class QueryGenerator {
       settings.limit
     );
 
+    // -------------------------------------
+    // Generate v13 query
+
+    let qryGenV13 = new SparnaturalJsonGeneratorV13(
+      this.actionStore.sparnatural
+    );
+
+    var jsonQueryV13 = qryGenV13.generateQuery(
+      this.actionStore.sparnatural.variableSection.listVariables(),
+      this.actionStore.sparnatural.variableSection.getOrder(),
+      settings.addDistinct,
+      settings.limit
+    );
+
+    console.log("Generated JSON v13 Query:", jsonQueryV13);
+
+    // -------------------------------------
+
     if (settings.debug) {
       console.log("*** Sparnatural JSON Query ***");
       console.dir(jsonQuery);
@@ -45,8 +64,7 @@ export class QueryGenerator {
       settings
     );
 
-    let selectQueryFromJson =
-        sparqlFromJsonGenerator.generateQuery(jsonQuery);
+    let selectQueryFromJson = sparqlFromJsonGenerator.generateQuery(jsonQuery);
 
     var generator = new Generator();
     var queryString = generator.stringify(selectQueryFromJson);
@@ -60,14 +78,13 @@ export class QueryGenerator {
     let payload: QueryUpdatedPayload = {
       queryString: queryString,
       queryJson: jsonQuery,
-      querySparqlJs: selectQueryFromJson
+      querySparqlJs: selectQueryFromJson,
     };
     this.fireQueryUpdatedEvent(payload);
 
     // re-enable submit button if it was disabled
     // note that the submitSection may not be present in case submitButton = false in the attributes
     this.actionStore.sparnatural.submitSection?.enableSubmit();
-
   }
 
   fireQueryUpdatedEvent(payload: QueryUpdatedPayload) {

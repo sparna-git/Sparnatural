@@ -1,11 +1,10 @@
 // See the original Traqula SPARQL rules at https://github.com/comunica/traqula/blob/ac278a201bf487889b063168c056b5495b9ed6b5/packages/rules-sparql-1-1/lib/Sparql11types.ts
 
-
 /***** Main Sparnatural Query Structure *****/
 
 export type SparnaturalQuery = {
-  type: 'query';
-  subType: 'select';
+  type: "query";
+  subType: "select";
   // When we will implement prefixes and base URIs, we will add this:
   // context: ContextDefinition[];
   // variables: (TermVariable | PatternBind)[] | [Wildcard];
@@ -16,10 +15,10 @@ export type SparnaturalQuery = {
   where: PatternBgpSameSubject;
 };
 
-export type PatternBase = { type: 'pattern'; subType: string };
+export type PatternBase = { type: "pattern"; subType: string };
 
 export type PatternBind = PatternBase & {
-  subType: 'bind';
+  subType: "bind";
   // expression: Expression;
   // right now we limit to aggregate expressions only
   expression: ExpressionAggregate;
@@ -28,47 +27,40 @@ export type PatternBind = PatternBase & {
 
 /***** End Main Sparnatural Query Structure *****/
 
-
-
-
 /***** BGP-same-subject extension of Sparnatural *****/
 
 // Extension : BGP with same subject
 export type PatternBgpSameSubject = PatternBase & {
-  subType: 'bgpSameSubject';
+  subType: "bgpSameSubject";
   subject: TermTypedVariable;
   predicateObjectPairs: PredicateObjectPair[];
 };
 
 // Extension : predicate-object pair in a BGP with same subject
 export type PredicateObjectPair = {
-  type: 'predicateObjectPair';
+  type: "predicateObjectPair";
   // mark a line as optional or notExists
-  subType?: 'optional' | 'notExists';
+  subType?: "optional" | "notExists";
   predicate: TermIri;
   object: ObjectCriteria;
 };
 
 // Extension : object criteria in a predicate-object pair
 export type ObjectCriteria = {
-  type: 'objectCriteria';
+  type: "objectCriteria";
   variable: TermTypedVariable;
   // the name of the variable is repeated at each row
-  values?:ValuePatternRow[];
+  values?: ValuePatternRow[];
   filters?: LabelledFilter[];
   predicateObjectPairs?: PredicateObjectPair[];
 };
 
 // Extension : a filter with a label
 export type LabelledFilter = {
-  type: 'labelledFilter';
+  type: "labelledFilter";
   label: string;
-  filter:  
-    DateFilter | 
-    MapFilter | 
-    NumberFilter | 
-    SearchFilter;
-}
+  filter: DateFilter | MapFilter | NumberFilter | SearchFilter;
+};
 
 // Extension : a date filter
 export interface DateFilter {
@@ -79,12 +71,12 @@ export interface DateFilter {
   // undefined if not set
   start?: string | undefined;
   stop?: string | undefined;
-};
+}
 
 // Extension : a map filter
 export interface MapFilter {
   type: "mapFilter";
-  coordType: 'Polygon' | 'Rectangle';
+  coordType: "Polygon" | "Rectangle";
   coordinates: LatLng[][];
 }
 
@@ -113,7 +105,6 @@ export interface SearchFilter {
 
 /***** End BGP-same-subject extension of Sparnatural *****/
 
-
 /***** Context definition, for defining prefixes and base URIs *****/
 
 /* When we will implement prefixes and base URIs, we will add this:
@@ -133,10 +124,12 @@ export type ContextDefinition = ContextDefinitionPrefix | ContextDefinitionBase;
 
 /***** End Context definition *****/
 
-
 /***** Solution modifiers (order and limit/offset) *****/
 
-export type SolutionModifierBase = Node & { type: 'solutionModifier'; subType: string };
+export type SolutionModifierBase = AstNode & {
+  type: "solutionModifier";
+  subType: string;
+};
 export type Ordering = {
   descending: boolean;
   // expression: Expression;
@@ -144,11 +137,13 @@ export type Ordering = {
   expression: TermVariable;
 };
 export type SolutionModifierOrder = SolutionModifierBase & {
-  subType: 'order';
+  subType: "order";
   orderDefs: Ordering[];
 };
-export type SolutionModifierLimitOffset = SolutionModifierBase
-  & { subType: 'limitOffset'; limit: number };
+export type SolutionModifierLimitOffset = SolutionModifierBase & {
+  subType: "limitOffset";
+  limit: number;
+};
 export type SolutionModifier =
   | SolutionModifierOrder
   | SolutionModifierLimitOffset;
@@ -158,7 +153,6 @@ export type SolutionModifiers = {
 };
 
 /***** End Solution modifiers *****/
-
 
 /***** Values clause *****/
 
@@ -183,23 +177,24 @@ export type SolutionModifiers = {
 ]
  */
 
-export type ValuePatternRow = Record<string, TermIri | TermLiteral | TermLabelledIri | undefined>;
+export type ValuePatternRow = Record<
+  string,
+  TermIri | TermLiteral | TermLabelledIri | undefined
+>;
 export type PatternValues = PatternBase & {
-  subType: 'values';
+  subType: "values";
   variables: TermVariable[];
   values: ValuePatternRow[];
 };
 
 /***** End Values clause *****/
 
-
 /***** Generic Expression structure (function calls, operations, or aggregates) *****/
 
-export type ExpressionBase = Node & { type: 'expression'; subType: string };
-
+export type ExpressionBase = AstNode & { type: "expression"; subType: string };
 
 type ExpressionAggregateBase = ExpressionBase & {
-  subType: 'aggregate';
+  subType: "aggregate";
   distinct: boolean;
   expression: [TermVariable];
 };
@@ -215,7 +210,6 @@ export type ExpressionAggregateSeparator = ExpressionAggregateBase & {
 export type ExpressionAggregate =
   | ExpressionAggregateDefault
   | ExpressionAggregateSeparator;
-
 
 /*
 
@@ -263,25 +257,27 @@ export type Expression =
 
 /***** End Generic Expression structure *****/
 
-
 /***** Base RDF terms : literals with lang/datatypes, and IRIs, and variables *****/
 
-export type TermBase = { type: 'term'; subType: string };
+export type TermBase = { type: "term"; subType: string };
 export type TermLiteralBase = TermBase & {
-  subType: 'literal';
+  subType: "literal";
   value: string;
 };
 export type TermLiteralStr = TermLiteralBase & { langOrIri: undefined };
 export type TermLiteralLangStr = TermLiteralBase & { langOrIri: string };
 export type TermLiteralTyped = TermLiteralBase & { langOrIri: TermIri };
-export type TermLiteral = TermLiteralStr | TermLiteralLangStr | TermLiteralTyped;
+export type TermLiteral =
+  | TermLiteralStr
+  | TermLiteralLangStr
+  | TermLiteralTyped;
 
 export type TermVariable = TermBase & {
-  subType: 'variable';
+  subType: "variable";
   value: string;
 };
 
-export type TermIriBase = TermBase & { subType: 'namedNode' };
+export type TermIriBase = TermBase & { subType: "namedNode" };
 export type TermIriFull = TermIriBase & { value: string };
 export type TermIri = TermIriFull;
 
@@ -296,22 +292,18 @@ export type TermIri = TermIriFull;
 **/
 
 // Extension : Specific labelled IRI
-export type TermLabelledIri = TermIriFull & { label: string; };
+export type TermLabelledIri = TermIriFull & { label: string };
 
 // Extension Specific typed variables
-export type TermTypedVariable = TermVariable & { rdfType: string; }
+export type TermTypedVariable = TermVariable & { rdfType: string };
 
 export type GraphTerm = TermIri | TermLiteral | TermLabelledIri;
 export type Term = GraphTerm | TermVariable | TermTypedVariable;
 
 /***** End RDF terms *****/
 
-
-
-
-
-
-
-
-
-
+// AstNode instead of Node to avoid circular dependencies
+export type AstNode = {
+  type: string;
+  subType: string;
+};
