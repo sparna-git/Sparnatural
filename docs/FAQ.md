@@ -73,7 +73,7 @@ See [issue 3 in Sparnatural Wikidata Prototype](https://github.com/lubianat/spar
 
 #### The default datasources use `langMatches()` function and returns dupicate languages, can this be changed to `lang()` instead ?
 
-You need to create a custom datasource with a custom SPARQL query to do that. See https://docs.sparnatural.eu/OWL-based-configuration-datasources#your-own-sparql-query-lists--autocomplete and see an example at https://github.com/sparna-git/sparnatural.eu/blob/main/demos/demo-smt-cim10/sparnatural-config.ttl#L117
+You need to create a custom datasource with a custom SPARQL query to do that. See https://docs.sparnatural.eu/datasources-configuration#your-own-sparql-query-lists--autocomplete and see an example at https://github.com/sparna-git/sparnatural.eu/blob/main/demos/demo-smt-cim10/sparnatural-config.ttl#L117
 
 
 Originally asked in [issue 327](https://github.com/sparna-git/Sparnatural/issues/327).

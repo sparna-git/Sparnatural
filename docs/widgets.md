@@ -28,7 +28,7 @@ List widget is implemented using the [select2 JQuery component](https://select2.
 
 List widgets can work both with URIs + labels, or with literal values. It can even mix URIs and literals in the same list.
 
-The sort order of the elements in the list, as well as their precise labels, depends on the underlying SPARQL query that populates the list. Sparnatural provides [default datasources](http://docs.sparnatural.eu/OWL-based-configuration-datasources.html#preconfigured-datasources-for-a-listproperty) that can be ordered alphabetically, alphabetically showing the number of occurrences in parenthesis, or ordered by decreasing number of occurrences.
+The sort order of the elements in the list, as well as their precise labels, depends on the underlying SPARQL query that populates the list. Sparnatural provides [default datasources](http://docs.sparnatural.eu/datasources-configuration.html#preconfigured-datasources-for-a-listproperty) that can be ordered alphabetically, alphabetically showing the number of occurrences in parenthesis, or ordered by decreasing number of occurrences.
 
 List widgets supports `optgroup` to group values into sections. The grouping is also provided by the SPARQL query, and is used in particular when [querying multiple endpoints](Querying-multiple-endpoints).
 
@@ -42,7 +42,7 @@ By default, list widgets are used if the statistics are available to the configu
 
 ### Datasources
 
-The list of URI as well as their labels needs to be [configured using a SPARQL datasource](http://docs.sparnatural.eu/OWL-based-configuration-datasources.html#preconfigured-datasources-for-a-listproperty).
+The list of URI as well as their labels needs to be [configured using a SPARQL datasource](http://docs.sparnatural.eu/datasources-configuration.html#preconfigured-datasources-for-a-listproperty).
 
 The default datasource used is [`datasources:list_URI_or_literal_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_URI_or_literal_count), itself relying on the SPARQL query [`datasources:query_list_URI_or_literal_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_URI_or_literal_count)
 
@@ -104,7 +104,7 @@ By default, autocomplete widgets are used if none of the other widget matched.
 
 ### Datasources
 
-The list of proposals displayed to the user needs to be [configured using a SPARQL datasource](http://docs.sparnatural.eu/OWL-based-configuration-datasources.html#preconfigured-datasources-for-an-autocompleteproperty).
+The list of proposals displayed to the user needs to be [configured using a SPARQL datasource](http://docs.sparnatural.eu/datasources-configuration.html#preconfigured-datasources-for-an-autocompleteproperty).
 The default datasource used is [`datasources:search_URI_contains`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_URI_contains), itself relying on the SPARQL query [`datasources:query_search_URI_contains`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_URI_contains). If the range is a literal, the default datasource is [`datasources:search_literal_contains`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_literal_contains), itself relying on the SPARQL query [`datasources:query_search_literal_contains`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_literal_contains)
 
 ### SPARQL clause
