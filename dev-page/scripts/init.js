@@ -32,9 +32,7 @@ sparnatural.addEventListener("init", (event) => {
 });
 
 sparnatural.addEventListener("queryUpdated", (event) => {
-  var queryString = sparnatural.expandSparql(
-    event.detail.queryString
-  );
+  var queryString = sparnatural.expandSparql(event.detail.queryString);
 
   yasqe.setValue(queryString);
 
@@ -53,9 +51,7 @@ sparnatural.addEventListener("queryUpdated", (event) => {
 
 sparnatural.addEventListener("queryUpdated", (event) => {
   var queryString = sparnatural.expandSparql(event.detail.queryString);
-  var queryString = sparnatural.expandSparql(
-    event.detail.queryString
-  );
+  var queryString = sparnatural.expandSparql(event.detail.queryString);
   // Ajouter une ligne au tableau
   const tableBody = document.getElementById("sparql-comparison-table");
   const row = document.createElement("tr");
@@ -66,8 +62,7 @@ sparnatural.addEventListener("queryUpdated", (event) => {
   newCell.textContent = queryString;
   row.appendChild(newCell);
   const statusCell = document.createElement("td");
-  statusCell.textContent =
-    queryString === queryString ? "OK" : "Pas OK";
+  statusCell.textContent = queryString === queryString ? "OK" : "Pas OK";
   statusCell.classList.add(
     queryString === queryString ? "table-success" : "table-danger"
   );
@@ -77,6 +72,10 @@ sparnatural.addEventListener("queryUpdated", (event) => {
 
   document.getElementById("query-json").value = JSON.stringify(
     event.detail.queryJson
+  );
+
+  document.getElementById("new-query-json").value = JSON.stringify(
+    event.detail.newQueryJson
   );
 
   // Notifier les plugins Yasr
@@ -133,6 +132,16 @@ document.getElementById("switch-language").onclick = function () {
 document.getElementById("export").onclick = function () {
   var jsonString = JSON.stringify(
     JSON.parse(document.getElementById("query-json").value),
+    null,
+    2
+  );
+  $("#export-json").val(jsonString);
+  $("#exportModal").modal("show");
+};
+
+document.getElementById("newExport").onclick = function () {
+  var jsonString = JSON.stringify(
+    JSON.parse(document.getElementById("new-query-json").value),
     null,
     2
   );

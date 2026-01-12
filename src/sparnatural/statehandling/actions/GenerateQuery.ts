@@ -6,6 +6,7 @@ import { SparnaturalJsonGeneratorV13 } from "../../generators/json/SparnaturalJs
 import { Generator } from "sparqljs";
 import { SparnaturalElement } from "../../../SparnaturalElement";
 import { SparnaturalQueryIfc } from "../../SparnaturalQueryIfc";
+import { SparnaturalQuery } from "../../SparnaturalQueryIfc-v13";
 import { JsonSparqlTranslator } from "../../generators/sparql/fromjson/JsonSparqlTranslator";
 
 export class QueryGenerator {
@@ -78,6 +79,7 @@ export class QueryGenerator {
     let payload: QueryUpdatedPayload = {
       queryString: queryString,
       queryJson: jsonQuery,
+      newQueryJson: jsonQueryV13,
       querySparqlJs: selectQueryFromJson,
     };
     this.fireQueryUpdatedEvent(payload);
@@ -101,5 +103,6 @@ export class QueryGenerator {
 export class QueryUpdatedPayload {
   queryString: string;
   queryJson: SparnaturalQueryIfc;
+  newQueryJson: SparnaturalQuery;
   querySparqlJs: Object;
 }
