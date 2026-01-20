@@ -69,11 +69,11 @@ export class QueryGenerator {
     let selectQueryFromJson = sparqlFromJsonGenerator.generateQuery(jsonQuery);
 
     var generator = new Generator();
-    var queryString = generator.stringify(selectQueryFromJson);
+    var queryStringOld = generator.stringify(selectQueryFromJson);
 
     if (settings.debug) {
       console.log("*** Sparnatural SPARQL Query from JSON ***");
-      console.dir(queryString);
+      console.dir(queryStringOld);
     }
 
     // --------------------------------------------------------------
@@ -88,7 +88,7 @@ export class QueryGenerator {
       sparqlFromJsonV13Generator.generateQuery(jsonQueryV13);
 
     var generatorV13 = new Generator();
-    var queryStringV13 = generatorV13.stringify(selectQueryFromJsonV13);
+    var queryString = generatorV13.stringify(selectQueryFromJsonV13);
 
     //console.log("Generated SPARQL v13 Query:", queryStringV13);
 
@@ -97,7 +97,7 @@ export class QueryGenerator {
     // fire the event
     let payload: QueryUpdatedPayload = {
       queryString: queryString,
-      queryStringV13: queryStringV13,
+      queryStringOld: queryStringOld,
       queryJson: jsonQuery,
       newQueryJson: jsonQueryV13,
       querySparqlJs: selectQueryFromJson,
@@ -122,7 +122,7 @@ export class QueryGenerator {
 
 export class QueryUpdatedPayload {
   queryString: string;
-  queryStringV13: string;
+  queryStringOld: string;
   queryJson: SparnaturalQueryIfc;
   newQueryJson: SparnaturalQuery;
   querySparqlJs: Object;
