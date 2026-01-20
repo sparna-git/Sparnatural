@@ -163,7 +163,7 @@ export class JsonSparqlTranslator {
           }
         });
 
-        //console.log("specProperty", specProperty);
+        console.log("specProperty", specProperty);
 
         if (!specProperty) {
           // Si aucune propriété n'est trouvée, retourne une variable simple
@@ -196,6 +196,7 @@ export class JsonSparqlTranslator {
     variablesArray.forEach((varArray: Variable[]) => {
       finalResult.push(...varArray);
     });
+    console.log("finalResult variables:", finalResult);
     return finalResult;
   }
 

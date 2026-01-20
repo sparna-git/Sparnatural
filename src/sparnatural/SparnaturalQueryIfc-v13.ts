@@ -4,7 +4,7 @@
 
 export type SparnaturalQuery = {
   type: "query";
-  subType: "select";
+  subType: "SELECT";
   // When we will implement prefixes and base URIs, we will add this:
   // context: ContextDefinition[];
   // variables: (TermVariable | PatternBind)[] | [Wildcard];
@@ -13,6 +13,25 @@ export type SparnaturalQuery = {
   solutionModifiers: SolutionModifiers;
   distinct?: true;
   where: PatternBgpSameSubject;
+  // additional metadata for the query, not directly related to its structure
+  metadata?: {
+    // query ID
+    id?: string;
+    // language of the UI with which the query was generated
+    lang?: string;
+    // (short) labels for the query, in different languages
+    // the key is the language code (e.g. "en", "de", "fr")
+    label?: {
+      [key: string]: string;
+    };
+    // (long) descriptions for the query, in different languages
+    // the key is the language code (e.g. "en", "de", "fr")
+    description?: {
+      [key: string]: string;
+    };
+    // any other metadata are allowed here
+    [key: string]: any;
+  };
 };
 
 export type PatternBase = { type: "pattern"; subType: string };

@@ -135,7 +135,8 @@ export default class BranchTranslator {
       // Note : on subject position, the only variable that can be selected is the very first one
       // Otherwise it can be selected in the object position, but not inside a WHERE clause
       // Anyway if it not the very first, all the startClassPtrn is ignored when building the final query
-      BranchTranslator.isVarSelected(this.#fullQuery, this.#branch.line.s) && this.#isVeryFirst,
+      BranchTranslator.isVarSelected(this.#fullQuery, this.#branch.line.s) &&
+        this.#isVeryFirst,
       this.#valueBuilder?.isBlockingStart(),
       this.#specProvider,
       this.settings
@@ -168,6 +169,7 @@ export default class BranchTranslator {
       );
     }
   }
+
   #buildIntersectionPtrn() {
     // Vérification des conditions de génération de l'intersection triple
     if (
@@ -247,7 +249,6 @@ export default class BranchTranslator {
       }
     }
   }
-
 
   /**
    * Translates the line to SPARQL

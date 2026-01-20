@@ -16,7 +16,7 @@ import {
 
 import {
   labelledCriteriaToFilters,
-  labelledCriteriaToValues,
+  labelledCriteriaToFlatValues,
 } from "../../querypreloading/QueryAdapterFunc";
 
 import { Order } from "../../SparnaturalQueryIfc";
@@ -36,7 +36,7 @@ export class SparnaturalJsonGeneratorV13 {
   ): SparnaturalQuery {
     return {
       type: "query",
-      subType: "select",
+      subType: "SELECT",
       variables: this.#toVariables(variables),
       distinct: distinct || undefined,
       solutionModifiers: this.#solutionModifiers(order, limit),
@@ -138,10 +138,10 @@ export class SparnaturalJsonGeneratorV13 {
     const widgetValues = cg.endClassWidgetGroup.getWidgetValues();
 
     object.filters = labelledCriteriaToFilters(widgetValues);
-    object.values = labelledCriteriaToValues(
-      object.variable.value,
-      widgetValues
-    );
+    const flatValues = labelledCriteriaToFlatValues(widgetValues);
+    if (flatValues && flatValues.length > 0) {
+      object.values = flatValues as any;
+    }
 
     if (grp.whereChild) {
       object.predicateObjectPairs = this.#collectPairs(grp.whereChild);
