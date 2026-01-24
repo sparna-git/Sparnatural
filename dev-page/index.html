@@ -101,7 +101,7 @@
               id="sparnatural"
               src="configs/dbpediafr-config.ttl"
               lang="en"
-              endpoint="https://proxy.sparnatural.eu/sparql-proxy/sparql?endpoint=http%3A%2F%2Ffr.dbpedia.org%2Fsparql"
+              endpoint="https://services.sparnatural.eu/api/v1/dbpedia-en/sparql"
               defaultLang="fr"
               distinct="true"
               limit="1000"
@@ -128,7 +128,9 @@
         -->
           </div>
           <input type="hidden" id="query-json" />
+          <input type="hidden" id="new-query-json" />
           <div><a id="export" href="#">Export query in JSON</a></div>
+          <div><a id="newExport" href="#"> New export query in JSON</a></div>
           <div><a id="load" href="#">Load query from JSON</a></div>
           <div><a id="clear" href="#">Clear query</a></div>
         </div>
@@ -139,8 +141,8 @@
                 Les requêtes sont envoyées à
                 <a
                   id="endpoint"
-                  href="http://openarchaeo-graphdb.huma-num.fr/repositories/openarchaeo "
-                  >http://openarchaeo-graphdb.huma-num.fr/repositories/openarchaeo</a
+                  href="https://services.sparnatural.eu/api/v1/dbpedia-en/sparql"
+                  >https://services.sparnatural.eu/api/v1/dbpedia-en/sparql</a
                 >
               </span>
             </div>

@@ -6,7 +6,9 @@ import { SparnaturalJsonGeneratorV13 } from "../../generators/json/SparnaturalJs
 import { Generator } from "sparqljs";
 import { SparnaturalElement } from "../../../SparnaturalElement";
 import { SparnaturalQueryIfc } from "../../SparnaturalQueryIfc";
+import { SparnaturalQuery } from "../../SparnaturalQueryIfc-v13";
 import { JsonSparqlTranslator } from "../../generators/sparql/fromjson/JsonSparqlTranslator";
+import { JsonV13SparqlTranslator } from "../../generators/sparql/fromjsonv13/JsonV13SparqlTranslator";
 
 export class QueryGenerator {
   actionStore: ActionStore;
@@ -36,7 +38,7 @@ export class QueryGenerator {
       settings.limit
     );
 
-    // -------------------------------------
+    // --------------------------------------------------------------
     // Generate v13 query
 
     let qryGenV13 = new SparnaturalJsonGeneratorV13(
@@ -50,9 +52,9 @@ export class QueryGenerator {
       settings.limit
     );
 
-    console.log("Generated JSON v13 Query:", jsonQueryV13);
+    //console.log("Generated JSON v13 Query:", jsonQueryV13);
 
-    // -------------------------------------
+    // --------------------------------------------------------------
 
     if (settings.debug) {
       console.log("*** Sparnatural JSON Query ***");
@@ -67,17 +69,37 @@ export class QueryGenerator {
     let selectQueryFromJson = sparqlFromJsonGenerator.generateQuery(jsonQuery);
 
     var generator = new Generator();
-    var queryString = generator.stringify(selectQueryFromJson);
+    var queryStringOld = generator.stringify(selectQueryFromJson);
 
     if (settings.debug) {
       console.log("*** Sparnatural SPARQL Query from JSON ***");
-      console.dir(queryString);
+      console.dir(queryStringOld);
     }
+
+    // --------------------------------------------------------------
+    // Translate the v13 JSON to SPARQL
+
+    var sparqlFromJsonV13Generator = new JsonV13SparqlTranslator(
+      this.actionStore.specProvider,
+      settings
+    );
+
+    let selectQueryFromJsonV13 =
+      sparqlFromJsonV13Generator.generateQuery(jsonQueryV13);
+
+    var generatorV13 = new Generator();
+    var queryString = generatorV13.stringify(selectQueryFromJsonV13);
+
+    //console.log("Generated SPARQL v13 Query:", queryStringV13);
+
+    // --------------------------------------------------------------
 
     // fire the event
     let payload: QueryUpdatedPayload = {
       queryString: queryString,
+      queryStringOld: queryStringOld,
       queryJson: jsonQuery,
+      newQueryJson: jsonQueryV13,
       querySparqlJs: selectQueryFromJson,
     };
     this.fireQueryUpdatedEvent(payload);
@@ -100,6 +122,8 @@ export class QueryGenerator {
 
 export class QueryUpdatedPayload {
   queryString: string;
+  queryStringOld: string;
   queryJson: SparnaturalQueryIfc;
+  newQueryJson: SparnaturalQuery;
   querySparqlJs: Object;
 }

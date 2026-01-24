@@ -26,16 +26,14 @@ import {
   SearchFilter,
 } from "../SparnaturalQueryIfc-v13";
 
-/* ===============================================================
-   Generic helpers
-   =============================================================== */
-
+// A generic mapper type
 type Mapper<I, O> = (input: I) => O;
 
-/* ===============================================================
-   GraphTerm → v1 RdfTermCriteria
-   =============================================================== */
-
+/**
+ * e.g. TermIri or TermLiteral to LabelledCriteria<RdfTermCriteria>
+ * @param term The graph term to convert
+ * @returns The labelled criteria, or null if the term type is unsupported
+ */
 export function graphTermToLabelledCriteria(
   term: GraphTerm
 ): LabelledCriteria<RdfTermCriteria> | null {
@@ -75,10 +73,12 @@ export function graphTermToLabelledCriteria(
   return null;
 }
 
-/* ===============================================================
-   VALUES (v13) → LabelledCriteria (v1)
-   =============================================================== */
-
+/**
+ * Translates the object values in a v13 ObjectCriteria to labelled criteria in v1
+ * @param variableName The variable name to extract from each value row
+ * @param obj The ObjectCriteria containing the values
+ * @returns An array of labelled criteria
+ */
 export function translateObjectValues(
   variableName: string,
   obj: ObjectCriteria
@@ -99,6 +99,12 @@ export function translateObjectValues(
   return translateValueRows(variableName, values as ValuePatternRow[]);
 }
 
+/**
+ * Translates v13 VALUES rows to labelled criteria in v1
+ * @param variableName The variable name to extract from each value row
+ * @param rows The VALUES rows
+ * @returns An array of labelled criteria
+ */
 export function translateValueRows(
   variableName: string,
   rows: ValuePatternRow[]
@@ -112,9 +118,30 @@ export function translateValueRows(
   });
 }
 
-/* ===============================================================
-   Filters v13 → Criteria v1 (GENERIC)
-   =============================================================== */
+/** Translates v13 labelled filters to v1 labelled criteria
+ * @param filters The labelled filters to translate
+ * @returns An array of labelled criteria
+ */
+export function translateFilters(
+  filters: LabelledFilter[]
+): LabelledCriteria<Criteria>[] {
+  return filters.map((lf) => {
+    const mapper = filterToCriteriaMap[lf.filter.type];
+    if (!mapper) {
+      throw new Error(`Unknown filter type: ${lf.filter.type}`);
+    }
+    return {
+      label: lf.label,
+      criteria: mapper(lf),
+    };
+  });
+}
+
+/**
+ * Translates v13 labelled filters to v1 labelled criteria
+ * @param filters The labelled filters to translate
+ * @returns An array of labelled criteria
+ */
 
 const filterToCriteriaMap: Record<
   LabelledFilter["filter"]["type"],
@@ -144,24 +171,39 @@ const filterToCriteriaMap: Record<
   },
 };
 
-export function translateFilters(
-  filters: LabelledFilter[]
-): LabelledCriteria<Criteria>[] {
-  return filters.map((lf) => {
-    const mapper = filterToCriteriaMap[lf.filter.type];
-    if (!mapper) {
-      throw new Error(`Unknown filter type: ${lf.filter.type}`);
-    }
-    return {
-      label: lf.label,
-      criteria: mapper(lf),
-    };
-  });
+/**
+ * Converts a v13 PatternBind to a v1 VariableExpression
+ * @param bind A v13 PatternBind
+ * @returns A v1 VariableExpression
+ */
+
+export function patternBindToVariableExpression(
+  bind: PatternBind
+): VariableExpression {
+  return {
+    expression: {
+      type: "aggregate",
+      aggregation: bind.expression.aggregation,
+      distinct: bind.expression.distinct,
+      expression: {
+        termType: "Variable",
+        value: bind.expression.expression[0].value,
+      },
+    },
+    variable: {
+      termType: "Variable",
+      value: bind.variable.value,
+    },
+  };
 }
 
-/* ===============================================================
-   Criteria v1 → Filters v13 (GENERIC)
-   =============================================================== */
+// Second part
+
+/**
+ * Converts labelled criteria to labelled filters (v1 to v13)
+ * @param vals An array of labelled criteria v1
+ * @returns An array of labelled filters v13
+ */
 
 const criteriaToFilterRegistry: Array<{
   match: (c: Criteria) => boolean;
@@ -223,6 +265,11 @@ const criteriaToFilterRegistry: Array<{
   },
 ];
 
+/**
+ * Converts labelled criteria to labelled filters (v1 to v13)
+ * @param vals An array of labelled criteria v1
+ * @returns An array of labelled filters v13
+ */
 export function labelledCriteriaToFilters(
   vals: LabelledCriteria<Criteria>[]
 ): LabelledFilter[] {
@@ -232,53 +279,42 @@ export function labelledCriteriaToFilters(
   });
 }
 
-/* ===============================================================
-   Criteria v1 → VALUES v13
-   =============================================================== */
-
-export function labelledCriteriaToValues(
-  variable: string,
+/**
+ * Converts labelled criteria with RDFTerm to flat values (v1 to v13)
+ * @param vals An array of labelled criteria v1
+ * @returns An array of flat value patterns v13
+ */
+export function labelledCriteriaToFlatValues(
   vals: LabelledCriteria<Criteria>[]
-): ValuePatternRow[] {
+): Array<{
+  type: "term";
+  subType: "namedNode" | "literal";
+  value: string;
+  label: string;
+  langOrIri?: string;
+}> {
   return vals
-    .filter((v) => "rdfTerm" in v.criteria)
+    .filter(
+      (v): v is LabelledCriteria<RdfTermCriteria> => "rdfTerm" in v.criteria
+    )
     .map((v) => {
-      const t = (v.criteria as RdfTermCriteria).rdfTerm;
+      const t = v.criteria.rdfTerm;
+
+      if (t.type === "uri") {
+        return {
+          type: "term",
+          subType: "namedNode",
+          value: t.value,
+          label: v.label,
+        };
+      }
 
       return {
-        [variable]:
-          t.type === "uri"
-            ? { type: "term", subType: "namedNode", value: t.value }
-            : {
-                type: "term",
-                subType: "literal",
-                value: t.value,
-                langOrIri: t["xml:lang"] ?? undefined,
-              },
+        type: "term",
+        subType: "literal",
+        value: t.value,
+        label: v.label,
+        langOrIri: t["xml:lang"] ?? t.datatype,
       };
     });
-}
-
-/* ===============================================================
-   PatternBind (v13) → VariableExpression (v1)
-   =============================================================== */
-
-export function patternBindToVariableExpression(
-  bind: PatternBind
-): VariableExpression {
-  return {
-    expression: {
-      type: "aggregate",
-      aggregation: bind.expression.aggregation,
-      distinct: bind.expression.distinct,
-      expression: {
-        termType: "Variable",
-        value: bind.expression.expression[0].value,
-      },
-    },
-    variable: {
-      termType: "Variable",
-      value: bind.variable.value,
-    },
-  };
 }
