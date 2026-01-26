@@ -2,7 +2,7 @@ import {
   SparnaturalQuery,
   TermVariable,
   PatternBind,
-} from "../../../SparnaturalQueryIfcV13";
+} from "../../../SparnaturalQueryIfc-v13";
 import { VariableExpression } from "../../../SparnaturalQueryIfc";
 import { Pattern, VariableTerm as SparqlVariableTerm } from "sparqljs";
 import { VariableExpression as SparqlVariableExpression } from "sparqljs";

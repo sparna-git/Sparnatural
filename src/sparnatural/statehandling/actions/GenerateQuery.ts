@@ -6,7 +6,7 @@ import { SparnaturalJsonGeneratorV13 } from "../../generators/json/SparnaturalJs
 import { Generator } from "sparqljs";
 import { SparnaturalElement } from "../../../SparnaturalElement";
 import { SparnaturalQueryIfc } from "../../SparnaturalQueryIfc";
-import { SparnaturalQuery } from "../../SparnaturalQueryIfcV13";
+import { SparnaturalQuery } from "../../SparnaturalQueryIfc-v13";
 import { JsonSparqlTranslator } from "../../generators/sparql/fromjson/JsonSparqlTranslator";
 import { JsonV13SparqlTranslator } from "../../generators/sparql/fromjsonv13/JsonV13SparqlTranslator";
 

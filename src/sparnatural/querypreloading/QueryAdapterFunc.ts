@@ -24,7 +24,7 @@ import {
   MapFilter,
   NumberFilter,
   SearchFilter,
-} from "../SparnaturalQueryIfcV13";
+} from "../SparnaturalQueryIfc-v13";
 
 // A generic mapper type
 type Mapper<I, O> = (input: I) => O;

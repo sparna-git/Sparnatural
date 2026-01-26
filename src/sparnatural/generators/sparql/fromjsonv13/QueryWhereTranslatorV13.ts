@@ -4,7 +4,7 @@ import { ISparnaturalSpecification } from "../../../spec-providers/ISparnaturalS
 import {
   SparnaturalQuery,
   PredicateObjectPair,
-} from "../../../SparnaturalQueryIfcV13";
+} from "../../../SparnaturalQueryIfc-v13";
 import BranchTranslatorV13 from "./BranchTranslatorV13";
 
 const factory = new DataFactory();

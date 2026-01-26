@@ -21,7 +21,7 @@ import {
   TermVariable,
   TermTypedVariable,
   PredicateObjectPair,
-} from "../SparnaturalQueryIfcV13";
+} from "../SparnaturalQueryIfc-v13";
 
 export default class QueryLoader {
   static sparnatural: SparnaturalComponent;

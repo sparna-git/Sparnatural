@@ -6,7 +6,7 @@ import {
 } from "./sparnatural/settings/defaultSettings";
 import SparnaturalComponent from "./sparnatural/components/SparnaturalComponent";
 import { SparnaturalQueryIfc } from "./sparnatural/SparnaturalQueryIfc";
-import { SparnaturalQuery } from "./sparnatural/SparnaturalQueryIfcV13";
+import { SparnaturalQuery } from "./sparnatural/SparnaturalQueryIfc-v13";
 import QueryLoader from "./sparnatural/querypreloading/QueryLoader";
 import QueryLoaderv13 from "./sparnatural/querypreloading/QueryLoader-v13";
 import { SparnaturalAttributes } from "./SparnaturalAttributes";

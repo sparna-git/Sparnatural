@@ -10,7 +10,7 @@ import {
   ObjectCriteria,
   SparnaturalQuery,
   TermTypedVariable,
-} from "../../../SparnaturalQueryIfcV13";
+} from "../../../SparnaturalQueryIfc-v13";
 
 import {
   LabelledCriteria,

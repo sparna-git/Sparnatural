@@ -12,7 +12,7 @@ import {
   TermTypedVariable,
   PatternBind,
   ExpressionAggregate,
-} from "../../SparnaturalQueryIfcV13";
+} from "../../SparnaturalQueryIfc-v13";
 
 import {
   labelledCriteriaToFilters,
