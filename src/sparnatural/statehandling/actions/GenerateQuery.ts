@@ -6,7 +6,7 @@ import { SparnaturalJsonGeneratorV13 } from "../../generators/json/SparnaturalJs
 import { Generator } from "sparqljs";
 import { SparnaturalElement } from "../../../SparnaturalElement";
 import { SparnaturalQueryIfc } from "../../SparnaturalQueryIfc";
-import { SparnaturalQuery } from "../../SparnaturalQueryIfc-v13";
+import { SparnaturalQuery } from "../../SparnaturalQueryIfcV13";
 import { JsonSparqlTranslator } from "../../generators/sparql/fromjson/JsonSparqlTranslator";
 import { JsonV13SparqlTranslator } from "../../generators/sparql/fromjsonv13/JsonV13SparqlTranslator";
 
@@ -31,25 +31,25 @@ export class QueryGenerator {
     let settings = getSettings();
     let qryGen = new SparnaturalJsonGenerator(this.actionStore.sparnatural);
 
-    var jsonQuery = qryGen.generateQuery(
+    var jsonQueryOld = qryGen.generateQuery(
       this.actionStore.sparnatural.variableSection.listVariables(),
       this.actionStore.sparnatural.variableSection.getOrder(),
       settings.addDistinct,
-      settings.limit
+      settings.limit,
     );
 
     // --------------------------------------------------------------
     // Generate v13 query
 
     let qryGenV13 = new SparnaturalJsonGeneratorV13(
-      this.actionStore.sparnatural
+      this.actionStore.sparnatural,
     );
 
-    var jsonQueryV13 = qryGenV13.generateQuery(
+    var jsonQuery = qryGenV13.generateQuery(
       this.actionStore.sparnatural.variableSection.listVariables(),
       this.actionStore.sparnatural.variableSection.getOrder(),
       settings.addDistinct,
-      settings.limit
+      settings.limit,
     );
 
     //console.log("Generated JSON v13 Query:", jsonQueryV13);
@@ -63,10 +63,11 @@ export class QueryGenerator {
 
     var sparqlFromJsonGenerator = new JsonSparqlTranslator(
       this.actionStore.specProvider,
-      settings
+      settings,
     );
 
-    let selectQueryFromJson = sparqlFromJsonGenerator.generateQuery(jsonQuery);
+    let selectQueryFromJson =
+      sparqlFromJsonGenerator.generateQuery(jsonQueryOld);
 
     var generator = new Generator();
     var queryStringOld = generator.stringify(selectQueryFromJson);
@@ -81,11 +82,11 @@ export class QueryGenerator {
 
     var sparqlFromJsonV13Generator = new JsonV13SparqlTranslator(
       this.actionStore.specProvider,
-      settings
+      settings,
     );
 
     let selectQueryFromJsonV13 =
-      sparqlFromJsonV13Generator.generateQuery(jsonQueryV13);
+      sparqlFromJsonV13Generator.generateQuery(jsonQuery);
 
     var generatorV13 = new Generator();
     var queryString = generatorV13.stringify(selectQueryFromJsonV13);
@@ -99,7 +100,7 @@ export class QueryGenerator {
       queryString: queryString,
       queryStringOld: queryStringOld,
       queryJson: jsonQuery,
-      newQueryJson: jsonQueryV13,
+      OldQueryJson: jsonQueryOld,
       querySparqlJs: selectQueryFromJson,
     };
     this.fireQueryUpdatedEvent(payload);
@@ -115,7 +116,7 @@ export class QueryGenerator {
       new CustomEvent(SparnaturalElement.EVENT_QUERY_UPDATED, {
         bubbles: true,
         detail: payload,
-      })
+      }),
     );
   }
 }
@@ -123,7 +124,7 @@ export class QueryGenerator {
 export class QueryUpdatedPayload {
   queryString: string;
   queryStringOld: string;
-  queryJson: SparnaturalQueryIfc;
-  newQueryJson: SparnaturalQuery;
+  queryJson: SparnaturalQuery;
+  OldQueryJson: SparnaturalQueryIfc;
   querySparqlJs: Object;
 }

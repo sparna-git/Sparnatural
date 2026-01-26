@@ -21,7 +21,7 @@ import {
   TermVariable,
   TermTypedVariable,
   PredicateObjectPair,
-} from "../SparnaturalQueryIfc-v13";
+} from "../SparnaturalQueryIfcV13";
 
 export default class QueryLoader {
   static sparnatural: SparnaturalComponent;
@@ -49,14 +49,14 @@ export default class QueryLoader {
     this.sparnatural.setQuiet(false);
     this.sparnatural.html[0].dispatchEvent(new CustomEvent("generateQuery"));
     this.sparnatural.html[0].dispatchEvent(
-      new CustomEvent("redrawBackgroundAndLinks")
+      new CustomEvent("redrawBackgroundAndLinks"),
     );
   }
 
   // Build Sparnatural UI from the SparnaturalQuery
   static #buildSparnatural(
     sparnatural: SparnaturalComponent,
-    query: SparnaturalQuery
+    query: SparnaturalQuery,
   ): Map<string, string> {
     const varMapping = new Map<string, string>();
 
@@ -77,7 +77,7 @@ export default class QueryLoader {
     const localMap1 = this.#buildCriteriaGroupFromPair(
       rootGrpWrapper,
       subject,
-      first
+      first,
     );
     localMap1.forEach((v, k) => varMapping.set(k, v));
 
@@ -87,7 +87,7 @@ export default class QueryLoader {
         (
           rootGrpWrapper.CriteriaGroup.StartClassGroup
             .inputSelector as ClassTypeId
-        )?.selectViewVariableBtn?.widgetHtml
+        )?.selectViewVariableBtn?.widgetHtml,
       );
     }
 
@@ -98,7 +98,7 @@ export default class QueryLoader {
       const localMap = this.#buildCriteriaGroupFromPair(
         parent.andSibling,
         subject,
-        p
+        p,
       );
       localMap.forEach((v, k) => varMapping.set(k, v));
       parent = parent.andSibling;
@@ -111,7 +111,7 @@ export default class QueryLoader {
   static #buildCriteriaGroupFromPair(
     grpWrapper: GroupWrapper,
     subject: TermTypedVariable,
-    pair: PredicateObjectPair
+    pair: PredicateObjectPair,
   ): Map<string, string> {
     const varMapping = new Map<string, string>();
     const obj = pair.object;
@@ -125,13 +125,13 @@ export default class QueryLoader {
     if (!grpWrapper.CriteriaGroup.StartClassGroup.startClassVal.type) {
       this.#setSelectedValue(
         grpWrapper.CriteriaGroup.StartClassGroup,
-        subject.rdfType
+        subject.rdfType,
       );
     }
 
     varMapping.set(
       grpWrapper.CriteriaGroup.StartClassGroup.startClassVal.variable,
-      subject.value
+      subject.value,
     );
 
     // End class (object rdfType)
@@ -142,18 +142,18 @@ export default class QueryLoader {
 
     this.#setSelectedValue(
       grpWrapper.CriteriaGroup.EndClassGroup,
-      obj.variable.rdfType
+      obj.variable.rdfType,
     );
 
     varMapping.set(
       grpWrapper.CriteriaGroup.EndClassGroup.endClassVal.variable,
-      obj.variable.value
+      obj.variable.value,
     );
 
     // predicate
     this.#setSelectedValue(
       grpWrapper.CriteriaGroup.ObjectPropertyGroup,
-      pair.predicate.value
+      pair.predicate.value,
     );
 
     // ---------- VALUES / FILTERS translation to v1-style widget inputs ----------
@@ -174,19 +174,19 @@ export default class QueryLoader {
       widgetInputs.forEach((input) => {
         const parsedVal =
           grpWrapper.CriteriaGroup.EndClassGroup.editComponents.widgetWrapper.widgetComponent.parseInput(
-            input
+            input,
           );
 
         if (
           grpWrapper.CriteriaGroup.endClassWidgetGroup.widgetValues.length > 0
         ) {
           this.#clickOn(
-            grpWrapper.CriteriaGroup.endClassWidgetGroup.addWidgetValueBtn.html
+            grpWrapper.CriteriaGroup.endClassWidgetGroup.addWidgetValueBtn.html,
           );
         }
 
         grpWrapper.CriteriaGroup.EndClassGroup.editComponents.widgetWrapper.widgetComponent.triggerRenderWidgetVal(
-          parsedVal
+          parsedVal,
         );
       });
     }
@@ -209,7 +209,7 @@ export default class QueryLoader {
     // children recursion (WHERE)
     if (obj.predicateObjectPairs?.length) {
       this.#clickOn(
-        grpWrapper.CriteriaGroup.EndClassGroup.editComponents.actionWhere.btn
+        grpWrapper.CriteriaGroup.EndClassGroup.editComponents.actionWhere.btn,
       );
 
       const childrenPairs = [...obj.predicateObjectPairs];
@@ -218,7 +218,7 @@ export default class QueryLoader {
       let localMap = this.#buildCriteriaGroupFromPair(
         grpWrapper.whereChild,
         obj.variable,
-        firstChild
+        firstChild,
       );
       localMap.forEach((v, k) => varMapping.set(k, v));
 
@@ -228,7 +228,7 @@ export default class QueryLoader {
         localMap = this.#buildCriteriaGroupFromPair(
           parent.andSibling,
           obj.variable,
-          cp
+          cp,
         );
         localMap.forEach((v, k) => varMapping.set(k, v));
         parent = parent.andSibling;
@@ -240,7 +240,7 @@ export default class QueryLoader {
       startClassVal,
       grpWrapper.CriteriaGroup.StartClassGroup,
       endClassVal,
-      grpWrapper.CriteriaGroup.EndClassGroup
+      grpWrapper.CriteriaGroup.EndClassGroup,
     );
 
     return varMapping;
@@ -249,25 +249,25 @@ export default class QueryLoader {
   // set selected options (optional, notExists)
   static #triggerOptions(
     grpWrapper: GroupWrapper,
-    branchLike: { optional?: boolean; notExists?: boolean }
+    branchLike: { optional?: boolean; notExists?: boolean },
   ) {
     if (
       branchLike.notExists &&
       grpWrapper.optionState != OptionTypes.NOTEXISTS
     ) {
       this.#clickOn(
-        grpWrapper.CriteriaGroup.OptionsGroup.optionalArrow.widgetHtml
+        grpWrapper.CriteriaGroup.OptionsGroup.optionalArrow.widgetHtml,
       );
       this.#clickOn(
-        grpWrapper.CriteriaGroup.OptionsGroup.NotExistsComponent.html
+        grpWrapper.CriteriaGroup.OptionsGroup.NotExistsComponent.html,
       );
     }
     if (branchLike.optional && grpWrapper.optionState != OptionTypes.OPTIONAL) {
       this.#clickOn(
-        grpWrapper.CriteriaGroup.OptionsGroup.optionalArrow.widgetHtml
+        grpWrapper.CriteriaGroup.OptionsGroup.optionalArrow.widgetHtml,
       );
       this.#clickOn(
-        grpWrapper.CriteriaGroup.OptionsGroup.OptionalComponent.html
+        grpWrapper.CriteriaGroup.OptionsGroup.OptionalComponent.html,
       );
     }
   }
@@ -289,7 +289,7 @@ export default class QueryLoader {
   // set selected value and submit
   static #setSelectedValue(
     component: StartClassGroup | EndClassGroup | ObjectPropertyGroup,
-    value: string
+    value: string,
   ) {
     component.inputSelector.setSelected(value);
     component.inputSelector.submitSelected();
@@ -299,12 +299,12 @@ export default class QueryLoader {
     startClassVal: SelectedVal,
     startClassComponent: StartClassGroup,
     endClassVal: SelectedVal,
-    endClassComponent: EndClassGroup
+    endClassComponent: EndClassGroup,
   ) {
     if (this.#hasSelectedVar(this.query.variables, endClassVal.variable)) {
       this.#clickOn(
         (endClassComponent.inputSelector as ClassTypeId)?.selectViewVariableBtn
-          ?.widgetHtml
+          ?.widgetHtml,
       );
     }
   }
@@ -320,12 +320,12 @@ export default class QueryLoader {
         if (d.state.selectedVariable.variable === varName) {
           varMenu.removeDraggableByVarName(varName);
           const newDraggable = varMenu.addDraggableComponent(
-            d.state.selectedVariable
+            d.state.selectedVariable,
           );
 
           if (this.#isBind(v)) {
             newDraggable.loadAggregatedVariable(
-              patternBindToVariableExpression(v)
+              patternBindToVariableExpression(v),
             );
           }
         }
@@ -342,7 +342,7 @@ export default class QueryLoader {
     }
 
     variableSortOption.changeSortOrderCallBack(
-      orderDef.descending ? Order.DESC : Order.ASC
+      orderDef.descending ? Order.DESC : Order.ASC,
     );
   }
 
@@ -367,7 +367,7 @@ export default class QueryLoader {
   // Check if a variable is selected in the query variables
   static #hasSelectedVar(
     vars: SparnaturalQuery["variables"],
-    varName: string
+    varName: string,
   ): boolean {
     let result = false;
 
@@ -393,7 +393,7 @@ export default class QueryLoader {
 
   // Get the variable name from a select item (TermVariable or PatternBind)
   static #getSelectedVarNameFromSelectItem(
-    v: TermVariable | PatternBind
+    v: TermVariable | PatternBind,
   ): string {
     if (this.#isBind(v)) {
       return v.expression?.expression?.[0]?.value ?? v.variable.value;

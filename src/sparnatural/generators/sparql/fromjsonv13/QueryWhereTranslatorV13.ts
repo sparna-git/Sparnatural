@@ -4,7 +4,7 @@ import { ISparnaturalSpecification } from "../../../spec-providers/ISparnaturalS
 import {
   SparnaturalQuery,
   PredicateObjectPair,
-} from "../../../SparnaturalQueryIfc-v13";
+} from "../../../SparnaturalQueryIfcV13";
 import BranchTranslatorV13 from "./BranchTranslatorV13";
 
 const factory = new DataFactory();
@@ -26,7 +26,7 @@ export default class QueryWhereTranslatorV13 {
   constructor(
     jsonQuery: SparnaturalQuery,
     specProvider: ISparnaturalSpecification,
-    settings: any
+    settings: any,
   ) {
     this.#jsonQuery = jsonQuery;
     this.#specProvider = specProvider;
@@ -61,7 +61,7 @@ export default class QueryWhereTranslatorV13 {
           index === 0,
           // first level is never "inside" optional/notExists
           false,
-          this.settings
+          this.settings,
         );
 
         branchBuilder.build();

@@ -12,7 +12,7 @@ import {
   TermTypedVariable,
   PatternBind,
   ExpressionAggregate,
-} from "../../SparnaturalQueryIfc-v13";
+} from "../../SparnaturalQueryIfcV13";
 
 import {
   labelledCriteriaToFilters,
@@ -32,7 +32,7 @@ export class SparnaturalJsonGeneratorV13 {
     variables: DraggableComponentState[],
     order: Order,
     distinct: boolean,
-    limit: number
+    limit: number,
   ): SparnaturalQuery {
     return {
       type: "query",
@@ -41,7 +41,7 @@ export class SparnaturalJsonGeneratorV13 {
       distinct: distinct || undefined,
       solutionModifiers: this.#solutionModifiers(order, limit),
       where: this.#buildWhere(
-        this.sparnatural.BgWrapper.componentsList.rootGroupWrapper
+        this.sparnatural.BgWrapper.componentsList.rootGroupWrapper,
       ),
     };
   }
@@ -51,7 +51,7 @@ export class SparnaturalJsonGeneratorV13 {
   // -----------------------------------
 
   #toVariables(
-    vars: DraggableComponentState[]
+    vars: DraggableComponentState[],
   ): (TermVariable | PatternBind)[] {
     return vars.map((v) => {
       if (v.aggregateFunction) {
