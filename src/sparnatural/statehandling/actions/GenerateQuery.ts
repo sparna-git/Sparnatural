@@ -46,8 +46,6 @@ export class QueryGenerator {
     );
 
     var jsonQuery = qryGenV13.generateQuery(
-      this.actionStore.sparnatural.variableSection.listVariables(),
-      this.actionStore.sparnatural.variableSection.getOrder(),
       settings.addDistinct,
       settings.limit,
     );

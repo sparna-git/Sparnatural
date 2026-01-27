@@ -29,17 +29,15 @@ export class SparnaturalJsonGeneratorV13 {
   }
 
   generateQuery(
-    variables: DraggableComponentState[],
-    order: Order,
     distinct: boolean,
-    limit: number,
+    limit: number
   ): SparnaturalQuery {
     return {
       type: "query",
       subType: "SELECT",
-      variables: this.#toVariables(variables),
+      variables: this.#toVariables(this.sparnatural.variableSection.listVariables()),
       distinct: distinct || undefined,
-      solutionModifiers: this.#solutionModifiers(order, limit),
+      solutionModifiers: this.#solutionModifiers(this.sparnatural.variableSection.getOrder(), limit),
       where: this.#buildWhere(
         this.sparnatural.BgWrapper.componentsList.rootGroupWrapper,
       ),
