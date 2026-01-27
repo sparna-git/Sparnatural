@@ -26,9 +26,6 @@ export class SparnaturalElement extends HTMLElement {
 
   // just to avoid name clash with "attributes"
   _attributes: SparnaturalAttributes;
-  // for the moment, just keep the handlers in the settings
-  // handlers: SparnaturalHandlers;
-
   sparnatural: SparnaturalComponent;
 
   constructor() {
