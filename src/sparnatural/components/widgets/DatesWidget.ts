@@ -149,12 +149,12 @@ export class DatesWidget extends AbstractWidget {
 
   parseInput(dateValue:LabelledCriteria<DateCriteria>): LabelledCriteria<DateCriteria> {
     let theValue = dateValue.criteria as DateCriteria;
-    if (theValue.start == "" || theValue.stop == "") {
-      dateValue = null;
-    } else {
+    
+    if (theValue.start !== "" && theValue.stop !== "") {
       if (parseInt(theValue.start) > parseInt(theValue.stop)) {
         dateValue = null;
       } else {
+        
         var absoluteStartYear = theValue.start.startsWith("-")
           ? theValue.start.substring(1)
           : theValue.start;
@@ -174,10 +174,7 @@ export class DatesWidget extends AbstractWidget {
         theValue.stop = paddedStopYear + "-12-31T23:59:59";
       }
     }
-    dateValue.label = this.#getValueLabel(
-      theValue.start,
-      theValue.stop
-    );
+
     return {
       label: this.#getValueLabel(
         theValue.start,

@@ -141,17 +141,41 @@ export class TimeDatePickerWidget extends AbstractWidget {
     // set a minus in front of the date if there was one in the value
     let startDate:Date;
     if(this.inputStart.val() != '') {
+      let dateString = this.inputStart.val() as string;
       startDate = this.inputStart.datepicker("getDate");
-      if((this.inputStart.val() as string).startsWith("-") && !startDate.toISOString().startsWith("-")) {
-        startDate.setFullYear(parseInt(this.inputStart.val().toString()));
+      
+      // if original date value was only 2 digits, force it because the getDate returns a 19xx date
+      if(
+        (!dateString.startsWith("-") && dateString.length == 2)
+        ||
+        (dateString.startsWith("-") && dateString.length == 3)
+      ) {
+        let year = parseInt(dateString);
+        startDate.setFullYear(year);
+      }
+
+      if(dateString.startsWith("-") && !startDate.toISOString().startsWith("-")) {
+        startDate.setFullYear(parseInt(dateString));
       }
     }
     
     let endDate:Date;
     if(this.inputEnd.val() != '') {
+      let dateString = this.inputEnd.val() as string;
       endDate = this.inputEnd.datepicker("getDate");
-      if((this.inputEnd.val() as string).startsWith("-") && !endDate.toISOString().startsWith("-")) {
-        endDate.setFullYear(parseInt(this.inputEnd.val().toString()));
+
+      // if original date value was only 2 digits, force it because the getDate returns a 19xx date
+      if(
+        (!dateString.startsWith("-") && dateString.length == 2)
+        ||
+        (dateString.startsWith("-") && dateString.length == 3)
+      ) {
+        let year = parseInt(dateString);
+        endDate.setFullYear(year);
+      }
+
+      if(dateString.startsWith("-") && !endDate.toISOString().startsWith("-")) {
+        endDate.setFullYear(parseInt(dateString));
       }
     }
 
