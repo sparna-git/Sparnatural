@@ -1,10 +1,13 @@
+/**
+ * A cache, either based on localStorage if available, either on a private array.
+ */
 class LocalDataStorage {
   // Instance stores a reference to the Singleton
   private static instance: any;
 
-  privateArray = new Array();
+  private privateArray = new Array();
 
-  constructor() {}
+  private constructor() {}
 
   // Private methods and variables
   get(name: any) {
@@ -23,6 +26,11 @@ class LocalDataStorage {
     }
   }
 
+  /**
+   * Either stores in localStorage or in private array if localStorage is not available
+   * @param name key to store
+   * @param value value to store
+   */
   set(name: any, value: any) {
     this.privateArray[name] = value;
     if (this.storageAvailable()) {
@@ -34,7 +42,7 @@ class LocalDataStorage {
 
   // Get the Singleton instance if one exists
   // or create one if it doesn't
-  getInstance() {
+  static getInstance() {
     if (!LocalDataStorage.instance) {
       LocalDataStorage.instance = new LocalDataStorage();
     }

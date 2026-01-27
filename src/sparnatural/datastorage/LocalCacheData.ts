@@ -4,11 +4,11 @@ class LocalCacheData {
   constructor() {}
 
   fetch(uri: string, parameters: any, ttl: number):Promise<Response> {
-    // console.log("LocalCacheData : "+uri+" / ttl "+ttl)
-    var datastorage = new LocalDataStorage().getInstance();
+    var datastorage = LocalDataStorage.getInstance();
     //var lastLoading = localStorage[uri] ;
     var now = Date.now();
 
+    // if we don't have it in cache, set the current date of this URL
     if (!datastorage.get(uri)) {
       datastorage.set(uri, now);
     }
