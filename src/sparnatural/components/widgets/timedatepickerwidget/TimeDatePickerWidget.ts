@@ -182,6 +182,9 @@ export class TimeDatePickerWidget extends AbstractWidget {
     if (this.dateFormat == "day") {
       tmpValue = {
         start: (startValue)?new Date(startValue.setHours(0, 0, 0, 0)):null,
+        // we set it to the end of the day and we shift one more minute to jumpt to tomorrow
+        // so that if the same date is searched as start + end it will find this value
+        // stop: (endValue)?this.#shiftOneMoreMinute(new Date(endValue.setHours(23, 59, 1, 59))):null,
         stop: (endValue)?new Date(endValue.setHours(23, 59, 59, 59)):null,
         startLabel: startValue?startValue.toLocaleDateString():"",
         endLabel: endValue?endValue.toLocaleDateString():""
@@ -198,8 +201,8 @@ export class TimeDatePickerWidget extends AbstractWidget {
     let dateTimePickerVal:LabelledCriteria<DateCriteria> = {
       label: this.#getValueLabel(tmpValue.startLabel, tmpValue.endLabel),
       criteria: {
-        start: (tmpValue.start)?tmpValue.start.toISOString():null,
-        stop: (tmpValue.stop)?tmpValue.stop.toISOString():null,
+        start: (tmpValue.start)?this.#toISOStringWithTimezone(tmpValue.start):null,
+        stop: (tmpValue.stop)?this.#toISOStringWithTimezone(tmpValue.stop):null,
       }        
     };
     return dateTimePickerVal;
@@ -215,6 +218,21 @@ export class TimeDatePickerWidget extends AbstractWidget {
     return endValue ? 
     new Date(endValue.getFullYear(),11,31,23,59,59) 
     :null
+  }
+
+  #shiftOneMoreMinute(date:Date) {
+    if(!date) return null;
+    let newDate = new Date(date);
+    newDate.setMinutes(date.getMinutes()+1);
+    return newDate;
+  }
+
+  /**
+   * @param date 
+   * @returns The ISO date string taking into account timezone (otherwise toISODate returns the date in UTC and the hours shift)
+   */
+  #toISOStringWithTimezone(date:Date) {
+    return new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString();
   }
 
   #getValueLabel = function (startLabel: string, stopLabel: string) {
