@@ -27,7 +27,7 @@ export class JsonV13SparqlTranslator {
     // the Sparnatural configuration
     specProvider: ISparnaturalSpecification,
     // settings
-    settings: any
+    settings: any,
   ) {
     this.specProvider = specProvider;
     this.settings = settings;
@@ -70,7 +70,7 @@ export class JsonV13SparqlTranslator {
 
     if (this.defaultLabelVars.length > 0) {
       this.defaultLabelVars.forEach((v) =>
-        this.#insertDefaultLabelVar(sparqlJsQuery, v)
+        this.#insertDefaultLabelVar(sparqlJsQuery, v),
       );
     }
 
@@ -80,7 +80,7 @@ export class JsonV13SparqlTranslator {
     // set a GROUP BY based on aggregation expression in the variables
     // add this after defaultLabel var have been inserted, and re-read them from the query
     sparqlJsQuery.group = this.#addGroupBy(
-      sparqlJsQuery.variables as Variable[]
+      sparqlJsQuery.variables as Variable[],
     );
 
     return sparqlJsQuery;
@@ -125,7 +125,7 @@ export class JsonV13SparqlTranslator {
     const whereBuilder = new QueryWhereTranslatorV13(
       this.jsonQuery,
       this.specProvider,
-      this.settings
+      this.settings,
     );
     whereBuilder.build();
     this.defaultLabelVars = whereBuilder.getDefaultVars();
@@ -149,7 +149,7 @@ export class JsonV13SparqlTranslator {
           SparqlFactory.buildAggregateFunctionExpression(
             v.expression.aggregation,
             factory.variable(v.expression.expression[0].value),
-            factory.variable(v.variable.value)
+            factory.variable(v.variable.value),
           ),
         ];
       }
@@ -225,7 +225,7 @@ export class JsonV13SparqlTranslator {
     // reconstruct the original var name by removing "_label" suffix
     var originalVar = (defaultLabelVar as SparqlVariableTerm).value.substring(
       0,
-      (defaultLabelVar as SparqlVariableTerm).value.length - "_label".length
+      (defaultLabelVar as SparqlVariableTerm).value.length - "_label".length,
     );
     //console.log("SpraqlQuery variables", sparqlQuery.variables);
     for (var i = 0; i < sparqlQuery.variables.length; i++) {

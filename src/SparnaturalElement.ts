@@ -77,7 +77,7 @@ export class SparnaturalElement extends HTMLElement {
   expandSparql(query: string) {
     return this.sparnatural.specProvider.expandSparql(
       query,
-      getSettings().sparqlPrefixes
+      getSettings().sparqlPrefixes,
     );
   }
 
@@ -88,7 +88,7 @@ export class SparnaturalElement extends HTMLElement {
   attributeChangedCallback(
     name: string,
     oldValue: string | null,
-    newValue: string | null
+    newValue: string | null,
   ) {
     if (oldValue === newValue) {
       return;
@@ -98,7 +98,7 @@ export class SparnaturalElement extends HTMLElement {
     if (oldValue != null) {
       if (getSettings().debug) {
         console.log(
-          `${name}'s value has been changed from ${oldValue} to ${newValue}`
+          `${name}'s value has been changed from ${oldValue} to ${newValue}`,
         );
       }
 
@@ -151,7 +151,7 @@ export class SparnaturalElement extends HTMLElement {
    * @returns True if the query is a SparnaturalQuery (v13), false if it's a SparnaturalQueryIfc (v1)
    */
   private isV13Query(
-    query: SparnaturalQuery | SparnaturalQueryIfc
+    query: SparnaturalQuery | SparnaturalQueryIfc,
   ): query is SparnaturalQuery {
     return (query as SparnaturalQuery).where !== undefined;
   }
@@ -182,7 +182,7 @@ export class SparnaturalElement extends HTMLElement {
   executeSparql(
     query: string,
     callback: (data: any) => void,
-    errorCallback?: (error: any) => void
+    errorCallback?: (error: any) => void,
   ) {
     let sparqlFetcherFactory: SparqlHandlerFactory = new SparqlHandlerFactory(
       getSettings().language,
@@ -190,7 +190,7 @@ export class SparnaturalElement extends HTMLElement {
       getSettings().customization.headers,
       getSettings().customization.sparqlHandler,
       // can be undefined
-      this.sparnatural.catalog
+      this.sparnatural.catalog,
     );
 
     let sparqlFetcher: SparqlHandlerIfc =
@@ -210,5 +210,5 @@ export class SparnaturalElement extends HTMLElement {
 customElements.get(SparnaturalElement.HTML_ELEMENT_NAME) ||
   window.customElements.define(
     SparnaturalElement.HTML_ELEMENT_NAME,
-    SparnaturalElement
+    SparnaturalElement,
   );

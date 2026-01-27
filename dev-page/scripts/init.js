@@ -33,7 +33,7 @@ sparnatural.addEventListener("init", (event) => {
 
 sparnatural.addEventListener("queryUpdated", (event) => {
   var queryString = sparnatural.expandSparql(event.detail.queryString);
-
+  console.log("Expanded query string Sparnatural:", queryString);
   yasqe.setValue(queryString);
 
   // store JSON in hidden field
@@ -71,11 +71,11 @@ sparnatural.addEventListener("queryUpdated", (event) => {
   // Mettre à jour le champ caché
 
   document.getElementById("query-json").value = JSON.stringify(
-    event.detail.queryJson
+    event.detail.OldQueryJson
   );
 
   document.getElementById("new-query-json").value = JSON.stringify(
-    event.detail.newQueryJson
+    event.detail.queryJson
   );
 
   // Notifier les plugins Yasr

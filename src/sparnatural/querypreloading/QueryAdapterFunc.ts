@@ -35,7 +35,7 @@ type Mapper<I, O> = (input: I) => O;
  * @returns The labelled criteria, or null if the term type is unsupported
  */
 export function graphTermToLabelledCriteria(
-  term: GraphTerm
+  term: GraphTerm,
 ): LabelledCriteria<RdfTermCriteria> | null {
   if (term.subType === "namedNode") {
     const iri = term as TermIri | TermLabelledIri;
@@ -81,7 +81,7 @@ export function graphTermToLabelledCriteria(
  */
 export function translateObjectValues(
   variableName: string,
-  obj: ObjectCriteria
+  obj: ObjectCriteria,
 ): LabelledCriteria<Criteria>[] {
   const values = obj.values;
   if (!values || values.length === 0) return [];
@@ -107,7 +107,7 @@ export function translateObjectValues(
  */
 export function translateValueRows(
   variableName: string,
-  rows: ValuePatternRow[]
+  rows: ValuePatternRow[],
 ): LabelledCriteria<Criteria>[] {
   return rows.flatMap((row) => {
     const term = row[variableName];
@@ -123,7 +123,7 @@ export function translateValueRows(
  * @returns An array of labelled criteria
  */
 export function translateFilters(
-  filters: LabelledFilter[]
+  filters: LabelledFilter[],
 ): LabelledCriteria<Criteria>[] {
   return filters.map((lf) => {
     const mapper = filterToCriteriaMap[lf.filter.type];
@@ -178,7 +178,7 @@ const filterToCriteriaMap: Record<
  */
 
 export function patternBindToVariableExpression(
-  bind: PatternBind
+  bind: PatternBind,
 ): VariableExpression {
   return {
     expression: {
@@ -271,7 +271,7 @@ const criteriaToFilterRegistry: Array<{
  * @returns An array of labelled filters v13
  */
 export function labelledCriteriaToFilters(
-  vals: LabelledCriteria<Criteria>[]
+  vals: LabelledCriteria<Criteria>[],
 ): LabelledFilter[] {
   return vals.flatMap((v) => {
     const entry = criteriaToFilterRegistry.find((r) => r.match(v.criteria));
@@ -285,7 +285,7 @@ export function labelledCriteriaToFilters(
  * @returns An array of flat value patterns v13
  */
 export function labelledCriteriaToFlatValues(
-  vals: LabelledCriteria<Criteria>[]
+  vals: LabelledCriteria<Criteria>[],
 ): Array<{
   type: "term";
   subType: "namedNode" | "literal";
@@ -295,7 +295,7 @@ export function labelledCriteriaToFlatValues(
 }> {
   return vals
     .filter(
-      (v): v is LabelledCriteria<RdfTermCriteria> => "rdfTerm" in v.criteria
+      (v): v is LabelledCriteria<RdfTermCriteria> => "rdfTerm" in v.criteria,
     )
     .map((v) => {
       const t = v.criteria.rdfTerm;

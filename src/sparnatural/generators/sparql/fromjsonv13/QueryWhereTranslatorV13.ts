@@ -26,7 +26,7 @@ export default class QueryWhereTranslatorV13 {
   constructor(
     jsonQuery: SparnaturalQuery,
     specProvider: ISparnaturalSpecification,
-    settings: any
+    settings: any,
   ) {
     this.#jsonQuery = jsonQuery;
     this.#specProvider = specProvider;
@@ -61,7 +61,7 @@ export default class QueryWhereTranslatorV13 {
           index === 0,
           // first level is never "inside" optional/notExists
           false,
-          this.settings
+          this.settings,
         );
 
         branchBuilder.build();
