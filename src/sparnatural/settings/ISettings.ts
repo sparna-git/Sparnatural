@@ -1,5 +1,5 @@
+import { SparqlHandlerIfc } from "rdf-shacl-commons";
 import { AutocompleteConfiguration } from "../components/widgets/AutoCompleteWidget";
-import { SparqlHandlerIfc } from "../components/datasources/SparqlHandler";
 import { ListConfiguration } from "../components/widgets/ListWidget";
 import { MapConfiguration } from "../components/widgets/MapWidget";
 import { NumberConfiguration } from "../components/widgets/NumberWidget";

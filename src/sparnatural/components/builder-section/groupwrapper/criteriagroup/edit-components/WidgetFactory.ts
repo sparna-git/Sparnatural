@@ -1,13 +1,11 @@
 import { Config } from "../../../../../ontologies/SparnaturalConfig";
 import { Datasources } from "../../../../../ontologies/SparnaturalConfigDatasources";
-import { Catalog } from "../../../../../settings/Catalog";
 import { HTMLComponent } from "../../../../HtmlComponent";
 import { SelectedVal } from "../../../../SelectedVal";
 import { AbstractWidget } from "../../../../widgets/AbstractWidget";
 import { AutocompleteConfiguration, AutoCompleteWidget } from "../../../../widgets/AutoCompleteWidget";
 import { BooleanConfiguration, BooleanWidget } from "../../../../widgets/BooleanWidget";
 import { ListSparqlTemplateQueryBuilder, AutocompleteSparqlTemplateQueryBuilder, TreeSparqlTemplateQueryBuilder, ValuesListSparqlTemplateQueryBuilder } from "../../../../datasources/SparqlBuilders";
-import { SparqlHandlerFactory, SparqlHandlerIfc } from "../../../../datasources/SparqlHandler";
 import { ListConfiguration, ListWidget } from "../../../../widgets/ListWidget";
 import MapWidget, { MapConfiguration } from "../../../../widgets/MapWidget";
 import { NoWidget } from "../../../../widgets/NoWidget";
@@ -20,7 +18,7 @@ import { NoOpListDataProvider, NoOpAutocompleteProvider, NoOpTreeDataProvider } 
 import { SparqlListDataProvider, SparqlAutocompleDataProvider, SparqlTreeDataProvider, SparqlValuesListDataProvider } from "../../../../datasources/SparqlDataProviders";
 import ISpecificationProperty from "../../../../../spec-providers/ISpecificationProperty";
 import { IDatasource } from "../../../../../spec-providers/IDatasource";
-import { RDFS, SKOS } from "rdf-shacl-commons";
+import { Catalog, RDFS, SKOS, SparqlHandlerFactory, SparqlHandlerIfc } from "rdf-shacl-commons";
 
 /**
  * Inversion of coupling : we don't want to depend on ISettings as this class is meant to be reused

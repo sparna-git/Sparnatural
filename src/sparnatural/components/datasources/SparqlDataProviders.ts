@@ -1,9 +1,8 @@
 import { Term } from "@rdfjs/types/data-model";
 import { ListDataProviderIfc, RdfTermDatasourceItem, AutocompleteDataProviderIfc, TreeDataProviderIfc, RdfTermTreeDatasourceItem, ValuesListDataProviderIfc } from "./DataProviders";
 import { AutocompleteSparqlQueryBuilderIfc, ListSparqlQueryBuilderIfc, TreeSparqlQueryBuilderIfc, ValuesListSparqlQueryBuilderIfc } from "./SparqlBuilders";
-import { SparqlHandlerIfc } from "./SparqlHandler";
 import { sameTerm } from "../../SparnaturalQueryIfc";
-
+import { SparqlHandlerIfc } from "rdf-shacl-commons";
 
 export abstract class BaseSparqlListDataProvider {
     

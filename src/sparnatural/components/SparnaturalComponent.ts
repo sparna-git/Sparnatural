@@ -7,8 +7,8 @@ import ActionStore from "../statehandling/ActionStore";
 import VariableSection from "./variables-section/VariableSelection";
 import { HTMLComponent } from "./HtmlComponent";
 import { SparnaturalElement } from "../../SparnaturalElement";
-import { Catalog } from "../settings/Catalog";
 import { I18n } from "../settings/I18n";
+import { Catalog } from "rdf-shacl-commons";
 
 class SparnaturalComponent extends HTMLComponent {
   specProvider: ISparnaturalSpecification;

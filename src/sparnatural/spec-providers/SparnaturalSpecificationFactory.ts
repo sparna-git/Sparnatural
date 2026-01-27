@@ -1,9 +1,8 @@
 import { DataFactory } from 'rdf-data-factory';
 import { RdfStore } from "rdf-stores";
 import { OWLSpecificationProvider } from "./owl//OWLSpecificationProvider";
-import { Catalog } from '../settings/Catalog';
 import { SHACLSpecificationProvider } from './shacl/SHACLSpecificationProvider';
-import { RDF, RdfStoreReader, SH } from 'rdf-shacl-commons';
+import { Catalog, RDF, RdfStoreReader, SH } from 'rdf-shacl-commons';
 
 let DF = new DataFactory();
 

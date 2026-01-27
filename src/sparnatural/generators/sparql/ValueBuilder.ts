@@ -19,7 +19,6 @@ import ISpecificationProperty from "../../spec-providers/ISpecificationProperty"
 import { SHACLSpecificationEntity } from "../../spec-providers/shacl/SHACLSpecificationEntity";
 import { DateCriteria, RDFTerm, RdfTermCriteria, LabelledCriteria, Criteria, BooleanCriteria, NumberCriteria, SearchCriteria, MapCriteria } from "../../SparnaturalQueryIfc";
 import { GEOFUNCTIONS, GEOSPARQL } from "rdf-shacl-commons";
-import { SHACLSpecificationProperty } from "../../spec-providers/shacl/SHACLSpecificationProperty";
 
 const factory = new DataFactory();
 

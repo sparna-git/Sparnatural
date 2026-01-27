@@ -10,11 +10,7 @@ import { SparnaturalQuery } from "./sparnatural/SparnaturalQueryIfc-v13";
 import QueryLoader from "./sparnatural/querypreloading/QueryLoader";
 import QueryLoaderv13 from "./sparnatural/querypreloading/QueryLoader-v13";
 import { SparnaturalAttributes } from "./SparnaturalAttributes";
-import {
-  SparqlHandlerFactory,
-  SparqlHandlerIfc,
-} from "./sparnatural/components/datasources/SparqlHandler";
-
+import { SparqlHandlerFactory, SparqlHandlerIfc } from "rdf-shacl-commons";
 /*
   This is the sparnatural HTMLElement. 
   e.g. Interface to the outside world

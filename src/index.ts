@@ -24,7 +24,7 @@ export * from "./sparnatural/components/widgets/timedatepickerwidget/TimeDatePic
 // export * from "./sparnatural/components/widgets/LoadingSpinner";
 // export * from "./sparnatural/components/widgets/data/DataProviders";
 // export * from "./sparnatural/components/widgets/data/SparqlBuilders";
-export * from "./sparnatural/components/datasources/SparqlHandler";
+
 // export * from "./sparnatural/components/widgets/data/UrlFetcher";
 export * from "./sparnatural/dag/Dag";
 // export * from "./sparnatural/datastorage/LocalCacheData";
@@ -44,8 +44,7 @@ export * from "./sparnatural/generators/sparql/fromjson/JsonSparqlTranslator";
 export * from "./sparnatural/ontologies/SparnaturalConfig";
 export * from "./sparnatural/ontologies/SparnaturalConfigDatasources";
 // export * from "./sparnatural/querypreloading/QueryLoader";
-export * from "./sparnatural/settings/Catalog";
-export * from "./sparnatural/settings/DataService";
+
 export * from "./sparnatural/settings/I18n";
 // export * from "./sparnatural/settings/ISettings";
 // export * from "./sparnatural/settings/defaultSettings";

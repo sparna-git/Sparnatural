@@ -1,6 +1,6 @@
 import { Store } from 'n3';
 import { QueryEngine } from '@comunica/query-sparql-rdfjs-lite';
-import { SparqlHandlerIfc } from './SparqlHandler';
+import { SparqlHandlerIfc } from 'rdf-shacl-commons';
 
 /**
  * A SPARQL handler that executes queries against an in-memory RDF store,
