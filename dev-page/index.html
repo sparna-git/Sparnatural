@@ -97,11 +97,25 @@
 
               https://xls2rdf.sparna.fr/rest/convert?url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2F1LBumEdCIl8CUlkB0PGqPK6T_9-4nnpix%2Fexport%3Fformat%3Dxlsx&noPostProcessings=true https://raw.githubusercontent.com/ICA-EGAD/RiC-O/refs/heads/master/ontology/previous-versions/RiC-O_v0-2_release/RiC-O_v0-2.rdf
             -->
-            <spar-natural
+            <!-- <spar-natural
               id="sparnatural"
               src="configs/dbpediafr-config.ttl"
               lang="en"
               endpoint="https://services.sparnatural.eu/api/v1/dbpedia-en/sparql"
+              defaultLang="fr"
+              distinct="true"
+              limit="1000"
+              maxOr="10"
+              maxDepth="10"
+              debug="false"
+              prefixes="rdfs:http://www.w3.org/2000/01/rdf-schema#"
+            />-->
+
+            <spar-natural
+              id="sparnatural"
+              src="https://xls2rdf.sparna.fr/rest/convert?url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2F1WrC2r7yDQCP5AKhu6SAK8Ba_QshzFKmm%2Fexport%3Fformat%3Dxlsx&noPostProcessings=true https://xls2rdf.sparna.fr/rest/convert?url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2F1UWfCJmgvgwJ0yOs6Ox_qzn47heaiQ0cx%2Fexport%3Fformat%3Dxlsx&noPostProcessings=true configs/collections-shacl.ttl"
+              lang="en"
+              endpoint="https://proxy.sparnatural.eu/sparql-proxy/sparql?endpoint=https%3A%2F%2Fwww.dev.performing-arts.ch%2Fsparql"
               defaultLang="fr"
               distinct="true"
               limit="1000"
@@ -141,8 +155,8 @@
                 Les requêtes sont envoyées à
                 <a
                   id="endpoint"
-                  href="https://services.sparnatural.eu/api/v1/dbpedia-en/sparql"
-                  >https://services.sparnatural.eu/api/v1/dbpedia-en/sparql</a
+                  href="https://proxy.sparnatural.eu/sparql-proxy/sparql?endpoint=https%3A%2F%2Fwww.dev.performing-arts.ch%2Fsparql"
+                  >https://proxy.sparnatural.eu/sparql-proxy/sparql?endpoint=https%3A%2F%2Fwww.dev.performing-arts.ch%2Fsparql</a
                 >
               </span>
             </div>

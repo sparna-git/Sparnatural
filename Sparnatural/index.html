@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sparnatural</title>
+
+    <!-- ================= CSS (IDENTIQUES AU 1ER FICHIER) ================= -->
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+      crossorigin="anonymous"
+    />
+
+    <!-- Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+    <!-- YASGUI CSS -->
+    <link
+      href="https://unpkg.com/@triply/yasgui/build/yasgui.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="fa/css/all.min.css" />
+
+    <!-- datepicker -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@chenfengyuan/datepicker@1.0.9/dist/datepicker.min.css"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+
+    <!-- Sparnatural CSS -->
+    <link rel="stylesheet" href="sparnatural.css" />
+    <link rel="stylesheet" href="sparnatural-history.css" />
+    <link rel="stylesheet" href="fa/css/style.css" />
+
+    <!-- ================= STRUCTURE / LAYOUT CSS ================= -->
+    <style>
+      .modal {
+        z-index: 1050 !important; /* valeur doit etre supérieure à celle de l'overlay */
+      }
+      .modal-backdrop {
+        z-index: 1040 !important; /* L'overlay doit avoir un z-index inferieur*/
+      }
+
+      .yasqe .CodeMirror {
+        font-size: 0.8em;
+      }
+
+      #sparnatural-section {
+        padding-top: 40px;
+        height: auto;
+        overflow: visible;
+      }
+
+      #yasqe {
+        display: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- ======= NavBar ======= -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="#">Sparnatural !</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" href="https://sparnatural.eu"
+                >Sparnatural Home</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="https://github.com/sparna-git/Sparnatural"
+                >Github</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="https://docs.sparnatural.eu"
+                >Documentation</a
+              >
+            </li>
+            <li class="nav-item" style="margin-left: 500px">
+              <a class="nav-link" href="?lang=fr">fr</a>
+            </li>
+            &nbsp;|&nbsp;
+            <li class="nav-item"><a class="nav-link" href="?lang=en">en</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- ================= MAIN ================= -->
+    <main>
+      <!-- ================= SPARNATURAL ================= -->
+      <section class="container mt-4">
+        <spar-natural
+          src="./sparnatural-config.ttl"
+          endpoint="https://dbpedia.org/sparql"
+          lang="en"
+          defaultLang="en"
+          distinct="true"
+          limit="1000"
+          debug="true"
+        ></spar-natural>
+
+        <input type="hidden" id="query-json" />
+      </section>
+
+      <!-- ================= ACTION BAR ================= -->
+      <section class="container mb-1">
+        <div class="row">
+          <div class="col-md-6">
+            <span style="font-style: italic; font-size: 0.9em">
+              <a href="#" id="sparql-toggle">
+                <i id="sparql-toggle-icon" class="fad fa-eye fa-fw"></i>
+                <span data-i18n="toggleSparql"></span>Toggle SPARQL
+              </a>
+              &nbsp;|&nbsp;
+              <a href="#" id="share">
+                <i class="fad fa-share-square"></i>
+                <span data-i18n="share"> Share</span>
+              </a>
+              &nbsp;|&nbsp;
+              <a href="#" id="export">
+                <i class="fad fa-file-export"></i>
+                <span data-i18n="export"> Export</span>
+              </a>
+              &nbsp;|&nbsp;
+              <a href="#" id="import">
+                <i class="fad fa-file-import"></i>
+                <span data-i18n="import"> Import</span>
+              </a>
+            </span>
+          </div>
+
+          <div class="col-md-4">
+            <select
+              class="form-control"
+              id="select-examples"
+              style="width: 100%; appearance: auto !important"
+            >
+              <option value="none" selected>
+                <span data-i18n="loadQueryExemple"
+                  >Charger une requête d’exemple…</span
+                >
+              </option>
+            </select>
+          </div>
+
+          <div class="col-md-2 text-end">
+            <sparnatural-history lang="fr">
+              <sparnatural-services
+                href="https://services.sparnatural.eu/api/v1/dbpedia-en/"
+              ></sparnatural-services>
+            </sparnatural-history>
+
+            <button id="myCustomButton" class="btn btn-primary w-100">
+              <i class="fad fa-history"></i
+              ><span data-i18n="history.title"> History</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= YASQE ================= -->
+      <section class="container">
+        <div id="yasqe"></div>
+      </section>
+
+      <!-- ================= YASR ================= -->
+      <section class="container mb-4">
+        <div id="yasr"></div>
+      </section>
+    </main>
+
+    <!-- ================= MODALS ================= -->
+
+    <!-- ================= SHARE MODAL ================= -->
+    <div class="modal fade" id="shareModal" tabindex="-1">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Partage de requête</h5>
+            <button class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+
+          <div class="modal-body">
+            <p>Pour partager cette requête, envoyez le lien suivant :</p>
+            <a id="share-link" href="#" target="_blank" rel="noopener"></a>
+          </div>
+
+          <div class="modal-footer">
+            <button class="btn btn-secondary" data-bs-dismiss="modal">
+              Fermer
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= EXPORT MODAL ================= -->
+    <div class="modal fade" id="exportModal" tabindex="-1">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Export JSON</h5>
+            <button class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+
+          <div class="modal-body" style="overflow: hidden">
+            <textarea
+              id="export-json"
+              class="form-control font-monospace"
+              rows="20"
+              style="width: 100%"
+              readonly
+            ></textarea>
+          </div>
+
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Fermer
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= IMPORT MODAL ================= -->
+    <div class="modal fade" id="importModal" tabindex="-1">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Import JSON</h5>
+            <button class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+
+          <div class="modal-body" style="overflow: hidden">
+            <textarea
+              id="import-json"
+              class="font-monospace"
+              rows="20"
+              style="width: 100%"
+            ></textarea>
+          </div>
+
+          <div class="modal-footer">
+            <button id="importButton" class="btn btn-primary">Import</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <a
+      href="#"
+      class="back-to-top d-flex align-items-center justify-content-center"
+      ><i class="bi bi-chevron-up"></i
+    ></a>
+
+    <!-- ================= JS (IDENTIQUES AU 1ER FICHIER) ================= -->
+
+    <!-- jQuery (AVANT jquery.i18n) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- jquery.i18n (cdnjs) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.8/jquery.i18n.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.8/jquery.i18n.messagestore.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.8/jquery.i18n.fallbacks.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.8/jquery.i18n.parser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.8/jquery.i18n.emitter.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.8/jquery.i18n.language.min.js"></script>
+
+    <!-- i18n -->
+    <script>
+      const lang =
+        new URLSearchParams(window.location.search).get("lang") || "en";
+
+      // sync <html lang>
+      document.documentElement.lang = lang;
+
+      // init jquery i18n
+      $.i18n({ locale: lang });
+
+      $.i18n()
+        .load({
+          en: {
+            "history.title": " History",
+            toggleSparql: "  Toggle SPARQL editor",
+            share: "Share",
+            export: "Export",
+            import: "Import",
+            loadQueryExemple: "Load example query...",
+          },
+          fr: {
+            "history.title": " Historique",
+            toggleSparql: "  Afficher/Masquer éditeur SPARQL",
+            share: "Partager",
+            export: "Exporter la requête en JSON",
+            import: "Charger une requête en JSON",
+            loadQueryExemple: "Charger une requête d’exemple…",
+          },
+        })
+        .done(function () {
+          $("body").i18n();
+          console.log("i18n ready, lang =", lang);
+        });
+    </script>
+
+    <!-- anchors -->
+    <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js"></script>
+
+    <!-- Bootstrap -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- YASGUI -->
+    <script src="https://unpkg.com/@triply/yasgui/build/yasgui.min.js"></script>
+
+    <!-- Sparnatural -->
+    <script src="sparnatural.js"></script>
+    <script src="sparnatural-yasgui-plugins.js"></script>
+    <script src="sparnatural-services.js"></script>
+    <script src="sparnatural-history.js"></script>
+    <script src="sample-queries.js"></script>
+
+    <!-- JsonUrl (pour share / compress URL) -->
+    <script src="https://cdn.jsdelivr.net/npm/json-url@3.1.0/dist/browser/json-url.min.js"></script>
+
+    <!-- Custom JS -->
+    <script src="main.js"></script>
+  </body>
+</html>

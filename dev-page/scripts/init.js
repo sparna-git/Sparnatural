@@ -10,6 +10,10 @@ console.log("urlParams", urlParams);
 const lang = urlParams.get("lang");
 console.log("Configuration ", sparnatural.configuration);
 
+// Declare yasr and yasqe at the top level so they can be used in event handlers
+let yasr;
+let yasqe;
+
 sparnatural.addEventListener("init", (event) => {
   console.log("init sparnatural...");
   sparnatural.configuration = {
@@ -20,13 +24,16 @@ sparnatural.addEventListener("init", (event) => {
   };
   console.log("Configuration ", sparnatural.configuration);
   // Notify all plugins of configuration updates if they support it
-  for (const plugin in yasr.plugins) {
-    if (yasr.plugins[plugin].notifyConfiguration) {
-      console.log("notifying configuration for plugin " + plugin);
-      yasr.plugins[plugin].notifyConfiguration(
-        sparnatural.sparnatural.specProvider
-      );
-      console.log("sparnatural", sparnatural.sparnatural.specProvider);
+  // Only if yasr is already initialized
+  if (yasr && yasr.plugins) {
+    for (const plugin in yasr.plugins) {
+      if (yasr.plugins[plugin].notifyConfiguration) {
+        console.log("notifying configuration for plugin " + plugin);
+        yasr.plugins[plugin].notifyConfiguration(
+          sparnatural.sparnatural.specProvider,
+        );
+        console.log("sparnatural", sparnatural.sparnatural.specProvider);
+      }
     }
   }
 });
@@ -38,7 +45,7 @@ sparnatural.addEventListener("queryUpdated", (event) => {
 
   // store JSON in hidden field
   document.getElementById("query-json").value = JSON.stringify(
-    event.detail.queryString
+    event.detail.queryString,
   );
 
   // notify the query to yasr plugins
@@ -64,18 +71,18 @@ sparnatural.addEventListener("queryUpdated", (event) => {
   const statusCell = document.createElement("td");
   statusCell.textContent = queryStringOld === queryString ? "OK" : "Pas OK";
   statusCell.classList.add(
-    queryStringOld === queryString ? "table-success" : "table-danger"
+    queryStringOld === queryString ? "table-success" : "table-danger",
   );
   row.appendChild(statusCell);
   tableBody.appendChild(row);
   // Mettre à jour le champ caché
 
   document.getElementById("query-json").value = JSON.stringify(
-    event.detail.OldQueryJson
+    event.detail.OldQueryJson,
   );
 
   document.getElementById("new-query-json").value = JSON.stringify(
-    event.detail.queryJson
+    event.detail.queryJson,
   );
 
   // Notifier les plugins Yasr
@@ -94,7 +101,7 @@ sparnatural.addEventListener("submit", (event) => {
 });
 
 console.log("init yasr & yasqe...");
-const yasqe = new Yasqe(document.getElementById("yasqe"), {
+yasqe = new Yasqe(document.getElementById("yasqe"), {
   requestConfig: { endpoint: $("#endpoint").text() },
   copyEndpointOnNewTab: false,
 });
@@ -107,7 +114,7 @@ Yasr.registerPlugin("GridPlugin", SparnaturalYasguiPlugins.GridPlugin);
 Yasr.plugins.TableX.defaults.openIriInNewWindow = true;
 
 delete Yasr.plugins["table"];
-const yasr = new Yasr(document.getElementById("yasr"), {
+yasr = new Yasr(document.getElementById("yasr"), {
   pluginOrder: ["TableX", "Response", "Map", "GridPlugin", "StatsPlugin"],
   defaultPlugin: "TableX",
   //this way, the URLs in the results are prettified using the defined prefixes in the query
@@ -133,7 +140,7 @@ document.getElementById("export").onclick = function () {
   var jsonString = JSON.stringify(
     JSON.parse(document.getElementById("query-json").value),
     null,
-    2
+    2,
   );
   $("#export-json").val(jsonString);
   $("#exportModal").modal("show");
@@ -143,7 +150,7 @@ document.getElementById("newExport").onclick = function () {
   var jsonString = JSON.stringify(
     JSON.parse(document.getElementById("new-query-json").value),
     null,
-    2
+    2,
   );
   $("#export-json").val(jsonString);
   $("#exportModal").modal("show");
