@@ -1,9 +1,9 @@
-import { DataFactory } from 'rdf-data-factory';
+import { DataFactory } from "rdf-data-factory";
 import { SelectedVal } from "../SelectedVal";
 import { AbstractWidget, ValueRepetition } from "./AbstractWidget";
-import { I18n } from '../../settings/I18n';
-import { HTMLComponent } from '../HtmlComponent';
-import { BooleanCriteria, LabelledCriteria } from '../../SparnaturalQueryIfc';
+import { I18n } from "../../settings/I18n";
+import { HTMLComponent } from "../HtmlComponent";
+import { BooleanCriteria, LabelledCriteria } from "../../SparnaturalQueryIfc";
 
 const factory = new DataFactory();
 
@@ -12,7 +12,6 @@ export interface BooleanConfiguration {
 }
 
 export class BooleanWidget extends AbstractWidget {
-
   configuration: BooleanConfiguration;
 
   constructor(
@@ -20,7 +19,7 @@ export class BooleanWidget extends AbstractWidget {
     configuration: BooleanConfiguration,
     startClassVal: SelectedVal,
     objectPropVal: SelectedVal,
-    endClassVal: SelectedVal
+    endClassVal: SelectedVal,
   ) {
     super(
       "boolean-widget",
@@ -29,7 +28,7 @@ export class BooleanWidget extends AbstractWidget {
       startClassVal,
       objectPropVal,
       endClassVal,
-      ValueRepetition.SINGLE
+      ValueRepetition.SINGLE,
     );
 
     this.configuration = configuration;
@@ -38,21 +37,28 @@ export class BooleanWidget extends AbstractWidget {
   render() {
     super.render();
     let trueSpan = $(
-      `<span class="boolean-value">${this.configuration.existNotExist ? I18n.labels.exists : I18n.labels.true}</span>'`
+      `<span class="boolean-value">${
+        this.configuration.existNotExist ? I18n.labels.exists : I18n.labels.true
+      }</span>`,
     );
     let orSpan = $(`<span class="or">&nbsp;${I18n.labels.Or}&nbsp;</span>`);
     let falseSpan = $(
-      `<span class="boolean-value"">${this.configuration.existNotExist ? I18n.labels.notExists : I18n.labels.true}</span>`
+      `<span class="boolean-value">${
+        this.configuration.existNotExist
+          ? I18n.labels.notExists
+          : I18n.labels.false
+      }</span>`,
     );
     this.html.append(trueSpan).append(orSpan).append(falseSpan);
 
     trueSpan[0].addEventListener("click", (e) => {
-      let widgetValue:LabelledCriteria<BooleanCriteria> = {
-        label: this.configuration.existNotExist ? I18n.labels.exists : I18n.labels.true,
+      let widgetValue: LabelledCriteria<BooleanCriteria> = {
+        label: this.configuration.existNotExist
+          ? I18n.labels.exists
+          : I18n.labels.true,
         criteria: {
-          boolean: true
-        }
-        
+          boolean: true,
+        },
       };
 
       this.triggerRenderWidgetVal(widgetValue);
@@ -60,10 +66,12 @@ export class BooleanWidget extends AbstractWidget {
 
     falseSpan[0].addEventListener("click", (e) => {
       let widgetValue: LabelledCriteria<BooleanCriteria> = {
-        label: this.configuration.existNotExist ? I18n.labels.notExists : I18n.labels.true,
+        label: this.configuration.existNotExist
+          ? I18n.labels.notExists
+          : I18n.labels.false,
         criteria: {
-          boolean: false
-        }
+          boolean: false,
+        },
       };
 
       this.triggerRenderWidgetVal(widgetValue);
@@ -71,8 +79,9 @@ export class BooleanWidget extends AbstractWidget {
     return this;
   }
 
-  parseInput(input: LabelledCriteria<BooleanCriteria>): LabelledCriteria<BooleanCriteria> {
+  parseInput(
+    input: LabelledCriteria<BooleanCriteria>,
+  ): LabelledCriteria<BooleanCriteria> {
     return input;
-   }
-
+  }
 }

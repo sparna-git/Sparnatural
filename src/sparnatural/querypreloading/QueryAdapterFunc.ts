@@ -3,6 +3,7 @@ import {
   Criteria,
   RDFTerm,
   RdfTermCriteria,
+  BooleanCriteria,
   DateCriteria,
   MapCriteria,
   NumberCriteria,
@@ -36,7 +37,7 @@ type Mapper<I, O> = (input: I) => O;
  */
 export function graphTermToLabelledCriteria(
   term: GraphTerm,
-): LabelledCriteria<RdfTermCriteria> | null {
+): LabelledCriteria<RdfTermCriteria | BooleanCriteria> | null {
   if (term.subType === "namedNode") {
     const iri = term as TermIri | TermLabelledIri;
     return {
@@ -53,12 +54,25 @@ export function graphTermToLabelledCriteria(
   if (term.subType === "literal") {
     const lit = term as TermLiteral;
 
+    // Detect xsd:boolean → return BooleanCriteria
+    const lo = lit.langOrIri;
+    if (lo && typeof lo === "object") {
+      const datatypeValue = (lo as TermIriFull).value;
+      if (datatypeValue === "http://www.w3.org/2001/XMLSchema#boolean") {
+        return {
+          label: lit.value,
+          criteria: {
+            boolean: lit.value === "true",
+          } as BooleanCriteria,
+        };
+      }
+    }
+
     const rdfTerm: RDFTerm = {
       type: "literal",
       value: lit.value,
     };
 
-    const lo = lit.langOrIri;
     if (typeof lo === "string") rdfTerm["xml:lang"] = lo;
     if (lo && typeof lo === "object") {
       rdfTerm.datatype = (lo as TermIriFull).value;
@@ -282,39 +296,86 @@ export function labelledCriteriaToFilters(
 /**
  * Converts labelled criteria with RDFTerm to flat values (v1 to v13)
  * @param vals An array of labelled criteria v1
- * @returns An array of flat value patterns v13
+ * @returns An array of GraphTerm with label (TermLabelledIri or TermLiteral with label)
  */
 export function labelledCriteriaToFlatValues(
   vals: LabelledCriteria<Criteria>[],
-): Array<{
-  type: "term";
-  subType: "namedNode" | "literal";
-  value: string;
-  label: string;
-  langOrIri?: string;
-}> {
-  return vals
-    .filter(
-      (v): v is LabelledCriteria<RdfTermCriteria> => "rdfTerm" in v.criteria,
-    )
-    .map((v) => {
-      const t = v.criteria.rdfTerm;
+): GraphTerm[] {
+  const results: GraphTerm[] = [];
+
+  for (const v of vals) {
+    // RdfTermCriteria → named node or literal
+    if ("rdfTerm" in v.criteria) {
+      const t = (v.criteria as RdfTermCriteria).rdfTerm;
 
       if (t.type === "uri") {
-        return {
+        results.push({
           type: "term",
           subType: "namedNode",
           value: t.value,
           label: v.label,
-        };
+        } as TermLabelledIri);
+        continue;
       }
 
-      return {
+      // Literal with language tag
+      if (t["xml:lang"]) {
+        results.push({
+          type: "term",
+          subType: "literal",
+          value: t.value,
+          langOrIri: t["xml:lang"],
+          label: v.label,
+        } as TermLiteral & { label: string });
+        continue;
+      }
+
+      // Literal with datatype
+      if (t.datatype) {
+        results.push({
+          type: "term",
+          subType: "literal",
+          value: t.value,
+          langOrIri: {
+            type: "term",
+            subType: "namedNode",
+            value: t.datatype,
+          } as TermIri,
+          label: v.label,
+        } as TermLiteral & { label: string });
+        continue;
+      }
+
+      // Plain literal (no lang, no datatype)
+      results.push({
         type: "term",
         subType: "literal",
         value: t.value,
+        langOrIri: undefined,
         label: v.label,
-        langOrIri: t["xml:lang"] ?? t.datatype,
-      };
-    });
+      } as TermLiteral & { label: string });
+      continue;
+    }
+
+    // BooleanCriteria → literal with xsd:boolean datatype
+    if ("boolean" in v.criteria) {
+      const boolVal = (v.criteria as BooleanCriteria).boolean;
+      results.push({
+        type: "term",
+        subType: "literal",
+        value: String(boolVal),
+        langOrIri: {
+          type: "term",
+          subType: "namedNode",
+          value: "http://www.w3.org/2001/XMLSchema#boolean",
+        } as TermIri,
+        label: v.label,
+      } as TermLiteral & { label: string });
+      continue;
+    }
+
+    // Other criteria types (date, number, search, map) are handled by filters, not values
+  }
+
+  return results;
 }

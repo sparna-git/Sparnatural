@@ -9,11 +9,11 @@ const FileManagerPlugin = require("filemanager-webpack-plugin");
 
 module.exports = {
   entry: {
-    sparnatural: [ "./src/SparnaturalElement.ts", "./scss/sparnatural.scss" ]
+    sparnatural: ["./src/SparnaturalElement.ts", "./scss/sparnatural.scss"],
   },
   output: {
     path: path.resolve(__dirname, "./dist/browser"),
-    filename: "[name].js"
+    filename: "[name].js",
   },
   module: {
     rules: [
@@ -78,7 +78,7 @@ module.exports = {
       stream: require.resolve("stream-browserify"),
       querystring: require.resolve("querystring-es3"),
       url: require.resolve("url/"),
-      crypto: false
+      crypto: false,
     },
     extensions: [".tsx", ".ts", ".js"],
   },
@@ -124,7 +124,7 @@ module.exports = {
           globOptions: {
             ignore: ["**/index.html", "**/form-page.html"], // Assure-toi de ne pas copier ces fichiers déjà générés
           },
-        }
+        },
       ],
     }),
 
@@ -208,7 +208,64 @@ module.exports = {
             ],
           },
           {
-            delete: ["./dist/hello-sparnatural"]
+            delete: ["./dist/hello-sparnatural"],
+          },
+          // sparnatural-starter folder
+          {
+            copy: [
+              {
+                source: "./sparnatural-starter/**",
+                destination: "./dist/sparnatural-starter",
+                options: { overwrite: true },
+              },
+            ],
+          },
+          {
+            copy: [
+              {
+                source: "./dist/browser/sparnatural.js",
+                destination: "./dist/sparnatural-starter/js/",
+                options: { overwrite: true },
+              },
+            ],
+          },
+          {
+            copy: [
+              {
+                source: "./dist/browser/sparnatural.css",
+                destination: "./dist/sparnatural-starter/css/",
+                options: { overwrite: true },
+              },
+            ],
+          },
+          {
+            copy: [
+              {
+                source: "./dist/browser/sparnatural.js.map",
+                destination: "./dist/sparnatural-starter/js/",
+                options: { overwrite: true },
+              },
+            ],
+          },
+          {
+            copy: [
+              {
+                source: "./dist/browser/sparnatural.css.map",
+                destination: "./dist/sparnatural-starter/css/",
+                options: { overwrite: true },
+              },
+            ],
+          },
+          {
+            archive: [
+              {
+                source: "./dist/sparnatural-starter",
+                destination: "./dist/sparnatural-starter.zip",
+              },
+            ],
+          },
+          {
+            delete: ["./dist/sparnatural-starter"],
           },
           {
             copy: [

@@ -39,8 +39,8 @@
     />
 
     <!-- Sparnatural CSS -->
-    <link rel="stylesheet" href="sparnatural.css" />
-    <link rel="stylesheet" href="sparnatural-history.css" />
+    <link rel="stylesheet" href="css/sparnatural.css" />
+    <link rel="stylesheet" href="css/sparnatural-history.css" />
     <link rel="stylesheet" href="fa/css/style.css" />
 
     <!-- ================= STRUCTURE / LAYOUT CSS ================= -->
@@ -117,7 +117,7 @@
       <!-- ================= SPARNATURAL ================= -->
       <section class="container mt-4">
         <spar-natural
-          src="./sparnatural-config.ttl"
+          src="./configs/sparnatural-config.ttl"
           endpoint="https://dbpedia.org/sparql"
           lang="en"
           defaultLang="en"
@@ -171,11 +171,7 @@
           </div>
 
           <div class="col-md-2 text-end">
-            <sparnatural-history lang="fr">
-              <sparnatural-services
-                href="https://services.sparnatural.eu/api/v1/dbpedia-en/"
-              ></sparnatural-services>
-            </sparnatural-history>
+            <sparnatural-history lang="fr"> </sparnatural-history>
 
             <button id="myCustomButton" class="btn btn-primary w-100">
               <i class="fad fa-history"></i
@@ -203,12 +199,12 @@
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Partage de requête</h5>
+            <h5 class="modal-title"><span data-i18n="shareModal.title"></span></h5>
             <button class="btn-close" data-bs-dismiss="modal"></button>
           </div>
 
           <div class="modal-body">
-            <p>Pour partager cette requête, envoyez le lien suivant :</p>
+            <p><span data-i18n="shareModal.instructions"></p>
             <a id="share-link" href="#" target="_blank" rel="noopener"></a>
           </div>
 
@@ -317,6 +313,8 @@
             export: "Export",
             import: "Import",
             loadQueryExemple: "Load example query...",
+            "shareModal.instructions": "To share this query, send the following link:",
+            "shareModal.title": "Share Query",
           },
           fr: {
             "history.title": " Historique",
@@ -325,6 +323,9 @@
             export: "Exporter la requête en JSON",
             import: "Charger une requête en JSON",
             loadQueryExemple: "Charger une requête d’exemple…",
+            "shareModal.instructions":
+              "Pour partager cette requête, envoyez le lien suivant :",
+            "shareModal.title": "Partage de requête",
           },
         })
         .done(function () {
@@ -347,16 +348,15 @@
     <script src="https://unpkg.com/@triply/yasgui/build/yasgui.min.js"></script>
 
     <!-- Sparnatural -->
-    <script src="sparnatural.js"></script>
-    <script src="sparnatural-yasgui-plugins.js"></script>
-    <script src="sparnatural-services.js"></script>
-    <script src="sparnatural-history.js"></script>
-    <script src="sample-queries.js"></script>
+    <script src="js/sparnatural.js"></script>
+    <script src="js/sparnatural-yasgui-plugins.js"></script>
+    <script src="js/sparnatural-history.js"></script>
+    <script src="js/sample-queries.js"></script>
 
     <!-- JsonUrl (pour share / compress URL) -->
     <script src="https://cdn.jsdelivr.net/npm/json-url@3.1.0/dist/browser/json-url.min.js"></script>
 
     <!-- Custom JS -->
-    <script src="main.js"></script>
+    <script src="js/main.js"></script>
   </body>
 </html>

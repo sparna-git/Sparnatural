@@ -142,7 +142,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const url = window.location.pathname + "?query=" + result;
         const link = document.getElementById("share-link");
         link.href = url;
-        link.textContent = "Requête partagée";
+        if (lang === "fr") {
+          link.textContent = "Requête Sparnatural";
+        } else {
+          link.textContent = "Sparnatural Query";
+        }
         new bootstrap.Modal(document.getElementById("shareModal")).show();
       });
   });
