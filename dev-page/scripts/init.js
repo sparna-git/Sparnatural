@@ -78,10 +78,10 @@ sparnatural.addEventListener("queryUpdated", (event) => {
   // Mettre à jour le champ caché
 
   document.getElementById("query-json").value = JSON.stringify(
-    event.detail.OldQueryJson,
+    event.detail.queryJson,
   );
 
-  document.getElementById("new-query-json").value = JSON.stringify(
+  document.getElementById("old-query-json").value = JSON.stringify(
     event.detail.queryJson,
   );
 
@@ -146,9 +146,9 @@ document.getElementById("export").onclick = function () {
   $("#exportModal").modal("show");
 };
 
-document.getElementById("newExport").onclick = function () {
+document.getElementById("oldExport").onclick = function () {
   var jsonString = JSON.stringify(
-    JSON.parse(document.getElementById("new-query-json").value),
+    JSON.parse(document.getElementById("old-query-json").value),
     null,
     2,
   );
