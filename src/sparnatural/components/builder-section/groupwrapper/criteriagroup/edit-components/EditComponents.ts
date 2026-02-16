@@ -114,7 +114,7 @@ class EditComponents extends HTMLComponent {
   maxDepthIsReached() {
     let maxreached = false;
     this.html[0].dispatchEvent(
-      new CustomEvent("getMaxVarIndex", {
+      new CustomEvent("getMaxDepth", {
         bubbles: true,
         detail: (index: number) => {
           if (index >= getSettings().maxDepth) maxreached = true;

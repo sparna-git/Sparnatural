@@ -15,18 +15,21 @@ class GroupWrapper extends HTMLComponent {
   whereChild?: GroupWrapper;
   andSibling?: GroupWrapper;
   optionState = OptionTypes.NONE;
-  #isRoot = false // Wether this GrpWrapper is the root (first) GrpWrapper
   linkAndBottom?: LinkAndBottom; // connection line drawn from this CriteriaList with hasAnd CriteriaList
   linkWhereBottom?: LinkWhereBottom;
   CriteriaGroup: CriteriaGroup;
   specProvider: ISparnaturalSpecification;
   groupWrapperEventStore: GroupWrapperEventStore;
+  // depth in the query tree
   depth: number;
+  // order among siblings (used to determine whether it is the first line)
+  order: number;
 
   constructor(
     ParentComponent: HTMLComponent,
     specProvider: ISparnaturalSpecification,
     depth:number,
+    order:number,
     startOrEndClassVal?: SelectedVal,
     renderEyeButtonOnStartClassGroup?: boolean
   ) {
@@ -39,6 +42,7 @@ class GroupWrapper extends HTMLComponent {
       renderEyeButtonOnStartClassGroup
     );
     this.depth = depth;
+    this.order = order;
   }
 
   render(): this {
@@ -78,5 +82,6 @@ class GroupWrapper extends HTMLComponent {
     callBack(this);
     return;
   }
+
 }
 export default GroupWrapper;

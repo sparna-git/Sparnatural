@@ -27,6 +27,8 @@ class ComponentsList extends HTMLComponent {
       this.specProvider,
       // depth = 0
       0,
+      // order = 0, it is the first sibling
+      0,
       undefined,
       // render eye button on the root StartClassGroup
       true

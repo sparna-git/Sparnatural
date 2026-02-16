@@ -12,6 +12,8 @@ export function addAndComponent(
     grpWrapper.specProvider,
     // same depth
     grpWrapper.depth,
+    // increment order,
+    grpWrapper.order + 1,
     startClassVal
   ).render();
   //set state to startClassValSelected and trigger change

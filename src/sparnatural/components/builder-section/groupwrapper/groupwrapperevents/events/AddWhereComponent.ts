@@ -21,6 +21,8 @@ export function addWhereComponent(
     grpWrapper.specProvider,
     // depth = parent depth + 1
     grpWrapper.depth + 1,
+    // order = 1, it will be the first sibling
+    0,
     endClassVal
   ).render();
 

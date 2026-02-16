@@ -7,6 +7,7 @@ import CriteriaGroup from "../CriteriaGroup";
 import { HTMLComponent } from "../../../../HtmlComponent";
 import EditComponents from "../edit-components/EditComponents";
 import { AbstractWidget } from "../../../../widgets/AbstractWidget";
+import { Model } from "rdf-shacl-commons";
 
 /**
  * The "range" select, encapsulating a ClassTypeId
@@ -65,28 +66,21 @@ class EndClassGroup extends HTMLComponent {
     });
   }
 
-  // Creating the Variable for the variable menu
   #createSparqlVar(type: string) {
     this.endClassVal.type = type;
     this.html[0].dispatchEvent(
-      new CustomEvent("getSparqlVarId", {
+      new CustomEvent("getSparqlVar", {
         bubbles: true,
-        detail: (id: number) => {
-          //callback
-          this.endClassVal.variable = `${this.#getUriClassName(type)}_${id}`;
-          this.#syncDefaultLblVar();
-        },
+        detail: {
+          type : type,
+          callback: (variable: string) => {
+            //callback
+            this.endClassVal.variable = variable;
+          }
+        }
       })
     );
-    
   }
-
-  #getUriClassName(uri:string){
-    // replaces all non-ASCII characters with an underscore in variable names
-    if(uri.includes('#')) return uri.split('#').pop().replace(/[^\x00-\x7F]/g, "_").replace(/-/g, "_")
-    return uri.split('/').pop().replace(/[^\x00-\x7F]/g, "_").replace(/-/g, "_")
-  }
-
   
   // adding a defaultlblProperty
   // see: https://docs.sparnatural.eu/OWL-based-configuration#classes-configuration-reference

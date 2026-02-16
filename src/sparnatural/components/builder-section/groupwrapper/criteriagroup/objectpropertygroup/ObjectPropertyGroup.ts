@@ -5,6 +5,7 @@ import CriteriaGroup from "../CriteriaGroup";
 import { HTMLComponent } from "../../../../HtmlComponent";
 import { SelectedVal } from "../../../..//SelectedVal";
 import { TOOLTIP_CONFIG } from "../../../../../settings/defaultSettings";
+import { Model } from "rdf-shacl-commons";
 
 /**
  * The property selection part of a criteria/line, encapsulating an ObjectPropertyTypeId
@@ -68,12 +69,16 @@ class ObjectPropertyGroup extends HTMLComponent {
   #createSparqlVar(type: string) {
     this.objectPropVal.type = type;
     this.html[0].dispatchEvent(
-      new CustomEvent("getSparqlVarId", {
+      new CustomEvent("getSparqlVar", {
         bubbles: true,
-        detail: (id: number) => {
-          //callback
-          this.objectPropVal.variable = `?${this.#getUriClassName(type)}_${id}`
-      }})
+        detail: {
+          type : type,
+          callback: (variable: string) => {
+            //callback
+            this.objectPropVal.variable = variable;
+          }
+        }
+      })
     );
   }
 
@@ -94,12 +99,6 @@ class ObjectPropertyGroup extends HTMLComponent {
 		} else {
 			$(this.ParentCriteriaGroup.ObjectPropertyGroup.html).removeAttr('data-tippy-content') ;
 		}
-  }
-
-  // get the classname of the uri
-  #getUriClassName(uri:string){
-    if(uri.includes('#')) return uri.split('#').pop().replace(/[^\x00-\x7F]/g, "_").replace(/-/g, "_")
-    return uri.split('/').pop().replace(/[^\x00-\x7F]/g, "_").replace(/-/g, "_")
   }
 
   getTypeSelected() {

@@ -5,6 +5,7 @@ import CriteriaGroup from "../CriteriaGroup";
 import { HTMLComponent } from "../../../../HtmlComponent";
 import { TippyInfo } from "../../../../buttons/TippyInfo";
 import { TOOLTIP_CONFIG } from "../../../../../settings/defaultSettings";
+import { Model } from "rdf-shacl-commons";
 
 /**
  * Selection of the start class in a criteria/line
@@ -84,22 +85,17 @@ class StartClassGroup extends HTMLComponent {
   #createSparqlVar(type: string) {
     this.startClassVal.type = type;
     this.html[0].dispatchEvent(
-      new CustomEvent("getSparqlVarId", {
+      new CustomEvent("getSparqlVar", {
         bubbles: true,
-        detail: (id: number) => {
-          //callback
-          this.startClassVal.variable = `${this.#getUriClassName(type)}_${id}`;
-          this.#syncDefaultLblVar();
-        },
+        detail: {
+          type : type,
+          callback: (variable: string) => {
+            //callback
+            this.startClassVal.variable = variable;
+          }
+        }
       })
     );
-  }
-
-  // get the classname of the uri
-  #getUriClassName(uri:string){
-    // replaces all non-ASCII characters with an underscore in variable names
-    if(uri.includes('#')) return uri.split('#').pop().replace(/[^\x00-\x7F]/g, "_").replace(/-/g, "_")
-    return uri.split('/').pop().replace(/[^\x00-\x7F]/g, "_").replace(/-/g, "_")
   }
 
   // adding a defaultlblProperty

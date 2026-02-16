@@ -10,6 +10,7 @@ import { selectViewVar } from "./actions/SelectViewVar";
 import { SelectQuery } from "sparqljs";
 import GroupWrapper from "../components/builder-section/groupwrapper/GroupWrapper";
 import { QueryGenerator } from "./actions/GenerateQuery";
+import { Model } from "rdf-shacl-commons";
 
 export enum MaxVarAction {
   INCREASE,
@@ -25,10 +26,7 @@ export enum MaxVarAction {
 class ActionStore {
   sparnatural: SparnaturalComponent;
   specProvider: any;
-  // order: Order = Order.NOORDER; //default no order
-  // variables: Array<string> = []; // example ?museum
   language = "en"; //default
-  sparqlVarID = 0; // sparqlVarId shows the index for the sparql variables. e.g Country_1 where '1' is the id
   showVariableNames = true; //variable decides whether the variableNames (?Musee_1) or the label name (museum) is shown
 
   // when quiet, don't emit onQueryUpdated events
@@ -87,7 +85,7 @@ class ActionStore {
     );
 
     this.sparnatural.html[0].addEventListener(
-      "getMaxVarIndex",
+      "getMaxDepth",
       (e: CustomEvent) => {
         e.stopImmediatePropagation();
         var maxDepth = 1;
@@ -110,14 +108,31 @@ class ActionStore {
     });
 
     this.sparnatural.html[0].addEventListener(
-      "getSparqlVarId",
+      "getSparqlVar",
       (e: CustomEvent) => {
+        let payload = e.detail;
+        if (!("type" in payload))
+          throw Error(
+            "getSparqlVar event requires an object of { type: string }"
+          );
+        
         e.stopImmediatePropagation();
-        this.sparqlVarID++;
-        // return the index in callback
-        e.detail(this.sparqlVarID);
+
+        let maxVariableIndexPerTypes = this.sparnatural.getMaxVariableIndexByTypes();
+        let currentTypeIndex = maxVariableIndexPerTypes.get(payload.type) || 0;
+
+        // return the variable name in callback
+        if(currentTypeIndex === 0) {
+          // if first variable of this type don't add the index to have more readable variable names when there's only one of each type,
+          // e.g ?Country instead of ?Country_1
+          payload.callback(`${Model.getSparqlVariableNameFromUri(payload.type)}`);
+        } else {
+          payload.callback(`${Model.getSparqlVariableNameFromUri(payload.type)}_${currentTypeIndex + 1}`);
+        }
+        
       }
     );
+
 
     this.sparnatural.html[0].addEventListener(
       "getSelectedVarLength",
@@ -129,8 +144,7 @@ class ActionStore {
 
     this.sparnatural.html[0].addEventListener("resetVars", (e: CustomEvent) => {
       e.stopImmediatePropagation();
-      this.sparqlVarID = 0;
-      // this.variables = [];
+
       this.sparnatural.variableSection.html.remove();
       this.sparnatural.variableSection.render();
       // not sure we should regenerate the query here
@@ -194,15 +208,6 @@ class ActionStore {
       "deleteGrpWrapper",
       (e: CustomEvent) => {
         deleteGrpWrapper(this.sparnatural, e);
-      }
-    );
-
-    // called by RemoveEndClass to adjust the sparqlVarID after a CriteriaGroup deletion and recreation
-    this.sparnatural.html[0].addEventListener(
-      "adjustSparqlVarID",
-      (e: CustomEvent) => {
-        let payload = e.detail;
-        this.sparqlVarID += payload;
       }
     );
   }

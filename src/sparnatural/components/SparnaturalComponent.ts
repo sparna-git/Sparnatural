@@ -8,7 +8,7 @@ import VariableSection from "./variables-section/VariableSelection";
 import { HTMLComponent } from "./HtmlComponent";
 import { SparnaturalElement } from "../../SparnaturalElement";
 import { I18n } from "../settings/I18n";
-import { Catalog } from "rdf-shacl-commons";
+import { Catalog, Model } from "rdf-shacl-commons";
 
 class SparnaturalComponent extends HTMLComponent {
   specProvider: ISparnaturalSpecification;
@@ -135,6 +135,60 @@ class SparnaturalComponent extends HTMLComponent {
     } else {
       I18n.init("en");
     }
+  }
+
+  getMaxVariableIndexByTypes(): Map<string, number> {
+    let maxVariableIndexPerType = new Map<string, number>();
+
+    this.BgWrapper.componentsList.rootGroupWrapper.traversePostOrder(
+      (grpWrapper) => {
+
+        // generic counting function to extract the index of a variable and update the max index for its type
+        let processTypeVar = (type:string, variable:string) => {
+          if(type && variable) {
+            // if a variable does not match this pattern, it means it will not be counted
+            // which is OK, as there is no risk of collision with the generated variables that always have an index
+            if(variable.match(/_(\d+)$/)) {
+              let index = parseInt(variable.match(/_(\d+)$/)![1]);
+
+              if(maxVariableIndexPerType.has(type) && maxVariableIndexPerType.get(type)! < index) {
+                maxVariableIndexPerType.set(type, index);
+              } else if(!maxVariableIndexPerType.has(type)) {
+                maxVariableIndexPerType.set(type, index);
+              }
+            }
+            
+            // also check the base variable without index, in case there is only one variable of this type which does not have an index
+            let baseVar = Model.getSparqlVariableNameFromUri(type);
+            if(variable === baseVar && !maxVariableIndexPerType.has(type)) {
+              maxVariableIndexPerType.set(type, 1);
+            }
+          }
+        }
+
+        // count the variable only if it is the very first
+        if (grpWrapper.depth === 0 && grpWrapper.order === 0) {
+          processTypeVar(
+            grpWrapper.CriteriaGroup.StartClassGroup?.startClassVal.type,
+            grpWrapper.CriteriaGroup.StartClassGroup?.startClassVal.variable
+          );
+        }
+
+        // always count the end class group
+        processTypeVar(
+            grpWrapper.CriteriaGroup.EndClassGroup?.endClassVal.type,
+            grpWrapper.CriteriaGroup.EndClassGroup?.endClassVal.variable
+        );
+
+        // always count the object property group
+        processTypeVar(
+          grpWrapper.CriteriaGroup.ObjectPropertyGroup?.objectPropVal.type,
+          grpWrapper.CriteriaGroup.ObjectPropertyGroup?.objectPropVal.variable
+        );
+      }
+    );
+
+    return maxVariableIndexPerType;
   }
 }
 export default SparnaturalComponent;

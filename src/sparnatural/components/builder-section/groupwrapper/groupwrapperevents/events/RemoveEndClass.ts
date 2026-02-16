@@ -30,12 +30,6 @@ export function removeEndClass(grpWrapper: GroupWrapper) {
   inputSelector.submitSelected() ;
   // nice-select is 2nd place in childrenslist. move away from nice-select...
   //inputSelector.html[0].children[1].classList.add("disabled");
-  
-  // decrease the SPARQL var counter by 2 : one for the previous EndClassGroup, one for the new StartClassGroup
-  // that gets its original value back
-  grpWrapper.html[0].dispatchEvent(
-    new CustomEvent("adjustSparqlVarID", { bubbles: true, detail: -2 })
-  );
 
   // there might have been variables in the variable section which now got deleted
   grpWrapper.html[0].dispatchEvent(
