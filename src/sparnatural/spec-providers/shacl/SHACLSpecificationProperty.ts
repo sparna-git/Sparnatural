@@ -68,7 +68,7 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
       var hasNodeKindIri = this.graph.hasTriple(factory.namedNode(this.uri), SH.NODE_KIND, SH.IRI);
 
       if(hasNodeKindIri) {
-        return (this.shape.resolveShNodeOrShClass().length == 0);
+        return (this.getRange().length == 0);
       }
 
       return false;

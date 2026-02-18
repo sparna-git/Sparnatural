@@ -7,7 +7,6 @@ import redrawBackgroundAndLinks from "./actions/RedrawBackgroundAndLinks";
 import deleteGrpWrapper from "./actions/DeleteGrpWrapper";
 import { updateVarList } from "./actions/UpdateVarList";
 import { selectViewVar } from "./actions/SelectViewVar";
-import { SelectQuery } from "sparqljs";
 import GroupWrapper from "../components/builder-section/groupwrapper/GroupWrapper";
 import { QueryGenerator } from "./actions/GenerateQuery";
 import { Model } from "rdf-shacl-commons";

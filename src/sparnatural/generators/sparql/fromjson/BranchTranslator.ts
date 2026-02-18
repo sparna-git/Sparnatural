@@ -266,10 +266,10 @@ export default class BranchTranslator {
     }
 
     if (
-      this.#branch.line.o &&
-      !this.#specProvider
-        .getEntity(this.#branch.line.oType)
-        .isLiteralEntity() &&
+      this.#branch.line.o 
+      &&
+      !this.#specProvider.getEntity(this.#branch.line.oType).isLiteralEntity()
+      &&
       !this.#specProvider.getProperty(this.#branch.line.p).omitClassCriteria()
     ) {
       exceptStartPtrn.push(...this.#endClassPtrn);
