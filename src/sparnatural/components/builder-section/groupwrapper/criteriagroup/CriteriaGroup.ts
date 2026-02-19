@@ -11,11 +11,9 @@ import { OptionsGroup, OptionTypes } from "./optionsgroup/OptionsGroup";
 import { HTMLComponent } from "../../../HtmlComponent";
 import { SelectedVal } from "../../../SelectedVal";
 import {
-  EndClassWidgetGroup,
-  EndClassWidgetValue,
+  EndClassWidgetGroup
 } from "./startendclassgroup/EndClassWidgetGroup";
 import ActionsGroup from "../../../buttons/actions/ActionsGroup";
-import { triggerOption } from "../groupwrapperevents/events/TriggerOption";
 import { I18n } from "../../../../settings/I18n";
 
 class CriteriaGroup extends HTMLComponent {
@@ -120,7 +118,7 @@ class CriteriaGroup extends HTMLComponent {
         }
 
         this.OptionsGroup.onObjectPropertyGroupSelected(
-          this.ParentGroupWrapper.optionState
+          this.ParentGroupWrapper.currentOptionState
         );
 
         // if there is already a andSibling don't allow to rerender the ActionAnd again
@@ -129,12 +127,9 @@ class CriteriaGroup extends HTMLComponent {
 
         // if property has a sparqlService, switch the state
         if (this.specProvider.getProperty(e.detail.type).getServiceEndpoint()) {
-          triggerOption(this.ParentGroupWrapper, OptionTypes.SERVICE);
+          this.ParentGroupWrapper.triggerOption(OptionTypes.SERVICE);
         } else {
-          triggerOption(
-            this.ParentGroupWrapper,
-            this.ParentGroupWrapper.optionState
-          );
+          this.ParentGroupWrapper.triggerOption(this.ParentGroupWrapper.currentOptionState);
         }
       }
     );

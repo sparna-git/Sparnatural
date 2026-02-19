@@ -155,8 +155,8 @@ export class SparnaturalJsonGeneratorV13 {
       object,
     };
 
-    if (grp.optionState === OptionTypes.OPTIONAL) pair.subType = "optional";
-    if (grp.optionState === OptionTypes.NOTEXISTS) pair.subType = "notExists";
+    if (grp.currentOptionState === OptionTypes.OPTIONAL) pair.subType = "optional";
+    if (grp.currentOptionState === OptionTypes.NOTEXISTS) pair.subType = "notExists";
 
     return pair;
   }

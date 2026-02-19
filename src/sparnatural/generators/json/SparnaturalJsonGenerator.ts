@@ -102,15 +102,15 @@ export class SparnaturalJsonGenerator {
       },
       children: grpWrapper.whereChild
         // either we are already in an option, or one was set at this level
-        ? this.#getBranch(grpWrapper.whereChild, isInOption || (grpWrapper.optionState != OptionTypes.NONE))
+        ? this.#getBranch(grpWrapper.whereChild, isInOption || (grpWrapper.currentOptionState != OptionTypes.NONE))
         : undefined
     };
 
     // don't set the flags if they are not true
-    if(!isInOption && (grpWrapper.optionState == OptionTypes.OPTIONAL)) {
+    if(!isInOption && (grpWrapper.currentOptionState == OptionTypes.OPTIONAL)) {
       branch.optional = true;
     }
-    if(!isInOption && (grpWrapper.optionState == OptionTypes.NOTEXISTS)) {
+    if(!isInOption && (grpWrapper.currentOptionState == OptionTypes.NOTEXISTS)) {
       branch.notExists = true;
     }
 

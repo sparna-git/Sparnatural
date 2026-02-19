@@ -71,6 +71,17 @@ export class HTMLComponent implements IRenderable {
     } else {
       return this.parentComponent.getRootComponent();
     }
-
   }
+
+  /**
+   * Utility function to switch css class of an element from oldState to newState.
+   */
+  static switchState(
+    el: HTMLElement,
+    oldState: string,
+    newState: string
+  ) {
+    el.classList.remove(oldState);
+    el.classList.add(newState);
+  };
 }

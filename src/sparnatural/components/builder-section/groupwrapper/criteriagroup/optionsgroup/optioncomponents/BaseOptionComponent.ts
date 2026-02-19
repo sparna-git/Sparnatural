@@ -17,6 +17,7 @@ class BaseOptionComponent extends HTMLComponent {
     this,
     UiuxConfig.COMPONENT_ARROW_BACK
   );
+
   default_value: string = "";
   ParentOptionsGroup: OptionsGroup;
   parentWrapper: GroupWrapper;
@@ -24,6 +25,7 @@ class BaseOptionComponent extends HTMLComponent {
   name: string;
   type: OptionTypes;
   selected = false;
+
   constructor(
     baseCssClass: string,
     type: OptionTypes,
@@ -53,6 +55,14 @@ class BaseOptionComponent extends HTMLComponent {
     this.html[0].dispatchEvent(
       new CustomEvent("optionTriggered", { bubbles: true, detail: this.type })
     );
+  }
+
+  select() {
+    this.html[0].classList.add("Enabled");
+  }
+
+  unselect() {
+    this.html[0].classList.remove("Enabled");
   }
 }
 

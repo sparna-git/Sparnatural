@@ -66,9 +66,9 @@ function renderLinks(grpWrapper: GroupWrapper) {
 
 //sets the correct OptionState on newly added group wrappers
 function rerenderOptionState(grpWrapper: GroupWrapper) {
-  if (grpWrapper.optionState != OptionTypes.NONE) {
-    let tmpOptionState = grpWrapper.optionState;
-    grpWrapper.optionState = OptionTypes.NONE;
+  if (grpWrapper.currentOptionState != OptionTypes.NONE) {
+    let tmpOptionState = grpWrapper.currentOptionState;
+    grpWrapper.currentOptionState = OptionTypes.NONE;
     grpWrapper.html[0].dispatchEvent(
       new CustomEvent("optionTriggered", { detail: tmpOptionState })
     );

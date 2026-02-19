@@ -253,7 +253,7 @@ export default class QueryLoader {
   ) {
     if (
       branchLike.notExists &&
-      grpWrapper.optionState != OptionTypes.NOTEXISTS
+      grpWrapper.currentOptionState != OptionTypes.NOTEXISTS
     ) {
       this.#clickOn(
         grpWrapper.CriteriaGroup.OptionsGroup.optionalArrow.widgetHtml,
@@ -262,7 +262,7 @@ export default class QueryLoader {
         grpWrapper.CriteriaGroup.OptionsGroup.NotExistsComponent.html,
       );
     }
-    if (branchLike.optional && grpWrapper.optionState != OptionTypes.OPTIONAL) {
+    if (branchLike.optional && grpWrapper.currentOptionState != OptionTypes.OPTIONAL) {
       this.#clickOn(
         grpWrapper.CriteriaGroup.OptionsGroup.optionalArrow.widgetHtml,
       );

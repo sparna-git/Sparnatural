@@ -144,11 +144,11 @@ export default class QueryLoader{
   }
   
   static #triggerOptions(grpWrapper: GroupWrapper, branch: Branch) {
-    if (branch.notExists && grpWrapper.optionState != OptionTypes.NOTEXISTS) {
+    if (branch.notExists && grpWrapper.currentOptionState != OptionTypes.NOTEXISTS) {
       this.#clickOn(grpWrapper.CriteriaGroup.OptionsGroup.optionalArrow.widgetHtml);
       this.#clickOn(grpWrapper.CriteriaGroup.OptionsGroup.NotExistsComponent.html);
     }
-    if (branch.optional && grpWrapper.optionState != OptionTypes.OPTIONAL) {
+    if (branch.optional && grpWrapper.currentOptionState != OptionTypes.OPTIONAL) {
       this.#clickOn(grpWrapper.CriteriaGroup.OptionsGroup.optionalArrow.widgetHtml);
       this.#clickOn(grpWrapper.CriteriaGroup.OptionsGroup.OptionalComponent.html);
     }

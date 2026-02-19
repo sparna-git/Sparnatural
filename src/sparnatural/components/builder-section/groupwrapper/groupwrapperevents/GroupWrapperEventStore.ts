@@ -5,7 +5,6 @@ import { completeGrpInput } from "./events/CompleteGrpInput";
 import { inCompleteGrpInput } from "./events/InCompleteGrpInput";
 import { removeEndClass } from "./events/RemoveEndClass";
 import { removeGrpWrapper } from "./events/RemoveGrpWrapper";
-import { triggerOption } from "./events/TriggerOption";
 
 export default class GroupWrapperEventStore {
   grpWrapper: GroupWrapper;
@@ -70,7 +69,7 @@ export default class GroupWrapperEventStore {
           );
         e.stopImmediatePropagation();
         let newOptionState = e.detail;
-        triggerOption(this.grpWrapper, newOptionState);
+        this.grpWrapper.triggerOption(newOptionState);
         this.grpWrapper.html[0].dispatchEvent(
           new CustomEvent("generateQuery", { bubbles: true })
         );

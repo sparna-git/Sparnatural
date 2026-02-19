@@ -23,7 +23,7 @@ export function removeEndClass(grpWrapper: GroupWrapper) {
     grpWrapper.isRootGrpWrapper()
   ).render();
   // Set state back to NONE
-  grpWrapper.optionState = OptionTypes.NONE
+  grpWrapper.currentOptionState = OptionTypes.NONE
   // set StartClassVal back to its original value
   grpWrapper.CriteriaGroup.StartClassGroup.startClassVal = startVal;
   let inputSelector = grpWrapper.CriteriaGroup.StartClassGroup.inputSelector;

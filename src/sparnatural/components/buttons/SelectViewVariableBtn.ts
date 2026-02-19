@@ -2,13 +2,14 @@ import UiuxConfig from "../IconsConstants";
 import { HTMLComponent } from "../HtmlComponent";
 
 /*
-  
     Switch Component having a binary state:
     selected: Switching between the states with onClick
 */
 export class SelectViewVariableBtn extends HTMLComponent {
+
   selected = false;
   callBack;
+  
   constructor(
     ParentComponent: HTMLComponent,
     callBack: (selected: boolean) => void
