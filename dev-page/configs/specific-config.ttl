@@ -1,0 +1,28 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix endorse: <https://op.europa.eu/en/web/endorse-2025/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#> .
+@prefix epvoc: <https://data.europarl.europa.eu/def/epvoc#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix eli-dl: <http://data.europa.eu/eli/eli-draft-legislation-ontology#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix sparnatural-config: <http://data.sparna.fr/ontologies/sparnatural-config-core#> .
+
+
+
+
+# 1. Disable some entry points to make initial list smaller
+org:Membersip sh:deactivated true .
+vcard:Voice sh:deactivated true .
+vcard:Fax sh:deactivated true .
+epvoc:ContactPoint sh:deactivated true .
+foaf:OnlineAccount sh:deactivated true .
+foaf:Document sh:deactivated true .
+foaf:Image sh:deactivated true .
+skos:Concept sh:deactivated true .
+dcterms:PeriodOfTime sh:deactivated true .
+eli-dl:ParliamentaryTerm sh:deactivated true .

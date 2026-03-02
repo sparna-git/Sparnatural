@@ -82,7 +82,7 @@ sparnatural.addEventListener("queryUpdated", (event) => {
   );
 
   document.getElementById("old-query-json").value = JSON.stringify(
-    event.detail.queryJson,
+    event.detail.OldQueryJson,
   );
 
   // Notifier les plugins Yasr

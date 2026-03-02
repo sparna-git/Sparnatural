@@ -109,13 +109,15 @@
               maxDepth="10"
               debug="false"
               prefixes="rdfs:http://www.w3.org/2000/01/rdf-schema#"
+
+              "src="configs/specific-config.ttl configs/org-ep.shacl-demo.ttl""
             />-->
 
             <spar-natural
               id="sparnatural"
-              src="configs/sparnatural-config_oresm_nov2025-bis.ttl"
+              src="configs/dbpediafr-config.ttl"
               lang="en"
-              endpoint="http://graphdb.sparna.fr/repositories/oresm"
+              endpoint="https://dbpedia.org/sparql"
               defaultLang="fr"
               distinct="true"
               limit="1000"
@@ -153,10 +155,8 @@
             <div class="col-md-12">
               <span style="font-size: 90%">
                 Les requêtes sont envoyées à
-                <a
-                  id="endpoint"
-                  href="http://graphdb.sparna.fr/repositories/oresm"
-                  >http://graphdb.sparna.fr/repositories/oresm</a
+                <a id="endpoint" href="https://dbpedia.org/sparql"
+                  >https://dbpedia.org/sparql</a
                 >
               </span>
             </div>
