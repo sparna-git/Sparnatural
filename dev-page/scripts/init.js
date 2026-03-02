@@ -45,7 +45,7 @@ sparnatural.addEventListener("queryUpdated", (event) => {
 
   // store JSON in hidden field
   document.getElementById("query-json").value = JSON.stringify(
-    event.detail.queryString,
+    event.detail.queryJson,
   );
 
   // notify the query to yasr plugins

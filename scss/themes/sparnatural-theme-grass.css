@@ -28,11 +28,12 @@
 
   /** 
   * Color of the options arrow (optional / negation) (strong green)
+  * As well as submit section top color
   **/
   --secondary-color-main: rgb(107, 215, 171);
 
   /** 
-  * Color of the highlight of arrows
+  * Color of the highlight of arrows, as well as play button, as well as around arrows when selected
   **/
   --secondary-color-important: rgb(2, 184, 117);
 
