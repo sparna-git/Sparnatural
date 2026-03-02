@@ -3,7 +3,7 @@ Sparnatural is a **visual client-side SPARQL query builder** for exploring and n
 
 It supports the creation of basic graph patterns with the selection of values with autocomplete search or dropdown lists, or other widgets. It can be configured through a SHACL configuration file that defines the classes and properties to be presented in the component.
 
-![](https://sparnatural.eu/assets/videos/screencast-2025.webm)
+![](docs/assets/screencasts/screencast-sparnatural-dbpedia-v3-en.gif)
 
 You can play with **online demos at http://sparnatural.eu#demos**.
 
