@@ -1,8 +1,8 @@
 export * from "./SparnaturalAttributes";
 export * from "./SparnaturalElement";
-//export * from "./sparnatural/SparnaturalQueryIfc";
+export * from "./sparnatural/SparnaturalQueryIfc";
 
-export * from "./sparnatural/SparnaturalQueryIfc-v13";
+// export * from "./sparnatural/SparnaturalQueryIfc-v13";
 
 export * from "./sparnatural/components/HtmlComponent";
 // export * from "./sparnatural/components/SelectedVal";
@@ -29,8 +29,8 @@ export * from "./sparnatural/components/widgets/timedatepickerwidget/TimeDatePic
 export * from "./sparnatural/dag/Dag";
 // export * from "./sparnatural/datastorage/LocalCacheData";
 // export * from "./sparnatural/datastorage/LocalDataStorage";
-// export * from "./sparnatural/generators/json/SparnaturalJsonGenerator";
-export * from "./sparnatural/generators/json/SparnaturalJson-v13Generator";
+export * from "./sparnatural/generators/json/SparnaturalJsonGenerator";
+// export * from "./sparnatural/generators/json/SparnaturalJson-v13Generator";
 // export * from "./sparnatural/generators/sparql/ClassBuilder";
 // export * from "./sparnatural/generators/sparql/IntersectionBuilder";
 // export * from "./sparnatural/generators/sparql/SparqlFactory";
@@ -38,8 +38,8 @@ export * from "./sparnatural/generators/json/SparnaturalJson-v13Generator";
 // export * from "./sparnatural/generators/sparql/ValueBuilder";
 // export * from "./sparnatural/generators/sparql/WhereBuilder";
 // export * from "./sparnatural/generators/sparql/fromjson/BranchTranslator";
-// export * from "./sparnatural/generators/sparql/fromjson/JsonSparqlTranslator";
-export * from "./sparnatural/generators/sparql/fromjsonv13/JsonV13SparqlTranslator";
+export * from "./sparnatural/generators/sparql/fromjson/JsonSparqlTranslator";
+// export * from "./sparnatural/generators/sparql/fromjsonv13/JsonV13SparqlTranslator";
 // export * from "./sparnatural/generators/sparql/fromjson/QueryWhereTranslator";
 // export * from "./sparnatural/generators/sparql/fromjson/TypedVariableTranslator";
 // export * from "./sparnatural/globals/IJQuery";
