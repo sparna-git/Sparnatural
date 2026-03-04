@@ -202,6 +202,10 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
         return this.shape.isLiteral();
     }
 
+    isBlankNodeEntity(): boolean {
+        return this.shape.isBlankNode();
+    }
+
     /**
      * @returns true if this shape has a target, either a targetClass or sh:target, or is itself a Class
      */
@@ -295,6 +299,7 @@ export class SpecialSHACLSpecificationEntity implements ISHACLSpecificationEntit
     getConnectingProperties(range: string): string[] { return new Array<string>(); }
     getConnectingPropertiesTree(range: string): DagIfc<ISpecificationProperty> { return new Dag<ISpecificationProperty>(); }
     isLiteralEntity(): boolean { return true; }
+    isBlankNodeEntity(): boolean { return false; }
     hasTypeCriteria(): boolean { return false; }
     getDefaultLabelProperty(): string | undefined { return undefined; }
     getOrder(): string|undefined { return undefined; }

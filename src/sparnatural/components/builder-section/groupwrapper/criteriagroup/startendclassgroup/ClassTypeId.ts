@@ -27,7 +27,6 @@ class ClassTypeId extends HTMLComponent {
     UiuxConfig.COMPONENT_ARROW_BACK
   );
 
-  //selectBuilder: HierarchicalClassSelectBuilder;
   selectBuilder: ClassSelectBuilder;
   startClassVal: SelectedVal = {
     variable: null,

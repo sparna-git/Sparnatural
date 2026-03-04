@@ -17,6 +17,7 @@ export interface ISpecificationEntity extends ISpecificationEntry {
   getConnectingProperties(range: string): Array<string>;
   getConnectingPropertiesTree(range: string): DagIfc<ISpecificationProperty>;
   isLiteralEntity(): boolean;
+  isBlankNodeEntity(): boolean;
 
   hasTypeCriteria(): boolean;
 

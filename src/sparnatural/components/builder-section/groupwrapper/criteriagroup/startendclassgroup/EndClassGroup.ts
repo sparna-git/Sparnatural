@@ -137,7 +137,8 @@ class EndClassGroup extends HTMLComponent {
       })
     );
 
-    var desc = this.specProvider.getEntity(this.endClassVal.type).getTooltip();
+    let entity = this.specProvider.getEntity(this.endClassVal.type);
+    var desc = entity.getTooltip();
     if (desc) {
       $(this.html).find(".ClassTypeId").attr("data-tippy-content", desc.replace(/"/g, '&quot;'));
       var tippySettings = Object.assign({}, TOOLTIP_CONFIG);
@@ -147,6 +148,11 @@ class EndClassGroup extends HTMLComponent {
       $(this.ParentCriteriaGroup.EndClassGroup.html).removeAttr(
         "data-tippy-content"
       );
+    }
+
+    // if entity is a blank node, deactivate eye selector
+    if(entity.isBlankNodeEntity()) {
+      this.inputSelector.selectViewVariableBtn.setAlwaysDisabled(true);
     }
   }
 

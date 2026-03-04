@@ -119,6 +119,10 @@ export class OWLSpecificationEntity extends OWLSpecificationEntry implements ISp
         );
     }
 
+    isBlankNodeEntity(): boolean {
+        return false;
+    }
+
     hasTypeCriteria(): boolean {
         return (
             this.store.getQuads(

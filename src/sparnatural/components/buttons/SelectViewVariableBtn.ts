@@ -8,6 +8,7 @@ import { HTMLComponent } from "../HtmlComponent";
 export class SelectViewVariableBtn extends HTMLComponent {
 
   selected = false;
+  alwaysDisabled = false;
   callBack;
   
   constructor(
@@ -26,7 +27,12 @@ export class SelectViewVariableBtn extends HTMLComponent {
       this.widgetHtml = $(UiuxConfig.ICON_NOT_SELECTED_VARIABLE);
     }
     super.render();
-    this.#addClickListener();
+    if(!this.alwaysDisabled) {
+      this.#addClickListener();
+    } else {
+      this.disable()
+    }
+    
     return this;
   }
 
@@ -51,12 +57,24 @@ export class SelectViewVariableBtn extends HTMLComponent {
     this.widgetHtml.off("click");
   }
 
+  setAlwaysDisabled(ad:boolean) {
+    this.alwaysDisabled = ad;
+    if(this.alwaysDisabled) {
+      this.disable();
+    } else {
+      this.enable();
+    }
+  }
+
   disable() {
     this.html.addClass("disabled");
     this.#removeClickListener();
   }
 
   enable() {
+    // can never be reenabled if always disabled
+    if(this.alwaysDisabled) return;
+
     // make sure we don't enable twise
     if(this.html.hasClass("disabled")) {
       this.html.removeClass("disabled");
