@@ -57,13 +57,12 @@ export default class MapWidget extends AbstractWidget {
   }
   
   protected configuration: MapConfiguration;
-  protected endClassWidgetGroup: any;
   protected widgetValues: LabelledCriteria<MapCriteria>[];
-  //protected widgetValue: MapWidgetValue[];
-  // protected blockObjectPropTriple: boolean = true
-  renderMapValueBtn: AddUserInputBtn;
-  map: L.Map;
-  drawingLayer: L.Layer;
+
+  protected renderMapValueBtn: AddUserInputBtn;
+  protected map: L.Map;
+  protected drawingLayer: L.Layer;
+
   constructor(
     configuration: MapConfiguration,
     parentComponent: HTMLComponent,
@@ -83,7 +82,6 @@ export default class MapWidget extends AbstractWidget {
 
     this.configuration = configuration;
     this.parentComponent = parentComponent;
-    this.endClassWidgetGroup = (this.parentComponent.parentComponent.parentComponent.parentComponent as CriteriaGroup).endClassWidgetGroup ;
   }
 
   render(): this {
@@ -172,9 +170,6 @@ export default class MapWidget extends AbstractWidget {
     if ((this.widgetValues !== undefined) && (this.widgetValues.length > 0)) {
       
       var layers = [];
-      //layers = L.PM.Utils.findLayers(this.map)
-      //console.log(layers) ;
-      //this.drawingLayer = layers[0] as Layer;
       this.map.pm.getGeomanLayers(false).forEach(layer => {
         if(layer instanceof L.Polygon) {
             layer.pm.enable() ;
@@ -201,12 +196,9 @@ export default class MapWidget extends AbstractWidget {
       title: I18n.labels.MapWidgetValidate,
       className: "submitMap icon-map-validate",
       onClick: () => {
-        //this.widgetValue = [this.widgetValue]
         this.#setWidgetValue(this.drawingLayer) ;
         this.triggerRenderWidgetVal(this.widgetValues);
         $(this.parentComponent).trigger("change");
-        //this.html.hide() ;
-        //this.endClassWidgetGroup
       },
     }
     this.map.pm.Toolbar.createCustomControl(submitMapOptions);
@@ -220,66 +212,20 @@ export default class MapWidget extends AbstractWidget {
       this.drawingLayer = e.layer;
 
       this.map.addLayer(this.drawingLayer);
-
-      //let widgetValue = this.#setWidgetValue(e.layer) ;
-
-
-      //this.endClassWidgetGroup.html[0].addEventListener("click", (evt:MouseEvent) => this.showWidgetMap(evt)) ;
-
-      //this.renderWidgetVal(widgetValue);
       //add listener when the shape gets changed
-        this.drawingLayer.on("pm:edit", (e) => {
+      this.drawingLayer.on("pm:edit", (e) => {
 
-        this.drawingLayer = e.layer;
-          //let widgetValue = this.#setWidgetValue(e.layer) ;
-          //this.#setWidgetValue(e.layer) ;
-          //this.renderWidgetVal(widgetValue);
+      this.drawingLayer = e.layer;
       });
     });
 
     
-    this.map.on("pm:update", (e) => {
-      
-      console.log('fireing pm:update');
+    this.map.on("pm:update", (e) => {      
       this.drawingLayer = e.layer;
-      //let widgetValue = this.#setWidgetValue(e.layer) ;
-      //this.#setWidgetValue(e.layer) ;
-      //this.renderWidgetVal(widgetValue);
-      //this.endClassWidgetGroup.html[0].addEventListener("click", (evt:MouseEvent) => this.showWidgetMap(evt)) ;
     });
-
-    /*this.map.on("pm:drawend", (e) => {
-      console.log(e);
-      this.drawingLayer = e.layer;
-    });*/
 
     this.#changeButton();
   };
-
-  /*showWidgetMap(this: HTMLElement, ev: Event) {
-    console.log(ev) ;
-
-  }*/
-
-  /*private showWidgetMap(e: MouseEvent): void {
-    let objectVal = this.endClassWidgetGroup.ParentComponent.ObjectPropertyGroup.objectPropVal ;
-    this.endClassWidgetGroup.ParentComponent.EndClassGroup.editComponents = false ;
-    this.endClassWidgetGroup.ParentComponent.EndClassGroup.onObjectPropertyGroupSelected(objectVal) ;
-    this.endClassWidgetGroup.ParentComponent.endClassWidgetGroup.render() ;
-    console.log(this) ;
-    let _this = this.endClassWidgetGroup.ParentComponent.EndClassGroup.editComponents.widgetWrapper.widgetComponent ;
-    //this.html = this.endClassWidgetGroup.ParentComponent.EndClassGroup.editComponents.widgetWrapper.widgetComponent.html ;
-    //this.parentComponent = this.endClassWidgetGroup.ParentComponent.EndClassGroup.editComponents.widgetWrapper.widgetComponent.parentComponent ;
-    //this.endClassWidgetGroup = this.parentComponent.ParentComponent.ParentComponent.ParentComponent.endClassWidgetGroup ;
-    _this.widgetValue = this.widgetValue ;
-    _this.#renderMap(true) ;
-    //this.render() ;
-
-    console.info(`After click event, 'this' refers to canvas and not to the instance of Foo:`);
-    console.info(this);
-    console.info(_this);
-    console.warn(`Message is: "${_this.widgetValue}"`); // error
-  }*/
 
   #getValueLabel(layer: any) {
     let area = this.#polygonArea((layer as any).getLatLngs() as LatLng[][]) ; 
