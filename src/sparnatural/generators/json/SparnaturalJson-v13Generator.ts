@@ -28,16 +28,19 @@ export class SparnaturalJsonGeneratorV13 {
     this.sparnatural = sparnatural;
   }
 
-  generateQuery(
-    distinct: boolean,
-    limit: number
-  ): SparnaturalQuery {
+  generateQuery(distinct: boolean, limit: number): SparnaturalQuery {
     return {
       type: "query",
       subType: "SELECT",
-      variables: this.#toVariables(this.sparnatural.variableSection.listVariables()),
+      context: [], // TO DO : implement prefixes and base URIs on generator
+      variables: this.#toVariables(
+        this.sparnatural.variableSection.listVariables(),
+      ),
       distinct: distinct || undefined,
-      solutionModifiers: this.#solutionModifiers(this.sparnatural.variableSection.getOrder(), limit),
+      solutionModifiers: this.#solutionModifiers(
+        this.sparnatural.variableSection.getOrder(),
+        limit,
+      ),
       where: this.#buildWhere(
         this.sparnatural.BgWrapper.componentsList.rootGroupWrapper,
       ),

@@ -21,6 +21,7 @@ import {
   TermVariable,
   TermTypedVariable,
   PredicateObjectPair,
+  ContextDefinition,
 } from "../SparnaturalQueryIfc-v13";
 
 export default class QueryLoader {
@@ -60,6 +61,10 @@ export default class QueryLoader {
   ): Map<string, string> {
     const varMapping = new Map<string, string>();
 
+    // build prefix/base map from optional query.context
+    const contextDefs = (query as SparnaturalQuery).context ?? [];
+    const prefixInfo = this.#buildPrefixInfo(contextDefs);
+
     if (!query?.where || query.where.subType !== "bgpSameSubject") {
       throw Error("Query.where is missing or not a bgpSameSubject");
     }
@@ -78,6 +83,7 @@ export default class QueryLoader {
       rootGrpWrapper,
       subject,
       first,
+      prefixInfo,
     );
     localMap1.forEach((v, k) => varMapping.set(k, v));
 
@@ -99,6 +105,7 @@ export default class QueryLoader {
         parent.andSibling,
         subject,
         p,
+        prefixInfo,
       );
       localMap.forEach((v, k) => varMapping.set(k, v));
       parent = parent.andSibling;
@@ -112,20 +119,26 @@ export default class QueryLoader {
     grpWrapper: GroupWrapper,
     subject: TermTypedVariable,
     pair: PredicateObjectPair,
+    prefixInfo: { prefixes: Record<string, string>; base?: string },
   ): Map<string, string> {
     const varMapping = new Map<string, string>();
     const obj = pair.object;
 
     // Start class (subject rdfType)
+    const resolvedSubjectType = this.#expandIriValue(
+      subject.rdfType,
+      prefixInfo,
+    );
+
     const startClassVal: SelectedVal = {
-      type: subject.rdfType,
+      type: resolvedSubjectType,
       variable: subject.value,
     };
 
     if (!grpWrapper.CriteriaGroup.StartClassGroup.startClassVal.type) {
       this.#setSelectedValue(
         grpWrapper.CriteriaGroup.StartClassGroup,
-        subject.rdfType,
+        resolvedSubjectType,
       );
     }
 
@@ -135,14 +148,19 @@ export default class QueryLoader {
     );
 
     // End class (object rdfType)
+    const resolvedObjectType = this.#expandIriValue(
+      obj.variable.rdfType,
+      prefixInfo,
+    );
+
     const endClassVal: SelectedVal = {
-      type: obj.variable.rdfType,
+      type: resolvedObjectType,
       variable: obj.variable.value,
     };
 
     this.#setSelectedValue(
       grpWrapper.CriteriaGroup.EndClassGroup,
-      obj.variable.rdfType,
+      resolvedObjectType,
     );
 
     varMapping.set(
@@ -150,10 +168,16 @@ export default class QueryLoader {
       obj.variable.value,
     );
 
-    // predicate
+    // predicate (may use prefix/base)
+    const resolvedPredicate = this.#expandIriValue(
+      pair.predicate.value,
+      prefixInfo,
+    );
+
+    // set predicate using resolved absolute IRI or local expansion
     this.#setSelectedValue(
       grpWrapper.CriteriaGroup.ObjectPropertyGroup,
-      pair.predicate.value,
+      resolvedPredicate,
     );
 
     // ---------- VALUES / FILTERS translation to v1-style widget inputs ----------
@@ -219,6 +243,7 @@ export default class QueryLoader {
         grpWrapper.whereChild,
         obj.variable,
         firstChild,
+        prefixInfo,
       );
       localMap.forEach((v, k) => varMapping.set(k, v));
 
@@ -229,6 +254,7 @@ export default class QueryLoader {
           parent.andSibling,
           obj.variable,
           cp,
+          prefixInfo,
         );
         localMap.forEach((v, k) => varMapping.set(k, v));
         parent = parent.andSibling;
@@ -403,5 +429,63 @@ export default class QueryLoader {
 
   static #clickOn(el: JQuery<HTMLElement>) {
     el[0].dispatchEvent(new Event("click"));
+  }
+
+  // Build a map of prefixes and optional base IRI from context definitions
+  static #buildPrefixInfo(contextDefs: ContextDefinition[]): {
+    prefixes: Record<string, string>;
+    base?: string;
+  } {
+    const prefixes: Record<string, string> = {};
+    let base: string | undefined = undefined;
+
+    if (!Array.isArray(contextDefs)) return { prefixes, base };
+
+    contextDefs.forEach((c: ContextDefinition) => {
+      if (!c || !c.subType) return;
+      if (c.subType === "prefix") {
+        // value may be an object like TermIriFull { value: string } or a raw string
+        const val = (c.value && (c.value.value ?? c.value)) || undefined;
+        if (c.key && typeof val === "string") prefixes[c.key] = val;
+      }
+      if (c.subType === "base") {
+        const val = (c.value && (c.value.value ?? c.value)) || undefined;
+        if (typeof val === "string") base = val;
+      }
+    });
+
+    return { prefixes, base };
+  }
+
+  // Expand an IRI-like value using known prefixes or base.
+  // Leaves absolute IRIs (http:, mailto:) unchanged (trimmed).
+  static #expandIriValue(
+    value: string,
+    prefixInfo: { prefixes: Record<string, string>; base?: string },
+  ): string {
+    if (!value || typeof value !== "string") return value;
+    const v = value.trim();
+
+    if (v.startsWith("http") || v.startsWith("mailto") || v.startsWith("<")) {
+      //console.log(`Value ${v} treated as absolute IRI (starts with http/mailto/<)`);
+      return v.replace(/^<|>$/g, "");
+    }
+
+    // prefixed form prefix:local
+    const idx = v.indexOf(":");
+    if (idx > 0) {
+      const prefix = v.substring(0, idx);
+      const local = v.substring(idx + 1);
+      if (prefixInfo.prefixes && prefixInfo.prefixes[prefix]) {
+        return prefixInfo.prefixes[prefix] + local;
+      }
+      // unknown prefix -> return original value unchanged
+      return v;
+    }
+
+    // no prefix, try base
+    if (prefixInfo.base) return prefixInfo.base + v;
+
+    return v;
   }
 }

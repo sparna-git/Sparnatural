@@ -6,7 +6,7 @@ export type SparnaturalQuery = {
   type: "query";
   subType: "SELECT";
   // When we will implement prefixes and base URIs, we will add this:
-  // context: ContextDefinition[];
+  context: ContextDefinition[];
   // variables: (TermVariable | PatternBind)[] | [Wildcard];
   // idea : we could support Wildcard, in this case all variables get selected
   variables: (TermVariable | PatternBind)[];
@@ -126,20 +126,22 @@ export interface SearchFilter {
 
 /***** Context definition, for defining prefixes and base URIs *****/
 
-/* When we will implement prefixes and base URIs, we will add this:
+/* When we will implement prefixes and base URIs, we will add this:*/
 
-export type ContextDefinitionBase_ = Node & { type: 'contextDef'; subType: string };
+export type ContextDefinitionBase_ = AstNode & {
+  type: "contextDef";
+  subType: string;
+};
 export type ContextDefinitionPrefix = ContextDefinitionBase_ & {
-  subType: 'prefix';
+  subType: "prefix";
   key: string;
   value: TermIriFull;
 };
 export type ContextDefinitionBase = ContextDefinitionBase_ & {
-  subType: 'base';
+  subType: "base";
   value: TermIriFull;
 };
 export type ContextDefinition = ContextDefinitionPrefix | ContextDefinitionBase;
-*/
 
 /***** End Context definition *****/
 
@@ -298,17 +300,14 @@ export type TermVariable = TermBase & {
 
 export type TermIriBase = TermBase & { subType: "namedNode" };
 export type TermIriFull = TermIriBase & { value: string };
-export type TermIri = TermIriFull;
+export type TermIri = TermIriFull | TermIriPrefixed;
 
-/** When we will implement prefixes, we will add this:
+/** When we will implement prefixes, we will add this:**/
 
 export type TermIriPrefixed = TermIriBase & {
   value: string;
   prefix: string;
 };
-
-export type TermIri = TermIriFull;
-**/
 
 // Extension : Specific labelled IRI
 export type TermLabelledIri = TermIriFull & { label: string };
