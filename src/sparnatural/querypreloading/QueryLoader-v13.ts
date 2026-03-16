@@ -81,16 +81,6 @@ export default class QueryLoader {
     );
     localMap1.forEach((v, k) => varMapping.set(k, v));
 
-    // unselect root subject eye if not selected in query
-    if (!this.#hasSelectedVar(query.variables, subject.value)) {
-      this.#clickOn(
-        (
-          rootGrpWrapper.CriteriaGroup.StartClassGroup
-            .inputSelector as ClassTypeId
-        )?.selectViewVariableBtn?.widgetHtml,
-      );
-    }
-
     // other top-level pairs = AND siblings
     let parent = rootGrpWrapper;
     pairs.forEach((p) => {
@@ -103,6 +93,16 @@ export default class QueryLoader {
       localMap.forEach((v, k) => varMapping.set(k, v));
       parent = parent.andSibling;
     });
+
+    // unselect root subject eye if not selected in query
+    if (!this.#hasSelectedVar(query.variables, subject.value)) {
+      this.#clickOn(
+        (
+          rootGrpWrapper.CriteriaGroup.StartClassGroup
+            .inputSelector as ClassTypeId
+        )?.selectViewVariableBtn?.widgetHtml,
+      );
+    }
 
     return varMapping;
   }

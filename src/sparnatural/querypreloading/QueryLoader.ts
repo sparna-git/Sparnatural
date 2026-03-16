@@ -48,14 +48,6 @@ export default class QueryLoader{
         let rootBranch = branches.shift();
         let localVarMapping = this.#buildCriteriaGroup(rootGrpWrapper, rootBranch);
         localVarMapping.forEach((value: string, key:string) => { varMapping.set(key, value); });
-        
-        // by default, the very first start class group will be selected
-        // if the first variable is *not* selected, then unselect it
-        const firstStartClassVal = { type: rootBranch.line.sType, variable: rootBranch.line.s };
-        if(!QueryLoader.#hasSelectedVar(this.query.variables,firstStartClassVal.variable)) {
-          // click on first eye btn to unselect it
-          this.#clickOn((rootGrpWrapper.CriteriaGroup.StartClassGroup.inputSelector as ClassTypeId)?.selectViewVariableBtn?.widgetHtml)
-        }
 
         let parent = rootGrpWrapper;
         branches.forEach((b) => {
@@ -64,6 +56,14 @@ export default class QueryLoader{
           localVarMapping.forEach((value: string, key:string) => { varMapping.set(key, value); });
           parent = parent.andSibling;
         });
+
+        // by default, the very first start class group will be selected
+        // if the first variable is *not* selected, then unselect it - and do that at the end of the query loading
+        const firstStartClassVal = { type: rootBranch.line.sType, variable: rootBranch.line.s };
+        if(!QueryLoader.#hasSelectedVar(this.query.variables,firstStartClassVal.variable)) {
+          // click on first eye btn to unselect it
+          this.#clickOn((rootGrpWrapper.CriteriaGroup.StartClassGroup.inputSelector as ClassTypeId)?.selectViewVariableBtn?.widgetHtml)
+        }
 
         return varMapping;
     }
@@ -134,8 +134,6 @@ export default class QueryLoader{
       
       // select if the var is viewed (eye btn)
       this.#setSelectViewVariableBtn(
-        startClassVal,
-        grpWarpper.CriteriaGroup.StartClassGroup,
         endClassVal,
         grpWarpper.CriteriaGroup.endClassGroup
       )
@@ -166,12 +164,10 @@ export default class QueryLoader{
 
   // this method checks if the eye btn was enabled in the loaded query
   static #setSelectViewVariableBtn(
-    startClassVal:SelectedVal,
-    startClassComponent:StartClassGroup,
-    endClassVal:SelectedVal,
+    selectedVal:SelectedVal,
     endClassComponent:EndClassGroup
   ){
-    if(QueryLoader.#hasSelectedVar(this.query.variables, endClassVal.variable)) {
+    if(QueryLoader.#hasSelectedVar(this.query.variables, selectedVal.variable)) {
       // click on eye btn
       this.#clickOn((endClassComponent.inputSelector as ClassTypeId)?.selectViewVariableBtn?.widgetHtml)
     }
