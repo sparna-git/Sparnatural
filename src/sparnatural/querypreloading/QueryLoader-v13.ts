@@ -129,6 +129,10 @@ export default class QueryLoader {
       );
     }
 
+    // This is for cases where the variable name has been manually changed in the query
+    // and is not one of the selected variables in the result set
+    grpWrapper.CriteriaGroup.StartClassGroup.startClassVal = startClassVal;
+
     varMapping.set(
       grpWrapper.CriteriaGroup.StartClassGroup.startClassVal.variable,
       subject.value,
@@ -144,6 +148,10 @@ export default class QueryLoader {
       grpWrapper.CriteriaGroup.endClassGroup,
       obj.variable.rdfType,
     );
+
+    // This is for cases where the variable name has been manually changed in the query
+    // and is not one of the selected variables in the result set
+    grpWrapper.CriteriaGroup.endClassGroup.endClassVal = endClassVal;
 
     varMapping.set(
       grpWrapper.CriteriaGroup.endClassGroup.endClassVal.variable,
