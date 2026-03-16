@@ -145,7 +145,7 @@ class EndClassGroup extends HTMLComponent {
       tippySettings.placement = "top-start";
       tippy(".EndClassGroup .ClassTypeId[data-tippy-content]", tippySettings);
     } else {
-      $(this.ParentCriteriaGroup.EndClassGroup.html).removeAttr(
+      $(this.ParentCriteriaGroup.endClassGroup.html).removeAttr(
         "data-tippy-content"
       );
     }

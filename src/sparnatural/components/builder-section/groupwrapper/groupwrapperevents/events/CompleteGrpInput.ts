@@ -2,7 +2,7 @@ import GroupWrapper from "../../GroupWrapper";
 
 //Input is completed by either choosing widgetvalue or adding a whereChild
 export function completeGrpInput(grpWrapper: GroupWrapper) {
-  grpWrapper.CriteriaGroup.EndClassGroup.renderSelectViewVar();
+  grpWrapper.CriteriaGroup.endClassGroup.renderSelectViewVar();
 
   if(grpWrapper.CriteriaGroup.StartClassGroup.renderEyeBtn){
     // only highlite when eye Btn is rendered.
@@ -12,7 +12,7 @@ export function completeGrpInput(grpWrapper: GroupWrapper) {
   }
 
   grpWrapper.html[0].classList.add("completed");
-  grpWrapper.CriteriaGroup.EndClassGroup.inputSelector.html[0].classList.add(
+  grpWrapper.CriteriaGroup.endClassGroup.inputSelector.html[0].classList.add(
     "Highlited"
   );
   grpWrapper.html[0].dispatchEvent(

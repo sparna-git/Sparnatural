@@ -94,7 +94,7 @@ export default class QueryLoader {
     // other top-level pairs = AND siblings
     let parent = rootGrpWrapper;
     pairs.forEach((p) => {
-      this.#clickOn(parent.CriteriaGroup.ActionsGroup.actions.ActionAnd.btn);
+      this.#clickOn(parent.CriteriaGroup.actionsGroup.actions.ActionAnd.btn);
       const localMap = this.#buildCriteriaGroupFromPair(
         parent.andSibling,
         subject,
@@ -141,18 +141,18 @@ export default class QueryLoader {
     };
 
     this.#setSelectedValue(
-      grpWrapper.CriteriaGroup.EndClassGroup,
+      grpWrapper.CriteriaGroup.endClassGroup,
       obj.variable.rdfType,
     );
 
     varMapping.set(
-      grpWrapper.CriteriaGroup.EndClassGroup.endClassVal.variable,
+      grpWrapper.CriteriaGroup.endClassGroup.endClassVal.variable,
       obj.variable.value,
     );
 
     // predicate
     this.#setSelectedValue(
-      grpWrapper.CriteriaGroup.ObjectPropertyGroup,
+      grpWrapper.CriteriaGroup.objectPropertyGroup,
       pair.predicate.value,
     );
 
@@ -173,7 +173,7 @@ export default class QueryLoader {
     if (widgetInputs.length > 0) {
       widgetInputs.forEach((input) => {
         const parsedVal =
-          grpWrapper.CriteriaGroup.EndClassGroup.editComponents.widgetWrapper.widgetComponent.parseInput(
+          grpWrapper.CriteriaGroup.endClassGroup.editComponents.widgetWrapper.widgetComponent.parseInput(
             input,
           );
 
@@ -185,7 +185,7 @@ export default class QueryLoader {
           );
         }
 
-        grpWrapper.CriteriaGroup.EndClassGroup.editComponents.widgetWrapper.widgetComponent.triggerRenderWidgetVal(
+        grpWrapper.CriteriaGroup.endClassGroup.editComponents.widgetWrapper.widgetComponent.triggerRenderWidgetVal(
           parsedVal,
         );
       });
@@ -200,7 +200,7 @@ export default class QueryLoader {
       !obj.predicateObjectPairs || obj.predicateObjectPairs.length === 0;
 
     if (hasNoValuesOrFilters && hasNoChildren) {
-      grpWrapper.CriteriaGroup.EndClassGroup.editComponents.onSelectAll();
+      grpWrapper.CriteriaGroup.endClassGroup.editComponents.onSelectAll();
     }
 
     // options v13
@@ -209,7 +209,7 @@ export default class QueryLoader {
     // children recursion (WHERE)
     if (obj.predicateObjectPairs?.length) {
       this.#clickOn(
-        grpWrapper.CriteriaGroup.EndClassGroup.editComponents.actionWhere.btn,
+        grpWrapper.CriteriaGroup.endClassGroup.editComponents.actionWhere.btn,
       );
 
       const childrenPairs = [...obj.predicateObjectPairs];
@@ -224,7 +224,7 @@ export default class QueryLoader {
 
       let parent = grpWrapper.whereChild;
       childrenPairs.forEach((cp) => {
-        this.#clickOn(parent.CriteriaGroup.ActionsGroup.actions.ActionAnd.btn);
+        this.#clickOn(parent.CriteriaGroup.actionsGroup.actions.ActionAnd.btn);
         localMap = this.#buildCriteriaGroupFromPair(
           parent.andSibling,
           obj.variable,
@@ -240,7 +240,7 @@ export default class QueryLoader {
       startClassVal,
       grpWrapper.CriteriaGroup.StartClassGroup,
       endClassVal,
-      grpWrapper.CriteriaGroup.EndClassGroup,
+      grpWrapper.CriteriaGroup.endClassGroup,
     );
 
     return varMapping;

@@ -128,8 +128,8 @@ export class SparnaturalJsonGeneratorV13 {
       variable: {
         type: "term",
         subType: "variable",
-        value: cg.EndClassGroup.getVarName(),
-        rdfType: cg.EndClassGroup.getTypeSelected(),
+        value: cg.endClassGroup.getVarName(),
+        rdfType: cg.endClassGroup.getTypeSelected(),
       },
     };
 
@@ -150,7 +150,7 @@ export class SparnaturalJsonGeneratorV13 {
       predicate: {
         type: "term",
         subType: "namedNode",
-        value: cg.ObjectPropertyGroup.getTypeSelected(),
+        value: cg.objectPropertyGroup.getTypeSelected(),
       },
       object,
     };

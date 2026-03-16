@@ -5,7 +5,7 @@ export default function toggleVarNames(sparnatural:SparnaturalComponent,showVarN
   sparnatural.BgWrapper.componentsList.rootGroupWrapper.traversePreOrder(
     (grpWrapper: GroupWrapper) => {
       let startGrp = grpWrapper.CriteriaGroup.StartClassGroup;
-      let endGrp = grpWrapper.CriteriaGroup.EndClassGroup;
+      let endGrp = grpWrapper.CriteriaGroup.endClassGroup;
       if(showVarNames){
         startGrp.inputSelector.showVarName()
         endGrp.inputSelector.showVarName()

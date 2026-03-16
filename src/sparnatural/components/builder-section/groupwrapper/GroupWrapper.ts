@@ -67,7 +67,7 @@ class GroupWrapper extends HTMLComponent {
 
   // set back state to when objectproperty was selected
   setObjectPropertySelectedState() {
-    let opVal = this.CriteriaGroup.ObjectPropertyGroup.objectPropVal;
+    let opVal = this.CriteriaGroup.objectPropertyGroup.objectPropVal;
     //if opVal is null, then temporary lbl is shown an no endclassgroup has been selected
     if (!opVal) return;
     this.CriteriaGroup.html[0].dispatchEvent(
@@ -78,11 +78,6 @@ class GroupWrapper extends HTMLComponent {
   triggerOption(
     newOptionState: OptionTypes
   ) {
-    if (this.explicitOptionState == newOptionState) {
-      //btn with already active state got clicked again. switch back to normal
-      newOptionState = OptionTypes.NONE; 
-    }
-
     //If there is a service endpoint and newOptionState is NONE, then set it to SERVICE
     if(this.hasServiceEndpoint() && newOptionState === OptionTypes.NONE) {
       newOptionState = OptionTypes.SERVICE
@@ -90,7 +85,7 @@ class GroupWrapper extends HTMLComponent {
 
     //set css on linkWhereBottom
     if (this.whereChild) {
-      HTMLComponent.switchState(this.linkWhereBottom.html[0],this.explicitOptionState,newOptionState);
+      this.linkWhereBottom.setCurrentOptionState(newOptionState);
     }
 
     this.setCurrentOptionState(newOptionState);
@@ -111,19 +106,21 @@ class GroupWrapper extends HTMLComponent {
     this.currentOptionState = newState;
  
     // disable the eye button on the descendants, or re-enable it
+    // NOTE : as this function may be called to inherit the optional state while the criteria is not yet complete,
+    // the end class group may not be known, so we add '?' at every step
     if (newState == OptionTypes.NOTEXISTS) {      
       // remove the variable selection if it was selected
-      if(this.CriteriaGroup.EndClassGroup.inputSelector.selectViewVariableBtn.selected) {
-        this.CriteriaGroup.EndClassGroup.inputSelector.selectViewVariableBtn.widgetHtml[0].dispatchEvent(new Event("click"));
+      if(this.CriteriaGroup.endClassGroup?.inputSelector?.selectViewVariableBtn?.selected) {
+        this.CriteriaGroup.endClassGroup?.inputSelector?.selectViewVariableBtn?.widgetHtml[0].dispatchEvent(new Event("click"));
       }
-      this.CriteriaGroup.EndClassGroup.inputSelector.selectViewVariableBtn.disable();
+      this.CriteriaGroup.endClassGroup?.inputSelector?.selectViewVariableBtn?.disable();
     } else {
-      this.CriteriaGroup.EndClassGroup.inputSelector.selectViewVariableBtn.enable();
+      this.CriteriaGroup.endClassGroup?.inputSelector?.selectViewVariableBtn?.enable();
     }
   }
 
   hasServiceEndpoint() {
-    return this.specProvider.getProperty(this.CriteriaGroup.ObjectPropertyGroup.objectPropVal?.type)?.getServiceEndpoint();
+    return this.specProvider.getProperty(this.CriteriaGroup.objectPropertyGroup.objectPropVal?.type)?.getServiceEndpoint();
   }
 
   /**

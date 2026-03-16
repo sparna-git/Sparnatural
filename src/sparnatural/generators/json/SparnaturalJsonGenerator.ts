@@ -93,10 +93,10 @@ export class SparnaturalJsonGenerator {
     let branch: Branch = {
       line: {
         s: CrtGrp.StartClassGroup.getVarName(),
-        p: CrtGrp.ObjectPropertyGroup.getTypeSelected(),
-        o: CrtGrp.EndClassGroup.getVarName(),
+        p: CrtGrp.objectPropertyGroup.getTypeSelected(),
+        o: CrtGrp.endClassGroup.getVarName(),
         sType: CrtGrp.StartClassGroup.getTypeSelected(),
-        oType: CrtGrp.EndClassGroup.getTypeSelected(),
+        oType: CrtGrp.endClassGroup.getTypeSelected(),
         // extract only the value part, not the key
         criterias: CrtGrp.endClassWidgetGroup.getWidgetValues(),
       },

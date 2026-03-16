@@ -57,21 +57,21 @@ sparnatural.addEventListener("queryUpdated", (event) => {
 });
 
 sparnatural.addEventListener("queryUpdated", (event) => {
-  var queryStringOld = sparnatural.expandSparql(event.detail.queryStringOld);
+  var queryStringNew = sparnatural.expandSparql(event.detail.queryStringNew);
   var queryString = sparnatural.expandSparql(event.detail.queryString);
   // Ajouter une ligne au tableau
   const tableBody = document.getElementById("sparql-comparison-table");
   const row = document.createElement("tr");
   const oldCell = document.createElement("td");
-  oldCell.textContent = queryStringOld;
+  oldCell.textContent = queryString;
   row.appendChild(oldCell);
   const newCell = document.createElement("td");
-  newCell.textContent = queryString;
+  newCell.textContent = queryStringNew;
   row.appendChild(newCell);
   const statusCell = document.createElement("td");
-  statusCell.textContent = queryStringOld === queryString ? "OK" : "Pas OK";
+  statusCell.textContent = queryStringNew === queryString ? "OK" : "Pas OK";
   statusCell.classList.add(
-    queryStringOld === queryString ? "table-success" : "table-danger",
+    queryStringNew === queryString ? "table-success" : "table-danger",
   );
   row.appendChild(statusCell);
   tableBody.appendChild(row);

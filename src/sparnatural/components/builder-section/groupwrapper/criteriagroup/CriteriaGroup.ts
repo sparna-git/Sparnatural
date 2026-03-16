@@ -19,12 +19,12 @@ import { I18n } from "../../../../settings/I18n";
 class CriteriaGroup extends HTMLComponent {
   StartClassGroup: StartClassGroup;
   OptionsGroup: OptionsGroup; // optional or notexists
-  ObjectPropertyGroup: ObjectPropertyGroup;
-  EndClassGroup: EndClassGroup;
+  objectPropertyGroup: ObjectPropertyGroup;
+  endClassGroup: EndClassGroup;
   endClassWidgetGroup: EndClassWidgetGroup;
-  ActionsGroup: ActionsGroup;
+  actionsGroup: ActionsGroup;
   specProvider: ISparnaturalSpecification;
-  ParentGroupWrapper: GroupWrapper;
+  parentGroupWrapper: GroupWrapper;
   unselectBtn: UnselectBtn;
 
   constructor(
@@ -35,7 +35,7 @@ class CriteriaGroup extends HTMLComponent {
   ) {
     super("CriteriaGroup", parentComponent, null);
     this.specProvider = specProvider;
-    this.ParentGroupWrapper = parentComponent;
+    this.parentGroupWrapper = parentComponent;
     this.StartClassGroup = new StartClassGroup(
       this,
       this.specProvider,
@@ -62,14 +62,14 @@ class CriteriaGroup extends HTMLComponent {
     // create all the elements of the criteria
     this.StartClassGroup.render();
     this.OptionsGroup = new OptionsGroup(this, this.specProvider).render();
-    this.ObjectPropertyGroup = new ObjectPropertyGroup(
+    this.objectPropertyGroup = new ObjectPropertyGroup(
       this,
       this.specProvider,
       I18n.labels.ObjectPropertyTemporaryLabel
     ).render();
-    this.EndClassGroup = new EndClassGroup(this, this.specProvider).render();
+    this.endClassGroup = new EndClassGroup(this, this.specProvider).render();
     this.endClassWidgetGroup = new EndClassWidgetGroup(this, this.specProvider);
-    this.ActionsGroup = new ActionsGroup(this, this.specProvider).render();
+    this.actionsGroup = new ActionsGroup(this, this.specProvider).render();
 
     this.#assembleComponents();
   }
@@ -84,8 +84,8 @@ class CriteriaGroup extends HTMLComponent {
           throw Error(
             "StartClassGroupSelected expects object of type SelectedVal"
           );
-        this.ObjectPropertyGroup.onStartClassGroupSelected(e.detail);
-        this.EndClassGroup.onStartClassGroupSelected(e.detail);
+        this.objectPropertyGroup.onStartClassGroupSelected(e.detail);
+        this.endClassGroup.onStartClassGroupSelected(e.detail);
       }
     );
 
@@ -94,7 +94,7 @@ class CriteriaGroup extends HTMLComponent {
       e.stopImmediatePropagation();
       if (!this.#isSelectedVal(e.detail))
         throw Error("EndClassGroupSelected expects object of type SelectedVal");
-      this.ObjectPropertyGroup.onEndClassGroupSelected(e.detail);
+      this.objectPropertyGroup.onEndClassGroupSelected(e.detail);
     });
 
     // 3. Automatically selected or User selects ObjectPropertyGrpVal
@@ -110,26 +110,26 @@ class CriteriaGroup extends HTMLComponent {
 
         // if there is already a where connection or widget values selected, don't change anything
         if (
-          !this.ParentGroupWrapper.whereChild &&
+          !this.parentGroupWrapper.whereChild &&
           this.endClassWidgetGroup?.widgetValues?.length === 0
         ) {
-          this.EndClassGroup.onObjectPropertyGroupSelected(e.detail);
+          this.endClassGroup.onObjectPropertyGroupSelected(e.detail);
           this.endClassWidgetGroup.render();
         }
 
         this.OptionsGroup.onObjectPropertyGroupSelected(
-          this.ParentGroupWrapper.currentOptionState
+          this.parentGroupWrapper.currentOptionState
         );
 
         // if there is already a andSibling don't allow to rerender the ActionAnd again
-        if (!this.ParentGroupWrapper.andSibling)
-          this.ActionsGroup.onObjectPropertyGroupSelected();
+        if (!this.parentGroupWrapper.andSibling)
+          this.actionsGroup.onObjectPropertyGroupSelected();
 
         // if property has a sparqlService, switch the state
         if (this.specProvider.getProperty(e.detail.type).getServiceEndpoint()) {
-          this.ParentGroupWrapper.triggerOption(OptionTypes.SERVICE);
+          this.parentGroupWrapper.triggerOption(OptionTypes.SERVICE);
         } else {
-          this.ParentGroupWrapper.triggerOption(this.ParentGroupWrapper.currentOptionState);
+          this.parentGroupWrapper.triggerOption(this.parentGroupWrapper.currentOptionState);
         }
       }
     );
@@ -158,7 +158,7 @@ class CriteriaGroup extends HTMLComponent {
     // when inputgot selected then we remove the where btn and EditComponents
     this.html[0].addEventListener("removeEditComponents", (e: CustomEvent) => {
       e.stopImmediatePropagation();
-      this.EndClassGroup.editComponents?.html?.empty()?.remove();
+      this.endClassGroup.editComponents?.html?.empty()?.remove();
     });
 
     // gets called when a user removes a previously selected widgetValue
@@ -189,13 +189,13 @@ class CriteriaGroup extends HTMLComponent {
         !e.detail.editedValue
       ) {
         // Render WidgetsWrapper and ActionWhere
-        this.EndClassGroup.editComponents.render();
+        this.endClassGroup.editComponents.render();
         this.html[0].dispatchEvent(
           new CustomEvent("onGrpInputNotCompleted", { bubbles: true })
         );
       } else {
         //we only need widgetswrapper
-        this.EndClassGroup.editComponents.renderWidgetsWrapper();
+        this.endClassGroup.editComponents.renderWidgetsWrapper();
       }
     });
   };

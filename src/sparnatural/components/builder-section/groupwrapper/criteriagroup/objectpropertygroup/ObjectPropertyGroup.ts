@@ -92,12 +92,12 @@ class ObjectPropertyGroup extends HTMLComponent {
     var desc = this.specProvider.getProperty(this.objectPropVal.type).getTooltip();
 
     if(desc) {
-			$(this.ParentCriteriaGroup.ObjectPropertyGroup.html).find('.ObjectPropertyTypeId').attr('data-tippy-content', desc.replace(/"/g, '&quot;') ) ;
+			$(this.ParentCriteriaGroup.objectPropertyGroup.html).find('.ObjectPropertyTypeId').attr('data-tippy-content', desc.replace(/"/g, '&quot;') ) ;
 			var tippySettings = Object.assign({}, TOOLTIP_CONFIG);
 			tippySettings.placement = "top-start";
 			tippy('.ObjectPropertyGroup .ObjectPropertyTypeId[data-tippy-content]', tippySettings);
 		} else {
-			$(this.ParentCriteriaGroup.ObjectPropertyGroup.html).removeAttr('data-tippy-content') ;
+			$(this.ParentCriteriaGroup.objectPropertyGroup.html).removeAttr('data-tippy-content') ;
 		}
   }
 

@@ -59,7 +59,7 @@ export default class QueryLoader{
 
         let parent = rootGrpWrapper;
         branches.forEach((b) => {
-          this.#clickOn(parent.CriteriaGroup.ActionsGroup.actions.ActionAnd.btn);
+          this.#clickOn(parent.CriteriaGroup.actionsGroup.actions.ActionAnd.btn);
           let localVarMapping = this.#buildCriteriaGroup(parent.andSibling, b);
           localVarMapping.forEach((value: string, key:string) => { varMapping.set(key, value); });
           parent = parent.andSibling;
@@ -85,31 +85,31 @@ export default class QueryLoader{
   
       // set EndClassGroup
       const endClassVal = { type: branch.line.oType, variable: branch.line.o };
-      this.#setSelectedValue(grpWarpper.CriteriaGroup.EndClassGroup, branch.line.oType);
+      this.#setSelectedValue(grpWarpper.CriteriaGroup.endClassGroup, branch.line.oType);
       // transparently set the variable name to the one in the query
       // before we click on the select button, so that the column is selected with the proper name
       // grpWarpper.CriteriaGroup.EndClassGroup.endClassVal = endClassVal;
-      varMapping.set(grpWarpper.CriteriaGroup.EndClassGroup.endClassVal.variable, branch.line.o);
+      varMapping.set(grpWarpper.CriteriaGroup.endClassGroup.endClassVal.variable, branch.line.o);
 
       //set ObjectPropertyGroup
       this.#setSelectedValue(
-        grpWarpper.CriteriaGroup.ObjectPropertyGroup,
+        grpWarpper.CriteriaGroup.objectPropertyGroup,
         branch.line.p
       );
     
       // set WidgetValues
       if(branch.line.criterias) {
         branch.line.criterias.forEach((v) => {
-          const parsedVal: LabelledCriteria<Criteria> = grpWarpper.CriteriaGroup.EndClassGroup.editComponents.widgetWrapper.widgetComponent.parseInput(v)
+          const parsedVal: LabelledCriteria<Criteria> = grpWarpper.CriteriaGroup.endClassGroup.editComponents.widgetWrapper.widgetComponent.parseInput(v)
           // if there are multiple values rendered, click first the 'plus' btn, to add more values
           if(grpWarpper.CriteriaGroup.endClassWidgetGroup.widgetValues.length > 0) this.#clickOn(grpWarpper.CriteriaGroup.endClassWidgetGroup.addWidgetValueBtn.html)
-          grpWarpper.CriteriaGroup.EndClassGroup.editComponents.widgetWrapper.widgetComponent.triggerRenderWidgetVal(parsedVal)
+          grpWarpper.CriteriaGroup.endClassGroup.editComponents.widgetWrapper.widgetComponent.triggerRenderWidgetVal(parsedVal)
         });
       }
 
       // if there is no value, and no children, set an "Any" value
       if((!branch.line.criterias || branch.line.criterias.length == 0) && (!branch.children || branch.children.length == 0)) {
-        grpWarpper.CriteriaGroup.EndClassGroup.editComponents.onSelectAll();
+        grpWarpper.CriteriaGroup.endClassGroup.editComponents.onSelectAll();
       }
     
       // trigger option state
@@ -117,7 +117,7 @@ export default class QueryLoader{
     
       if (branch.children && branch.children.length > 0) {
         this.#clickOn(
-          grpWarpper.CriteriaGroup.EndClassGroup.editComponents.actionWhere.btn
+          grpWarpper.CriteriaGroup.endClassGroup.editComponents.actionWhere.btn
         );
         // first child
         let localVarMapping = this.#buildCriteriaGroup(grpWarpper.whereChild, branch.children.shift());
@@ -125,7 +125,7 @@ export default class QueryLoader{
         // the rest of the children are AND connected
         let parent = grpWarpper.whereChild;
         branch.children.forEach((c) => {
-          this.#clickOn(parent.CriteriaGroup.ActionsGroup.actions.ActionAnd.btn);
+          this.#clickOn(parent.CriteriaGroup.actionsGroup.actions.ActionAnd.btn);
           let localVarMapping = this.#buildCriteriaGroup(parent.andSibling, c);
           localVarMapping.forEach((value:string,key: string) => varMapping.set(key, value));
           parent = parent.andSibling;
@@ -137,7 +137,7 @@ export default class QueryLoader{
         startClassVal,
         grpWarpper.CriteriaGroup.StartClassGroup,
         endClassVal,
-        grpWarpper.CriteriaGroup.EndClassGroup
+        grpWarpper.CriteriaGroup.endClassGroup
       )
 
       return varMapping;

@@ -313,7 +313,7 @@ export type TermIri = TermIriFull;
 // Extension : Specific labelled IRI
 export type TermLabelledIri = TermIriFull & { label: string };
 
-// Extension Specific typed variables
+// Extension : Specific typed variables
 export type TermTypedVariable = TermVariable & { rdfType: string };
 
 export type GraphTerm = TermIri | TermLiteral | TermLabelledIri;

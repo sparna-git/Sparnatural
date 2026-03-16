@@ -13,7 +13,7 @@ export function updateVarList(actionStore: ActionStore) {
   actionStore.sparnatural.BgWrapper.componentsList.rootGroupWrapper.traversePreOrder(
     (grpWrapper: GroupWrapper) => {
       let startGrp = grpWrapper.CriteriaGroup.StartClassGroup;
-      let endGrp = grpWrapper.CriteriaGroup.EndClassGroup;
+      let endGrp = grpWrapper.CriteriaGroup.endClassGroup;
       if(startGrp.isVarSelected() && startGrp.getVarName()) varNames.add(startGrp.getVarName());
       if(endGrp.isVarSelected() && endGrp.getVarName()) varNames.add(endGrp.getVarName());      
     }

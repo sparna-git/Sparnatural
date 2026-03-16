@@ -94,7 +94,7 @@ export class OptionsGroup extends HTMLComponent {
     // MUST BE WRAPPED INTO LIST DIV
     if(
       this.specProvider.getProperty(
-        this.ParentCriteriaGroup.ObjectPropertyGroup.objectPropVal.type
+        this.ParentCriteriaGroup.objectPropertyGroup.objectPropVal.type
       ).isEnablingOptional()
     ) {
       this.OptionalComponent.render();
@@ -102,7 +102,7 @@ export class OptionsGroup extends HTMLComponent {
 
     if(
       this.specProvider.getProperty(
-        this.ParentCriteriaGroup.ObjectPropertyGroup.objectPropVal.type
+        this.ParentCriteriaGroup.objectPropertyGroup.objectPropVal.type
       ).isEnablingNegation()
     ) {
       this.NotExistsComponent.render();
@@ -120,11 +120,11 @@ export class OptionsGroup extends HTMLComponent {
   #checkIfOptionsPossible(): boolean {
     return (
       this.specProvider.getProperty(
-        this.ParentCriteriaGroup.ObjectPropertyGroup.objectPropVal.type
+        this.ParentCriteriaGroup.objectPropertyGroup.objectPropVal.type
       ).isEnablingOptional()
       ||
       this.specProvider.getProperty(
-        this.ParentCriteriaGroup.ObjectPropertyGroup.objectPropVal.type
+        this.ParentCriteriaGroup.objectPropertyGroup.objectPropVal.type
       ).isEnablingNegation()
     );
   }

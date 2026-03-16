@@ -9,7 +9,7 @@ export function removeEndClass(grpWrapper: GroupWrapper) {
     grpWrapper.whereChild.html[0].dispatchEvent(new CustomEvent("onRemoveGrp"));
 
   // notify it is incomplete - it will become higher and remove the "completed" class
-  grpWrapper.CriteriaGroup.EndClassGroup.html[0].dispatchEvent(
+  grpWrapper.CriteriaGroup.endClassGroup.html[0].dispatchEvent(
     new CustomEvent("onGrpInputNotCompleted", { bubbles: true })
   );
 

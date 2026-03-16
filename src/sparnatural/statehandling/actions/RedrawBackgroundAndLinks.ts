@@ -16,7 +16,6 @@ export default function redrawBackgroundAndLinks(
   sparnatural.BgWrapper.componentsList.rootGroupWrapper.traversePreOrder(
     (grpWrapper: GroupWrapper) => {
       renderLinks(grpWrapper);
-      rerenderOptionState(grpWrapper);
       //render background
       currentHeight = grpWrapper.CriteriaGroup.html.outerHeight(true) + 1;
       cssdef += drawBackgroundOfGroupWrapper(
@@ -61,17 +60,6 @@ function renderLinks(grpWrapper: GroupWrapper) {
     grpWrapper.linkAndBottom.html.empty();
     grpWrapper.linkAndBottom.html.remove();
     if (grpWrapper.html) grpWrapper.linkAndBottom.render();
-  }
-}
-
-//sets the correct OptionState on newly added group wrappers
-function rerenderOptionState(grpWrapper: GroupWrapper) {
-  if (grpWrapper.currentOptionState != OptionTypes.NONE) {
-    let tmpOptionState = grpWrapper.currentOptionState;
-    grpWrapper.currentOptionState = OptionTypes.NONE;
-    grpWrapper.html[0].dispatchEvent(
-      new CustomEvent("optionTriggered", { detail: tmpOptionState })
-    );
   }
 }
 

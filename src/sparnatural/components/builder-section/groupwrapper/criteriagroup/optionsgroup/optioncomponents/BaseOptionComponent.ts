@@ -36,7 +36,7 @@ class BaseOptionComponent extends HTMLComponent {
     this.name = name;
     this.ParentOptionsGroup = ParentComponent as OptionsGroup;
     this.parentWrapper =
-      this.ParentOptionsGroup.ParentCriteriaGroup.ParentGroupWrapper;
+      this.ParentOptionsGroup.ParentCriteriaGroup.parentGroupWrapper;
     this.type = type;
   }
 

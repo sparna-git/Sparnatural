@@ -16,7 +16,7 @@ export default function updateVarName(
   actionStore.sparnatural.BgWrapper.componentsList.rootGroupWrapper.traversePreOrder(
     (grpWrapper: GroupWrapper) => {
       let startGrp = grpWrapper.CriteriaGroup.StartClassGroup;
-      let endGrp = grpWrapper.CriteriaGroup.EndClassGroup;
+      let endGrp = grpWrapper.CriteriaGroup.endClassGroup;
 
       if (startGrp.getVarName() === previousVarName.variable) startGrp.setVarName(variableState.selectedVariable.variable);
       if (endGrp.getVarName() === previousVarName.variable) endGrp.setVarName(variableState.selectedVariable.variable);

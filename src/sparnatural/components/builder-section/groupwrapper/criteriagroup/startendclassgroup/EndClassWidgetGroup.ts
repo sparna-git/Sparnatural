@@ -176,7 +176,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
 
     // if the widget allows multiple values to be selected then AddWidgetValueBtn
     // undefined for NON_SELECTABLE_PROPERTY
-    const widgetComp:AbstractWidget | undefined = (this.parentComponent as CriteriaGroup).EndClassGroup.getWidgetComponent()
+    const widgetComp:AbstractWidget | undefined = (this.parentComponent as CriteriaGroup).endClassGroup.getWidgetComponent()
     if(widgetComp && widgetComp.valueRepetition == ValueRepetition.MULTIPLE) {
       // now (re)render the addMoreValuesButton
       this.addWidgetValueBtn?.html

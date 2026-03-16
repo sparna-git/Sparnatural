@@ -1,5 +1,6 @@
 import { I18n } from "../../../settings/I18n";
 import { HTMLComponent } from "../../HtmlComponent";
+import { OptionTypes } from "./criteriagroup/optionsgroup/OptionsGroup";
 import EndClassGroup from "./criteriagroup/startendclassgroup/EndClassGroup";
 import GroupWrapper from "./GroupWrapper";
 
@@ -15,27 +16,44 @@ import GroupWrapper from "./GroupWrapper";
      - (posUpperStart.left + (posUpperStart.right - posUpperStart.left) / 4) is used to calculate one quarter of the width from the left side
 */
 class LinkWhereBottom extends HTMLComponent {
-  ParentGroupWrapper: GroupWrapper;
+
+  parentGroupWrapper: GroupWrapper;
   widgetHTML = $(`<span>${I18n.labels.Where}</span>`);
   upperVertical = $(`<div class="upper-vertical"></div>`);
   horizontal = $(`<div class="horizontal"></div>`).append(this.widgetHTML);
   lowerVertical = $(`<div class="lower-vertical"></div>`);
-  constructor(ParentComponent: HTMLComponent) {
-    super("link-where-bottom", ParentComponent, null);
-    this.ParentGroupWrapper = ParentComponent as GroupWrapper;
+
+  // noOption or optionalEnabled or notExists, etc.
+  currentOptionState = OptionTypes.NONE;
+
+  constructor(parentComponent: HTMLComponent) {
+    super("link-where-bottom", parentComponent, null);
+    this.parentGroupWrapper = parentComponent as GroupWrapper;
+
+    // inherit the optionState from its parent
+    this.currentOptionState = this.parentGroupWrapper.currentOptionState;
   }
 
   render(): this {
     super.render();
+    
+    // add an explicit class for the option
+    this.html.addClass(this.currentOptionState);
+
     this.html.add(this.upperVertical);
     this.html.append(this.upperVertical);
     this.html.append(this.horizontal);
     this.html.append(this.lowerVertical);
     this.#drawWhereConnection(
-      this.ParentGroupWrapper.CriteriaGroup.EndClassGroup,
-      this.ParentGroupWrapper.whereChild
+      this.parentGroupWrapper.CriteriaGroup.endClassGroup,
+      this.parentGroupWrapper.whereChild
     );
     return this;
+  }
+
+  setCurrentOptionState(newState:OptionTypes) {
+    HTMLComponent.switchState(this.html[0],this.currentOptionState,newState);
+    this.currentOptionState = newState;
   }
 
   #drawWhereConnection(EndClassGroup: EndClassGroup, whereChild: GroupWrapper) {

@@ -176,14 +176,14 @@ class SparnaturalComponent extends HTMLComponent {
 
         // always count the end class group
         processTypeVar(
-            grpWrapper.CriteriaGroup.EndClassGroup?.endClassVal.type,
-            grpWrapper.CriteriaGroup.EndClassGroup?.endClassVal.variable
+            grpWrapper.CriteriaGroup.endClassGroup?.endClassVal.type,
+            grpWrapper.CriteriaGroup.endClassGroup?.endClassVal.variable
         );
 
         // always count the object property group
         processTypeVar(
-          grpWrapper.CriteriaGroup.ObjectPropertyGroup?.objectPropVal.type,
-          grpWrapper.CriteriaGroup.ObjectPropertyGroup?.objectPropVal.variable
+          grpWrapper.CriteriaGroup.objectPropertyGroup?.objectPropVal.type,
+          grpWrapper.CriteriaGroup.objectPropertyGroup?.objectPropVal.variable
         );
       }
     );

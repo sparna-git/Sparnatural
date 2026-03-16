@@ -35,7 +35,7 @@ export function addAndComponent(
 function removeActionAnd(grpWarpper: GroupWrapper) {
   // deactivate onHover function and remove it. Could also make it invisible?
   let remCss =
-    grpWarpper.CriteriaGroup.ActionsGroup.actions.ActionAnd.widgetHtml.remove();
+    grpWarpper.CriteriaGroup.actionsGroup.actions.ActionAnd.widgetHtml.remove();
   if (remCss.length == 0)
     throw Error(
       `Didn't find ActionAnd Component. ActionAnd.html:${this.actions.ActionAnd.html}`

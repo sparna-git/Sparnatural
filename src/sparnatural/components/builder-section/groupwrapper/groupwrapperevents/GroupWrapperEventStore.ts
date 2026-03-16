@@ -1,3 +1,4 @@
+import { OptionTypes } from "../criteriagroup/optionsgroup/OptionsGroup";
 import GroupWrapper from "../GroupWrapper";
 import { addAndComponent } from "./events/AddAndComponent";
 import { addWhereComponent } from "./events/AddWhereComponent";
@@ -69,6 +70,10 @@ export default class GroupWrapperEventStore {
           );
         e.stopImmediatePropagation();
         let newOptionState = e.detail;
+        if(newOptionState === this.grpWrapper.explicitOptionState) {
+          // button was clicked twice, it means we want to switch it off to NONE
+          newOptionState = OptionTypes.NONE;
+        }
         this.grpWrapper.triggerOption(newOptionState);
         this.grpWrapper.html[0].dispatchEvent(
           new CustomEvent("generateQuery", { bubbles: true })

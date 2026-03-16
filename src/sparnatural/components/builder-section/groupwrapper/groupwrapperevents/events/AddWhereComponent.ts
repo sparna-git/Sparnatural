@@ -3,10 +3,10 @@ import GroupWrapper from "../../GroupWrapper";
 import LinkWhereBottom from "../../LinkWhereBottom";
 
 let removeEditComponents = (grpWrapper: GroupWrapper) => {
-  grpWrapper.CriteriaGroup.EndClassGroup.html[0].dispatchEvent(
+  grpWrapper.CriteriaGroup.endClassGroup.html[0].dispatchEvent(
     new CustomEvent("removeEditComponents", {bubbles:true})
   );
-  grpWrapper.CriteriaGroup.EndClassGroup.editComponents = null;
+  grpWrapper.CriteriaGroup.endClassGroup.editComponents = null;
 };
 
 //give it additional class childsList
@@ -25,6 +25,10 @@ export function addWhereComponent(
     0,
     endClassVal
   ).render();
+
+  // inherits the option state on where children
+  // grpWrapper.whereChild.currentOptionState = grpWrapper.currentOptionState;
+  grpWrapper.whereChild.setCurrentOptionState(grpWrapper.currentOptionState);
 
   //endClassVal is new startClassVal and trigger 'change' event on ClassTypeId
   let inputSelector =
