@@ -9,14 +9,14 @@ export function removeEndClass(grpWrapper: GroupWrapper) {
     grpWrapper.whereChild.html[0].dispatchEvent(new CustomEvent("onRemoveGrp"));
 
   // notify it is incomplete - it will become higher and remove the "completed" class
-  grpWrapper.CriteriaGroup.endClassGroup.html[0].dispatchEvent(
+  grpWrapper.criteriaGroup.endClassGroup.html[0].dispatchEvent(
     new CustomEvent("onGrpInputNotCompleted", { bubbles: true })
   );
 
-  let startVal = grpWrapper.CriteriaGroup.StartClassGroup.startClassVal;
-  grpWrapper.CriteriaGroup.html.empty();
-  grpWrapper.CriteriaGroup.html.remove();
-  grpWrapper.CriteriaGroup = new CriteriaGroup(
+  let startVal = grpWrapper.criteriaGroup.startClassGroup.startClassVal;
+  grpWrapper.criteriaGroup.html.empty();
+  grpWrapper.criteriaGroup.html.remove();
+  grpWrapper.criteriaGroup = new CriteriaGroup(
     grpWrapper,
     grpWrapper.specProvider,
     startVal,
@@ -25,8 +25,8 @@ export function removeEndClass(grpWrapper: GroupWrapper) {
   // Set state back to NONE
   grpWrapper.currentOptionState = OptionTypes.NONE
   // set StartClassVal back to its original value
-  grpWrapper.CriteriaGroup.StartClassGroup.startClassVal = startVal;
-  let inputSelector = grpWrapper.CriteriaGroup.StartClassGroup.inputSelector;
+  grpWrapper.criteriaGroup.startClassGroup.startClassVal = startVal;
+  let inputSelector = grpWrapper.criteriaGroup.startClassGroup.inputSelector;
   inputSelector.submitSelected() ;
   // nice-select is 2nd place in childrenslist. move away from nice-select...
   //inputSelector.html[0].children[1].classList.add("disabled");

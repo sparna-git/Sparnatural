@@ -89,13 +89,13 @@ export class SparnaturalJsonGenerator {
   // goes recursivly through the grpWrappers and collects all the data
   #getBranch(grpWrapper: GroupWrapper, isInOption:boolean): Array<any> {
     let branches = [];
-    let CrtGrp = grpWrapper.CriteriaGroup;
+    let CrtGrp = grpWrapper.criteriaGroup;
     let branch: Branch = {
       line: {
-        s: CrtGrp.StartClassGroup.getVarName(),
+        s: CrtGrp.startClassGroup.getVarName(),
         p: CrtGrp.objectPropertyGroup.getTypeSelected(),
         o: CrtGrp.endClassGroup.getVarName(),
-        sType: CrtGrp.StartClassGroup.getTypeSelected(),
+        sType: CrtGrp.startClassGroup.getTypeSelected(),
         oType: CrtGrp.endClassGroup.getTypeSelected(),
         // extract only the value part, not the key
         criterias: CrtGrp.endClassWidgetGroup.getWidgetValues(),

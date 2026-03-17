@@ -15,8 +15,8 @@ export default function updateVarName(
   // traversePreOrder through components and calculate background / linkAndBottoms /  for them
   actionStore.sparnatural.BgWrapper.componentsList.rootGroupWrapper.traversePreOrder(
     (grpWrapper: GroupWrapper) => {
-      let startGrp = grpWrapper.CriteriaGroup.StartClassGroup;
-      let endGrp = grpWrapper.CriteriaGroup.endClassGroup;
+      let startGrp = grpWrapper.criteriaGroup.startClassGroup;
+      let endGrp = grpWrapper.criteriaGroup.endClassGroup;
 
       if (startGrp.getVarName() === previousVarName.variable) startGrp.setVarName(variableState.selectedVariable.variable);
       if (endGrp.getVarName() === previousVarName.variable) endGrp.setVarName(variableState.selectedVariable.variable);

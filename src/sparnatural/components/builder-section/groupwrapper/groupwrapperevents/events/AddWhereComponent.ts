@@ -3,10 +3,10 @@ import GroupWrapper from "../../GroupWrapper";
 import LinkWhereBottom from "../../LinkWhereBottom";
 
 let removeEditComponents = (grpWrapper: GroupWrapper) => {
-  grpWrapper.CriteriaGroup.endClassGroup.html[0].dispatchEvent(
+  grpWrapper.criteriaGroup.endClassGroup.html[0].dispatchEvent(
     new CustomEvent("removeEditComponents", {bubbles:true})
   );
-  grpWrapper.CriteriaGroup.endClassGroup.editComponents = null;
+  grpWrapper.criteriaGroup.endClassGroup.editComponents = null;
 };
 
 //give it additional class childsList
@@ -17,6 +17,7 @@ export function addWhereComponent(
   removeEditComponents(grpWrapper);
   //provide endclassval as startvalue for the new group
   grpWrapper.whereChild = new GroupWrapper(
+    grpWrapper,
     grpWrapper,
     grpWrapper.specProvider,
     // depth = parent depth + 1
@@ -32,7 +33,7 @@ export function addWhereComponent(
 
   //endClassVal is new startClassVal and trigger 'change' event on ClassTypeId
   let inputSelector =
-    grpWrapper.whereChild.CriteriaGroup.StartClassGroup.inputSelector;
+    grpWrapper.whereChild.criteriaGroup.startClassGroup.inputSelector;
   
     inputSelector.submitSelected() ;
   // nice-select is 2nd place in childrenslist. move away from nice-select...

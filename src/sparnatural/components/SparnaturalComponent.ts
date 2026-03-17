@@ -124,8 +124,8 @@ class SparnaturalComponent extends HTMLComponent {
 
   isEmpty() {
     return (
-      this.BgWrapper.componentsList.rootGroupWrapper.CriteriaGroup
-        .StartClassGroup.startClassVal?.type == null
+      this.BgWrapper.componentsList.rootGroupWrapper.criteriaGroup
+        .startClassGroup.startClassVal?.type == null
     );
   }
 
@@ -169,21 +169,21 @@ class SparnaturalComponent extends HTMLComponent {
         // count the variable only if it is the very first
         if (grpWrapper.depth === 0 && grpWrapper.order === 0) {
           processTypeVar(
-            grpWrapper.CriteriaGroup.StartClassGroup?.startClassVal.type,
-            grpWrapper.CriteriaGroup.StartClassGroup?.startClassVal.variable
+            grpWrapper.criteriaGroup.startClassGroup?.startClassVal.type,
+            grpWrapper.criteriaGroup.startClassGroup?.startClassVal.variable
           );
         }
 
         // always count the end class group
         processTypeVar(
-            grpWrapper.CriteriaGroup.endClassGroup?.endClassVal.type,
-            grpWrapper.CriteriaGroup.endClassGroup?.endClassVal.variable
+            grpWrapper.criteriaGroup.endClassGroup?.endClassVal.type,
+            grpWrapper.criteriaGroup.endClassGroup?.endClassVal.variable
         );
 
         // always count the object property group
         processTypeVar(
-          grpWrapper.CriteriaGroup.objectPropertyGroup?.objectPropVal.type,
-          grpWrapper.CriteriaGroup.objectPropertyGroup?.objectPropVal.variable
+          grpWrapper.criteriaGroup.objectPropertyGroup?.objectPropVal.type,
+          grpWrapper.criteriaGroup.objectPropertyGroup?.objectPropVal.variable
         );
       }
     );

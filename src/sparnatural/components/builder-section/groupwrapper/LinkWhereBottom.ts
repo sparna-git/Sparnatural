@@ -45,7 +45,7 @@ class LinkWhereBottom extends HTMLComponent {
     this.html.append(this.horizontal);
     this.html.append(this.lowerVertical);
     this.#drawWhereConnection(
-      this.parentGroupWrapper.CriteriaGroup.endClassGroup,
+      this.parentGroupWrapper.criteriaGroup.endClassGroup,
       this.parentGroupWrapper.whereChild
     );
     return this;
@@ -95,7 +95,7 @@ class LinkWhereBottom extends HTMLComponent {
 
   #drawLowerVertical(whereChild: GroupWrapper) {
     const startClassClientRect =
-      whereChild.CriteriaGroup.StartClassGroup.html[0].getBoundingClientRect();
+      whereChild.criteriaGroup.startClassGroup.html[0].getBoundingClientRect();
     const bx =
       (startClassClientRect.left + (startClassClientRect.right - startClassClientRect.left) / 4) + window.scrollX;
     // -2 so that it looks connected to white group

@@ -13,7 +13,7 @@ import { Model } from "rdf-shacl-commons";
 class StartClassGroup extends HTMLComponent {
   startClassVal: SelectedVal;
   inputSelector: ClassTypeId;
-  ParentCriteriaGroup: CriteriaGroup;
+  parentCriteriaGroup: CriteriaGroup;
   specProvider: ISparnaturalSpecification;
   renderEyeBtn:Boolean = false;
   temporaryLabel: string;
@@ -35,7 +35,7 @@ class StartClassGroup extends HTMLComponent {
     
     this.temporaryLabel = temporaryLabel;
     this.inputSelector = new ClassTypeId(this, this.specProvider, this.temporaryLabel, startClassVal);
-    this.ParentCriteriaGroup = this.parentComponent as CriteriaGroup;
+    this.parentCriteriaGroup = this.parentComponent as CriteriaGroup;
     this.startClassVal = startClassVal
       ? startClassVal
       : {

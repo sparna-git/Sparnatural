@@ -14,6 +14,7 @@ import { SelectedVal } from "../../SelectedVal";
 class GroupWrapper extends HTMLComponent {
   whereChild?: GroupWrapper;
   andSibling?: GroupWrapper;
+  parentGroupWrapper?: GroupWrapper;
 
   // the current option state, either set directly at this level, or inherited from a parent group wrapper
   currentOptionState = OptionTypes.NONE;
@@ -22,7 +23,7 @@ class GroupWrapper extends HTMLComponent {
 
   linkAndBottom?: LinkAndBottom; // connection line drawn from this CriteriaList with hasAnd CriteriaList
   linkWhereBottom?: LinkWhereBottom;
-  CriteriaGroup: CriteriaGroup;
+  criteriaGroup: CriteriaGroup;
   specProvider: ISparnaturalSpecification;
   groupWrapperEventStore: GroupWrapperEventStore;
   // depth in the query tree
@@ -31,16 +32,18 @@ class GroupWrapper extends HTMLComponent {
   order: number;
 
   constructor(
-    ParentComponent: HTMLComponent,
+    parentGroupWrapper: GroupWrapper,
+    parentComponent: HTMLComponent,
     specProvider: ISparnaturalSpecification,
     depth:number,
     order:number,
     startOrEndClassVal?: SelectedVal,
     renderEyeButtonOnStartClassGroup?: boolean
   ) {
-    super("groupe", ParentComponent, null);
+    super("groupe", parentComponent, null);
+    this.parentGroupWrapper = parentGroupWrapper;
     this.specProvider = specProvider;
-    this.CriteriaGroup = new CriteriaGroup(
+    this.criteriaGroup = new CriteriaGroup(
       this,
       this.specProvider,
       startOrEndClassVal,
@@ -53,24 +56,20 @@ class GroupWrapper extends HTMLComponent {
   render(): this {
     super.render();
     this.groupWrapperEventStore = new GroupWrapperEventStore(this);
-    this.CriteriaGroup = this.CriteriaGroup.render();
+    this.criteriaGroup = this.criteriaGroup.render();
     return this;
   }
 
   isRootGrpWrapper(): boolean{
-    return (
-      (this.parentComponent instanceof ComponentsList)
-      &&
-      ((this.parentComponent as ComponentsList).rootGroupWrapper == this)
-    );
+    return (this.parentGroupWrapper === null)
   }
 
   // set back state to when objectproperty was selected
   setObjectPropertySelectedState() {
-    let opVal = this.CriteriaGroup.objectPropertyGroup.objectPropVal;
+    let opVal = this.criteriaGroup.objectPropertyGroup.objectPropVal;
     //if opVal is null, then temporary lbl is shown an no endclassgroup has been selected
     if (!opVal) return;
-    this.CriteriaGroup.html[0].dispatchEvent(
+    this.criteriaGroup.html[0].dispatchEvent(
       new CustomEvent("onObjectPropertyGroupSelected", { detail: opVal })
     );
   }
@@ -96,12 +95,12 @@ class GroupWrapper extends HTMLComponent {
       grpWrapper.inheritOptionState(newOptionState);
     });
 
-    this.CriteriaGroup.OptionsGroup?.setNewState(newOptionState);
+    this.criteriaGroup.optionsGroup?.setNewState(newOptionState);
   }
 
   setCurrentOptionState(newState: OptionTypes) {
     // set css on grpwrapper itself
-    HTMLComponent.switchState(this.CriteriaGroup.html[0], this.currentOptionState, newState);
+    HTMLComponent.switchState(this.criteriaGroup.html[0], this.currentOptionState, newState);
     // store the new state in the class variable
     this.currentOptionState = newState;
  
@@ -110,17 +109,35 @@ class GroupWrapper extends HTMLComponent {
     // the end class group may not be known, so we add '?' at every step
     if (newState == OptionTypes.NOTEXISTS) {      
       // remove the variable selection if it was selected
-      if(this.CriteriaGroup.endClassGroup?.inputSelector?.selectViewVariableBtn?.selected) {
-        this.CriteriaGroup.endClassGroup?.inputSelector?.selectViewVariableBtn?.widgetHtml[0].dispatchEvent(new Event("click"));
+      if(this.criteriaGroup.endClassGroup?.inputSelector?.selectViewVariableBtn?.selected) {
+        this.criteriaGroup.endClassGroup?.inputSelector?.selectViewVariableBtn?.widgetHtml[0].dispatchEvent(new Event("click"));
       }
-      this.CriteriaGroup.endClassGroup?.inputSelector?.selectViewVariableBtn?.disable();
+      this.criteriaGroup.endClassGroup?.inputSelector?.selectViewVariableBtn?.disable();
     } else {
-      this.CriteriaGroup.endClassGroup?.inputSelector?.selectViewVariableBtn?.enable();
+      this.criteriaGroup.endClassGroup?.inputSelector?.selectViewVariableBtn?.enable();
     }
   }
 
   hasServiceEndpoint() {
-    return this.specProvider.getProperty(this.CriteriaGroup.objectPropertyGroup.objectPropVal?.type)?.getServiceEndpoint();
+    return this.specProvider.getProperty(this.criteriaGroup.objectPropertyGroup.objectPropVal?.type)?.getServiceEndpoint();
+  }
+
+  getDebugId():string {
+    return ( (!this.isRootGrpWrapper())?(this.parentGroupWrapper.getDebugId()+"."+this.order):""+this.order) + " (?" + this.criteriaGroup.startClassGroup?.startClassVal.variable+")";
+  }
+
+  disableActionAnd() {
+    // deactivate onHover function and remove it. Could also make it invisible?
+    let remCss = this.criteriaGroup.actionsGroup.actions.actionAnd.widgetHtml.remove();
+
+    if (remCss.length == 0)
+      throw Error(
+        `Didn't find ActionAnd Component. ActionAnd.widgetHtml:${this.criteriaGroup.actionsGroup.actions.actionAnd.widgetHtml}`
+      );
+  }
+
+  enableActionAnd() {
+    this.criteriaGroup.actionsGroup.onObjectPropertyGroupSelected();
   }
 
   /**
@@ -134,10 +151,10 @@ class GroupWrapper extends HTMLComponent {
 
     //remove the optional possibilities for child groups if they have an optional arrow
     if (newState == OptionTypes.NONE) {
-      this.CriteriaGroup.OptionsGroup.enable();
+      this.criteriaGroup.optionsGroup.enable();
     }
     if (newState == OptionTypes.NOTEXISTS || newState == OptionTypes.OPTIONAL) {
-      this.CriteriaGroup.OptionsGroup.disable();
+      this.criteriaGroup.optionsGroup.disable();
     }
   };
 

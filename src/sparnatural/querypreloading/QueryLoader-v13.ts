@@ -84,7 +84,7 @@ export default class QueryLoader {
     // other top-level pairs = AND siblings
     let parent = rootGrpWrapper;
     pairs.forEach((p) => {
-      this.#clickOn(parent.CriteriaGroup.actionsGroup.actions.ActionAnd.btn);
+      this.#clickOn(parent.criteriaGroup.actionsGroup.actions.actionAnd.btn);
       const localMap = this.#buildCriteriaGroupFromPair(
         parent.andSibling,
         subject,
@@ -98,7 +98,7 @@ export default class QueryLoader {
     if (!this.#hasSelectedVar(query.variables, subject.value)) {
       this.#clickOn(
         (
-          rootGrpWrapper.CriteriaGroup.StartClassGroup
+          rootGrpWrapper.criteriaGroup.startClassGroup
             .inputSelector as ClassTypeId
         )?.selectViewVariableBtn?.widgetHtml,
       );
@@ -122,19 +122,19 @@ export default class QueryLoader {
       variable: subject.value,
     };
 
-    if (!grpWrapper.CriteriaGroup.StartClassGroup.startClassVal.type) {
+    if (!grpWrapper.criteriaGroup.startClassGroup.startClassVal.type) {
       this.#setSelectedValue(
-        grpWrapper.CriteriaGroup.StartClassGroup,
+        grpWrapper.criteriaGroup.startClassGroup,
         subject.rdfType,
       );
     }
 
     // This is for cases where the variable name has been manually changed in the query
     // and is not one of the selected variables in the result set
-    grpWrapper.CriteriaGroup.StartClassGroup.startClassVal = startClassVal;
+    grpWrapper.criteriaGroup.startClassGroup.startClassVal = startClassVal;
 
     varMapping.set(
-      grpWrapper.CriteriaGroup.StartClassGroup.startClassVal.variable,
+      grpWrapper.criteriaGroup.startClassGroup.startClassVal.variable,
       subject.value,
     );
 
@@ -145,22 +145,22 @@ export default class QueryLoader {
     };
 
     this.#setSelectedValue(
-      grpWrapper.CriteriaGroup.endClassGroup,
+      grpWrapper.criteriaGroup.endClassGroup,
       obj.variable.rdfType,
     );
 
     // This is for cases where the variable name has been manually changed in the query
     // and is not one of the selected variables in the result set
-    grpWrapper.CriteriaGroup.endClassGroup.endClassVal = endClassVal;
+    grpWrapper.criteriaGroup.endClassGroup.endClassVal = endClassVal;
 
     varMapping.set(
-      grpWrapper.CriteriaGroup.endClassGroup.endClassVal.variable,
+      grpWrapper.criteriaGroup.endClassGroup.endClassVal.variable,
       obj.variable.value,
     );
 
     // predicate
     this.#setSelectedValue(
-      grpWrapper.CriteriaGroup.objectPropertyGroup,
+      grpWrapper.criteriaGroup.objectPropertyGroup,
       pair.predicate.value,
     );
 
@@ -181,19 +181,19 @@ export default class QueryLoader {
     if (widgetInputs.length > 0) {
       widgetInputs.forEach((input) => {
         const parsedVal =
-          grpWrapper.CriteriaGroup.endClassGroup.editComponents.widgetWrapper.widgetComponent.parseInput(
+          grpWrapper.criteriaGroup.endClassGroup.editComponents.widgetWrapper.widgetComponent.parseInput(
             input,
           );
 
         if (
-          grpWrapper.CriteriaGroup.endClassWidgetGroup.widgetValues.length > 0
+          grpWrapper.criteriaGroup.endClassWidgetGroup.widgetValues.length > 0
         ) {
           this.#clickOn(
-            grpWrapper.CriteriaGroup.endClassWidgetGroup.addWidgetValueBtn.html,
+            grpWrapper.criteriaGroup.endClassWidgetGroup.addWidgetValueBtn.html,
           );
         }
 
-        grpWrapper.CriteriaGroup.endClassGroup.editComponents.widgetWrapper.widgetComponent.triggerRenderWidgetVal(
+        grpWrapper.criteriaGroup.endClassGroup.editComponents.widgetWrapper.widgetComponent.triggerRenderWidgetVal(
           parsedVal,
         );
       });
@@ -208,7 +208,7 @@ export default class QueryLoader {
       !obj.predicateObjectPairs || obj.predicateObjectPairs.length === 0;
 
     if (hasNoValuesOrFilters && hasNoChildren) {
-      grpWrapper.CriteriaGroup.endClassGroup.editComponents.onSelectAll();
+      grpWrapper.criteriaGroup.endClassGroup.editComponents.onSelectAll();
     }
 
     // options v13
@@ -217,7 +217,7 @@ export default class QueryLoader {
     // children recursion (WHERE)
     if (obj.predicateObjectPairs?.length) {
       this.#clickOn(
-        grpWrapper.CriteriaGroup.endClassGroup.editComponents.actionWhere.btn,
+        grpWrapper.criteriaGroup.endClassGroup.editComponents.actionWhere.btn,
       );
 
       const childrenPairs = [...obj.predicateObjectPairs];
@@ -232,7 +232,7 @@ export default class QueryLoader {
 
       let parent = grpWrapper.whereChild;
       childrenPairs.forEach((cp) => {
-        this.#clickOn(parent.CriteriaGroup.actionsGroup.actions.ActionAnd.btn);
+        this.#clickOn(parent.criteriaGroup.actionsGroup.actions.actionAnd.btn);
         localMap = this.#buildCriteriaGroupFromPair(
           parent.andSibling,
           obj.variable,
@@ -246,9 +246,9 @@ export default class QueryLoader {
     // eye button (same behaviour: only end class toggled)
     this.#setSelectViewVariableBtn(
       startClassVal,
-      grpWrapper.CriteriaGroup.StartClassGroup,
+      grpWrapper.criteriaGroup.startClassGroup,
       endClassVal,
-      grpWrapper.CriteriaGroup.endClassGroup,
+      grpWrapper.criteriaGroup.endClassGroup,
     );
 
     return varMapping;
@@ -264,18 +264,18 @@ export default class QueryLoader {
       grpWrapper.currentOptionState != OptionTypes.NOTEXISTS
     ) {
       this.#clickOn(
-        grpWrapper.CriteriaGroup.OptionsGroup.optionalArrow.widgetHtml,
+        grpWrapper.criteriaGroup.optionsGroup.optionalArrow.widgetHtml,
       );
       this.#clickOn(
-        grpWrapper.CriteriaGroup.OptionsGroup.NotExistsComponent.html,
+        grpWrapper.criteriaGroup.optionsGroup.NotExistsComponent.html,
       );
     }
     if (branchLike.optional && grpWrapper.currentOptionState != OptionTypes.OPTIONAL) {
       this.#clickOn(
-        grpWrapper.CriteriaGroup.OptionsGroup.optionalArrow.widgetHtml,
+        grpWrapper.criteriaGroup.optionsGroup.optionalArrow.widgetHtml,
       );
       this.#clickOn(
-        grpWrapper.CriteriaGroup.OptionsGroup.OptionalComponent.html,
+        grpWrapper.criteriaGroup.optionsGroup.OptionalComponent.html,
       );
     }
   }

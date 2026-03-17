@@ -4,8 +4,8 @@ import GroupWrapper from "../../components/builder-section/groupwrapper/GroupWra
 export default function toggleVarNames(sparnatural:SparnaturalComponent,showVarNames:boolean) {
   sparnatural.BgWrapper.componentsList.rootGroupWrapper.traversePreOrder(
     (grpWrapper: GroupWrapper) => {
-      let startGrp = grpWrapper.CriteriaGroup.StartClassGroup;
-      let endGrp = grpWrapper.CriteriaGroup.endClassGroup;
+      let startGrp = grpWrapper.criteriaGroup.startClassGroup;
+      let endGrp = grpWrapper.criteriaGroup.endClassGroup;
       if(showVarNames){
         startGrp.inputSelector.showVarName()
         endGrp.inputSelector.showVarName()

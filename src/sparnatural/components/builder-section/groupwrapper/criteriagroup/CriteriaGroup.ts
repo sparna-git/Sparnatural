@@ -17,8 +17,8 @@ import ActionsGroup from "../../../buttons/actions/ActionsGroup";
 import { I18n } from "../../../../settings/I18n";
 
 class CriteriaGroup extends HTMLComponent {
-  StartClassGroup: StartClassGroup;
-  OptionsGroup: OptionsGroup; // optional or notexists
+  startClassGroup: StartClassGroup;
+  optionsGroup: OptionsGroup; // optional or notexists
   objectPropertyGroup: ObjectPropertyGroup;
   endClassGroup: EndClassGroup;
   endClassWidgetGroup: EndClassWidgetGroup;
@@ -36,7 +36,7 @@ class CriteriaGroup extends HTMLComponent {
     super("CriteriaGroup", parentComponent, null);
     this.specProvider = specProvider;
     this.parentGroupWrapper = parentComponent;
-    this.StartClassGroup = new StartClassGroup(
+    this.startClassGroup = new StartClassGroup(
       this,
       this.specProvider,
       I18n.labels.StartClassTemporaryLabel,
@@ -60,8 +60,8 @@ class CriteriaGroup extends HTMLComponent {
 
   #renderChildComponents() {
     // create all the elements of the criteria
-    this.StartClassGroup.render();
-    this.OptionsGroup = new OptionsGroup(this, this.specProvider).render();
+    this.startClassGroup.render();
+    this.optionsGroup = new OptionsGroup(this, this.specProvider).render();
     this.objectPropertyGroup = new ObjectPropertyGroup(
       this,
       this.specProvider,
@@ -117,13 +117,14 @@ class CriteriaGroup extends HTMLComponent {
           this.endClassWidgetGroup.render();
         }
 
-        this.OptionsGroup.onObjectPropertyGroupSelected(
+        this.optionsGroup.onObjectPropertyGroupSelected(
           this.parentGroupWrapper.currentOptionState
         );
 
-        // if there is already a andSibling don't allow to rerender the ActionAnd again
-        if (!this.parentGroupWrapper.andSibling)
-          this.actionsGroup.onObjectPropertyGroupSelected();
+        // if there is no AND sibling, enable the AND action again
+        if (!this.parentGroupWrapper.andSibling) {
+          this.parentGroupWrapper.enableActionAnd();
+        }
 
         // if property has a sparqlService, switch the state
         if (this.specProvider.getProperty(e.detail.type).getServiceEndpoint()) {

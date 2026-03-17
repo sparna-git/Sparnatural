@@ -9,15 +9,16 @@ import ActionAnd from "./actioncomponents/ActionAnd";
  **/
 class ActionsGroup extends HTMLComponent {
   actions: {
-    ActionAnd: ActionAnd;
+    actionAnd: ActionAnd;
   };
-  ParentCriteriaGroup: CriteriaGroup;
+  parentCriteriaGroup: CriteriaGroup;
   specProvider: ISparnaturalSpecification;
-  constructor(ParentCriteriaGroup: CriteriaGroup, specProvider: ISparnaturalSpecification) {
-    super("ActionsGroup", ParentCriteriaGroup, null);
+
+  constructor(parentCriteriaGroup: CriteriaGroup, specProvider: ISparnaturalSpecification) {
+    super("ActionsGroup", parentCriteriaGroup, null);
     this.specProvider = specProvider;
     //TODO refactor is this even necessary
-    this.ParentCriteriaGroup = ParentCriteriaGroup as CriteriaGroup;
+    this.parentCriteriaGroup = parentCriteriaGroup as CriteriaGroup;
   }
 
   render() {
@@ -27,16 +28,16 @@ class ActionsGroup extends HTMLComponent {
 
   onObjectPropertyGroupSelected() {
     this.actions = {
-      ActionAnd: new ActionAnd(this, this.#onAddAnd).render(),
+      actionAnd: new ActionAnd(this, this.#onAddAnd).render(),
     };
   }
 
   // This code should probably be in a higher located component such as criteria group or even higher(might need to introduce one)
   #onAddAnd = () => {
-    this.actions.ActionAnd.html[0].dispatchEvent(
+    this.actions.actionAnd.html[0].dispatchEvent(
       new CustomEvent("addAndComponent", {
         bubbles: true,
-        detail: this.ParentCriteriaGroup.StartClassGroup.startClassVal,
+        detail: this.parentCriteriaGroup.startClassGroup.startClassVal,
       })
     );
   };

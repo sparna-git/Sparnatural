@@ -17,7 +17,7 @@ export default function redrawBackgroundAndLinks(
     (grpWrapper: GroupWrapper) => {
       renderLinks(grpWrapper);
       //render background
-      currentHeight = grpWrapper.CriteriaGroup.html.outerHeight(true) + 1;
+      currentHeight = grpWrapper.criteriaGroup.html.outerHeight(true) + 1;
       cssdef += drawBackgroundOfGroupWrapper(
         index,
         previousHeight,
@@ -31,7 +31,7 @@ export default function redrawBackgroundAndLinks(
         // compute total height of children
         let childrenHeight = 0;
         grpWrapper.whereChild.traversePreOrder((g: GroupWrapper) => {
-          childrenHeight = g.CriteriaGroup.html.outerHeight(true);
+          childrenHeight = g.criteriaGroup.html.outerHeight(true);
 
           cssdef += drawBackgroundOfGroupWrapper(
             index,

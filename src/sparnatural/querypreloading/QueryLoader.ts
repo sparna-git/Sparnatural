@@ -51,7 +51,7 @@ export default class QueryLoader{
 
         let parent = rootGrpWrapper;
         branches.forEach((b) => {
-          this.#clickOn(parent.CriteriaGroup.actionsGroup.actions.ActionAnd.btn);
+          this.#clickOn(parent.criteriaGroup.actionsGroup.actions.actionAnd.btn);
           let localVarMapping = this.#buildCriteriaGroup(parent.andSibling, b);
           localVarMapping.forEach((value: string, key:string) => { varMapping.set(key, value); });
           parent = parent.andSibling;
@@ -62,7 +62,7 @@ export default class QueryLoader{
         const firstStartClassVal = { type: rootBranch.line.sType, variable: rootBranch.line.s };
         if(!QueryLoader.#hasSelectedVar(this.query.variables,firstStartClassVal.variable)) {
           // click on first eye btn to unselect it
-          this.#clickOn((rootGrpWrapper.CriteriaGroup.StartClassGroup.inputSelector as ClassTypeId)?.selectViewVariableBtn?.widgetHtml)
+          this.#clickOn((rootGrpWrapper.criteriaGroup.startClassGroup.inputSelector as ClassTypeId)?.selectViewVariableBtn?.widgetHtml)
         }
 
         return varMapping;
@@ -72,48 +72,48 @@ export default class QueryLoader{
       let varMapping = new Map<string,string>();
       // set StartClassVal only if there wasn't one set by the parent (e.g whereChild andSibling have it already set)
       const startClassVal = { type: branch.line.sType, variable: branch.line.s };
-      if (!grpWrapper.CriteriaGroup.StartClassGroup.startClassVal.type) {
+      if (!grpWrapper.criteriaGroup.startClassGroup.startClassVal.type) {
         //set StartClassGroup
         this.#setSelectedValue(
-            grpWrapper.CriteriaGroup.StartClassGroup,
+            grpWrapper.criteriaGroup.startClassGroup,
             branch.line.sType
         );
       }
       // also set the variable name
       // This is for cases where the variable name has been manually changed in the query
       // and is not one of the selected variables in the result set
-      grpWrapper.CriteriaGroup.StartClassGroup.startClassVal = startClassVal;
-      varMapping.set(grpWrapper.CriteriaGroup.StartClassGroup.startClassVal.variable, branch.line.s);
+      grpWrapper.criteriaGroup.startClassGroup.startClassVal = startClassVal;
+      varMapping.set(grpWrapper.criteriaGroup.startClassGroup.startClassVal.variable, branch.line.s);
   
       // set EndClassGroup
       const endClassVal = { type: branch.line.oType, variable: branch.line.o };
-      this.#setSelectedValue(grpWrapper.CriteriaGroup.endClassGroup, branch.line.oType);
+      this.#setSelectedValue(grpWrapper.criteriaGroup.endClassGroup, branch.line.oType);
       // transparently set the variable name to the one in the query
       // before we click on the select button, so that the column is selected with the proper name
       // This is for cases where the variable name has been manually changed in the query
       // and is not one of the selected variables in the result set
-      grpWrapper.CriteriaGroup.endClassGroup.endClassVal = endClassVal;
-      varMapping.set(grpWrapper.CriteriaGroup.endClassGroup.endClassVal.variable, branch.line.o);
+      grpWrapper.criteriaGroup.endClassGroup.endClassVal = endClassVal;
+      varMapping.set(grpWrapper.criteriaGroup.endClassGroup.endClassVal.variable, branch.line.o);
 
       //set ObjectPropertyGroup
       this.#setSelectedValue(
-        grpWrapper.CriteriaGroup.objectPropertyGroup,
+        grpWrapper.criteriaGroup.objectPropertyGroup,
         branch.line.p
       );
     
       // set WidgetValues
       if(branch.line.criterias) {
         branch.line.criterias.forEach((v) => {
-          const parsedVal: LabelledCriteria<Criteria> = grpWrapper.CriteriaGroup.endClassGroup.editComponents.widgetWrapper.widgetComponent.parseInput(v)
+          const parsedVal: LabelledCriteria<Criteria> = grpWrapper.criteriaGroup.endClassGroup.editComponents.widgetWrapper.widgetComponent.parseInput(v)
           // if there are multiple values rendered, click first the 'plus' btn, to add more values
-          if(grpWrapper.CriteriaGroup.endClassWidgetGroup.widgetValues.length > 0) this.#clickOn(grpWrapper.CriteriaGroup.endClassWidgetGroup.addWidgetValueBtn.html)
-          grpWrapper.CriteriaGroup.endClassGroup.editComponents.widgetWrapper.widgetComponent.triggerRenderWidgetVal(parsedVal)
+          if(grpWrapper.criteriaGroup.endClassWidgetGroup.widgetValues.length > 0) this.#clickOn(grpWrapper.criteriaGroup.endClassWidgetGroup.addWidgetValueBtn.html)
+          grpWrapper.criteriaGroup.endClassGroup.editComponents.widgetWrapper.widgetComponent.triggerRenderWidgetVal(parsedVal)
         });
       }
 
       // if there is no value, and no children, set an "Any" value
       if((!branch.line.criterias || branch.line.criterias.length == 0) && (!branch.children || branch.children.length == 0)) {
-        grpWrapper.CriteriaGroup.endClassGroup.editComponents.onSelectAll();
+        grpWrapper.criteriaGroup.endClassGroup.editComponents.onSelectAll();
       }
     
       // trigger option state
@@ -121,7 +121,7 @@ export default class QueryLoader{
     
       if (branch.children && branch.children.length > 0) {
         this.#clickOn(
-          grpWrapper.CriteriaGroup.endClassGroup.editComponents.actionWhere.btn
+          grpWrapper.criteriaGroup.endClassGroup.editComponents.actionWhere.btn
         );
         // first child
         let localVarMapping = this.#buildCriteriaGroup(grpWrapper.whereChild, branch.children.shift());
@@ -129,7 +129,7 @@ export default class QueryLoader{
         // the rest of the children are AND connected
         let parent = grpWrapper.whereChild;
         branch.children.forEach((c) => {
-          this.#clickOn(parent.CriteriaGroup.actionsGroup.actions.ActionAnd.btn);
+          this.#clickOn(parent.criteriaGroup.actionsGroup.actions.actionAnd.btn);
           let localVarMapping = this.#buildCriteriaGroup(parent.andSibling, c);
           localVarMapping.forEach((value:string,key: string) => varMapping.set(key, value));
           parent = parent.andSibling;
@@ -139,7 +139,7 @@ export default class QueryLoader{
       // select if the var is viewed (eye btn)
       this.#setSelectViewVariableBtn(
         endClassVal,
-        grpWrapper.CriteriaGroup.endClassGroup
+        grpWrapper.criteriaGroup.endClassGroup
       )
 
       return varMapping;
@@ -147,12 +147,12 @@ export default class QueryLoader{
   
   static #triggerOptions(grpWrapper: GroupWrapper, branch: Branch) {
     if (branch.notExists && grpWrapper.currentOptionState != OptionTypes.NOTEXISTS) {
-      this.#clickOn(grpWrapper.CriteriaGroup.OptionsGroup.optionalArrow.widgetHtml);
-      this.#clickOn(grpWrapper.CriteriaGroup.OptionsGroup.NotExistsComponent.html);
+      this.#clickOn(grpWrapper.criteriaGroup.optionsGroup.optionalArrow.widgetHtml);
+      this.#clickOn(grpWrapper.criteriaGroup.optionsGroup.NotExistsComponent.html);
     }
     if (branch.optional && grpWrapper.currentOptionState != OptionTypes.OPTIONAL) {
-      this.#clickOn(grpWrapper.CriteriaGroup.OptionsGroup.optionalArrow.widgetHtml);
-      this.#clickOn(grpWrapper.CriteriaGroup.OptionsGroup.OptionalComponent.html);
+      this.#clickOn(grpWrapper.criteriaGroup.optionsGroup.optionalArrow.widgetHtml);
+      this.#clickOn(grpWrapper.criteriaGroup.optionsGroup.OptionalComponent.html);
     }
   }
   

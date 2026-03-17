@@ -95,8 +95,8 @@ export class SparnaturalJsonGeneratorV13 {
     const subject: TermTypedVariable = {
       type: "term",
       subType: "variable",
-      value: root.CriteriaGroup.StartClassGroup.getVarName(),
-      rdfType: root.CriteriaGroup.StartClassGroup.getTypeSelected(),
+      value: root.criteriaGroup.startClassGroup.getVarName(),
+      rdfType: root.criteriaGroup.startClassGroup.getTypeSelected(),
     };
 
     return {
@@ -121,7 +121,7 @@ export class SparnaturalJsonGeneratorV13 {
   }
 
   #buildPair(grp: GroupWrapper): PredicateObjectPair {
-    const cg = grp.CriteriaGroup;
+    const cg = grp.criteriaGroup;
 
     const object: ObjectCriteria = {
       type: "objectCriteria",

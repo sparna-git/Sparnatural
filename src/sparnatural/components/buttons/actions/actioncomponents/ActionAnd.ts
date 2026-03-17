@@ -4,6 +4,7 @@ import { HTMLComponent } from "../../../HtmlComponent";
 
 class ActionAnd extends HTMLComponent {
   btn: JQuery<HTMLElement>;
+
   constructor(parentComponent: HTMLComponent, callBack: () => void) {
     let widgetHtml = $(`<span class="trait-and-bottom"></span>`);
     super("ActionAnd", parentComponent, widgetHtml);
@@ -13,9 +14,11 @@ class ActionAnd extends HTMLComponent {
       callBack();
     });
   }
+
   render() {
     super.render();
     return this;
   }
+  
 }
 export default ActionAnd;

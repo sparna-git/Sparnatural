@@ -12,8 +12,8 @@ export function updateVarList(actionStore: ActionStore) {
   let varNames = new Set<string>();
   actionStore.sparnatural.BgWrapper.componentsList.rootGroupWrapper.traversePreOrder(
     (grpWrapper: GroupWrapper) => {
-      let startGrp = grpWrapper.CriteriaGroup.StartClassGroup;
-      let endGrp = grpWrapper.CriteriaGroup.endClassGroup;
+      let startGrp = grpWrapper.criteriaGroup.startClassGroup;
+      let endGrp = grpWrapper.criteriaGroup.endClassGroup;
       if(startGrp.isVarSelected() && startGrp.getVarName()) varNames.add(startGrp.getVarName());
       if(endGrp.isVarSelected() && endGrp.getVarName()) varNames.add(endGrp.getVarName());      
     }

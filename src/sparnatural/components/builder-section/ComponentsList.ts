@@ -23,6 +23,7 @@ class ComponentsList extends HTMLComponent {
 
   initFirstGroupWrapper() {
     this.rootGroupWrapper = new GroupWrapper(
+      null,
       this,
       this.specProvider,
       // depth = 0
@@ -34,7 +35,7 @@ class ComponentsList extends HTMLComponent {
       true
     ).render();
     // The first criteriaGrp always has the "eye" icon to select it as a variable in the result set
-    this.rootGroupWrapper.CriteriaGroup.StartClassGroup.inputSelector.selectViewVariableBtn.render()
+    this.rootGroupWrapper.criteriaGroup.startClassGroup.inputSelector.selectViewVariableBtn.render()
   }
 
   /**
@@ -48,9 +49,9 @@ class ComponentsList extends HTMLComponent {
 
     // display its eye and selects it
     // TODO : this should be done only if previous StartClassGroup was itself selected
-    this.rootGroupWrapper.CriteriaGroup.StartClassGroup.renderEyeBtn = true
-    this.rootGroupWrapper.CriteriaGroup.StartClassGroup.autoSelectEyeBtn()
-    this.rootGroupWrapper.CriteriaGroup.StartClassGroup.inputSelector.html[0].classList.add(
+    this.rootGroupWrapper.criteriaGroup.startClassGroup.renderEyeBtn = true
+    this.rootGroupWrapper.criteriaGroup.startClassGroup.autoSelectEyeBtn()
+    this.rootGroupWrapper.criteriaGroup.startClassGroup.inputSelector.html[0].classList.add(
       "Highlited"
     );
   }

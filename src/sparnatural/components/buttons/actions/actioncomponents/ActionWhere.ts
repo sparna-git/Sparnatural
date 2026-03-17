@@ -10,10 +10,12 @@ import UiuxConfig from "../../../IconsConstants";
     There the Endclassgroup is foun
 */
 class ActionWhere extends HTMLComponent {
+
   parentComponent: EditComponents;
   specProvider: ISparnaturalSpecification;
   callBack: () => void;
   btn: JQuery<HTMLElement>;
+
   constructor(
     parentComponent: EditComponents,
     specProvider: ISparnaturalSpecification,
@@ -25,6 +27,7 @@ class ActionWhere extends HTMLComponent {
     this.callBack = callBack;
     this.parentComponent = parentComponent;
   }
+
   render = () => {
     super.render();
     var choiceNumber = 2;
@@ -52,4 +55,5 @@ class ActionWhere extends HTMLComponent {
     return this;
   };
 }
+
 export default ActionWhere;
