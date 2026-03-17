@@ -19,6 +19,13 @@ export function addAndComponent(
     startClassVal
   ).render();
 
+  // inherit the option state if it was also inherited by the parent
+  // that is if it was not on the parent that the option was set
+  if(grpWrapper.currentOptionState != grpWrapper.explicitOptionState) {
+    grpWrapper.andSibling.setCurrentOptionState(grpWrapper.currentOptionState);
+  }
+  
+
   //set state to startClassValSelected and trigger change
   let inputSelector = grpWrapper.andSibling.criteriaGroup.startClassGroup.inputSelector;
   inputSelector.submitSelected() ;
