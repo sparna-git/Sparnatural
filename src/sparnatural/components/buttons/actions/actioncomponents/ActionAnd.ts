@@ -10,6 +10,7 @@ class ActionAnd extends HTMLComponent {
     super("ActionAnd", parentComponent, widgetHtml);
     this.btn = $(`<a>${I18n.labels.And}</a>`);
     this.widgetHtml = this.widgetHtml.add(this.btn);
+
     this.btn[0].addEventListener("click", () => {
       callBack();
     });

@@ -27,6 +27,11 @@ class ActionsGroup extends HTMLComponent {
   }
 
   onObjectPropertyGroupSelected() {
+    // this is to prevent some (apprently) race condition where the action AND is recreated while it is still there
+    // see https://github.com/sparna-git/Sparnatural/issues/787
+    // we destroy any existing actionAnd before rendering a new one
+    this.actions?.actionAnd?.destroy();
+    
     this.actions = {
       actionAnd: new ActionAnd(this, this.#onAddAnd).render(),
     };
