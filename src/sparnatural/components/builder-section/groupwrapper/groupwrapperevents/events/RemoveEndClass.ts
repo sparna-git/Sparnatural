@@ -22,8 +22,12 @@ export function removeEndClass(grpWrapper: GroupWrapper) {
     startVal,
     grpWrapper.isRootGrpWrapper()
   ).render();
-  // Set state back to NONE
-  grpWrapper.currentOptionState = OptionTypes.NONE
+  // Set option state back to NONE
+  grpWrapper.explicitOptionState = OptionTypes.NONE
+  // re-force current option state so that we get the HTML style applied
+  let tmpOptionState = grpWrapper.currentOptionState;
+  grpWrapper.setCurrentOptionState(tmpOptionState);
+
   // set StartClassVal back to its original value
   grpWrapper.criteriaGroup.startClassGroup.startClassVal = startVal;
   let inputSelector = grpWrapper.criteriaGroup.startClassGroup.inputSelector;

@@ -211,9 +211,6 @@ export default class QueryLoader {
       grpWrapper.criteriaGroup.endClassGroup.editComponents.onSelectAll();
     }
 
-    // options v13
-    this.#triggerOptions(grpWrapper, this.#mapPairSubTypeToOptions(pair));
-
     // children recursion (WHERE)
     if (obj.predicateObjectPairs?.length) {
       this.#clickOn(
@@ -242,6 +239,9 @@ export default class QueryLoader {
         parent = parent.andSibling;
       });
     }
+
+    // options v13 - do it only after children so that the state is properly propagated
+    this.#triggerOptions(grpWrapper, this.#mapPairSubTypeToOptions(pair));
 
     // eye button (same behaviour: only end class toggled)
     this.#setSelectViewVariableBtn(

@@ -116,9 +116,6 @@ export default class QueryLoader{
         grpWrapper.criteriaGroup.endClassGroup.editComponents.onSelectAll();
       }
     
-      // trigger option state
-      this.#triggerOptions(grpWrapper, branch);
-    
       if (branch.children && branch.children.length > 0) {
         this.#clickOn(
           grpWrapper.criteriaGroup.endClassGroup.editComponents.actionWhere.btn
@@ -135,7 +132,10 @@ export default class QueryLoader{
           parent = parent.andSibling;
         });
       }
-      
+            
+      // trigger option state AFTER loading children so that the state is properly propagated to them
+      this.#triggerOptions(grpWrapper, branch);
+
       // select if the var is viewed (eye btn)
       this.#setSelectViewVariableBtn(
         endClassVal,
