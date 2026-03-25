@@ -55,7 +55,7 @@ export default class BranchTranslator {
     isVeryFirst: boolean,
     // true if this branch is under (recursively) of another that is itself in an option
     isInOption: boolean,
-    settings: any
+    settings: any,
   ) {
     this.#branch = branch;
     this.#fullQuery = fullQuery;
@@ -63,6 +63,18 @@ export default class BranchTranslator {
     this.#isVeryFirst = isVeryFirst;
     this.#isInOption = isInOption;
     this.settings = settings;
+    /*
+    console.log(
+      `BranchTranslator: variable="${
+        this.#branch.line.o
+      }", isSelected=${BranchTranslator.isVarSelected(
+        fullQuery,
+        this.#branch.line.o,
+      )}, selectVars=`,
+      fullQuery.variables.map(
+        (v: any) => v.value || v.expression?.expression?.value,
+      ),
+    );*/
 
     // create the object to convert widget values to SPARQL
     let endClassValue = this.#branch.line.oType;
@@ -71,7 +83,7 @@ export default class BranchTranslator {
       this.#valueBuilder = new ValueBuilderFactory().buildValueBuilder(
         this.#specProvider
           .getProperty(this.#branch.line.p)
-          .getPropertyType(endClassValue)
+          .getPropertyType(endClassValue),
       );
       // pass everything needed to generate SPARQL
       this.#valueBuilder.init(
@@ -80,7 +92,7 @@ export default class BranchTranslator {
         { variable: null, type: this.#branch.line.p },
         { variable: this.#branch.line.o, type: this.#branch.line.oType },
         BranchTranslator.isVarSelected(fullQuery, this.#branch.line.o),
-        this.#branch.line.criterias.map((v) => v.criteria)
+        this.#branch.line.criterias.map((v) => v.criteria),
       );
     }
   }
@@ -108,7 +120,7 @@ export default class BranchTranslator {
         false,
         // children branch will be in option if this one is optional or not exists
         this.#branch.optional || this.#branch.notExists,
-        this.settings
+        this.settings,
       );
       builder.build();
       this.#whereChildPtrns.push(...builder.getResultPtrns());
@@ -139,14 +151,14 @@ export default class BranchTranslator {
         this.#isVeryFirst,
       this.#valueBuilder?.isBlockingStart(),
       this.#specProvider,
-      this.settings
+      this.settings,
     );
     typeTranslator.build();
     this.#startClassPtrn = typeTranslator.resultPtrns;
     // if there was any default label patterns generated, gather the variable names of the default label
     if (typeTranslator.defaultLblPatterns.length > 0) {
       this.#defaultVars.push(
-        factory.variable(typeTranslator.defaultLabelVarName)
+        factory.variable(typeTranslator.defaultLabelVarName),
       );
     }
   }
@@ -158,14 +170,25 @@ export default class BranchTranslator {
       BranchTranslator.isVarSelected(this.#fullQuery, this.#branch.line.o),
       this.#valueBuilder?.isBlockingEnd(),
       this.#specProvider,
-      this.settings
+      this.settings,
     );
     typeTranslator.build();
 
     this.#endClassPtrn = typeTranslator.resultPtrns;
+    /*
+    console.log(
+      `BranchTranslator.#buildObjectClassPtrn: var="${
+        this.#branch.line.o
+      }", endClassPtrn=${
+        this.#endClassPtrn.length
+      } patterns, defaultLblPatterns=${
+        typeTranslator.defaultLblPatterns.length
+      }`,
+    );*/
+
     if (typeTranslator.defaultLblPatterns.length > 0) {
       this.#defaultVars.push(
-        factory.variable(typeTranslator.defaultLabelVarName)
+        factory.variable(typeTranslator.defaultLabelVarName),
       );
     }
   }
@@ -191,10 +214,10 @@ export default class BranchTranslator {
                 SparqlFactory.buildIntersectionTriple(
                   factory.variable(this.#branch.line.s),
                   specProperty.getBeginDateProperty(),
-                  factory.variable(`${this.#branch.line.o}_begin`)
+                  factory.variable(`${this.#branch.line.o}_begin`),
                 ),
               ]),
-            ])
+            ]),
           );
         }
 
@@ -205,10 +228,10 @@ export default class BranchTranslator {
                 SparqlFactory.buildIntersectionTriple(
                   factory.variable(this.#branch.line.s),
                   specProperty.getEndDateProperty(),
-                  factory.variable(`${this.#branch.line.o}_end`)
+                  factory.variable(`${this.#branch.line.o}_end`),
                 ),
               ]),
-            ])
+            ]),
           );
         }
 
@@ -219,10 +242,10 @@ export default class BranchTranslator {
                 SparqlFactory.buildIntersectionTriple(
                   factory.variable(this.#branch.line.s),
                   specProperty.getExactDateProperty(),
-                  factory.variable(`${this.#branch.line.o}_exact`)
+                  factory.variable(`${this.#branch.line.o}_exact`),
                 ),
               ]),
-            ])
+            ]),
           );
         }
       } else {
@@ -232,9 +255,9 @@ export default class BranchTranslator {
             SparqlFactory.buildIntersectionTriple(
               factory.variable(this.#branch.line.s),
               this.#branch.line.p,
-              factory.variable(this.#branch.line.o)
+              factory.variable(this.#branch.line.o),
             ),
-          ])
+          ]),
         );
       }
 
@@ -243,8 +266,8 @@ export default class BranchTranslator {
         this.#intersectionPtrn.push(
           SparqlFactory.buildFilterLangEquals(
             factory.variable(this.#branch.line.o),
-            factory.literal(this.settings.language)
-          )
+            factory.literal(this.settings.language),
+          ),
         );
       }
     }
@@ -264,15 +287,22 @@ export default class BranchTranslator {
     if (this.#intersectionPtrn) {
       exceptStartPtrn.push(...this.#intersectionPtrn);
     }
+    /*
+    console.log(
+      `BranchTranslator.#buildFinalResultPtrn: var="${
+        this.#branch.line.o
+      }", isLiteral=${this.#specProvider
+        .getEntity(this.#branch.line.oType)
+        .isLiteralEntity()},endClassPtrn=${this.#endClassPtrn.length}`,
+    );*/
 
     if (
-      this.#branch.line.o 
-      &&
+      this.#branch.line.o &&
       !this.#specProvider.getEntity(this.#branch.line.oType).isLiteralEntity()
-      &&
-      !this.#specProvider.getProperty(this.#branch.line.p).omitClassCriteria()
     ) {
       exceptStartPtrn.push(...this.#endClassPtrn);
+    } else {
+      //console.log(`  ⚠️ endClassPtrn SKIPPED for "${this.#branch.line.o}"`);
     }
     exceptStartPtrn.push(...this.#valuePtrns);
     exceptStartPtrn.push(...this.#whereChildPtrns);
@@ -294,7 +324,7 @@ export default class BranchTranslator {
       if (exceptStartPtrn.length > 0) {
         servicePtrn = SparqlFactory.buildServicePattern(
           exceptStartPtrn,
-          endpoint
+          endpoint,
         );
       }
     }
@@ -308,13 +338,13 @@ export default class BranchTranslator {
     // if this branch is optional and is not inside an optional branch
     if (this.#branch.optional && !this.#isInOption) {
       finalResultPtrns.push(
-        SparqlFactory.buildOptionalPattern(normalOrServicePatterns)
+        SparqlFactory.buildOptionalPattern(normalOrServicePatterns),
       );
     } else if (this.#branch.notExists && !this.#isInOption) {
       finalResultPtrns.push(
         SparqlFactory.buildNotExistsPattern(
-          SparqlFactory.buildGroupPattern(normalOrServicePatterns)
-        )
+          SparqlFactory.buildGroupPattern(normalOrServicePatterns),
+        ),
       );
     } else {
       // nothing special, just retain the patterns in the final result pattern

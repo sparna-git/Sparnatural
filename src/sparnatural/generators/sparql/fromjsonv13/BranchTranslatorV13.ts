@@ -329,8 +329,7 @@ export default class BranchTranslatorV13 {
 
     if (
       this.#o &&
-      !this.#specProvider.getEntity(this.#oType).isLiteralEntity() &&
-      !this.#specProvider.getProperty(this.#p).omitClassCriteria()
+      !this.#specProvider.getEntity(this.#oType).isLiteralEntity()
     ) {
       exceptStartPtrn.push(...this.#endClassPtrn);
     }
