@@ -1,6 +1,6 @@
 import { OWLSpecificationEntry } from "./OWLSpecificationEntry";
 import { OWL, OWLSpecificationProvider } from "./OWLSpecificationProvider";
-import { DataFactory } from 'rdf-data-factory';
+import { DataFactory } from "rdf-data-factory";
 import { Config } from "../../ontologies/SparnaturalConfig";
 import ISpecificationProperty from "../ISpecificationProperty";
 import { Datasources } from "../../ontologies/SparnaturalConfigDatasources";
@@ -11,12 +11,18 @@ import { RDFS } from "rdf-shacl-commons";
 
 const factory = new DataFactory();
 
-export class OWLSpecificationProperty extends OWLSpecificationEntry implements ISpecificationProperty {
-
-  constructor(uri:string, provider: OWLSpecificationProvider, n3store: RdfStore, lang: string) {
+export class OWLSpecificationProperty
+  extends OWLSpecificationEntry
+  implements ISpecificationProperty
+{
+  constructor(
+    uri: string,
+    provider: OWLSpecificationProvider,
+    n3store: RdfStore,
+    lang: string,
+  ) {
     super(uri, provider, n3store, lang);
   }
-
 
   getRange(): string[] {
     const classes = new Set<string>();
@@ -25,7 +31,7 @@ export class OWLSpecificationProperty extends OWLSpecificationEntry implements I
       factory.namedNode(this.uri),
       RDFS.RANGE,
       null,
-      null
+      null,
     );
 
     for (const aQuad of propertyQuads) {
@@ -33,11 +39,13 @@ export class OWLSpecificationProperty extends OWLSpecificationEntry implements I
         classes.add(aQuad.object.value);
       } else {
         // read union content - /!\ this is returning RDFTerms, so we map to extract the URI only
-        var classesInUnion = this.graph.readAsList(aQuad.object, OWL.UNION_OF).map(o => o.value)
-        if(classesInUnion) {
-            for (const aUnionClass of classesInUnion) {
-              classes.add(aUnionClass);
-            }
+        var classesInUnion = this.graph
+          .readAsList(aQuad.object, OWL.UNION_OF)
+          .map((o) => o.value);
+        if (classesInUnion) {
+          for (const aUnionClass of classesInUnion) {
+            classes.add(aUnionClass);
+          }
         }
       }
     }
@@ -45,14 +53,13 @@ export class OWLSpecificationProperty extends OWLSpecificationEntry implements I
     return Array.from(classes);
   }
 
-
-  getPropertyType(range:string):string|undefined {
+  getPropertyType(range: string): string | undefined {
     var superProperties = this.graph.readProperty(
       factory.namedNode(this.uri),
-      RDFS.SUBPROPERTY_OF
+      RDFS.SUBPROPERTY_OF,
     );
 
-    var KNOWN_PROPERTY_TYPES:string[] = [
+    var KNOWN_PROPERTY_TYPES: string[] = [
       Config.LIST_PROPERTY,
       Config.LITERAL_LIST_PROPERTY,
       Config.TIME_PROPERTY_PERIOD,
@@ -80,85 +87,109 @@ export class OWLSpecificationProperty extends OWLSpecificationEntry implements I
     return undefined;
   }
 
-    getDatasource() {
-      return DatasourceReading.readDatasourceAnnotationProperty(
-          this.uri,
-          Datasources.DATASOURCE,
-          this.graph
-      );
-    }
+  getDatasource() {
+    return DatasourceReading.readDatasourceAnnotationProperty(
+      this.uri,
+      Datasources.DATASOURCE,
+      this.graph,
+    );
+  }
 
-    getTreeChildrenDatasource() {
-      return DatasourceReading.readDatasourceAnnotationProperty(
-          this.uri,
-          Datasources.TREE_CHILDREN_DATASOURCE,
-          this.graph
-        );
-    }
+  getTreeChildrenDatasource() {
+    return DatasourceReading.readDatasourceAnnotationProperty(
+      this.uri,
+      Datasources.TREE_CHILDREN_DATASOURCE,
+      this.graph,
+    );
+  }
 
-    getTreeRootsDatasource() {
-      return DatasourceReading.readDatasourceAnnotationProperty(
-          this.uri,
-          Datasources.TREE_ROOTS_DATASOURCE,
-          this.graph
-      );
-    }
+  getTreeRootsDatasource() {
+    return DatasourceReading.readDatasourceAnnotationProperty(
+      this.uri,
+      Datasources.TREE_ROOTS_DATASOURCE,
+      this.graph,
+    );
+  }
 
-  getMinValue():string|undefined {
+  getMinValue(): string | undefined {
     return undefined;
   }
 
-  getMaxValue():string|undefined {
+  getMaxValue(): string | undefined {
     return undefined;
   }
 
-  getValues():Term[] | undefined {
+  getValues(): Term[] | undefined {
     return undefined;
   }
 
   isMultilingual(): boolean {
     return (
-      this.graph.readSingleProperty(factory.namedNode(this.uri), factory.namedNode(Config.IS_MULTILINGUAL))?.value == "true"
+      this.graph.readSingleProperty(
+        factory.namedNode(this.uri),
+        factory.namedNode(Config.IS_MULTILINGUAL),
+      )?.value == "true"
     );
   }
 
-  omitClassCriteria(): boolean {
-    return false;
-  }
-
   getBeginDateProperty(): string | undefined {
-    return this.graph.readSingleProperty(factory.namedNode(this.uri), factory.namedNode(Config.BEGIN_DATE_PROPERTY))?.value;
+    return this.graph.readSingleProperty(
+      factory.namedNode(this.uri),
+      factory.namedNode(Config.BEGIN_DATE_PROPERTY),
+    )?.value;
   }
 
   getEndDateProperty(): string | undefined {
-    return this.graph.readSingleProperty(factory.namedNode(this.uri), factory.namedNode(Config.END_DATE_PROPERTY))?.value;
+    return this.graph.readSingleProperty(
+      factory.namedNode(this.uri),
+      factory.namedNode(Config.END_DATE_PROPERTY),
+    )?.value;
   }
 
   getExactDateProperty(): string | undefined {
-    return this.graph.readSingleProperty(factory.namedNode(this.uri), factory.namedNode(Config.EXACT_DATE_PROPERTY))?.value;
+    return this.graph.readSingleProperty(
+      factory.namedNode(this.uri),
+      factory.namedNode(Config.EXACT_DATE_PROPERTY),
+    )?.value;
   }
 
   isEnablingNegation(): boolean {
     return !(
-      this.graph.readSingleProperty(factory.namedNode(this.uri), factory.namedNode(Config.ENABLE_NEGATION))?.value == "false"
+      this.graph.readSingleProperty(
+        factory.namedNode(this.uri),
+        factory.namedNode(Config.ENABLE_NEGATION),
+      )?.value == "false"
     );
   }
 
   isEnablingOptional(): boolean {
     return !(
-      this.graph.readSingleProperty(factory.namedNode(this.uri), factory.namedNode(Config.ENABLE_OPTIONAL))?.value == "false"
+      this.graph.readSingleProperty(
+        factory.namedNode(this.uri),
+        factory.namedNode(Config.ENABLE_OPTIONAL),
+      )?.value == "false"
     );
   }
 
   getServiceEndpoint(): string | undefined {
-    const service = this.graph.readSingleProperty(factory.namedNode(this.uri),factory.namedNode(Config.SPARQL_SERVICE));
-    if(service) {
-      return this.graph.readSingleProperty(service,factory.namedNode(Config.ENDPOINT))?.value;
+    const service = this.graph.readSingleProperty(
+      factory.namedNode(this.uri),
+      factory.namedNode(Config.SPARQL_SERVICE),
+    );
+    if (service) {
+      return this.graph.readSingleProperty(
+        service,
+        factory.namedNode(Config.ENDPOINT),
+      )?.value;
     }
   }
 
   isLogicallyExecutedAfter(): boolean {
-    return this.graph.hasTriple(factory.namedNode(this.uri), factory.namedNode(Config.SPARNATURAL_CONFIG_CORE+"executedAfter"), null);
+    return this.graph.hasTriple(
+      factory.namedNode(this.uri),
+      factory.namedNode(Config.SPARNATURAL_CONFIG_CORE + "executedAfter"),
+      null,
+    );
   }
 
   hasQualifiedValueShapeRange(): boolean {
@@ -168,6 +199,4 @@ export class OWLSpecificationProperty extends OWLSpecificationEntry implements I
   _isUnionClass(classNode: any) {
     return this.graph.hasProperty(classNode, OWL.UNION_OF);
   }
-
-    
 }
