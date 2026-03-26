@@ -31,7 +31,7 @@ export class JsonSparqlTranslator {
     // the Sparnatural configuration
     specProvider: ISparnaturalSpecification,
     // settings
-    settings: any
+    settings: any,
   ) {
     this.specProvider = specProvider;
     this.settings = settings;
@@ -71,7 +71,7 @@ export class JsonSparqlTranslator {
     // post processing for defaultlabel property
     if (this.defaultLabelVars.length > 0) {
       this.defaultLabelVars.forEach((defaultLabelVar) =>
-        this.#insertDefaultLabelVar(sparqlJsQuery, defaultLabelVar)
+        this.#insertDefaultLabelVar(sparqlJsQuery, defaultLabelVar),
       );
     }
 
@@ -82,7 +82,7 @@ export class JsonSparqlTranslator {
     // set a GROUP BY based on aggregation expression in the variables
     // add this after defaultLabel var have been inserted, and re-read them from the query
     sparqlJsQuery.group = this.#addGroupBy(
-      sparqlJsQuery.variables as Variable[]
+      sparqlJsQuery.variables as Variable[],
     );
 
     return sparqlJsQuery;
@@ -126,7 +126,7 @@ export class JsonSparqlTranslator {
     let whereBuilder = new QueryWhereTranslator(
       this.jsonQuery,
       this.specProvider,
-      this.settings
+      this.settings,
     );
     whereBuilder.build();
     this.defaultLabelVars = whereBuilder.getDefaultVars();
@@ -140,16 +140,49 @@ export class JsonSparqlTranslator {
    */
 
   #varsToRDFJS(
-    variables: Array<VariableTerm | VariableExpression>
+    variables: Array<VariableTerm | VariableExpression>,
   ): Variable[] {
     let variablesArray: Variable[][] = variables.map((v) => {
       if ((v as VariableExpression).expression) {
         let vExpression: VariableExpression = v as VariableExpression;
+        let innerVarName = vExpression.expression.expression.value;
+
+        // Vérifier si cette variable a un default label généré
+        // en cherchant dans les branches la variable et son type
+        let hasLabel = false;
+        const findVarType = (
+          branches: any[],
+          varName: string,
+        ): string | null => {
+          for (const branch of branches) {
+            if (branch.line.o === varName) return branch.line.oType;
+            if (branch.children) {
+              const result = findVarType(branch.children, varName);
+              if (result) return result;
+            }
+          }
+          return null;
+        };
+
+        const varType = findVarType(this.jsonQuery.branches, innerVarName);
+        if (varType) {
+          const entity = this.specProvider.getEntity(varType);
+          if (
+            entity &&
+            !entity.isLiteralEntity() &&
+            entity.getDefaultLabelProperty()
+          ) {
+            hasLabel = true;
+          }
+        }
+
+        const actualVar = hasLabel ? innerVarName + "_label" : innerVarName;
+
         return [
           SparqlFactory.buildAggregateFunctionExpression(
             vExpression.expression.aggregation,
-            factory.variable(vExpression.expression.expression.value),
-            factory.variable(vExpression.variable.value)
+            factory.variable(actualVar),
+            factory.variable(vExpression.variable.value),
           ),
         ];
       } else {
@@ -208,7 +241,7 @@ export class JsonSparqlTranslator {
    */
   #orderToRDFJS(
     order: Order,
-    variable: VariableTerm | VariableExpression
+    variable: VariableTerm | VariableExpression,
   ): Ordering[] {
     if (order == Order.DESC || order == Order.ASC) {
       let varName = (variable as VariableExpression).expression
@@ -236,7 +269,7 @@ export class JsonSparqlTranslator {
     // reconstruct the original var name by removing "_label" suffix
     var originalVar = (defaultLabelVar as VariableTerm).value.substring(
       0,
-      (defaultLabelVar as VariableTerm).value.length - "_label".length
+      (defaultLabelVar as VariableTerm).value.length - "_label".length,
     );
     //console.log("SpraqlQuery variables", sparqlQuery.variables);
     for (var i = 0; i < sparqlQuery.variables.length; i++) {
