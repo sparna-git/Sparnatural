@@ -191,12 +191,10 @@ export class JsonSparqlTranslator {
         // Parcourir les branches pour trouver la correspondance uniquement avec l'objet (o)
         (this.jsonQuery.branches as any[]).forEach((branch) => {
           if (branch.line.o === (v as VariableTerm).value) {
-            //console.log("Matching branch found for object:", branch);
+
             specProperty = this.specProvider.getProperty(branch.line.p);
           }
         });
-
-        console.log("specProperty", specProperty);
 
         if (!specProperty) {
           // Si aucune propriété n'est trouvée, retourne une variable simple

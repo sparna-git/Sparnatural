@@ -111,24 +111,30 @@ export default class BranchTranslator {
    * Converts all children branches, and gather their patterns at this level
    */
   #buildChildrenPatterns() {
-    this.#branch.children?.forEach((branch) => {
-      const builder = new BranchTranslator(
-        branch,
-        this.#fullQuery,
-        this.#specProvider,
-        // children are never the very first
-        false,
-        // children branch will be in option if this one is optional or not exists
-        this.#branch.optional || this.#branch.notExists,
-        this.settings,
-      );
-      builder.build();
-      this.#whereChildPtrns.push(...builder.getResultPtrns());
-      // gather default vars from children
-      this.#defaultVars.push(...builder.getDefaultVars());
-      // gather patterns to be executed after
-      this.#executedAfterPtrns.push(...builder.getExecutedAfterPtrns());
-    });
+    // do not build children patterns if there are criterias on the branch
+    // this is normally not possible in the Sparnatural UI, but can be possible if a value is injected in the query JSON structure by Sparnatural-form
+    // otherwise we take the risk that the object is set to a URI, while the subject of the cildren pattern will be a variable
+    // e.g. `?x :p <http://xxxx> . ?Actor a :Actor` 
+    if (!(this.#branch.line.criterias?.length > 0)) {
+      this.#branch.children?.forEach((branch) => {
+        const builder = new BranchTranslator(
+          branch,
+          this.#fullQuery,
+          this.#specProvider,
+          // children are never the very first
+          false,
+          // children branch will be in option if this one is optional or not exists
+          this.#branch.optional || this.#branch.notExists,
+          this.settings,
+        );
+        builder.build();
+        this.#whereChildPtrns.push(...builder.getResultPtrns());
+        // gather default vars from children
+        this.#defaultVars.push(...builder.getDefaultVars());
+        // gather patterns to be executed after
+        this.#executedAfterPtrns.push(...builder.getExecutedAfterPtrns());
+      });
+    }
   }
 
   #buildValuePtrn() {

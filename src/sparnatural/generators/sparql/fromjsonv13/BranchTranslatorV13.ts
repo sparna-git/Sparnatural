@@ -69,6 +69,8 @@ export default class BranchTranslatorV13 {
   // default vars gathered from children
   #defaultVars: Variable[] = [];
 
+  #hasValues = false;
+
   constructor(
     //the pair to convert
     pair: PredicateObjectPair,
@@ -124,6 +126,10 @@ export default class BranchTranslatorV13 {
         criterias.map((v) => v.criteria),
       );
     }
+
+    this.#hasValues =
+      (this.#object.values && this.#object.values.length > 0) ||
+      (this.#object.filters && this.#object.filters.length > 0);
   }
 
   build() {
@@ -143,27 +149,33 @@ export default class BranchTranslatorV13 {
     const children = this.#object.predicateObjectPairs;
     if (!children || children.length === 0) return;
 
-    children.forEach((childPair) => {
-      const builder = new BranchTranslatorV13(
-        childPair,
-        // subject of children becomes the current object variable
-        // In v13, nested predicateObjectPairs are under ObjectCriteria, so the "same subject" at that level is the object variable.
-        this.#object.variable,
-        this.#fullQuery,
-        this.#specProvider,
-        false,
-        // children are in option if parent is optional/notExists
-        this.#pair.subType === "optional" || this.#pair.subType === "notExists",
-        this.settings,
-      );
+    // do not build children patterns if there are criterias on the branch
+    // this is normally not possible in the Sparnatural UI, but can be possible if a value is injected in the query JSON structure by Sparnatural-form
+    // otherwise we take the risk that the object is set to a URI, while the subject of the cildren pattern will be a variable
+    // e.g. `?x :p <http://xxxx> . ?Actor a :Actor` 
+    if (!this.#hasValues) {
+      children.forEach((childPair) => {
+        const builder = new BranchTranslatorV13(
+          childPair,
+          // subject of children becomes the current object variable
+          // In v13, nested predicateObjectPairs are under ObjectCriteria, so the "same subject" at that level is the object variable.
+          this.#object.variable,
+          this.#fullQuery,
+          this.#specProvider,
+          false,
+          // children are in option if parent is optional/notExists
+          this.#pair.subType === "optional" || this.#pair.subType === "notExists",
+          this.settings,
+        );
 
-      builder.build();
-      this.#whereChildPtrns.push(...builder.getResultPtrns());
-      // gather default vars from children
-      this.#defaultVars.push(...builder.getDefaultVars());
-      // gather patterns to be executed after
-      this.#executedAfterPtrns.push(...builder.getExecutedAfterPtrns());
-    });
+        builder.build();
+        this.#whereChildPtrns.push(...builder.getResultPtrns());
+        // gather default vars from children
+        this.#defaultVars.push(...builder.getDefaultVars());
+        // gather patterns to be executed after
+        this.#executedAfterPtrns.push(...builder.getExecutedAfterPtrns());
+      });
+    }
   }
 
   /**
@@ -185,11 +197,7 @@ export default class BranchTranslatorV13 {
   }
 
   #buildValuePtrn() {
-    let hasValues =
-      (this.#object.values && this.#object.values.length > 0) ||
-      (this.#object.filters && this.#object.filters.length > 0);
-
-    if (hasValues) {
+    if (this.#hasValues) {
       this.#valuePtrns = this.#valueBuilder.build();
     }
   }
