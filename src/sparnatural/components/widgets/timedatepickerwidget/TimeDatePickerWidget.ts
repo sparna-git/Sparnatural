@@ -9,6 +9,7 @@ import { I18n } from "../../../settings/I18n";
 import { HTMLComponent } from "../../HtmlComponent";
 import { TOOLTIP_CONFIG } from "../../../settings/defaultSettings";
 import { LabelledCriteria, DateCriteria } from "../../../SparnaturalQueryIfc";
+import { time } from "node:console";
 
 const factory = new DataFactory();
 
@@ -150,10 +151,21 @@ export class TimeDatePickerWidget extends AbstractWidget {
         ||
         (dateString.startsWith("-") && dateString.length == 3)
       ) {
+        
         let year = parseInt(dateString);
         startDate.setFullYear(year);
+        console.warn(startDate.getFullYear())
+        if(startDate.getFullYear() > 1900) {
+          
+          // calling setFullYear with a 2 digit year returns a date in the 1900s, so if the year is bigger than 1900
+          // we force it with setTime
+          var TIME_OF_1900 = new Date("1900-01-01").getTime();
+          var realTime = startDate.getTime() - TIME_OF_1900;
+          startDate.setTime(realTime);
+        }
       }
 
+      // if input was provided with a minus but getDate did not return a negative year, force it
       if(dateString.startsWith("-") && !startDate.toISOString().startsWith("-")) {
         startDate.setFullYear(parseInt(dateString));
       }
@@ -174,6 +186,7 @@ export class TimeDatePickerWidget extends AbstractWidget {
         endDate.setFullYear(year);
       }
 
+      // if input was provided with a minus but getDate did not return a negative year, force it
       if(dateString.startsWith("-") && !endDate.toISOString().startsWith("-")) {
         endDate.setFullYear(parseInt(dateString));
       }
@@ -229,19 +242,34 @@ export class TimeDatePickerWidget extends AbstractWidget {
         stop: (tmpValue.stop)?this.#toISOStringWithTimezone(tmpValue.stop):null,
       }        
     };
+
     return dateTimePickerVal;
   }
 
+  /**
+   * @returns a Date object corresponding to the first day of the year of the provided date (with hours set to 00:00:00:000), or null if the provided date is null.
+   * Do NOT use the constructor of Date with year only because it considers the year as an offset from 1900, so 50 becomes 1950, and -50 becomes 1850, which is not what we want. 
+   */
   #getFirstDayYear(startValue:Date) {
-    return startValue ?
-    new Date(startValue.getFullYear(),0,1,0,0,1,0) 
-    :null
+    if(!startValue) return null;
+    let newDate = new Date(startValue);
+    newDate.setMonth(0);
+    newDate.setDate(1);
+    newDate.setHours(0,0,1,0);
+    return newDate;
   }
 
+  /**
+   * @returns a Date object corresponding to the last day of the year of the provided date (with hours set to 23:59:59:999), or null if the provided date is null
+   * Do NOT use the constructor of Date with year only because it considers the year as an offset from 1900, so 50 becomes 1950, and -50 becomes 1850, which is not what we want. 
+   */
   #getLastDayOfYear(endValue:Date) {
-    return endValue ? 
-    new Date(endValue.getFullYear(),11,31,23,59,59) 
-    :null
+    if(!endValue) return null;
+    let newDate = new Date(endValue);
+    newDate.setMonth(11);
+    newDate.setDate(31);
+    newDate.setHours(23,59,59,999);
+    return newDate;
   }
 
   #shiftOneMoreMinute(date:Date) {
