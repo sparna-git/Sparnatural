@@ -74,6 +74,11 @@
             width: auto;
         }
     }
+
+    // Style appliqué à .EndClassGroup quand il contient un élément .focus
+    &:has(> .focus) {
+        z-index: 11;
+    }
 }
 
 
