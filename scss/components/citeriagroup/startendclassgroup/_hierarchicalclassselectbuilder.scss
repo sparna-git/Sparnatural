@@ -309,6 +309,7 @@
         &.active-pane-hide-left {
             margin-left: -345px;
         }
+
         li {
             cursor: pointer;
             border-bottom: solid 1px #e8e8e8;
@@ -317,6 +318,17 @@
             background: #fff;
             position: relative;
             z-index: 11;
+
+            // Bordure couleur personnalisée depuis la configuration
+            &[data-color]::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 4px;
+                height: 100%;
+                background-color: var(--item-color);
+            }
 
             .item-count {
                 position: absolute;
