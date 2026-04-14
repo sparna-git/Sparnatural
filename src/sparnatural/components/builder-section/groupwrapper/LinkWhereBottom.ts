@@ -57,27 +57,26 @@ class LinkWhereBottom extends HTMLComponent {
   }
 
   #drawWhereConnection(EndClassGroup: EndClassGroup, whereChild: GroupWrapper) {
-    const xyUpper = this.#drawUpperVertical(EndClassGroup, whereChild);
-    const xyLower = this.#drawLowerVertical(whereChild);
+    const parentRect = this.parentGroupWrapper.html[0].getBoundingClientRect();
+    const xyUpper = this.#drawUpperVertical(EndClassGroup, whereChild, parentRect);
+    const xyLower = this.#drawLowerVertical(whereChild, parentRect);
     this.#drawHorizontal(xyLower, xyUpper);
   }
 
   // line from the middle of the endclassgroup till the end of GroupWrapper
-  #drawUpperVertical(endClassGroup: EndClassGroup, whereChild: GroupWrapper) {
+  #drawUpperVertical(endClassGroup: EndClassGroup, whereChild: GroupWrapper, parentRect: DOMRect) {
     const endClassClientRect = endClassGroup.html[0].getBoundingClientRect();
     const whereChildRect = whereChild.html[0].getBoundingClientRect();
-    const ax = (endClassClientRect.left + (endClassClientRect.right - endClassClientRect.left) / 2) + window.scrollX;
-    const ay = endClassClientRect.bottom + 3 + window.scrollY;
-    const by = whereChildRect.top + window.scrollY;
+    const ax = Math.round(endClassClientRect.left - parentRect.left + (endClassClientRect.right - endClassClientRect.left) / 2 - 1);
+    const ay = Math.round(endClassClientRect.bottom - parentRect.top);
+    const by = Math.round(whereChildRect.top - parentRect.top);
 
-    // ax can be used twice since the line is orthogonal to the upper element
-    let css = this.#getLine(
-      ax,
-      ax,
-      ay,
-      by
-    );
-    this.upperVertical.css(css);
+    const distance = by - ay;
+    this.upperVertical.css({
+      '--link-top': ay + 'px',
+      '--link-left': ax + 'px',
+      '--link-height': distance + 'px',
+    });
 
     return { x: ax, y: by };
   }
@@ -88,31 +87,44 @@ class LinkWhereBottom extends HTMLComponent {
   ) {
     // adapt line length according to width of the WHERE span.
     const width:number = this.widgetHTML.outerWidth()
-    const adaptedLowerx = xyLower.x - (width / 2)
-    const css = this.#getLine(adaptedLowerx, xyUpper.x, xyLower.y, xyUpper.y);
-    this.horizontal.css(css);
+    // position horizontal line so it ends exactly at xyUpper.x
+    const ax = Math.min(xyLower.x, xyUpper.x);
+    const bx = Math.max(xyLower.x, xyUpper.x);
+    const distance = Math.round(bx - ax + 2); // keep +3 for overlap safety
+
+    this.horizontal.css({
+      '--link-top': Math.round(xyLower.y - 1) + 'px',
+      '--link-left': Math.round(ax) + 'px',
+      '--link-width': distance + 'px',
+    });
+
+    // label "WHERE" should be centered above the lower vertical line (xyLower.x)
+    // we calculate its left position relative to the horizontal line's start (ax)
+    const labelOffset = xyLower.x - ax;
+    this.widgetHTML.css({
+      'left': Math.round(labelOffset) + 'px',
+      'top': '0px',
+      'transform': 'translate(-50%, -50%)' // center horizontally on point, and place above the line
+    });
   }
 
-  #drawLowerVertical(whereChild: GroupWrapper) {
+  #drawLowerVertical(whereChild: GroupWrapper, parentRect: DOMRect) {
     const startClassClientRect =
       whereChild.criteriaGroup.startClassGroup.html[0].getBoundingClientRect();
-    const bx =
-      (startClassClientRect.left + (startClassClientRect.right - startClassClientRect.left) / 4) + window.scrollX;
+    const bx = Math.round(startClassClientRect.left - parentRect.left + (startClassClientRect.right - startClassClientRect.left) / 4 - 1);
     // -2 so that it looks connected to white group
-    const by = startClassClientRect.top + window.scrollY - 2;
+    const by = Math.round(startClassClientRect.top - parentRect.top);
 
     const whereChildRect = whereChild.html[0].getBoundingClientRect();
 
-    const ay = whereChildRect.top + window.scrollY;
+    const ay = Math.round(whereChildRect.top - parentRect.top);
 
-    // bx can be used twice since line is orthogonal from the lower element
-    const css = this.#getLine(
-      bx,
-      bx,
-      ay,
-      by
-    );
-    this.lowerVertical.css(css);
+    const distance = by - ay;
+    this.lowerVertical.css({
+      '--link-top': ay + 'px',
+      '--link-left': bx + 'px',
+      '--link-height': distance + 'px',
+    });
 
     return { x: bx, y: ay };
   }

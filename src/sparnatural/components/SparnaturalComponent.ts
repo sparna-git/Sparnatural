@@ -46,6 +46,18 @@ class SparnaturalComponent extends HTMLComponent {
       this.html[0].dispatchEvent(
         new CustomEvent("redrawBackgroundAndLinks", { bubbles: true })
       );
+
+      // add resize listener
+      let resizeTimeout: number;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = window.setTimeout(() => {
+          this.html[0].dispatchEvent(
+            new CustomEvent("redrawBackgroundAndLinks", { bubbles: true })
+          );
+        }, 150);
+      });
+
       this.html.append(this.filter);
       console.log(
         "Found languages in configuration : " + this.specProvider.getLanguages()

@@ -14,54 +14,51 @@ import GroupWrapper from "./GroupWrapper";
 class LinkAndBottom extends HTMLComponent {
   length: number;
   ParentGroupWrapper: GroupWrapper;
+  widgetHTML = $(`<span>${I18n.labels.And}</span>`);
   constructor(ParentComponent: HTMLComponent) {
-    let widgetHTML = $(`<span>${I18n.labels.And}</span>`);
-    super("link-and-bottom", ParentComponent, widgetHTML);
+    super("link-and-bottom", ParentComponent, null);
     this.ParentGroupWrapper = ParentComponent as GroupWrapper;
   }
 
   render(): this {
     super.render();
+    this.html.append(this.widgetHTML);
     this.#drawLinkAndBottom(this.ParentGroupWrapper);
     return this;
   }
 
   // https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect/element-box-diagram.png
   #drawLinkAndBottom(grpWrapper: GroupWrapper) {
+    const parentLi = grpWrapper.html[0]; // le <li class="groupe">
+    const parentRect = parentLi.getBoundingClientRect();
+
     const posUpperStart =
       grpWrapper.criteriaGroup.startClassGroup.html[0].getBoundingClientRect();
     const posLowerStart =
       grpWrapper.andSibling.criteriaGroup.startClassGroup.html[0].getBoundingClientRect();
-    // from the upper and from the upperelement move 25% into the middle
-    const ax = (posUpperStart.left + (posUpperStart.right - posUpperStart.left) / 4) + window.scrollX;
-    let bx = (posLowerStart.left + (posLowerStart.right - posLowerStart.left) / 4) + window.scrollX;
+
+    // Position relative au parent <li>
+    const ax = Math.round(posUpperStart.left - parentRect.left + (posUpperStart.right - posUpperStart.left) / 4 - 1);
     // +3 so that it looks connected to white group and not orange arrow
-    const ay = posUpperStart.bottom  + window.scrollY + 3;
-    const by = posLowerStart.top  + window.scrollY;
+    const ay = Math.round(posUpperStart.bottom - parentRect.top);
+    const by = Math.round(posLowerStart.top - parentRect.top);
 
-    const css = this.#getLine(ax, bx, ay, by);
+    const distance = by - ay;
+    if (distance <= 0) return;
 
-    this.html.css(css);
+    this.html.css({
+      '--link-top': ay + 'px',
+      '--link-left': ax + 'px',
+      '--link-height': distance + 'px',
+    });
+
+    // label "AND" should be centered on the line
+    this.widgetHTML.css({
+      'top': '50%',
+      'transform': 'translate(-50%, -50%)'
+    });
   }
 
-  #getLine(ax: number, bx: number, ay: number, by: number) {
-    if (ax > bx) {
-      bx = ax + bx;
-      ax = bx - ax;
-      bx = bx - ax;
-    }
-    const distance = Math.sqrt(Math.pow(bx - ax, 2) + Math.pow(by - ay, 2));
-    // we always need a vertical line. So 90degree is fixed
-    const degree = 90;
-
-    return {
-      transformOrigin: "top left",
-      width: distance,
-      top: ay + "px",
-      left: ax + "px",
-      transform: `rotate(${degree}deg)`,
-    };
-  }
 }
 
 export default LinkAndBottom;
