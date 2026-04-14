@@ -75,7 +75,7 @@
         }
     }
 
-    // Style appliqué à .EndClassGroup quand il contient un élément .focus
+    // Style appliqué à .EndClassGroup quand il contient un élément .focus fix z-index #683
     &:has(> .focus) {
         z-index: 11;
     }
