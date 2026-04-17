@@ -100,7 +100,7 @@ export default class QueryLoader {
         (
           rootGrpWrapper.criteriaGroup.startClassGroup
             .inputSelector as ClassTypeId
-        )?.selectViewVariableBtn?.widgetHtml,
+        )?.getSelectViewVariableBtn()?.widgetHtml,
       );
     }
 
@@ -311,7 +311,7 @@ export default class QueryLoader {
   ) {
     if (this.#hasSelectedVar(this.query.variables, endClassVal.variable)) {
       this.#clickOn(
-        (endClassComponent.inputSelector as ClassTypeId)?.selectViewVariableBtn
+        (endClassComponent.inputSelector as ClassTypeId)?.getSelectViewVariableBtn()
           ?.widgetHtml,
       );
     }

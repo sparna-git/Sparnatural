@@ -14,8 +14,8 @@ export function updateVarList(actionStore: ActionStore) {
     (grpWrapper: GroupWrapper) => {
       let startGrp = grpWrapper.criteriaGroup.startClassGroup;
       let endGrp = grpWrapper.criteriaGroup.endClassGroup;
-      if(startGrp.isVarSelected() && startGrp.getVarName()) varNames.add(startGrp.getVarName());
-      if(endGrp.isVarSelected() && endGrp.getVarName()) varNames.add(endGrp.getVarName());      
+      if(startGrp.inputSelector.getSelectViewVariableBtn().selected && startGrp.getVarName()) varNames.add(startGrp.getVarName());
+      if(endGrp.inputSelector.getSelectViewVariableBtn().selected && endGrp.getVarName()) varNames.add(endGrp.getVarName());      
     }
   );
   updateDraggables(actionStore, varNames);

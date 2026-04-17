@@ -78,8 +78,8 @@ class StartClassGroup extends HTMLComponent {
    * This can be called from the outside when deleting the first row and the second row becomes root
    */
   autoSelectEyeBtn(){
-    this.inputSelector.selectViewVariableBtn.render() 
-    this.inputSelector.selectViewVariableBtn.widgetHtml[0].dispatchEvent(new Event('click'))
+    this.inputSelector.showSelectViewVariableBtn() ;
+    this.inputSelector.getSelectViewVariableBtn().click() ;
   }
 
   #createSparqlVar(type: string) {
@@ -137,13 +137,6 @@ class StartClassGroup extends HTMLComponent {
   }
   getDefaultLblVar(){
     return this.defaultLblVar?.variable
-  }
-
-  /**
-   * @returns true if the 'eye' icon on this arrow is selected
-   */
-  isVarSelected() {
-    return this.inputSelector?.selectViewVariableBtn?.selected;
   }
 
 }

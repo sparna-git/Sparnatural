@@ -108,12 +108,12 @@ class GroupWrapper extends HTMLComponent {
     // the end class group may not be known, so we add '?' at every step
     if (newState == OptionTypes.NOTEXISTS) {      
       // remove the variable selection if it was selected
-      if(this.criteriaGroup.endClassGroup?.inputSelector?.selectViewVariableBtn?.selected) {
-        this.criteriaGroup.endClassGroup?.inputSelector?.selectViewVariableBtn?.widgetHtml[0].dispatchEvent(new Event("click"));
+      if(this.criteriaGroup.endClassGroup?.inputSelector?.getSelectViewVariableBtn()?.selected) {
+        this.criteriaGroup.endClassGroup?.inputSelector?.getSelectViewVariableBtn()?.click();
       }
-      this.criteriaGroup.endClassGroup?.inputSelector?.selectViewVariableBtn?.disable();
+      this.criteriaGroup.endClassGroup?.inputSelector?.getSelectViewVariableBtn()?.disable();
     } else {
-      this.criteriaGroup.endClassGroup?.inputSelector?.selectViewVariableBtn?.enable();
+      this.criteriaGroup.endClassGroup?.inputSelector?.getSelectViewVariableBtn()?.enable();
     }
   }
 

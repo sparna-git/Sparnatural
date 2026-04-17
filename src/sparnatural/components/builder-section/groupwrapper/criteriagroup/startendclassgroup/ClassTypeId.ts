@@ -8,9 +8,10 @@ import { UnselectBtn } from "../../../../buttons/UnselectBtn";
 import { SelectedVal } from "../../../..//SelectedVal";
 import { SelectViewVariableBtn } from "../../../../buttons/SelectViewVariableBtn";
 import { HTMLComponent } from "../../../../HtmlComponent";
-import { DagIfc, DagNodeIfc, DagNode} from "../../../../../dag/Dag";
+import { DagIfc, DagNodeIfc} from "../../../../../dag/Dag";
 import { ISpecificationEntity } from "../../../../../spec-providers/ISpecificationEntity";
 import { ISpecificationEntry } from "../../../../../spec-providers/ISpecificationEntry";
+
 /**
  * Handles the selection of a Class, either in the DOMAIN selection or the RANGE selection.
  * The DOMAIN selection happens only for the very first line/criteria.
@@ -34,6 +35,8 @@ class ClassTypeId extends HTMLComponent {
   }; // if it is a whereChild, the startclassVal is already set
   oldWidget: JQuery<HTMLElement>; // oldWidget exists cause nice-select can't listen for 'change' Events...
   UnselectButton: UnselectBtn;
+
+  // this is controlled from the outside of this class currently
   selectViewVariableBtn: SelectViewVariableBtn;
   specProvider: ISparnaturalSpecification;
   htmlCurentValue: JQuery<HTMLElement>; 
@@ -48,7 +51,6 @@ class ClassTypeId extends HTMLComponent {
   ) {
     super("ClassTypeId", ParentComponent, null);
     this.temporaryLabel = temporaryLabel;
-    //this.selectBuilder = new HierarchicalClassSelectBuilder(this, specProvider);
     this.selectBuilder = new ClassSelectBuilder(this, specProvider);
     this.startClassVal = startClassVal;
     this.specProvider = specProvider;
@@ -56,6 +58,7 @@ class ClassTypeId extends HTMLComponent {
 
   render() {
     this.widgetHtml = null;
+    // this is created but not rendered yet
     this.selectViewVariableBtn = new SelectViewVariableBtn(
       this,
       this.#onchangeViewVariable
@@ -68,10 +71,15 @@ class ClassTypeId extends HTMLComponent {
       this.backArrow.render();
     }
 
-    this.htmlCurentValue = $(`<span class="current">${this.temporaryLabel}</span>`) ;
     let currentWrapper = $('<div class="currentWrapper"></div>') ;
+    // append label to currentWrapper
+    this.htmlCurentValue = $(`<span class="current">${this.temporaryLabel}</span>`) ;
     currentWrapper.append(this.htmlCurentValue) ;
     this.html.append(currentWrapper);
+
+    // also append eye button to currentWrapper
+    this.selectViewVariableBtn.htmlParent = currentWrapper ;
+    
     
     if (isStartClassGroup(this.parentComponent)) {
       if(!this.startClassVal?.type) {
@@ -89,14 +97,9 @@ class ClassTypeId extends HTMLComponent {
     }
 
     this.html.append(this.widgetHtml);
-    // convert to niceSelect: https://jqueryniceselect.hernansartorio.com/
-    // needs to happen after html.append(). it uses rendered stuff on page to create a new select... should move away from that
     this.oldWidget = this.selectBuilder.selectWidget.getInput();
     this.selectBuilder.selectWidget.initSelectUiUxListsHeight() ; //force init heigh after dominsertion.
-    //this.widgetHtml = this.widgetHtml.niceSelect();
-    // nice-select is not a proper select tag and that's why can't listen for change events... move away from nice-select!
     this.#addOnChangeListener(this.oldWidget);
-
    
     this.frontArrow.render();
 
@@ -121,7 +124,7 @@ class ClassTypeId extends HTMLComponent {
     this.UnselectButton = new UnselectBtn(this, removeEndClassEvent).render();
   }
   
-  setCurrentContent(id:string) {
+  setSelectedEntity(id:string) {
     let entity = this.specProvider.getEntity(id) ;
     let entity_icon = entity.getIcon() ;
     let icon = `` ;
@@ -138,7 +141,7 @@ class ClassTypeId extends HTMLComponent {
       "change",
       (e: CustomEvent) => {
         let selectedValue = e.detail.value ;
-        this.setCurrentContent(selectedValue) ;
+        this.setSelectedEntity(selectedValue) ;
         //disable further choice on nice-select
         this.widgetHtml[0].classList.add("disabled");
         this.widgetHtml[0].classList.remove("open");
@@ -149,18 +152,6 @@ class ClassTypeId extends HTMLComponent {
           })
         );
       });
-    /*selectWidget.on("change", (e) => {
-      let selectedValue = e.detail.value ;
-      //disable further choice on nice-select
-      this.widgetHtml[0].classList.add("disabled");
-      this.widgetHtml[0].classList.remove("open");
-      this.html[0].dispatchEvent(
-        new CustomEvent("classTypeValueSelected", {
-          bubbles: true,
-          detail: selectedValue,
-        })
-      );
-    });*/
   }
 
   #onchangeViewVariable = (selected: boolean) => {
@@ -208,6 +199,14 @@ class ClassTypeId extends HTMLComponent {
     const currentSpan = this.htmlCurentValue.first()[0].getElementsByClassName('label').item(0)
     // display variable
     currentSpan.textContent = this.parentComponent.getVarName();
+  }
+
+  getSelectViewVariableBtn() {
+    return this.selectViewVariableBtn;
+  }
+
+  showSelectViewVariableBtn() {
+    this.selectViewVariableBtn.render();
   }
 
 }

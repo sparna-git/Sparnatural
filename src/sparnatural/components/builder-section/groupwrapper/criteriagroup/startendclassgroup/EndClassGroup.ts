@@ -124,7 +124,7 @@ class EndClassGroup extends HTMLComponent {
 
   // renders the "eye" btn
   renderSelectViewVar() {
-    this.inputSelector.selectViewVariableBtn.render();
+    this.inputSelector.showSelectViewVariableBtn();
   }
 
   #valueWasSelected() {
@@ -152,7 +152,7 @@ class EndClassGroup extends HTMLComponent {
 
     // if entity is a blank node, deactivate eye selector
     if(entity.isBlankNodeEntity()) {
-      this.inputSelector.selectViewVariableBtn.setAlwaysDisabled(true);
+      this.inputSelector.getSelectViewVariableBtn().setAlwaysDisabled(true);
     }
   }
 
@@ -175,13 +175,6 @@ class EndClassGroup extends HTMLComponent {
 
   getTypeSelected() {
     return this.endClassVal.type;
-  }
-
-  /**
-   * @returns true if the 'eye' icon on this arrow is selected
-   */
-  isVarSelected() {
-    return this.inputSelector?.selectViewVariableBtn?.selected;
   }
 
   /**

@@ -35,7 +35,7 @@ class ComponentsList extends HTMLComponent {
       true
     ).render();
     // The first criteriaGrp always has the "eye" icon to select it as a variable in the result set
-    this.rootGroupWrapper.criteriaGroup.startClassGroup.inputSelector.selectViewVariableBtn.render()
+    this.rootGroupWrapper.criteriaGroup.startClassGroup.inputSelector.showSelectViewVariableBtn() ;
   }
 
   /**

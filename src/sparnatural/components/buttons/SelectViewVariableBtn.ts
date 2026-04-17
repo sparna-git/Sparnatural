@@ -82,4 +82,8 @@ export class SelectViewVariableBtn extends HTMLComponent {
     }
   }
 
+  click() {
+    this.widgetHtml[0].dispatchEvent(new Event("click"))
+  }
+
 }

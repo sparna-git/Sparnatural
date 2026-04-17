@@ -62,7 +62,7 @@ export default class QueryLoader{
         const firstStartClassVal = { type: rootBranch.line.sType, variable: rootBranch.line.s };
         if(!QueryLoader.#hasSelectedVar(this.query.variables,firstStartClassVal.variable)) {
           // click on first eye btn to unselect it
-          this.#clickOn((rootGrpWrapper.criteriaGroup.startClassGroup.inputSelector as ClassTypeId)?.selectViewVariableBtn?.widgetHtml)
+          this.#clickOn((rootGrpWrapper.criteriaGroup.startClassGroup.inputSelector as ClassTypeId)?.getSelectViewVariableBtn()?.widgetHtml)
         }
 
         return varMapping;
@@ -173,7 +173,7 @@ export default class QueryLoader{
   ){
     if(QueryLoader.#hasSelectedVar(this.query.variables, selectedVal.variable)) {
       // click on eye btn
-      this.#clickOn((endClassComponent.inputSelector as ClassTypeId)?.selectViewVariableBtn?.widgetHtml)
+      this.#clickOn((endClassComponent.inputSelector as ClassTypeId)?.getSelectViewVariableBtn()?.widgetHtml)
     }
   }
 

@@ -9,7 +9,7 @@ class BaseClassFactory {
   ulTags: Array<string> = ["componentsListe", "childsList"];
   spanTags: Array<string> = [
     "link-where-bottom",
-    "selectViewVariable",
+    "selectViewVariableBtn",
     "unselect",
     "circle-info",
     "loadingspinner"
