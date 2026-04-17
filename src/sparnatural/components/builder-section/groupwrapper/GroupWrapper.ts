@@ -5,7 +5,6 @@ import CriteriaGroup from "./criteriagroup/CriteriaGroup";
 import { HTMLComponent } from "../../HtmlComponent";
 import { OptionTypes } from "./criteriagroup/optionsgroup/OptionsGroup";
 import GroupWrapperEventStore from "./groupwrapperevents/GroupWrapperEventStore";
-import ComponentsList from "../ComponentsList";
 import { SelectedVal } from "../../SelectedVal";
 
 /*
