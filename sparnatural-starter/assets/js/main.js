@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // =============================================================================
   let sampleQueries = [];
   let lastQueryJson = null;
-  const lang = new URLSearchParams(window.location.search).get("lang") || "en";
+  const lang = new URLSearchParams(window.location.search).get("lang") || "fr";
 
   // Set language on components
   if (lang === "en") {

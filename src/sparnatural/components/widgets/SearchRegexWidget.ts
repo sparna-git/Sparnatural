@@ -36,7 +36,7 @@ export class SearchRegexWidget extends AbstractWidget {
       startClassVal,
       objectPropVal,
       endClassVal,
-      // simple search or regexes can be multivalued, but proprietary seaerch patterns are not
+      // simple search or regexes can be multivalued, but proprietary searches patterns are not
       (configuration.widgetType == Config.STRING_EQUALS_PROPERTY || configuration.widgetType == Config.SEARCH_PROPERTY)
         ?ValueRepetition.MULTIPLE
         :ValueRepetition.SINGLE
@@ -49,9 +49,11 @@ export class SearchRegexWidget extends AbstractWidget {
     super.render();
     this.searchInput = $(`<input />`);
     this.html.append(this.searchInput);
+
     // Build datatippy info
     if (this.configuration.widgetType == Config.VIRTUOSO_SEARCH_PROPERTY) {
       let datatippy = I18n.labels.VirtuosoSearchHelp;
+
       // set a tooltip on the info circle
       var tippySettings = Object.assign({}, TOOLTIP_CONFIG);
       tippySettings.placement = "left";
@@ -60,13 +62,16 @@ export class SearchRegexWidget extends AbstractWidget {
       tippySettings.delay = [0, 0];
       this.infoBtn = new InfoBtn(this, datatippy, tippySettings).render();
     } //finish datatippy
+
     this.addValueBtn = new AddUserInputBtn(
       this,
       I18n.labels.ButtonAdd,
       this.#addValueBtnClicked
     ).render();
+
     return this;
   }
+
   #addValueBtnClicked = () => {
     this.searchInput.trigger("change");
     let searchWidgetValue:LabelledCriteria<SearchCriteria> = {
