@@ -1,0 +1,216 @@
+@prefix schema: <http://schema.org/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix volipi: <http://data.sparna.fr/ontologies/volipi#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix skosthes: <http://purl.org/iso25964/skos-thes#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sacs: <https://data.archives.haute-garonne.fr/modeles/sacsaproces#> .
+@prefix type: <https://data.archives.haute-garonne.fr/type/> .
+@prefix qb: <http://purl.org/linked-data/cube#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix rico: <https://www.ica.org/standards/RiC/ontology#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix euvoc: <http://publications.europa.eu/ontology/euvoc#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix crm: <http://www.cidoc-crm.org/cidoc-crm/> .
+@prefix adms: <http://www.w3.org/ns/adms#> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix xls2rdf: <https://xls2rdf.sparna.fr/vocabulary#> .
+@prefix vocabulaire: <https://data.archives.haute-garonne.fr/vocabulaire/> .
+@prefix core: <http://data.sparna.fr/ontologies/sparnatural-config-core#> .
+@prefix shacl-play: <https://shacl-play.sparna.fr/ontology#> .
+@prefix datasources: <http://data.sparna.fr/ontologies/sparnatural-config-datasources#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix frbroo: <http://iflastandards.info/ns/fr/frbr/frbroo/> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix skosxl: <http://www.w3.org/2008/05/skos-xl#> .
+
+sacs:Identifiant sh:deactivated "true"^^xsd:boolean.
+sacs:Date sh:deactivated "true"^^xsd:boolean .
+sacs:Instruction sh:deactivated "true"^^xsd:boolean .
+sacs:Fait sh:deactivated "true"^^xsd:boolean . 
+sacs:LegalStatus sh:deactivated "true"^^xsd:boolean .
+sacs:IdentifierType sh:deactivated "true"^^xsd:boolean .
+sacs:PlaceType sh:deactivated "true"^^xsd:boolean .
+sacs:EventType sh:deactivated "true"^^xsd:boolean .
+sacs:OccupationType sh:deactivated "true"^^xsd:boolean .
+sacs:ActivityType sh:deactivated "true"^^xsd:boolean .
+sacs:CarrierType sh:deactivated "true"^^xsd:boolean .
+sacs:DemographicGroup sh:deactivated "true"^^xsd:boolean .
+sacs:CorporateBodyType sh:deactivated "true"^^xsd:boolean .
+sacs:TypeProcedure sh:deactivated "true"^^xsd:boolean .
+sacs:OrdreInstruction sh:deactivated "true"^^xsd:boolean .
+sacs:Traitement sh:deactivated "true"^^xsd:boolean .
+sacs:Depouillement sh:deactivated "true"^^xsd:boolean .
+sacs:Saisie sh:deactivated "true"^^xsd:boolean .
+sacs:Validation sh:deactivated "true"^^xsd:boolean .
+sacs:TypeRole sh:deactivated "true"^^xsd:boolean .
+sacs:Liasse sh:deactivated "true"^^xsd:boolean .
+
+
+# Lien inverse
+sacs:Fait
+  sh:property sacs:Fait_inverse_resultsOrResultedFrom .
+
+sacs:Fait_inverse_resultsOrResultedFrom sh:path [ sh:inversePath rico:resultsOrResultedFrom ];
+  sh:name "a déclenché"@fr;
+  sh:description "Les Faits ont donné lieu à une procédure"@fr;
+  sh:minCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:node sacs:Procedure .
+
+
+# Lien inverse
+sacs:Instruction
+  sh:property sacs:Instruction_inverse_hasOrHadSubevent .
+
+sacs:Instruction_inverse_hasOrHadSubevent sh:path [ sh:inversePath rico:hasOrHadSubevent ];
+  sh:name "fait partie de"@fr;
+  sh:description "Une instruction est l'instruction au sein d'une (et une seule) procédure"@fr;
+  sh:minCount "1"^^xsd:integer;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:node sacs:Procedure .
+
+
+# Lien inverse
+sacs:Juridiction
+  sh:property sacs:Juridiction_inverse_isOrWasPerformedBy .
+
+sacs:Juridiction_inverse_isOrWasPerformedBy sh:path [ sh:inversePath rico:isOrWasPerformedBy ];
+  sh:name "a mené"@fr;
+  sh:description "La juridiction a mené une instruction"@fr;
+  sh:nodeKind sh:IRI;
+  sh:node sacs:Instruction .
+
+
+# Lien inverse
+sacs:Juridiction
+  sh:property sacs:Juridiction_inverse_hasOrganicProvenance .
+
+sacs:Juridiction_inverse_hasOrganicProvenance sh:path [ sh:inversePath rico:hasOrganicProvenance ];
+  sh:name "a produit"@fr;
+  sh:description "Une juridiction peut être producteur de sacs"@fr;
+  sh:nodeKind sh:IRI;
+  sh:node sacs:Sac .
+
+
+# Lien inverse
+sacs:Lieu
+  sh:property sacs:Lieu_inverse_hasOrHadLocation .
+
+sacs:Lieu_inverse_hasOrHadLocation sh:path [ sh:inversePath rico:hasOrHadLocation ];
+  sh:name "est l'emplacement de"@fr;
+  sh:nodeKind sh:IRI;
+  sh:class rico:Event .
+
+
+# Lien inverse
+sacs:Lieu
+  sh:property sacs:Lieu_inverse_agentHasOrHadLocation .
+
+sacs:Lieu_inverse_agentHasOrHadLocation sh:path [ sh:inversePath rico:agentHasOrHadLocation ];
+  sh:name "est l'emplacement de"@fr;
+  sh:nodeKind sh:IRI;
+  sh:or ( [sh:node sacs:Juridiction] [sh:node sacs:PersonnePhysique] [sh:node sacs:PersonneMorale] ).
+
+# Lien inverse
+sacs:Procedure
+  sh:property sacs:Procedure_inverse_documents .
+
+sacs:Procedure_inverse_documents sh:path [ sh:inversePath rico:documents ];
+  sh:name "est documentée par"@fr;
+  sh:description "Les procédures sont documentées par un sac et une notice de sac"@fr;
+  sh:minCount "2"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:or ( [sh:node sacs:Notice] [sh:node sacs:Sac] ).
+
+
+# Lien inverse
+sacs:PersonneMorale
+  sh:property sacs:PersonneMorale_inverse_hasOrHadParticipant .
+
+sacs:PersonneMorale_inverse_hasOrHadParticipant sh:path [ sh:inversePath rico:hasOrHadParticipant ];
+  sh:name "a été impliquée dans"@fr;
+  sh:description "Une personne morale peut être impliquée dans une Procédure"@fr;
+  sh:nodeKind sh:IRI;
+  sh:node sacs:Procedure .
+
+
+# Lien inverse
+sacs:PersonnePhysique
+  sh:property sacs:PersonnePhysique_inverse_hasOrHadParticipant .
+
+sacs:PersonnePhysique_inverse_hasOrHadParticipant sh:path [ sh:inversePath rico:hasOrHadParticipant ];
+  sh:name "a été impliquée dans"@fr;
+  sh:description "Une personne physique peut être impliquée dans une Procédure"@fr;
+  sh:nodeKind sh:IRI;
+  sh:node sacs:Procedure .
+
+
+# Champ de recherche Libellé procédure + notice
+sacs:Procedure
+  sh:property sacs:Procedure_search .
+
+sacs:Procedure_search sh:path [ sh:alternativePath (
+  rico:name 
+  (
+    [sh:inversePath rico:documents]
+    rico:generalDescription
+  )
+) ];
+  sh:name "recherche"@fr;
+  sh:node sacs:Search ;
+  sh:nodeKind sh:Literal;
+  dash:searchWidget core:SearchProperty;
+.
+
+
+# Recherche Fait --> Lieu avec héritage sur les "sous-lieux"
+sacs:Fait
+  sh:property sacs:Fait_hasOrHadLocation_isDirectlyContainedBy_star .
+
+sacs:Fait_hasOrHadLocation_isDirectlyContainedBy_star sh:path (
+  rico:hasOrHadLocation
+  [ sh:zeroOrMorePath rico:isDirectlyContainedBy ]
+) ;
+  sh:name "ont eu pour localisation"@fr;
+  sh:description "Les faits se sont déroulés dans un contexte géographique"@fr;
+  sh:nodeKind sh:IRI;
+  sh:class rico:Place;
+  dash:searchWidget core:AutocompleteProperty .
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

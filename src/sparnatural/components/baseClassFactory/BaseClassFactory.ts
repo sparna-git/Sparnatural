@@ -10,6 +10,7 @@ class BaseClassFactory {
   spanTags: Array<string> = [
     "link-where-bottom",
     "selectViewVariableBtn",
+    "selectKeyInfoBtn",
     "unselect",
     "circle-info",
     "loadingspinner"

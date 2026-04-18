@@ -10,6 +10,8 @@ export class SelectViewVariableBtn extends HTMLComponent {
   selected = false;
   alwaysDisabled = false;
   callBack;
+
+  visible = false;
   
   constructor(
     ParentComponent: HTMLComponent,
@@ -31,6 +33,10 @@ export class SelectViewVariableBtn extends HTMLComponent {
       this.#addClickListener();
     } else {
       this.disable()
+    }
+
+    if(!this.visible) {
+      this.html.hide();
     }
     
     return this;
@@ -64,6 +70,16 @@ export class SelectViewVariableBtn extends HTMLComponent {
     } else {
       this.enable();
     }
+  }
+
+  show() {
+    this.visible = true;
+    this.render();
+  }
+
+  hide() {
+    this.visible = false;
+    this.render();
   }
 
   disable() {

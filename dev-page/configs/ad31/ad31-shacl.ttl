@@ -1,0 +1,1323 @@
+@prefix schema: <http://schema.org/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix volipi: <http://data.sparna.fr/ontologies/volipi#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix skosthes: <http://purl.org/iso25964/skos-thes#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sacs: <https://data.archives.haute-garonne.fr/modeles/sacsaproces#> .
+@prefix type: <https://data.archives.haute-garonne.fr/type/> .
+@prefix qb: <http://purl.org/linked-data/cube#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix rico: <https://www.ica.org/standards/RiC/ontology#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix euvoc: <http://publications.europa.eu/ontology/euvoc#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix crm: <http://www.cidoc-crm.org/cidoc-crm/> .
+@prefix adms: <http://www.w3.org/ns/adms#> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix xls2rdf: <https://xls2rdf.sparna.fr/vocabulary#> .
+@prefix vocabulaire: <https://data.archives.haute-garonne.fr/vocabulaire/> .
+@prefix ad31: <https://data.archives.haute-garonne.fr/ontologie#> .
+@prefix core: <http://data.sparna.fr/ontologies/sparnatural-config-core#> .
+@prefix geosparql: <http://www.opengis.net/ont/geosparql#> .
+@prefix shacl-play: <https://shacl-play.sparna.fr/ontology#> .
+@prefix datasources: <http://data.sparna.fr/ontologies/sparnatural-config-datasources#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix frbroo: <http://iflastandards.info/ns/fr/frbr/frbroo/> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix skosxl: <http://www.w3.org/2008/05/skos-xl#> .
+
+<https://data.archives.haute-garonne.fr/modeles/sacsaproces> a owl:Ontology;
+  dct:title "Modélisation du fonds des sacs à procès";
+  dct:abstract "Cette page documente la structure des données du fonds des Sacs à Procès des Archives Départemantales de la Haute-Garonne";
+  dct:creator "Archives Départementales de la Haute-Garonne";
+  dct:contributor "Sparna";
+  dct:issued "2026-03-01"^^xsd:date;
+  dcat:distribution _:6a507bd3afaa4d4099437ca6131f3514567 .
+
+_:6a507bd3afaa4d4099437ca6131f3514567 dct:format <https://www.iana.org/assignments/media-types/text/turtle>;
+  dcat:downloadURL <https://sparna-git.github.io/ad31/configs/ad31-shacl.ttl> .
+
+sacs:Identifiant a sh:NodeShape;
+  volipi:iconName "fa-solid fa-laptop-code";
+  sh:targetClass rico:Identifier;
+  rdfs:label "Identifiant"@fr;
+  skos:definition "Ici les identifiants utilisés dans le modèle. Les cotes sont les identifiants uniques des sacs. Chaque identifiant correspond à un seul sac. Un sac peut avoir plusieurs identifiants (de types différents). Les lieux peuvent avoir un code INSEE."@fr;
+  sh:nodeKind sh:IRI;
+  sh:pattern "^https:\\/\\/data.archives.haute-garonne.fr\\/((instanciation)|(lieu)|(archive))\\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}#((cote)|(insee)|(ark)|(castan[1234]))";
+  foaf:depiction sacs:Diagram_Instantiation;
+  sh:closed true;
+  sh:ignoredProperties _:6a507bd3afaa4d4099437ca6131f3514568;
+  shacl-play:background-color "ffffff";
+  sh:property sacs:Identifiant_name, sacs:Identifiant_hasIdentifierType;
+  sh:sparql sacs:BusinessRule_1 .
+
+_:6a507bd3afaa4d4099437ca6131f3514568 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+sacs:Date a sh:NodeShape;
+  volipi:iconName "fa-solid fa-calendar";
+  sh:targetClass rico:Date;
+  rdfs:label "Date"@fr;
+  skos:definition "Information chronologique liée à la procédure"@fr;
+  sh:nodeKind sh:IRI;
+  sh:pattern "^https://data.archives.haute-garonne.fr/evenement/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}#date-[debut|fin]";
+  foaf:depiction sacs:Diagram_Activity_Procedure;
+  sh:closed true;
+  sh:ignoredProperties _:6a507bd3afaa4d4099437ca6131f3514569;
+  shacl-play:background-color "ded9c3";
+  sh:property sacs:Date_normalizedDateValue, sacs:Date_expressedDate .
+
+_:6a507bd3afaa4d4099437ca6131f3514569 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+sacs:Notice a sh:NodeShape;
+  volipi:iconName "fa-solid fa-file-text";
+  sh:targetClass rico:RecordSet;
+  rdfs:label "Notice"@fr;
+  skos:definition "Contenu intellectuel des documents présents dans le sac"@fr;
+  sh:nodeKind sh:IRI;
+  sh:pattern "^https://data.archives.haute-garonne.fr/archive/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";
+  foaf:depiction sacs:Diagram_Instantiation;
+  sh:closed true;
+  sh:ignoredProperties _:6a507bd3afaa4d4099437ca6131f3514570;
+  shacl-play:background-color "dbeef4";
+  sh:property sacs:Notice_name, sacs:Notice_generalDescription, sacs:Notice_recordResourceExtent,
+    sacs:Notice_hasOrHadInstantiation, sacs:Notice_documents, sacs:Notice_hasOrHadIdentifier,
+    sacs:Notice_wasCreatedByAgentWithRole, sacs:Notice_hasOrganicOrFunctionalProvenance .
+
+_:6a507bd3afaa4d4099437ca6131f3514570 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+sacs:Fait a sh:NodeShape;
+  volipi:iconName "fa-solid fa-circle-question";
+  sh:targetClass rico:Event;
+  rdfs:label "Fait"@fr;
+  skos:definition "Objet de la procédure."@fr;
+  sh:nodeKind sh:IRI;
+  sh:pattern "^https://data.archives.haute-garonne.fr/evenement/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";
+  foaf:depiction sacs:Diagram_Event_Place;
+  sh:closed true;
+  sh:ignoredProperties _:6a507bd3afaa4d4099437ca6131f3514571;
+  shacl-play:background-color "fffa9f";
+  sh:property sacs:Fait_name, sacs:Fait_hasEventType, sacs:Fait_hasOrHadLocation .
+
+_:6a507bd3afaa4d4099437ca6131f3514571 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+sacs:Instruction a sh:NodeShape;
+  volipi:iconName "fa-solid fa-gavel";
+  sh:target sacs:Instruction-target;
+  rdfs:label "Instruction"@fr;
+  skos:definition "Ensemble d’actions menées par une juridiction pour mettre une affaire en état d’être jugée."@fr;
+  sh:nodeKind sh:IRI;
+  sh:pattern "^https://data.archives.haute-garonne.fr/evenement/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";
+  foaf:depiction sacs:Diagram_Activity_Procedure;
+  sh:closed true;
+  sh:ignoredProperties _:6a507bd3afaa4d4099437ca6131f3514572;
+  shacl-play:background-color "fffa9f";
+  sh:property sacs:Instruction_name, sacs:Instruction_hasActivityType_ActivityType,
+    sacs:Instruction_hasActivityType_OrdreActivite, sacs:Instruction_followsInTime, sacs:Instruction_precedesInTime,
+    sacs:Instruction_isOrWasPerformedBy .
+
+sacs:Instruction-target sh:select """PREFIX rico: <https://www.ica.org/standards/RiC/ontology#>
+PREFIX type: <https://data.archives.haute-garonne.fr/type/>
+SELECT $this
+WHERE {
+ $this a rico:Activity .
+ $this rico:hasActivityType type:acins .
+}""" .
+
+_:6a507bd3afaa4d4099437ca6131f3514572 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+sacs:Juridiction a sh:NodeShape;
+  volipi:iconName "fa-solid fa-landmark";
+  sh:target sacs:Juridiction-target;
+  rdfs:label "Juridiction"@fr;
+  skos:definition "Institution judiciaire ayant instruit la procédure."@fr;
+  sh:nodeKind sh:IRI;
+  sh:pattern "^https://data.archives.haute-garonne.fr/agent/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";
+  foaf:depiction sacs:Diagram_Activity_Procedure;
+  sh:closed true;
+  sh:ignoredProperties _:6a507bd3afaa4d4099437ca6131f3514573;
+  shacl-play:background-color "c7d8f1";
+  sh:property sacs:Juridiction_name, sacs:Juridiction_hasOrHadLegalStatus, sacs:Juridiction_agentHasOrHadLocation,
+    sacs:Juridiction_hasOrHadCorporateBodyType .
+
+sacs:Juridiction-target sh:select """PREFIX rico: <https://www.ica.org/standards/RiC/ontology#>
+PREFIX type: <https://data.archives.haute-garonne.fr/type/>
+SELECT $this
+WHERE {
+ $this a rico:CorporateBody .
+ $this rico:hasOrHadCorporateBodyType type:cljur .
+}""" .
+
+_:6a507bd3afaa4d4099437ca6131f3514573 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+sacs:Liasse a sh:NodeShape;
+  volipi:iconName "fa-solid fa-box-archive";
+  sh:target sacs:Liasse-target;
+  rdfs:label "Liasse"@fr;
+  skos:definition "Ensemble matériel de sacs, ficelés ensemble probablement au XIXe siècle dans le cadre d’une action archivistique de nature pour l’instant inconnue."@fr;
+  sh:nodeKind sh:IRI;
+  sh:pattern "^https://data.archives.haute-garonne.fr/instanciation/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";
+  foaf:depiction sacs:Diagram_Instantiation;
+  sh:closed true;
+  sh:ignoredProperties _:6a507bd3afaa4d4099437ca6131f3514574;
+  shacl-play:background-color "f5deb4";
+  sh:property sacs:Liasse_hasCarrierType, sacs:Liasse_title, sacs:Liasse_hadComponent,
+    sacs:Liasse_physicalCharacteristicsNote .
+
+sacs:Liasse-target sh:select """PREFIX rico: <https://www.ica.org/standards/RiC/ontology#>
+PREFIX type: <https://data.archives.haute-garonne.fr/type/>
+SELECT $this
+WHERE {
+ $this a rico:Instantiation .
+ $this rico:hasCarrierType type:sulia .
+}""" .
+
+_:6a507bd3afaa4d4099437ca6131f3514574 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+sacs:Lieu a sh:NodeShape;
+  volipi:iconName "fa-solid fa-location-dot";
+  sh:targetClass rico:Place;
+  rdfs:label "Lieu"@fr;
+  skos:definition "Entité géographique permettant de contextualiser des faits, une juridiction, ou une partie."@fr;
+  sh:nodeKind sh:IRI;
+  sh:pattern "^https://data.archives.haute-garonne.fr/lieu/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";
+  foaf:depiction sacs:Diagram_Event_Place;
+  sh:closed true;
+  sh:ignoredProperties _:6a507bd3afaa4d4099437ca6131f3514575;
+  shacl-play:background-color "f99f9f";
+  sh:property sacs:Lieu_name, sacs:Lieu_hasOrHadPlaceType, sacs:Lieu_isDirectlyContainedBy,
+    sacs:Lieu_directlyContains, sacs:Lieu_hasOrHadIdentifier, sacs:Lieu_geographicalCoordinates .
+
+_:6a507bd3afaa4d4099437ca6131f3514575 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+sacs:Procedure a sh:NodeShape;
+  volipi:iconName "fa-solid fa-book";
+  sh:target sacs:Procedure-target;
+  rdfs:label "Procédure"@fr;
+  skos:definition "Procédure judiciaire à l’origine des documents. Cœur de la description"@fr;
+  sh:nodeKind sh:IRI;
+  sh:pattern "^https://data.archives.haute-garonne.fr/evenement/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";
+  foaf:depiction sacs:Diagram_Activity_Procedure;
+  sh:closed true;
+  sh:ignoredProperties _:6a507bd3afaa4d4099437ca6131f3514576;
+  shacl-play:background-color "fef9a0";
+  sh:property sacs:Procedure_hasActivityType_ActivityType, sacs:Procedure_hasActivityType_ProcedureType,
+    sacs:Procedure_name, sacs:Procedure_resultsOrResultedFrom, sacs:Procedure_hasOrHadSubevent,
+    sacs:Procedure_isAssociatedWithEvent, sacs:Procedure_hasOrHadParticipant, sacs:Procedure_hasBeginningDate,
+    sacs:Procedure_hasEndDate .
+
+sacs:Procedure-target sh:select """PREFIX rico: <https://www.ica.org/standards/RiC/ontology#>
+PREFIX type: <https://data.archives.haute-garonne.fr/type/>
+SELECT $this
+WHERE {
+ $this a rico:Activity .
+ $this rico:hasActivityType type:acpro .
+}""" .
+
+_:6a507bd3afaa4d4099437ca6131f3514576 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+sacs:Traitement a sh:NodeShape;
+  volipi:iconName "fa-solid fa-gears";
+  sh:target sacs:Traitement-target;
+  rdfs:label "Traitement archivistique"@fr;
+  skos:definition "Activité de traitement archivistique, décomposée en étapes de dépouillement, de saisie, de validation ou relecture. Représente le traitement sur un \"lot\" de notices."@fr;
+  sh:nodeKind sh:IRI;
+  sh:pattern "^https://data.archives.haute-garonne.fr/evenement/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";
+  foaf:depiction sacs:Diagram_Activity_Campagne;
+  sh:closed true;
+  sh:ignoredProperties _:6a507bd3afaa4d4099437ca6131f3514577;
+  shacl-play:background-color "fef9a0";
+  sh:property sacs:Traitement_name, sacs:Traitement_hasActivityType, sacs:Traitement_hasDirectSubevent,
+    sacs:Traitement_isAssociatedWithDate, sacs:Traitement_hasOrHadIdentifier .
+
+sacs:Traitement-target sh:select """PREFIX rico: <https://www.ica.org/standards/RiC/ontology#>
+PREFIX type: <https://data.archives.haute-garonne.fr/type/>
+SELECT $this
+WHERE {
+ $this a rico:Activity .
+ $this rico:hasActivityType type:actra .
+}""" .
+
+_:6a507bd3afaa4d4099437ca6131f3514577 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+sacs:Depouillement a sh:NodeShape;
+  volipi:iconName "fa-solid fa-gears";
+  sh:target sacs:Depouillement-target;
+  rdfs:label "Dépouillement"@fr;
+  sh:nodeKind sh:IRI;
+  sh:pattern "^https://data.archives.haute-garonne.fr/evenement/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";
+  foaf:depiction sacs:Diagram_Activity_Campagne;
+  sh:closed true;
+  sh:ignoredProperties _:6a507bd3afaa4d4099437ca6131f3514578;
+  shacl-play:background-color "fef9a0";
+  sh:property sacs:Depouillement_hasActivityType, sacs:Depouillement_isOrWasPerformedByAgentWithOccupationOfType .
+
+sacs:Depouillement-target sh:select """PREFIX rico: <https://www.ica.org/standards/RiC/ontology#>
+PREFIX type: <https://data.archives.haute-garonne.fr/type/>
+SELECT $this
+WHERE {
+ $this a rico:Activity .
+ $this rico:hasActivityType type:acdep .
+}""" .
+
+_:6a507bd3afaa4d4099437ca6131f3514578 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+sacs:Saisie a sh:NodeShape;
+  volipi:iconName "fa-solid fa-gears";
+  sh:target sacs:Saisie-target;
+  rdfs:label "Saisie"@fr;
+  sh:nodeKind sh:IRI;
+  sh:pattern "^https://data.archives.haute-garonne.fr/evenement/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";
+  foaf:depiction sacs:Diagram_Activity_Campagne;
+  sh:closed true;
+  sh:ignoredProperties _:6a507bd3afaa4d4099437ca6131f3514579;
+  shacl-play:background-color "fef9a0";
+  sh:property sacs:Saisie_hasActivityType, sacs:Saisie_isOrWasPerformedByAgentWithOccupationOfType,
+    sacs:Saisie_saisieDirecte .
+
+sacs:Saisie-target sh:select """PREFIX rico: <https://www.ica.org/standards/RiC/ontology#>
+PREFIX type: <https://data.archives.haute-garonne.fr/type/>
+SELECT $this
+WHERE {
+ $this a rico:Activity .
+ $this rico:hasActivityType type:acsai .
+}""" .
+
+_:6a507bd3afaa4d4099437ca6131f3514579 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+sacs:Validation a sh:NodeShape;
+  volipi:iconName "fa-solid fa-gears";
+  sh:target sacs:Validation-target;
+  rdfs:label "Validation"@fr;
+  sh:nodeKind sh:IRI;
+  sh:pattern "^https://data.archives.haute-garonne.fr/evenement/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";
+  foaf:depiction sacs:Diagram_Activity_Campagne;
+  sh:closed true;
+  sh:ignoredProperties _:6a507bd3afaa4d4099437ca6131f3514580;
+  shacl-play:background-color "fef9a0";
+  sh:property sacs:Validation_hasActivityType .
+
+sacs:Validation-target sh:select """PREFIX rico: <https://www.ica.org/standards/RiC/ontology#>
+PREFIX type: <https://data.archives.haute-garonne.fr/type/>
+SELECT $this
+WHERE {
+ $this a rico:Activity .
+ $this rico:hasActivityType ?relOuVal VALUES ?relOuVal { type:acrel type:acval } .
+}""" .
+
+_:6a507bd3afaa4d4099437ca6131f3514580 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+sacs:Sac a sh:NodeShape;
+  volipi:iconName "fa-solid fa-suitcase";
+  sh:target sacs:Sac-target;
+  rdfs:label "Sac"@fr;
+  skos:definition "Aspect matériel de l’ensemble documentaire."@fr;
+  sh:nodeKind sh:IRI;
+  sh:pattern "^https://data.archives.haute-garonne.fr/instanciation/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";
+  foaf:depiction sacs:Diagram_Instantiation;
+  sh:closed true;
+  sh:ignoredProperties _:6a507bd3afaa4d4099437ca6131f3514581;
+  shacl-play:background-color "f4ddb4";
+  sh:property sacs:Sac_name, sacs:Sac_hasCarrierType, sacs:Sac_structure, sacs:Sac_hasOrHadIdentifier,
+    sacs:Sac_wasComponentOf, sacs:Sac_isOrWasInstantiationOf, sacs:Sac_hasOrganicProvenance,
+    sacs:Sac_documents .
+
+sacs:Sac-target sh:select """PREFIX rico: <https://www.ica.org/standards/RiC/ontology#>
+PREFIX type: <https://data.archives.haute-garonne.fr/type/>
+SELECT $this
+WHERE {
+ $this a rico:Instantiation .
+ $this rico:hasCarrierType type:susac .
+}""" .
+
+_:6a507bd3afaa4d4099437ca6131f3514581 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+sacs:PersonneMorale a sh:NodeShape;
+  volipi:iconName "fa-solid fa-building";
+  sh:target sacs:PersonneMorale-target;
+  rdfs:label "Partie – personne morale"@fr;
+  skos:definition "Personne morale partie du procès (défendeur ou demandeur)"@fr;
+  sh:nodeKind sh:IRI;
+  sh:pattern "^https://data.archives.haute-garonne.fr/agent/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";
+  foaf:depiction sacs:Diagram_Activity_Procedure;
+  shacl-play:background-color "c3d3eb";
+  sh:property sacs:PersonneMorale_name, sacs:PersonneMorale_hasOrHadCorporateBodyType,
+    sacs:PersonneMorale_agentHasOrHadLocation .
+
+sacs:PersonneMorale-target sh:select """PREFIX rico: <https://www.ica.org/standards/RiC/ontology#>
+PREFIX type: <https://data.archives.haute-garonne.fr/type/>
+SELECT $this
+WHERE {
+ $this a rico:CorporateBody .
+ FILTER NOT EXISTS { $this rico:hasOrHadCorporateBodyType type:cljur . }
+}""" .
+
+sacs:PersonnePhysique a sh:NodeShape;
+  volipi:iconName "fa-solid fa-male";
+  sh:targetClass rico:Person;
+  rdfs:label "Partie – personne physique"@fr;
+  skos:definition "Individu partie du procès (défendeur ou demandeur)"@fr;
+  sh:nodeKind sh:IRI;
+  sh:pattern "^https://data.archives.haute-garonne.fr/agent/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";
+  foaf:depiction sacs:Diagram_Activity_Procedure;
+  sh:closed true;
+  sh:ignoredProperties _:6a507bd3afaa4d4099437ca6131f3514582;
+  shacl-play:background-color "e5dfeb";
+  sh:property sacs:PersonnePhysique_name, sacs:PersonnePhysique_hasOrHadOccupationOfType,
+    sacs:PersonnePhysique_hasOrHadDemographicGroup .
+
+_:6a507bd3afaa4d4099437ca6131f3514582 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+sacs:LegalStatus a sh:NodeShape;
+  volipi:iconName "fa-solid fa-list-ul";
+  sh:targetClass rico:LegalStatus;
+  rdfs:label "Type de juridiction"@fr;
+  skos:definition "Vocabulaire contrôlé permettant de catégoriser les différents niveaux de juridiction."@fr;
+  sh:nodeKind sh:IRI;
+  sh:pattern "^https://data.archives.haute-garonne.fr/type/ju[a-z]{3}$";
+  shacl-play:background-color "ffffff";
+  sh:property sacs:LegalStatus_inScheme, sacs:LegalStatus_prefLabel .
+
+sacs:IdentifierType a sh:NodeShape;
+  volipi:iconName "fa-solid fa-list-ul";
+  sh:targetClass rico:IdentifierType;
+  rdfs:label "Type d'identifiant"@fr;
+  skos:definition "Vocabulaire contrôlé qualifiant un identifiant"@fr;
+  sh:nodeKind sh:IRI;
+  sh:pattern "^https://data.archives.haute-garonne.fr/type/id[a-z]{3}$";
+  shacl-play:background-color "ffffff";
+  sh:property sacs:IdentifierType_inScheme, sacs:IdentifierType_prefLabel .
+
+sacs:PlaceType a sh:NodeShape;
+  volipi:iconName "fa-solid fa-list-ul";
+  sh:targetClass rico:PlaceType;
+  rdfs:label "Type de lieu"@fr;
+  skos:definition "Vocabulaire contrôlé qualifiant les lieux"@fr;
+  sh:nodeKind sh:IRI;
+  sh:pattern "^https://data.archives.haute-garonne.fr/type/li[a-z]{3}$";
+  shacl-play:background-color "ffffff";
+  sh:property sacs:PlaceType_inScheme, sacs:PlaceType_prefLabel .
+
+sacs:EventType a sh:NodeShape;
+  volipi:iconName "fa-solid fa-list-ul";
+  sh:targetClass rico:EventType;
+  rdfs:label "Qualification des faits"@fr;
+  skos:definition "Qualification les faits à l’origine de la procédure."@fr;
+  sh:nodeKind sh:IRI;
+  sh:pattern "^https://data.archives.haute-garonne.fr/type/fa[a-z]{3}$";
+  shacl-play:background-color "ffffff";
+  sh:property sacs:EventType_inScheme, sacs:EventType_prefLabel .
+
+sacs:OccupationType a sh:NodeShape;
+  volipi:iconName "fa-solid fa-list-ul";
+  sh:targetClass rico:OccupationType;
+  rdfs:label "Type de profession"@fr;
+  skos:definition "Vocabulaire contrôlé permettant de catégoriser les professions exercées par des personnes physiques."@fr;
+  sh:nodeKind sh:IRI;
+  sh:pattern "^https://data.archives.haute-garonne.fr/type/pr[a-z]{3}$";
+  shacl-play:background-color "ffffff";
+  sh:property sacs:OccupationType_inScheme, sacs:OccupationType_prefLabel .
+
+sacs:ActivityType a sh:NodeShape;
+  volipi:iconName "fa-solid fa-list-ul";
+  sh:targetClass rico:ActivityType;
+  rdfs:label "Type d'activité"@fr;
+  skos:definition "Vocabulaire contrôlé qualifiant un type d'activité"@fr;
+  sh:nodeKind sh:IRI;
+  sh:pattern "^https://data.archives.haute-garonne.fr/type/ac[a-z]{3}$";
+  shacl-play:background-color "ffffff";
+  sh:property sacs:ActivityType_inScheme, sacs:ActivityType_prefLabel .
+
+sacs:CarrierType a sh:NodeShape;
+  volipi:iconName "fa-solid fa-list-ul";
+  sh:targetClass rico:CarrierType;
+  rdfs:label "Type d'instantiation"@fr;
+  skos:definition "Vocabulaire contrôlé qualifiant un type de support"@fr;
+  sh:nodeKind sh:IRI;
+  sh:pattern "^https://data.archives.haute-garonne.fr/type/su[a-z]{3}$";
+  shacl-play:background-color "ffffff";
+  sh:property sacs:CarrierType_inScheme, sacs:CarrierType_prefLabel .
+
+sacs:DemographicGroup a sh:NodeShape;
+  volipi:iconName "fa-solid fa-list-ul";
+  sh:targetClass rico:DemographicGroup;
+  rdfs:label "Sexe"@fr;
+  skos:definition "Vocabulaire contrôlé qualifiant le genre de la personne physique"@fr;
+  sh:nodeKind sh:IRI;
+  sh:pattern "^https://data.archives.haute-garonne.fr/type/sx[a-z]{3}$";
+  shacl-play:background-color "ffffff";
+  sh:property sacs:DemographicGroup_inScheme, sacs:DemographicGroup_prefLabel .
+
+sacs:CorporateBodyType a sh:NodeShape;
+  volipi:iconName "fa-solid fa-list-ul";
+  sh:targetClass rico:CorporateBodyType;
+  rdfs:label "Type de collectivité"@fr;
+  skos:definition "Vocabulaire contrôlé qualifiant un type de collectivité"@fr;
+  sh:nodeKind sh:IRI;
+  sh:pattern "^https://data.archives.haute-garonne.fr/type/cl[a-z]{3}$";
+  shacl-play:background-color "ffffff";
+  sh:property sacs:CorporateBodyType_inScheme, sacs:CorporateBodyType_prefLabel .
+
+sacs:TypeProcedure a sh:NodeShape;
+  volipi:iconName "fa-solid fa-list-ul";
+  sh:targetClass ad31:TypeProcedure;
+  rdfs:label "Type de procédure"@fr;
+  skos:definition "Vocabulaire contrôlé qualifiant un type de procédure"@fr;
+  sh:nodeKind sh:IRI;
+  sh:pattern "^https://data.archives.haute-garonne.fr/type/pc[a-z]{3}$";
+  shacl-play:background-color "ffffff";
+  sh:property sacs:TypeProcedure_inScheme, sacs:TypeProcedure_prefLabel .
+
+sacs:OrdreInstruction a sh:NodeShape;
+  volipi:iconName "fa-solid fa-list-ul";
+  sh:targetClass ad31:OrdreInstruction;
+  rdfs:label "Ordre"@fr;
+  skos:definition "Vocabulaire contrôlé qualifiant l'ordre de l'instruction (première, deuxième, troisième)"@fr;
+  sh:nodeKind sh:IRI;
+  sh:pattern "^https://data.archives.haute-garonne.fr/type/oi[a-z]{3}$";
+  shacl-play:background-color "ffffff";
+  sh:property sacs:OrdreInstruction_inScheme, sacs:OrdreInstruction_prefLabel .
+
+sacs:TypeRole a sh:NodeShape;
+  volipi:iconName "fa-solid fa-list-ul";
+  sh:targetClass rico:RoleType;
+  rdfs:label "Type de rôle"@fr;
+  skos:definition "Vocabulaire contrôlé qualifiant un type de rôle"@fr;
+  sh:nodeKind sh:IRI;
+  sh:pattern "^https://data.archives.haute-garonne.fr/type/ro[a-z]{3}$";
+  shacl-play:background-color "ffffff";
+  sh:property sacs:TypeRole_inScheme, sacs:TypeRole_prefLabel .
+
+sacs:Libelle a sh:NodeShape;
+  volipi:iconName "fa-solid fa-quote-left";
+  rdfs:label "Libellé"@fr;
+  sh:nodeKind sh:Literal .
+
+sacs:Text a sh:NodeShape;
+  volipi:iconName "fa-solid fa-font";
+  rdfs:label "Texte"@fr;
+  sh:nodeKind sh:Literal .
+
+sacs:Search a sh:NodeShape;
+  volipi:iconName "fa-solid fa-magnifying-glass";
+  rdfs:label "Recherche..."@fr;
+  sh:nodeKind sh:Literal .
+
+sacs:Number a sh:NodeShape;
+  volipi:iconName "fa-solid fa-1";
+  rdfs:label "Quantité"@fr;
+  sh:nodeKind sh:Literal .
+
+sacs:DateLiteral a sh:NodeShape;
+  volipi:iconName "fa-solid fa-calendar";
+  rdfs:label "Valeur de date"@fr;
+  sh:nodeKind sh:Literal .
+
+sacs:Coordinates a sh:NodeShape;
+  volipi:iconName "fa-solid fa-map-location";
+  rdfs:label "Coordonnées (WKT)"@fr;
+  skos:definition "Valeur de coordonnées au format [\"Well-Known Text\"](https://fr.wikipedia.org/wiki/Well-known_text), par exemple `\"POINT(3.89535229067 45.0276366659)\"`"@fr;
+  sh:nodeKind sh:Literal .
+
+sacs:SaisieDirecte a sh:NodeShape;
+  volipi:iconName "fa-solid fa-check-to-slot";
+  rdfs:label "Saisie directe oui/non"@fr;
+  sh:nodeKind sh:Literal .
+
+sacs:Identifiant_name sh:path rico:name;
+  sh:name "valeur"@fr;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string;
+  sh:node sacs:Libelle;
+  dash:propertyRole dash:LabelRole;
+  dash:searchWidget core:SearchProperty .
+
+sacs:Identifiant_hasIdentifierType sh:path rico:hasIdentifierType;
+  sh:name "a pour type d'identifiant"@fr;
+  sh:description "Chaque identifiant appartient à un type particulier"@fr;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class rico:IdentifierType;
+  dash:searchWidget core:ListProperty .
+
+sacs:Date_normalizedDateValue sh:path rico:normalizedDateValue;
+  sh:name "valeur de date normalisée"@fr;
+  sh:description "Format de date basé sur une norme technique publique."@fr;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:gYear;
+  sh:node sacs:DateLiteral;
+  dash:searchWidget core:TimeProperty-Year .
+
+sacs:Date_expressedDate sh:path rico:expressedDate;
+  sh:name "a pour date d'impression"@fr;
+  sh:description "Date en langage naturel"@fr;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype rdf:langString;
+  sh:node sacs:Text;
+  dash:propertyRole dash:LabelRole;
+  dash:searchWidget core:SearchProperty .
+
+sacs:Notice_name sh:path rico:name;
+  sh:name "libellé d'affichage"@fr;
+  sh:description "Contient la valeur \"Notice {cote}\" (exemple \"Notice 2 B 15815\")"@fr;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype rdf:langString;
+  sh:node sacs:Libelle;
+  dash:propertyRole dash:LabelRole .
+
+sacs:Notice_generalDescription sh:path rico:generalDescription;
+  sh:name "présentation du contenu"@fr;
+  sh:description "Informations sur le contenu intellectuel du sac. Il peut s’agir de détails sur la procédure ou de mentions de certains documents."@fr;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype rdf:langString;
+  sh:node sacs:Text;
+  dash:searchWidget core:SearchProperty .
+
+sacs:Notice_recordResourceExtent sh:path rico:recordResourceExtent;
+  sh:name "nombre de pièces"@fr;
+  sh:description "Nombre de pièces comprises dans le sac"@fr;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:integer;
+  sh:node sacs:Number;
+  dash:searchWidget core:SearchProperty .
+
+sacs:Notice_hasOrHadInstantiation sh:path rico:hasOrHadInstantiation;
+  sh:name "a pour instanciation"@fr;
+  sh:description "Les documents sont matérialisés par un sac"@fr;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:node sacs:Sac;
+  dash:searchWidget core:AutocompleteProperty .
+
+sacs:Notice_documents sh:path rico:documents;
+  sh:name "documente"@fr;
+  sh:description "Les documents documentent une procédure"@fr;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:node sacs:Procedure;
+  dash:searchWidget core:SearchProperty .
+
+sacs:Notice_hasOrHadIdentifier sh:path rico:hasOrHadIdentifier;
+  sh:name "a pour ID"@fr;
+  sh:description "Identifiant ARK de la notice"@fr;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class rico:Identifier;
+  dash:searchWidget core:NonSelectableProperty .
+
+sacs:Notice_wasCreatedByAgentWithRole sh:path ad31:wasCreatedByAgentWithRole;
+  sh:name "a été créé par un agent ayant pour rôle"@fr;
+  sh:description "Vocabulaire type de rôle"@fr;
+  sh:nodeKind sh:IRI;
+  sh:class rico:RoleType;
+  dash:searchWidget core:ListProperty .
+
+sacs:Notice_hasOrganicOrFunctionalProvenance sh:path rico:hasOrganicOrFunctionalProvenance;
+  sh:name "a pour provenance organique ou fonctionnelle"@fr;
+  sh:nodeKind sh:IRI;
+  sh:node sacs:Traitement .
+
+sacs:Fait_name sh:path rico:name;
+  sh:name "libellé d'affichage"@fr;
+  sh:description "Contient la valeur \"Fait de la procédure \"{intitulé de la procédure}\" \""@fr;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype rdf:langString;
+  sh:node sacs:Libelle;
+  dash:propertyRole dash:LabelRole;
+  dash:searchWidget core:SearchProperty .
+
+sacs:Fait_hasEventType sh:path rico:hasEventType;
+  sh:name "ont pour type de faits"@fr;
+  sh:description "Les faits ont une ou plusieurs qualifications"@fr;
+  sh:minCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class rico:EventType;
+  dash:searchWidget core:ListProperty .
+
+sacs:Fait_hasOrHadLocation sh:path rico:hasOrHadLocation;
+  sh:name "ont eu pour localisation (directe)"@fr;
+  sh:description "Lieu exact du fait, tel que mentionné dans les données, sans chercher à généraliser aux lieux parents."@fr;
+  sh:minCount 0;
+  sh:nodeKind sh:IRI;
+  sh:class rico:Place;
+  dash:searchWidget core:AutocompleteProperty .
+
+sacs:Instruction_name sh:path rico:name;
+  sh:name "libellé d'affichage"@fr;
+  sh:description "Contient la valeur \"Première instruction de \"{intitulé de la procédure}\" \" ou \"Deuxième instruction de ...\" ou \"Troisième instruction de ...\""@fr;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype rdf:langString;
+  sh:node sacs:Libelle;
+  dash:propertyRole dash:LabelRole;
+  dash:searchWidget core:SearchProperty .
+
+sacs:Instruction_hasActivityType_ActivityType sh:path rico:hasActivityType;
+  sh:name "a pour type d'activité"@fr;
+  sh:description "Vocabulaire type d'activité"@fr;
+  sh:nodeKind sh:IRI;
+  sh:qualifiedValueShape _:6a507bd3afaa4d4099437ca6131f3514583;
+  sh:qualifiedMinCount 1;
+  sh:qualifiedMaxCount 1 .
+
+_:6a507bd3afaa4d4099437ca6131f3514583 sh:class rico:ActivityType;
+  sh:hasValue type:acins .
+
+sacs:Instruction_hasActivityType_OrdreActivite sh:path rico:hasActivityType;
+  sh:name "a pour ordre"@fr;
+  sh:description "Ordre de l'instruction (première, deuxième, troisième)"@fr;
+  sh:nodeKind sh:IRI;
+  dash:searchWidget core:ListProperty;
+  sh:qualifiedValueShape _:6a507bd3afaa4d4099437ca6131f3514584;
+  sh:qualifiedMinCount 1;
+  sh:qualifiedMaxCount 1 .
+
+_:6a507bd3afaa4d4099437ca6131f3514584 sh:class ad31:OrdreInstruction .
+
+sacs:Instruction_followsInTime sh:path rico:followsInTime;
+  sh:name "a suivi dans le temps"@fr;
+  sh:description "Une instruction intervient après une autre instruction"@fr;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:node sacs:Instruction;
+  dash:searchWidget core:NonSelectableProperty .
+
+sacs:Instruction_precedesInTime sh:path rico:precedesInTime;
+  sh:name "a précédé dans le temps"@fr;
+  sh:description "Une instruction intervient avant une autre instruction"@fr;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:node sacs:Instruction;
+  dash:searchWidget core:NonSelectableProperty .
+
+sacs:Instruction_isOrWasPerformedBy sh:path rico:isOrWasPerformedBy;
+  sh:name "a été menée par"@fr;
+  sh:description "Une instruction est menée par une juridiction"@fr;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:node sacs:Juridiction;
+  dash:propertyRole dash:KeyInfoRole ;
+  dash:searchWidget core:AutocompleteProperty .
+
+sacs:Juridiction_name sh:path rico:name;
+  sh:name "nom"@fr;
+  sh:description "Juridiction 1/2/3"@fr;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype rdf:langString;
+  sh:node sacs:Libelle;
+  dash:propertyRole dash:LabelRole;
+  dash:searchWidget core:SearchProperty .
+
+sacs:Juridiction_hasOrHadLegalStatus sh:path rico:hasOrHadLegalStatus;
+  sh:name "avait pour type de juridiction"@fr;
+  sh:description "Une juridiction a un type de juridiction"@fr;
+  sh:minCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class rico:LegalStatus;
+  dash:searchWidget core:ListProperty .
+
+sacs:Juridiction_agentHasOrHadLocation sh:path rico:agentHasOrHadLocation;
+  sh:name "avait pour localisation"@fr;
+  sh:description "Une juridiction siège à un endroit donné. Dans des cas exceptionnel, une juridiction peut avoir 2 sièges indiqués."@fr;
+  sh:minCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class rico:Place;
+  dash:searchWidget core:AutocompleteProperty .
+
+sacs:Juridiction_hasOrHadCorporateBodyType sh:path rico:hasOrHadCorporateBodyType;
+  sh:name "a pour type de collectivité"@fr;
+  sh:description "Vocabulaire type de collectivité"@fr;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class rico:CorporateBodyType;
+  sh:hasValue type:cljur;
+  dash:searchWidget core:ListProperty .
+
+sacs:Liasse_hasCarrierType sh:path rico:hasCarrierType;
+  sh:name "a pour type de support"@fr;
+  sh:description "Vocabulaire type de support"@fr;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class rico:CarrierType;
+  sh:hasValue type:sulia .
+
+sacs:Liasse_title sh:path rico:title;
+  sh:name "intitulé"@fr;
+  sh:description "Informations se trouvant sur le papillon qui accompagne parfois les paquets liés avec une corde"@fr;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype rdf:langString;
+  sh:node sacs:Libelle;
+  dash:propertyRole dash:LabelRole;
+  dash:searchWidget core:SearchProperty .
+
+sacs:Liasse_hadComponent sh:path rico:hadComponent;
+  sh:name "a eu pour composant"@fr;
+  sh:description "Chaque liasse comportait au moins 2 sacs"@fr;
+  sh:minCount 2;
+  sh:nodeKind sh:IRI;
+  sh:node sacs:Sac;
+  dash:searchWidget core:AutocompleteProperty .
+
+sacs:Liasse_physicalCharacteristicsNote sh:path rico:physicalCharacteristicsNote;
+  sh:name "état des documents"@fr;
+  sh:description "État de conservation des documents"@fr;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype rdf:langString;
+  sh:node sacs:Text;
+  dash:searchWidget core:SearchProperty .
+
+sacs:Lieu_name sh:path rico:name;
+  sh:name "nom"@fr;
+  sh:description "Nom du lieu"@fr;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype rdf:langString;
+  sh:node sacs:Libelle;
+  dash:propertyRole dash:LabelRole;
+  dash:searchWidget core:SearchProperty .
+
+sacs:Lieu_hasOrHadPlaceType sh:path rico:hasOrHadPlaceType;
+  sh:name "a pour type de lieu"@fr;
+  sh:description "Un lieu est catégorisé par un type de lieu"@fr;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class rico:PlaceType;
+  dash:searchWidget core:ListProperty .
+
+sacs:Lieu_isDirectlyContainedBy sh:path rico:isDirectlyContainedBy;
+  sh:name "est directement contenu par"@fr;
+  sh:description "Un lieu est compris dans un autre lieu"@fr;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class rico:Place;
+  dash:searchWidget core:AutocompleteProperty .
+
+sacs:Lieu_directlyContains sh:path rico:directlyContains;
+  sh:name "contient directement"@fr;
+  sh:description "Un lieu comprend un autre lieu"@fr;
+  sh:nodeKind sh:IRI;
+  sh:class rico:Place;
+  dash:searchWidget core:AutocompleteProperty .
+
+sacs:Lieu_hasOrHadIdentifier sh:path rico:hasOrHadIdentifier;
+  sh:name "a pour code INSEE"@fr;
+  sh:description "Un lieu peut avoir un code INSEE"@fr;
+  sh:minCount 0;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class rico:Identifier;
+  dash:searchWidget core:NonSelectableProperty .
+
+sacs:Lieu_geographicalCoordinates sh:path rico:geographicalCoordinates;
+  sh:name "a pour coordonnées géographiques"@fr;
+  sh:description "Un lieu peut avoir des coordonnées géographiques"@fr;
+  sh:minCount 0;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype geosparql:wktLiteral;
+  sh:node sacs:Coordinates;
+  dash:searchWidget core:MapProperty .
+
+sacs:Procedure_hasActivityType_ActivityType sh:path rico:hasActivityType;
+  sh:name "a pour type d'activité"@fr;
+  sh:description "Vocabulaire type d'activité"@fr;
+  sh:nodeKind sh:IRI;
+  sh:qualifiedValueShape _:6a507bd3afaa4d4099437ca6131f3514585;
+  sh:qualifiedMinCount 1;
+  sh:qualifiedMaxCount 1 .
+
+_:6a507bd3afaa4d4099437ca6131f3514585 sh:class rico:ActivityType;
+  sh:hasValue type:acpro .
+
+sacs:Procedure_hasActivityType_ProcedureType sh:path rico:hasActivityType;
+  sh:name "a pour type de procédure"@fr;
+  sh:description "Vocabulaire type de procédure"@fr;
+  sh:nodeKind sh:IRI;
+  dash:searchWidget core:ListProperty;
+  sh:qualifiedValueShape _:6a507bd3afaa4d4099437ca6131f3514586;
+  sh:qualifiedMaxCount 2 .
+
+_:6a507bd3afaa4d4099437ca6131f3514586 sh:class ad31:TypeProcedure .
+
+sacs:Procedure_name sh:path rico:name;
+  sh:name "intitulé"@fr;
+  sh:description "Description succincte de la procédure"@fr;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype rdf:langString;
+  sh:node sacs:Libelle;
+  dash:propertyRole dash:LabelRole;
+  dash:searchWidget core:SearchProperty .
+
+sacs:Procedure_resultsOrResultedFrom sh:path rico:resultsOrResultedFrom;
+  sh:name "a résulté de"@fr;
+  sh:description "Une procédure est ouverte suite à des faits"@fr;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class rico:Event;
+  dash:searchWidget core:NonSelectableProperty .
+
+sacs:Procedure_hasOrHadSubevent sh:path rico:hasOrHadSubevent;
+  sh:name "a eu pour instruction"@fr;
+  sh:description "Une procédure est un ensemble d’instructions. Les instructions ne sont pas toujours connues, et il peut y avoir jusqu'à 3 instructions maximum par procédure."@fr;
+  sh:maxCount 3;
+  sh:nodeKind sh:IRI;
+  sh:node sacs:Instruction;
+  dash:searchWidget core:NonSelectableProperty .
+
+sacs:Procedure_isAssociatedWithEvent sh:path rico:isAssociatedWithEvent;
+  sh:name "était liée à la procédure"@fr;
+  sh:description "Une procédure peut être liée à une autre procédure"@fr;
+  sh:nodeKind sh:IRI;
+  sh:node sacs:Procedure;
+  dash:searchWidget core:AutocompleteProperty .
+
+sacs:Procedure_hasOrHadParticipant sh:path rico:hasOrHadParticipant;
+  sh:name "a impliqué"@fr;
+  sh:description "Une procédure implique des parties"@fr;
+  sh:nodeKind sh:IRI;
+  sh:or _:6a507bd3afaa4d4099437ca6131f3514589;
+  dash:searchWidget core:AutocompleteProperty .
+
+_:6a507bd3afaa4d4099437ca6131f3514587 sh:node sacs:PersonnePhysique .
+
+_:6a507bd3afaa4d4099437ca6131f3514588 sh:node sacs:PersonneMorale .
+
+_:6a507bd3afaa4d4099437ca6131f3514589 a rdf:List;
+  rdf:first _:6a507bd3afaa4d4099437ca6131f3514587;
+  rdf:rest _:6a507bd3afaa4d4099437ca6131f3514590 .
+
+_:6a507bd3afaa4d4099437ca6131f3514590 rdf:first _:6a507bd3afaa4d4099437ca6131f3514588;
+  rdf:rest rdf:nil .
+
+rico:hasOrHadParticipant owl:inverseOf rico:isOrWasParticipantIn .
+
+rico:isOrWasParticipantIn rdfs:label "était participant dans"@fr .
+
+sacs:Procedure_hasBeginningDate sh:path rico:hasBeginningDate;
+  sh:name "date de début"@fr;
+  sh:description "Date de début de la procédure"@fr;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class rico:Date;
+  dash:searchWidget core:NonSelectableProperty .
+
+sacs:Procedure_hasEndDate sh:path rico:hasEndDate;
+  sh:name "date de fin"@fr;
+  sh:description "Date fin de la procédure"@fr;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class rico:Date;
+  dash:searchWidget core:NonSelectableProperty .
+
+sacs:Sac_name sh:path rico:name;
+  sh:name "libellé d'affichage"@fr;
+  sh:description "Contient la valeur \"Sac {cote}\" (exemple \"Sac 2 B 15815\")"@fr;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype rdf:langString;
+  sh:node sacs:Libelle;
+  dash:propertyRole dash:LabelRole;
+  dash:searchWidget core:SearchProperty .
+
+sacs:Sac_hasCarrierType sh:path rico:hasCarrierType;
+  sh:name "a pour type de support"@fr;
+  sh:description "Vocabulaire type de support"@fr;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class rico:CarrierType;
+  sh:hasValue type:susac .
+
+sacs:Sac_structure sh:path rico:structure;
+  sh:name "autres informations descriptives"@fr;
+  sh:description "Caractéristiques matérielles du sac"@fr;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype rdf:langString;
+  sh:node sacs:Text;
+  dash:searchWidget core:SearchProperty .
+
+sacs:Sac_hasOrHadIdentifier sh:path rico:hasOrHadIdentifier;
+  sh:name "a pour cote"@fr;
+  sh:description "Chaque sac a un, voire plusieurs identifiants uniques"@fr;
+  sh:minCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class rico:Identifier;
+  dash:searchWidget core:NonSelectableProperty .
+
+sacs:Sac_wasComponentOf sh:path rico:wasComponentOf;
+  sh:name "a été le composant de"@fr;
+  sh:description "Les sacs peuvent être issus d’une liasse"@fr;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:node sacs:Liasse;
+  dash:searchWidget core:AutocompleteProperty .
+
+sacs:Sac_isOrWasInstantiationOf sh:path rico:isOrWasInstantiationOf;
+  sh:name "est une instanciation de"@fr;
+  sh:description "Les sacs sont le support d’un contenu informationnel"@fr;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class rico:RecordSet;
+  dash:searchWidget core:SearchProperty .
+
+sacs:Sac_hasOrganicProvenance sh:path rico:hasOrganicProvenance;
+  sh:name "a été produit par"@fr;
+  sh:description "Les sacs ont été produits par une ou plusieurs juridictions"@fr;
+  sh:nodeKind sh:IRI;
+  sh:node sacs:Juridiction;
+  dash:searchWidget core:AutocompleteProperty .
+
+sacs:Sac_documents sh:path rico:documents;
+  sh:name "documente"@fr;
+  sh:description "Les documents documentent une procédure"@fr;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:node sacs:Procedure;
+  dash:searchWidget core:AutocompleteProperty .
+
+sacs:PersonneMorale_name sh:path rico:name;
+  sh:name "nom"@fr;
+  sh:description "Nom de la personne morale"@fr;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype rdf:langString;
+  sh:node sacs:Libelle;
+  dash:propertyRole dash:LabelRole;
+  dash:searchWidget core:SearchProperty .
+
+sacs:PersonneMorale_hasOrHadCorporateBodyType sh:path rico:hasOrHadCorporateBodyType;
+  sh:name "avait pour type de collectivité"@fr;
+  sh:description "Vocabulaire type de collectivité"@fr;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class rico:CorporateBodyType;
+  dash:searchWidget core:ListProperty .
+
+sacs:PersonneMorale_agentHasOrHadLocation sh:path rico:agentHasOrHadLocation;
+  sh:name "avait pour localisation"@fr;
+  sh:description "Une personne morale est située à un endroit donné"@fr;
+  sh:nodeKind sh:IRI;
+  sh:class rico:Place;
+  dash:searchWidget core:AutocompleteProperty .
+
+sacs:PersonnePhysique_name sh:path rico:name;
+  sh:name "nom"@fr;
+  sh:description "Nom de la personne physique"@fr;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype rdf:langString;
+  sh:node sacs:Libelle;
+  dash:propertyRole dash:LabelRole;
+  dash:searchWidget core:SearchProperty .
+
+sacs:PersonnePhysique_hasOrHadOccupationOfType sh:path rico:hasOrHadOccupationOfType;
+  sh:name "avait pour type de profession"@fr;
+  sh:description "Une personne physique a une profession"@fr;
+  sh:minCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class rico:OccupationType;
+  dash:searchWidget core:ListProperty .
+
+sacs:PersonnePhysique_hasOrHadDemographicGroup sh:path rico:hasOrHadDemographicGroup;
+  sh:name "avait pour sexe supposé"@fr;
+  sh:description "Sexe de la personne physique"@fr;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:node sacs:DemographicGroup;
+  dash:searchWidget core:ListProperty .
+
+sacs:Traitement_name sh:path rico:name;
+  sh:name "libellé d'affichage"@fr;
+  sh:description "Contient la valeur \"Lot {num_lot}\" (exemple \"Lot 43\")"@fr;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype rdf:langString;
+  sh:node sacs:Libelle;
+  dash:propertyRole dash:LabelRole;
+  dash:searchWidget core:SearchProperty .
+
+sacs:Traitement_hasActivityType sh:path rico:hasActivityType;
+  sh:name "a pour type d'activité"@fr;
+  sh:description "Vocabulaire type d'activité"@fr;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class rico:ActivityType;
+  sh:hasValue type:actra .
+
+sacs:Traitement_hasDirectSubevent sh:path rico:hasDirectSubevent;
+  sh:name "a pour sous-événement direct"@fr;
+  sh:minCount 2;
+  sh:nodeKind sh:IRI;
+  sh:or _:6a507bd3afaa4d4099437ca6131f3514594;
+  dash:searchWidget core:NonSelectableProperty .
+
+_:6a507bd3afaa4d4099437ca6131f3514591 sh:node sacs:Saisie .
+
+_:6a507bd3afaa4d4099437ca6131f3514592 sh:node sacs:Validation .
+
+_:6a507bd3afaa4d4099437ca6131f3514593 sh:node sacs:Depouillement .
+
+_:6a507bd3afaa4d4099437ca6131f3514594 a rdf:List;
+  rdf:first _:6a507bd3afaa4d4099437ca6131f3514591;
+  rdf:rest _:6a507bd3afaa4d4099437ca6131f3514595 .
+
+_:6a507bd3afaa4d4099437ca6131f3514595 rdf:first _:6a507bd3afaa4d4099437ca6131f3514592;
+  rdf:rest _:6a507bd3afaa4d4099437ca6131f3514596 .
+
+_:6a507bd3afaa4d4099437ca6131f3514596 rdf:first _:6a507bd3afaa4d4099437ca6131f3514593;
+  rdf:rest rdf:nil .
+
+sacs:Traitement_isAssociatedWithDate sh:path rico:isAssociatedWithDate;
+  sh:name "est associé à une date"@fr;
+  sh:nodeKind sh:IRI;
+  sh:class rico:Date;
+  dash:searchWidget core:NonSelectableProperty .
+
+sacs:Traitement_hasOrHadIdentifier sh:path rico:hasOrHadIdentifier;
+  sh:name "a pour numéro"@fr;
+  sh:description "Le numéro du lot"@fr;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class rico:Identifier;
+  dash:searchWidget core:NonSelectableProperty .
+
+sacs:Depouillement_hasActivityType sh:path rico:hasActivityType;
+  sh:name "a pour type d'activité"@fr;
+  sh:description "Vocabulaire type d'activité"@fr;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class rico:ActivityType;
+  sh:hasValue type:acdep .
+
+sacs:Depouillement_isOrWasPerformedByAgentWithOccupationOfType sh:path ad31:isOrWasPerformedByAgentWithOccupationOfType;
+  sh:name "est ou a été effectué par un agent exerçant une profession de type"@fr;
+  sh:nodeKind sh:IRI;
+  sh:class rico:OccupationType;
+  dash:searchWidget core:ListProperty .
+
+sacs:Saisie_hasActivityType sh:path rico:hasActivityType;
+  sh:name "a pour type d'activité"@fr;
+  sh:description "Vocabulaire type d'activité"@fr;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class rico:ActivityType;
+  sh:hasValue type:acsai .
+
+sacs:Saisie_isOrWasPerformedByAgentWithOccupationOfType sh:path ad31:isOrWasPerformedByAgentWithOccupationOfType;
+  sh:name "est ou a été effectué par un agent exerçant une profession de type"@fr;
+  sh:nodeKind sh:IRI;
+  sh:class rico:OccupationType;
+  dash:searchWidget core:ListProperty .
+
+sacs:Saisie_saisieDirecte sh:path ad31:saisieDirecte;
+  sh:name "saisie directe"@fr;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:boolean;
+  sh:node sacs:SaisieDirecte .
+
+sacs:Validation_hasActivityType sh:path rico:hasActivityType;
+  sh:name "a pour type d'activité"@fr;
+  sh:description "Vocabulaire type d'activité"@fr;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class rico:ActivityType;
+  sh:in _:6a507bd3afaa4d4099437ca6131f3514597 .
+
+_:6a507bd3afaa4d4099437ca6131f3514597 rdf:first type:acrel;
+  rdf:rest _:6a507bd3afaa4d4099437ca6131f3514598 .
+
+_:6a507bd3afaa4d4099437ca6131f3514598 rdf:first type:acval;
+  rdf:rest rdf:nil .
+
+sacs:LegalStatus_inScheme sh:path skos:inScheme;
+  sh:name "in scheme"@fr;
+  sh:hasValue vocabulaire:ju .
+
+sacs:IdentifierType_inScheme sh:path skos:inScheme;
+  sh:name "in scheme"@fr;
+  sh:hasValue vocabulaire:id .
+
+sacs:PlaceType_inScheme sh:path skos:inScheme;
+  sh:name "in scheme"@fr;
+  sh:hasValue vocabulaire:li .
+
+sacs:EventType_inScheme sh:path skos:inScheme;
+  sh:name "in scheme"@fr;
+  sh:hasValue vocabulaire:fa .
+
+sacs:OccupationType_inScheme sh:path skos:inScheme;
+  sh:name "in scheme"@fr;
+  sh:hasValue vocabulaire:pr .
+
+sacs:ActivityType_inScheme sh:path skos:inScheme;
+  sh:name "in scheme"@fr;
+  sh:hasValue vocabulaire:ac .
+
+sacs:CarrierType_inScheme sh:path skos:inScheme;
+  sh:name "in scheme"@fr;
+  sh:hasValue vocabulaire:su .
+
+sacs:DemographicGroup_inScheme sh:path skos:inScheme;
+  sh:name "in scheme"@fr;
+  sh:hasValue vocabulaire:sx .
+
+sacs:CorporateBodyType_inScheme sh:path skos:inScheme;
+  sh:name "in scheme"@fr;
+  sh:hasValue vocabulaire:cl .
+
+sacs:TypeProcedure_inScheme sh:path skos:inScheme;
+  sh:name "in scheme"@fr;
+  sh:hasValue vocabulaire:pc .
+
+sacs:OrdreInstruction_inScheme sh:path skos:inScheme;
+  sh:name "in scheme"@fr;
+  sh:hasValue vocabulaire:oi .
+
+sacs:TypeRole_inScheme sh:path skos:inScheme;
+  sh:name "in scheme"@fr;
+  sh:hasValue vocabulaire:oi .
+
+sacs:LegalStatus_prefLabel sh:path skos:prefLabel;
+  sh:name "libellé"@fr;
+  sh:node sacs:Libelle;
+  dash:propertyRole dash:LabelRole .
+
+sacs:IdentifierType_prefLabel sh:path skos:prefLabel;
+  sh:name "libellé"@fr;
+  sh:node sacs:Libelle;
+  dash:propertyRole dash:LabelRole .
+
+sacs:PlaceType_prefLabel sh:path skos:prefLabel;
+  sh:name "libellé"@fr;
+  sh:node sacs:Libelle;
+  dash:propertyRole dash:LabelRole .
+
+sacs:EventType_prefLabel sh:path skos:prefLabel;
+  sh:name "libellé"@fr;
+  sh:node sacs:Libelle;
+  dash:propertyRole dash:LabelRole .
+
+sacs:OccupationType_prefLabel sh:path skos:prefLabel;
+  sh:name "libellé"@fr;
+  sh:node sacs:Libelle;
+  dash:propertyRole dash:LabelRole .
+
+sacs:ActivityType_prefLabel sh:path skos:prefLabel;
+  sh:name "libellé"@fr;
+  sh:node sacs:Libelle;
+  dash:propertyRole dash:LabelRole .
+
+sacs:CarrierType_prefLabel sh:path skos:prefLabel;
+  sh:name "libellé"@fr;
+  sh:node sacs:Libelle;
+  dash:propertyRole dash:LabelRole .
+
+sacs:DemographicGroup_prefLabel sh:path skos:prefLabel;
+  sh:name "libellé"@fr;
+  sh:node sacs:Libelle;
+  dash:propertyRole dash:LabelRole .
+
+sacs:CorporateBodyType_prefLabel sh:path skos:prefLabel;
+  sh:name "libellé"@fr;
+  sh:node sacs:Libelle;
+  dash:propertyRole dash:LabelRole .
+
+sacs:TypeProcedure_prefLabel sh:path skos:prefLabel;
+  sh:name "libellé"@fr;
+  sh:node sacs:Libelle;
+  dash:propertyRole dash:LabelRole .
+
+sacs:OrdreInstruction_prefLabel sh:path skos:prefLabel;
+  sh:name "libellé"@fr;
+  sh:node sacs:Libelle;
+  dash:propertyRole dash:LabelRole .
+
+sacs:TypeRole_prefLabel sh:path skos:prefLabel;
+  sh:name "libellé"@fr;
+  sh:node sacs:Libelle;
+  dash:propertyRole dash:LabelRole .
+
+sacs:Diagram_Instantiation dct:title "Sac"@fr;
+  sh:order 1 .
+
+sacs:Diagram_Activity_Procedure dct:title "Procédure"@fr;
+  sh:order 2 .
+
+sacs:Diagram_Event_Place dct:title "Faits et lieux des faits"@fr;
+  sh:order 3 .
+
+sacs:Diagram_Activity_Campagne dct:title "Campagne"@fr;
+  sh:order 4 .
+
+sacs:BusinessRule_1 a sh:SPARQLConstraint;
+  dct:description "Les URI d'Identifiants doivent commencer par l'URI de leur objet"@fr;
+  sh:message "L'URI d'un identifiant ne commence pas par l'URI de son objet";
+  sh:select """PREFIX rico: <https://www.ica.org/standards/RiC/ontology#>
+SELECT $this
+WHERE {
+ $this ^rico:hasOrHadIdentifier ?object .
+ FILTER(!STRSTARTS(STR($this), STR(?object)))
+}""" .

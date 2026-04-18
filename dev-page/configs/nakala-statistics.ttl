@@ -1,0 +1,1224 @@
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix dct:  <http://purl.org/dc/terms/> .
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_spatial>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_spatial> ;
+        void:distinctObjects  "428615"^^xsd:int ;
+        void:property         dct:spatial ;
+        void:triples          "428615"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Collection_creator>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Collection_creator> ;
+        void:distinctObjects  "314"^^xsd:int ;
+        void:property         dct:creator ;
+        void:triples          "1215"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Collection_accessRights>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Collection_accessRights> ;
+        void:distinctObjects  "4"^^xsd:int ;
+        void:property         dct:accessRights ;
+        void:triples          "4"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_WebResource_extent>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/WebResource_extent> ;
+        void:distinctObjects  "1463234"^^xsd:int ;
+        void:property         dct:extent ;
+        void:triples          "2044706"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Collection_format>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Collection_format> ;
+        void:distinctObjects  "20"^^xsd:int ;
+        void:property         dct:format ;
+        void:triples          "31"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_TimeSpan>
+        dct:conformsTo          <https://shacl-play.sparna.fr/shapes/TimeSpan> ;
+        void:class              <http://www.europeana.eu/schemas/edm/TimeSpan> ;
+        void:entities           "5714"^^xsd:int ;
+        void:propertyPartition  <https://www.nakala.fr/sparql/partition_TimeSpan_begin> , <https://www.nakala.fr/sparql/partition_TimeSpan_end> , <https://www.nakala.fr/sparql/partition_TimeSpan_prefLabel> .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_dateCopyrighted>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_dateCopyrighted> ;
+        void:distinctObjects  "13"^^xsd:int ;
+        void:property         dct:dateCopyrighted ;
+        void:triples          "120"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_IsPartOf>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_IsPartOf> ;
+        void:distinctObjects  "61"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/IsPartOf> ;
+        void:triples          "327"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_coverage>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_coverage> ;
+        void:distinctObjects  "22532"^^xsd:int ;
+        void:property         dct:coverage ;
+        void:triples          "1226163"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Concept_altLabel_2>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Concept_altLabel_2> ;
+        void:distinctObjects  "544"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#altLabel> ;
+        void:triples          "545"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Collection_hasPart>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Collection_hasPart> ;
+        void:distinctObjects  "120"^^xsd:int ;
+        void:property         dct:hasPart ;
+        void:triples          "120"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_isRequiredBy>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_isRequiredBy> ;
+        void:distinctObjects  "79"^^xsd:int ;
+        void:property         dct:isRequiredBy ;
+        void:triples          "81"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Agent_sameAs>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Agent_sameAs> ;
+        void:distinctObjects  "1371"^^xsd:int ;
+        void:property         <http://www.w3.org/2002/07/owl#sameAs> ;
+        void:triples          "1386"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ChangeSet>
+        dct:conformsTo          <https://shacl-play.sparna.fr/shapes/ChangeSet> ;
+        void:class              <http://purl.org/vocab/changeset/schema#ChangeSet> ;
+        void:entities           "383"^^xsd:int ;
+        void:propertyPartition  <https://www.nakala.fr/sparql/partition_ChangeSet_changeReason> , <https://www.nakala.fr/sparql/partition_ChangeSet_creatorName> , <https://www.nakala.fr/sparql/partition_ChangeSet_createdDate> , <https://www.nakala.fr/sparql/partition_ChangeSet_subjectOfChange> .
+
+<https://www.nakala.fr/sparql/partition_Concept_prefLabel>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Concept_prefLabel> ;
+        void:distinctObjects  "745"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#prefLabel> ;
+        void:triples          "745"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_WebResource_primaryTopic>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/WebResource_primaryTopic> ;
+        void:distinctObjects  "2044706"^^xsd:int ;
+        void:property         <http://xmlns.com/foaf/0.1/primaryTopic> ;
+        void:triples          "2044706"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Collection_isVersionOf>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Collection_isVersionOf> ;
+        void:distinctObjects  "2"^^xsd:int ;
+        void:property         dct:isVersionOf ;
+        void:triples          "2"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_Cites>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_Cites> ;
+        void:distinctObjects  "46"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/Cites> ;
+        void:triples          "65"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_type>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_type> ;
+        void:distinctObjects  "1266"^^xsd:int ;
+        void:property         dct:type ;
+        void:triples          "1321704"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_IsMetadataFor>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_IsMetadataFor> ;
+        void:distinctObjects  "4"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/IsMetadataFor> ;
+        void:triples          "5"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Place_sameAs>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Place_sameAs> ;
+        void:distinctObjects  "544"^^xsd:int ;
+        void:property         <http://www.w3.org/2002/07/owl#sameAs> ;
+        void:triples          "13762"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Collection_temporal>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Collection_temporal> ;
+        void:distinctObjects  "16"^^xsd:int ;
+        void:property         dct:temporal ;
+        void:triples          "107"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_available>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_available> ;
+        void:distinctObjects  "939"^^xsd:int ;
+        void:property         dct:available ;
+        void:triples          "39654"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_TimeSpan_end>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/TimeSpan_end> ;
+        void:distinctObjects  "464"^^xsd:int ;
+        void:property         <http://www.europeana.eu/schemas/edm/end> ;
+        void:triples          "5707"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Concept_inScheme>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Concept_inScheme> ;
+        void:distinctObjects  "1"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#inScheme> ;
+        void:triples          "334"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Collection_accrualMethod>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Collection_accrualMethod> ;
+        void:distinctObjects  "1"^^xsd:int ;
+        void:property         dct:accrualMethod ;
+        void:triples          "3"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Collection_rightsHolder>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Collection_rightsHolder> ;
+        void:distinctObjects  "21"^^xsd:int ;
+        void:property         dct:rightsHolder ;
+        void:triples          "158"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Collection_issued>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Collection_issued> ;
+        void:distinctObjects  "103"^^xsd:int ;
+        void:property         dct:issued ;
+        void:triples          "113"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_WebResource_description>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/WebResource_description> ;
+        void:distinctObjects  "105233"^^xsd:int ;
+        void:property         dct:description ;
+        void:triples          "136491"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_isReplacedBy>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_isReplacedBy> ;
+        void:distinctObjects  "3"^^xsd:int ;
+        void:property         dct:isReplacedBy ;
+        void:triples          "3"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_hasType>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_hasType> ;
+        void:distinctObjects  "29"^^xsd:int ;
+        void:property         <http://www.europeana.eu/schemas/edm/hasType> ;
+        void:triples          "895037"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_language>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_language> ;
+        void:distinctObjects  "418"^^xsd:int ;
+        void:property         dct:language ;
+        void:triples          "258244"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_rights>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_rights> ;
+        void:distinctObjects  "627"^^xsd:int ;
+        void:property         dct:rights ;
+        void:triples          "258467"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Collection_isAggregatedBy>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Collection_isAggregatedBy> ;
+        void:distinctObjects  "9998"^^xsd:int ;
+        void:property         <http://www.openarchives.org/ore/terms/isAggregatedBy> ;
+        void:triples          "9998"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Collection_accrualPeriodicity>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Collection_accrualPeriodicity> ;
+        void:distinctObjects  "4"^^xsd:int ;
+        void:property         dct:accrualPeriodicity ;
+        void:triples          "6"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Collection_references>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Collection_references> ;
+        void:distinctObjects  "4"^^xsd:int ;
+        void:property         dct:references ;
+        void:triples          "4"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_Reviews>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_Reviews> ;
+        void:distinctObjects  "2"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/Reviews> ;
+        void:triples          "2"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_IsSourceOf>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_IsSourceOf> ;
+        void:distinctObjects  "151"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/IsSourceOf> ;
+        void:triples          "174"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_publisher>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_publisher> ;
+        void:distinctObjects  "2485"^^xsd:int ;
+        void:property         dct:publisher ;
+        void:triples          "739675"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Agent_givenName>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Agent_givenName> ;
+        void:distinctObjects  "9174"^^xsd:int ;
+        void:property         <http://xmlns.com/foaf/0.1/givenName> ;
+        void:triples          "23439"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Collection_tableOfContents>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Collection_tableOfContents> ;
+        void:distinctObjects  "2"^^xsd:int ;
+        void:property         dct:tableOfContents ;
+        void:triples          "2"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Collection_relation>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Collection_relation> ;
+        void:distinctObjects  "120"^^xsd:int ;
+        void:property         dct:relation ;
+        void:triples          "265"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_IsDocumentedBy>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_IsDocumentedBy> ;
+        void:distinctObjects  "479"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/IsDocumentedBy> ;
+        void:triples          "487"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Aggregation_aggregates>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Aggregation_aggregates> ;
+        void:distinctObjects  "11064"^^xsd:int ;
+        void:property         <http://www.openarchives.org/ore/terms/aggregates> ;
+        void:triples          "11064"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ChangeSet_creatorName>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ChangeSet_creatorName> ;
+        void:distinctObjects  "2"^^xsd:int ;
+        void:property         <http://purl.org/vocab/changeset/schema#creatorName> ;
+        void:triples          "383"^^xsd:int ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "47"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <http://id.loc.gov/vocabulary/organizations/dlc>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "336"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <http://id.loc.gov/vocabulary/organizations/dlcmrc>
+                ] .
+
+<https://www.nakala.fr/sparql/partition_TimeSpan_prefLabel>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/TimeSpan_prefLabel> ;
+        void:distinctObjects  "30"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#prefLabel> ;
+        void:triples          "4240"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Aggregation>
+        dct:conformsTo          <https://shacl-play.sparna.fr/shapes/Aggregation> ;
+        void:class              <http://www.openarchives.org/ore/terms/Aggregation> ;
+        void:entities           "906100"^^xsd:int ;
+        void:propertyPartition  <https://www.nakala.fr/sparql/partition_Aggregation_intermediateProvider> , <https://www.nakala.fr/sparql/partition_Aggregation_rights> , <https://www.nakala.fr/sparql/partition_Aggregation_aggregates> , <https://www.nakala.fr/sparql/partition_Aggregation_dataProvider> , <https://www.nakala.fr/sparql/partition_Aggregation_aggregatedCHO> , <https://www.nakala.fr/sparql/partition_Aggregation_hasView> , <https://www.nakala.fr/sparql/partition_Aggregation_isShownAt> , <https://www.nakala.fr/sparql/partition_Aggregation_provider> , <https://www.nakala.fr/sparql/partition_Aggregation_isDescribedBy> .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_temporal>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_temporal> ;
+        void:distinctObjects  "6633"^^xsd:int ;
+        void:property         dct:temporal ;
+        void:triples          "74289"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_abstract>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_abstract> ;
+        void:distinctObjects  "8193"^^xsd:int ;
+        void:property         dct:abstract ;
+        void:triples          "37411"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_isPartOf>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_isPartOf> ;
+        void:distinctObjects  "9737"^^xsd:int ;
+        void:property         dct:isPartOf ;
+        void:triples          "50774"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_subject>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_subject> ;
+        void:distinctObjects  "56921"^^xsd:int ;
+        void:property         dct:subject ;
+        void:triples          "2838489"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Place_asWKT>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Place_asWKT> ;
+        void:distinctObjects  "15862"^^xsd:int ;
+        void:property         <http://www.opengis.net/ont/geosparql#asWKT> ;
+        void:triples          "55750"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_description>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_description> ;
+        void:distinctObjects  "278523"^^xsd:int ;
+        void:property         dct:description ;
+        void:triples          "1231143"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ResourceMap_modified>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ResourceMap_modified> ;
+        void:distinctObjects  "154974"^^xsd:int ;
+        void:property         dct:modified ;
+        void:triples          "904092"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Label>
+        dct:conformsTo          <https://shacl-play.sparna.fr/shapes/Label> ;
+        void:class              <http://www.w3.org/2008/05/skos-xl#Label> ;
+        void:entities           "545"^^xsd:int ;
+        void:propertyPartition  <https://www.nakala.fr/sparql/partition_Label_literalForm> .
+
+<https://www.nakala.fr/sparql/partition_Collection_modified>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Collection_modified> ;
+        void:distinctObjects  "4"^^xsd:int ;
+        void:property         dct:modified ;
+        void:triples          "6"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_Documents>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_Documents> ;
+        void:distinctObjects  "154"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/Documents> ;
+        void:triples          "450"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Aggregation_isShownAt>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Aggregation_isShownAt> ;
+        void:distinctObjects  "906100"^^xsd:int ;
+        void:property         <http://www.europeana.eu/schemas/edm/isShownAt> ;
+        void:triples          "906100"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Collection_date>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Collection_date> ;
+        void:distinctObjects  "447"^^xsd:int ;
+        void:property         dct:date ;
+        void:triples          "1409"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_conformsTo>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_conformsTo> ;
+        void:distinctObjects  "13"^^xsd:int ;
+        void:property         dct:conformsTo ;
+        void:triples          "13"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_alternative>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_alternative> ;
+        void:distinctObjects  "10068"^^xsd:int ;
+        void:property         dct:alternative ;
+        void:triples          "16462"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Collection_dateCopyrighted>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Collection_dateCopyrighted> ;
+        void:distinctObjects  "2"^^xsd:int ;
+        void:property         dct:dateCopyrighted ;
+        void:triples          "2"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ChangeSet_changeReason>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ChangeSet_changeReason> ;
+        void:distinctObjects  "3"^^xsd:int ;
+        void:property         <http://purl.org/vocab/changeset/schema#changeReason> ;
+        void:triples          "383"^^xsd:int ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "2"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          "updated"
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "47"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          "deprecated"
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "334"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          "new"
+                ] .
+
+<https://www.nakala.fr/sparql/partition_WebResource_available>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/WebResource_available> ;
+        void:distinctObjects  "3173"^^xsd:int ;
+        void:property         dct:available ;
+        void:triples          "1976080"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Concept_altLabel>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Concept_altLabel> ;
+        void:distinctObjects  "545"^^xsd:int ;
+        void:property         <http://www.w3.org/2008/05/skos-xl#altLabel> ;
+        void:triples          "545"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_Obsoletes>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_Obsoletes> ;
+        void:distinctObjects  "4"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/Obsoletes> ;
+        void:triples          "4"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_relation>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_relation> ;
+        void:distinctObjects  "27774"^^xsd:int ;
+        void:property         dct:relation ;
+        void:triples          "115256"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_creator>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_creator> ;
+        void:distinctObjects  "32997"^^xsd:int ;
+        void:property         dct:creator ;
+        void:triples          "1251678"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_IsNewVersionOf>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_IsNewVersionOf> ;
+        void:distinctObjects  "8"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/IsNewVersionOf> ;
+        void:triples          "8"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_dateSubmitted>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_dateSubmitted> ;
+        void:distinctObjects  "72"^^xsd:int ;
+        void:property         dct:dateSubmitted ;
+        void:triples          "1715"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ResourceMap_created>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ResourceMap_created> ;
+        void:distinctObjects  "807282"^^xsd:int ;
+        void:property         dct:created ;
+        void:triples          "905034"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Collection_rights>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Collection_rights> ;
+        void:distinctObjects  "20"^^xsd:int ;
+        void:property         dct:rights ;
+        void:triples          "22"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_IsDescribedBy>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_IsDescribedBy> ;
+        void:distinctObjects  "217"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/IsDescribedBy> ;
+        void:triples          "223"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Collection_coverage>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Collection_coverage> ;
+        void:distinctObjects  "108"^^xsd:int ;
+        void:property         dct:coverage ;
+        void:triples          "140"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_IsDerivedFrom>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_IsDerivedFrom> ;
+        void:distinctObjects  "110"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/IsDerivedFrom> ;
+        void:triples          "156"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_accessRights>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_accessRights> ;
+        void:distinctObjects  "49"^^xsd:int ;
+        void:property         dct:accessRights ;
+        void:triples          "1877"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Concept_historyNote>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Concept_historyNote> ;
+        void:distinctObjects  "157"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#historyNote> ;
+        void:triples          "201"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_IsVariantFormOf>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_IsVariantFormOf> ;
+        void:distinctObjects  "24"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/IsVariantFormOf> ;
+        void:triples          "104"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_hasPart>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_hasPart> ;
+        void:distinctObjects  "438"^^xsd:int ;
+        void:property         dct:hasPart ;
+        void:triples          "2410"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Concept_note>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Concept_note> ;
+        void:distinctObjects  "1"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#note> ;
+        void:triples          "200"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_source>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_source> ;
+        void:distinctObjects  "50338"^^xsd:int ;
+        void:property         dct:source ;
+        void:triples          "219910"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ResourceMap_describes>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ResourceMap_describes> ;
+        void:distinctObjects  "906100"^^xsd:int ;
+        void:property         <http://www.openarchives.org/ore/terms/describes> ;
+        void:triples          "906100"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_isReferencedBy>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_isReferencedBy> ;
+        void:distinctObjects  "9216"^^xsd:int ;
+        void:property         dct:isReferencedBy ;
+        void:triples          "29594"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_extent>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_extent> ;
+        void:distinctObjects  "6101"^^xsd:int ;
+        void:property         dct:extent ;
+        void:triples          "64490"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Collection_available>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Collection_available> ;
+        void:distinctObjects  "1"^^xsd:int ;
+        void:property         dct:available ;
+        void:triples          "1"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_modified>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_modified> ;
+        void:distinctObjects  "407"^^xsd:int ;
+        void:property         dct:modified ;
+        void:triples          "27752"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_WebResource_altLabel>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/WebResource_altLabel> ;
+        void:distinctObjects  "1950511"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#altLabel> ;
+        void:triples          "2044706"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Concept_changeNote>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Concept_changeNote> ;
+        void:distinctObjects  "336"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#changeNote> ;
+        void:triples          "336"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_HasMetadata>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_HasMetadata> ;
+        void:distinctObjects  "3"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/HasMetadata> ;
+        void:triples          "3"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_contributor>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_contributor> ;
+        void:distinctObjects  "6237"^^xsd:int ;
+        void:property         dct:contributor ;
+        void:triples          "300569"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Concept_broader>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Concept_broader> ;
+        void:distinctObjects  "4"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#broader> ;
+        void:triples          "77"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ResourceMap>
+        dct:conformsTo          <https://shacl-play.sparna.fr/shapes/ResourceMap> ;
+        void:class              <http://www.openarchives.org/ore/terms/ResourceMap> ;
+        void:entities           "906100"^^xsd:int ;
+        void:propertyPartition  <https://www.nakala.fr/sparql/partition_ResourceMap_describes> , <https://www.nakala.fr/sparql/partition_ResourceMap_modified> , <https://www.nakala.fr/sparql/partition_ResourceMap_creator> , <https://www.nakala.fr/sparql/partition_ResourceMap_rights> , <https://www.nakala.fr/sparql/partition_ResourceMap_created> , <https://www.nakala.fr/sparql/partition_ResourceMap_version> .
+
+<https://www.nakala.fr/sparql/partition_Place_lat>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Place_lat> ;
+        void:distinctObjects  "8916"^^xsd:int ;
+        void:property         <http://www.w3.org/2003/01/geo/wgs84_pos#lat> ;
+        void:triples          "55750"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_isGatheredInto>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_isGatheredInto> ;
+        void:distinctObjects  "10139"^^xsd:int ;
+        void:property         <http://www.europeana.eu/schemas/edm/isGatheredInto> ;
+        void:triples          "2805192"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Collection_language>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Collection_language> ;
+        void:distinctObjects  "22"^^xsd:int ;
+        void:property         dct:language ;
+        void:triples          "61"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_identifier>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_identifier> ;
+        void:distinctObjects  "1444674"^^xsd:int ;
+        void:property         dct:identifier ;
+        void:triples          "1581447"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_issued>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_issued> ;
+        void:distinctObjects  "4090"^^xsd:int ;
+        void:property         dct:issued ;
+        void:triples          "49639"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Collection_type>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Collection_type> ;
+        void:distinctObjects  "21"^^xsd:int ;
+        void:property         dct:type ;
+        void:triples          "168"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Collection_license>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Collection_license> ;
+        void:distinctObjects  "24"^^xsd:int ;
+        void:property         dct:license ;
+        void:triples          "172"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Collection_publisher>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Collection_publisher> ;
+        void:distinctObjects  "147"^^xsd:int ;
+        void:property         dct:publisher ;
+        void:triples          "740"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_provenance>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_provenance> ;
+        void:distinctObjects  "1757"^^xsd:int ;
+        void:property         dct:provenance ;
+        void:triples          "169561"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ChangeSet_createdDate>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ChangeSet_createdDate> ;
+        void:distinctObjects  "18"^^xsd:int ;
+        void:property         <http://purl.org/vocab/changeset/schema#createdDate> ;
+        void:triples          "383"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Concept_exactMatch>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Concept_exactMatch> ;
+        void:distinctObjects  "309"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#exactMatch> ;
+        void:triples          "309"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_WebResource>
+        dct:conformsTo          <https://shacl-play.sparna.fr/shapes/WebResource> ;
+        void:class              <http://www.europeana.eu/schemas/edm/WebResource> ;
+        void:entities           "2044706"^^xsd:int ;
+        void:propertyPartition  <https://www.nakala.fr/sparql/partition_WebResource_sha1> , <https://www.nakala.fr/sparql/partition_WebResource_description> , <https://www.nakala.fr/sparql/partition_WebResource_extent> , <https://www.nakala.fr/sparql/partition_WebResource_available> , <https://www.nakala.fr/sparql/partition_WebResource_format> , <https://www.nakala.fr/sparql/partition_WebResource_primaryTopic> , <https://www.nakala.fr/sparql/partition_WebResource_type> , <https://www.nakala.fr/sparql/partition_WebResource_altLabel> , <https://www.nakala.fr/sparql/partition_WebResource_isAggregatedBy> .
+
+<https://www.nakala.fr/sparql/partition_Collection_identifier>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Collection_identifier> ;
+        void:distinctObjects  "14102"^^xsd:int ;
+        void:property         dct:identifier ;
+        void:triples          "14104"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Label_literalForm>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Label_literalForm> ;
+        void:distinctObjects  "544"^^xsd:int ;
+        void:property         <http://www.w3.org/2008/05/skos-xl#literalForm> ;
+        void:triples          "545"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Agent_familyName>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Agent_familyName> ;
+        void:distinctObjects  "17438"^^xsd:int ;
+        void:property         <http://xmlns.com/foaf/0.1/familyName> ;
+        void:triples          "23370"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Collection_provenance>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Collection_provenance> ;
+        void:distinctObjects  "71"^^xsd:int ;
+        void:property         dct:provenance ;
+        void:triples          "235"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_IsIdenticalTo>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_IsIdenticalTo> ;
+        void:distinctObjects  "56"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/IsIdenticalTo> ;
+        void:triples          "84"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_medium>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_medium> ;
+        void:distinctObjects  "3372"^^xsd:int ;
+        void:property         dct:medium ;
+        void:triples          "239208"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Collection_source>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Collection_source> ;
+        void:distinctObjects  "1216"^^xsd:int ;
+        void:property         dct:source ;
+        void:triples          "1365"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Collection_abstract>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Collection_abstract> ;
+        void:distinctObjects  "1150"^^xsd:int ;
+        void:property         dct:abstract ;
+        void:triples          "1159"^^xsd:int .
+
+<https://www.nakala.fr/sparql>
+        a                    void:Dataset ;
+        void:classPartition  <https://www.nakala.fr/sparql/partition_TimeSpan> , <https://www.nakala.fr/sparql/partition_Collection> , <https://www.nakala.fr/sparql/partition_WebResource> , <https://www.nakala.fr/sparql/partition_Label> , <https://www.nakala.fr/sparql/partition_ProvidedCHO> , <https://www.nakala.fr/sparql/partition_ResourceMap> , <https://www.nakala.fr/sparql/partition_Agent> , <https://www.nakala.fr/sparql/partition_Place> , <https://www.nakala.fr/sparql/partition_Concept> , <https://www.nakala.fr/sparql/partition_Aggregation> , <https://www.nakala.fr/sparql/partition_ChangeSet> ;
+        void:triples         "55998085"^^xsd:int ;
+        <http://www.w3.org/ns/shacl#suggestedShapesGraph>
+                <https://shacl-play.sparna.fr/shapes/> .
+
+<https://www.nakala.fr/sparql/partition_Aggregation_intermediateProvider>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Aggregation_intermediateProvider> ;
+        void:distinctObjects  "16"^^xsd:int ;
+        void:property         <http://www.europeana.eu/schemas/edm/intermediateProvider> ;
+        void:triples          "6657"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Collection_isPartOf>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Collection_isPartOf> ;
+        void:distinctObjects  "75"^^xsd:int ;
+        void:property         dct:isPartOf ;
+        void:triples          "375"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ResourceMap_rights>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ResourceMap_rights> ;
+        void:distinctObjects  "1"^^xsd:int ;
+        void:property         dct:rights ;
+        void:triples          "906100"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_isFormatOf>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_isFormatOf> ;
+        void:distinctObjects  "1391"^^xsd:int ;
+        void:property         dct:isFormatOf ;
+        void:triples          "2407"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_IsSupplementedBy>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_IsSupplementedBy> ;
+        void:distinctObjects  "111"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/IsSupplementedBy> ;
+        void:triples          "154"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_IsReviewedBy>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_IsReviewedBy> ;
+        void:distinctObjects  "1"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/IsReviewedBy> ;
+        void:triples          "1"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_references>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_references> ;
+        void:distinctObjects  "1324"^^xsd:int ;
+        void:property         dct:references ;
+        void:triples          "28823"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Collection_extent>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Collection_extent> ;
+        void:distinctObjects  "79"^^xsd:int ;
+        void:property         dct:extent ;
+        void:triples          "252"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Aggregation_hasView>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Aggregation_hasView> ;
+        void:distinctObjects  "2044706"^^xsd:int ;
+        void:property         <http://www.europeana.eu/schemas/edm/hasView> ;
+        void:triples          "2044706"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_IsOriginalFormOf>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_IsOriginalFormOf> ;
+        void:distinctObjects  "98"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/IsOriginalFormOf> ;
+        void:triples          "106"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Collection_description>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Collection_description> ;
+        void:distinctObjects  "2150"^^xsd:int ;
+        void:property         dct:description ;
+        void:triples          "2196"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_Compiles>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_Compiles> ;
+        void:distinctObjects  "12"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/Compiles> ;
+        void:triples          "14"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Collection_created>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Collection_created> ;
+        void:distinctObjects  "102"^^xsd:int ;
+        void:property         dct:created ;
+        void:triples          "530"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_IsRequiredBy>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_IsRequiredBy> ;
+        void:distinctObjects  "7"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/IsRequiredBy> ;
+        void:triples          "7"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_IsPreviousVersionOf>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_IsPreviousVersionOf> ;
+        void:distinctObjects  "5"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/IsPreviousVersionOf> ;
+        void:triples          "6"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Collection_isFormatOf>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Collection_isFormatOf> ;
+        void:distinctObjects  "2"^^xsd:int ;
+        void:property         dct:isFormatOf ;
+        void:triples          "2"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_hasFormat>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_hasFormat> ;
+        void:distinctObjects  "1125"^^xsd:int ;
+        void:property         dct:hasFormat ;
+        void:triples          "16741"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Collection_alternative>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Collection_alternative> ;
+        void:distinctObjects  "9"^^xsd:int ;
+        void:property         dct:alternative ;
+        void:triples          "9"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Collection_title>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Collection_title> ;
+        void:distinctObjects  "11310"^^xsd:int ;
+        void:property         dct:title ;
+        void:triples          "11542"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_educationLevel>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_educationLevel> ;
+        void:distinctObjects  "2"^^xsd:int ;
+        void:property         dct:educationLevel ;
+        void:triples          "2"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Concept_narrower>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Concept_narrower> ;
+        void:distinctObjects  "77"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#narrower> ;
+        void:triples          "77"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_HasVersion>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_HasVersion> ;
+        void:distinctObjects  "55"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/HasVersion> ;
+        void:triples          "55"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ResourceMap_version>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ResourceMap_version> ;
+        void:distinctObjects  "112"^^xsd:int ;
+        void:property         <http://purl.org/pav/version> ;
+        void:triples          "895036"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Collection_spatial>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Collection_spatial> ;
+        void:distinctObjects  "231"^^xsd:int ;
+        void:property         dct:spatial ;
+        void:triples          "521"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Collection_bibliographicCitation>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Collection_bibliographicCitation> ;
+        void:distinctObjects  "179"^^xsd:int ;
+        void:property         dct:bibliographicCitation ;
+        void:triples          "179"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_WebResource_type>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/WebResource_type> ;
+        void:distinctObjects  "113"^^xsd:int ;
+        void:property         dct:type ;
+        void:triples          "2044706"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Agent_name>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Agent_name> ;
+        void:distinctObjects  "23559"^^xsd:int ;
+        void:property         <http://xmlns.com/foaf/0.1/name> ;
+        void:triples          "23632"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Collection_isRequiredBy>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Collection_isRequiredBy> ;
+        void:distinctObjects  "1"^^xsd:int ;
+        void:property         dct:isRequiredBy ;
+        void:triples          "1"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Concept_broadMatch>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Concept_broadMatch> ;
+        void:distinctObjects  "11"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#broadMatch> ;
+        void:triples          "331"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Place_prefLabel>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Place_prefLabel> ;
+        void:distinctObjects  "18549"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#prefLabel> ;
+        void:triples          "402952"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Concept>
+        dct:conformsTo          <https://shacl-play.sparna.fr/shapes/Concept> ;
+        void:class              <http://www.w3.org/2004/02/skos/core#Concept> ;
+        void:entities           "545"^^xsd:int ;
+        void:propertyPartition  <https://www.nakala.fr/sparql/partition_Concept_seeAlso> , <https://www.nakala.fr/sparql/partition_Concept_narrower> , <https://www.nakala.fr/sparql/partition_Concept_notation> , <https://www.nakala.fr/sparql/partition_Concept_inScheme> , <https://www.nakala.fr/sparql/partition_Concept_prefLabel> , <https://www.nakala.fr/sparql/partition_Concept_altLabel> , <https://www.nakala.fr/sparql/partition_Concept_altLabel_2> , <https://www.nakala.fr/sparql/partition_Concept_exactMatch> , <https://www.nakala.fr/sparql/partition_Concept_historyNote> , <https://www.nakala.fr/sparql/partition_Concept_changeNote> , <https://www.nakala.fr/sparql/partition_Concept_semanticRelation> , <https://www.nakala.fr/sparql/partition_Concept_broadMatch> , <https://www.nakala.fr/sparql/partition_Concept_note> , <https://www.nakala.fr/sparql/partition_Concept_broader> .
+
+<https://www.nakala.fr/sparql/partition_Concept_notation>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Concept_notation> ;
+        void:distinctObjects  "534"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#notation> ;
+        void:triples          "534"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_bibliographicCitation>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_bibliographicCitation> ;
+        void:distinctObjects  "42310"^^xsd:int ;
+        void:property         dct:bibliographicCitation ;
+        void:triples          "76517"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Collection_dateSubmitted>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Collection_dateSubmitted> ;
+        void:distinctObjects  "1"^^xsd:int ;
+        void:property         dct:dateSubmitted ;
+        void:triples          "1"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Aggregation_provider>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Aggregation_provider> ;
+        void:distinctObjects  "1103"^^xsd:int ;
+        void:property         <http://www.europeana.eu/schemas/edm/provider> ;
+        void:triples          "906100"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Aggregation_aggregatedCHO>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Aggregation_aggregatedCHO> ;
+        void:distinctObjects  "895036"^^xsd:int ;
+        void:property         <http://www.europeana.eu/schemas/edm/aggregatedCHO> ;
+        void:triples          "895036"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_IsCitedBy>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_IsCitedBy> ;
+        void:distinctObjects  "130"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/IsCitedBy> ;
+        void:triples          "188"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_IsReferencedBy>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_IsReferencedBy> ;
+        void:distinctObjects  "7"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/IsReferencedBy> ;
+        void:triples          "7"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Collection_medium>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Collection_medium> ;
+        void:distinctObjects  "5"^^xsd:int ;
+        void:property         dct:medium ;
+        void:triples          "5"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_isVersionOf>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_isVersionOf> ;
+        void:distinctObjects  "1128"^^xsd:int ;
+        void:property         dct:isVersionOf ;
+        void:triples          "2908"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Place>
+        dct:conformsTo          <https://shacl-play.sparna.fr/shapes/Place> ;
+        void:class              <http://www.europeana.eu/schemas/edm/Place> ;
+        void:entities           "428615"^^xsd:int ;
+        void:propertyPartition  <https://www.nakala.fr/sparql/partition_Place_asWKT> , <https://www.nakala.fr/sparql/partition_Place_prefLabel> , <https://www.nakala.fr/sparql/partition_Place_sameAs> , <https://www.nakala.fr/sparql/partition_Place_long> , <https://www.nakala.fr/sparql/partition_Place_lat> .
+
+<https://www.nakala.fr/sparql/partition_Collection_isReferencedBy>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Collection_isReferencedBy> ;
+        void:distinctObjects  "26"^^xsd:int ;
+        void:property         dct:isReferencedBy ;
+        void:triples          "27"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ResourceMap_creator>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ResourceMap_creator> ;
+        void:distinctObjects  "1"^^xsd:int ;
+        void:property         dct:creator ;
+        void:triples          "906100"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Aggregation_dataProvider>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Aggregation_dataProvider> ;
+        void:distinctObjects  "1156"^^xsd:int ;
+        void:property         <http://www.europeana.eu/schemas/edm/dataProvider> ;
+        void:triples          "906100"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_Continues>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_Continues> ;
+        void:distinctObjects  "273"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/Continues> ;
+        void:triples          "395"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Concept_seeAlso>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Concept_seeAlso> ;
+        void:distinctObjects  "5"^^xsd:int ;
+        void:property         <http://www.w3.org/2000/01/rdf-schema#seeAlso> ;
+        void:triples          "5"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_WebResource_sha1>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/WebResource_sha1> ;
+        void:distinctObjects  "1964853"^^xsd:int ;
+        void:property         <http://xmlns.com/foaf/0.1/sha1> ;
+        void:triples          "2044706"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Collection_contributor>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Collection_contributor> ;
+        void:distinctObjects  "292"^^xsd:int ;
+        void:property         dct:contributor ;
+        void:triples          "529"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Agent>
+        dct:conformsTo          <https://shacl-play.sparna.fr/shapes/Agent> ;
+        void:class              <http://www.europeana.eu/schemas/edm/Agent> ;
+        void:entities           "23632"^^xsd:int ;
+        void:propertyPartition  <https://www.nakala.fr/sparql/partition_Agent_familyName> , <https://www.nakala.fr/sparql/partition_Agent_sameAs> , <https://www.nakala.fr/sparql/partition_Agent_givenName> , <https://www.nakala.fr/sparql/partition_Agent_name> .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_IsCompiledBy>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_IsCompiledBy> ;
+        void:distinctObjects  "7"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/IsCompiledBy> ;
+        void:triples          "13"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_Requires>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_Requires> ;
+        void:distinctObjects  "7"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/Requires> ;
+        void:triples          "8"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Collection_audience>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Collection_audience> ;
+        void:distinctObjects  "4"^^xsd:int ;
+        void:property         dct:audience ;
+        void:triples          "4"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_IsVersionOf>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_IsVersionOf> ;
+        void:distinctObjects  "42"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/IsVersionOf> ;
+        void:triples          "45"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Aggregation_rights>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Aggregation_rights> ;
+        void:distinctObjects  "1"^^xsd:int ;
+        void:property         <http://www.europeana.eu/schemas/edm/rights> ;
+        void:triples          "906100"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Place_long>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Place_long> ;
+        void:distinctObjects  "9115"^^xsd:int ;
+        void:property         <http://www.w3.org/2003/01/geo/wgs84_pos#long> ;
+        void:triples          "55750"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ChangeSet_subjectOfChange>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ChangeSet_subjectOfChange> ;
+        void:distinctObjects  "381"^^xsd:int ;
+        void:property         <http://purl.org/vocab/changeset/schema#subjectOfChange> ;
+        void:triples          "383"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_IsSupplementTo>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_IsSupplementTo> ;
+        void:distinctObjects  "171"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/IsSupplementTo> ;
+        void:triples          "198"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_title>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_title> ;
+        void:distinctObjects  "794398"^^xsd:int ;
+        void:property         dct:title ;
+        void:triples          "915798"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_dateAccepted>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_dateAccepted> ;
+        void:distinctObjects  "17"^^xsd:int ;
+        void:property         dct:dateAccepted ;
+        void:triples          "18"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_isAggregatedBy>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_isAggregatedBy> ;
+        void:distinctObjects  "895036"^^xsd:int ;
+        void:property         <http://www.openarchives.org/ore/terms/isAggregatedBy> ;
+        void:triples          "895036"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_HasPart>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_HasPart> ;
+        void:distinctObjects  "310"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/HasPart> ;
+        void:triples          "328"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_license>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_license> ;
+        void:distinctObjects  "149"^^xsd:int ;
+        void:property         dct:license ;
+        void:triples          "977703"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_WebResource_isAggregatedBy>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/WebResource_isAggregatedBy> ;
+        void:distinctObjects  "895036"^^xsd:int ;
+        void:property         <http://www.openarchives.org/ore/terms/isAggregatedBy> ;
+        void:triples          "2044706"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_hasVersion>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_hasVersion> ;
+        void:distinctObjects  "73"^^xsd:int ;
+        void:property         dct:hasVersion ;
+        void:triples          "106"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_IsContinuedBy>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_IsContinuedBy> ;
+        void:distinctObjects  "248"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/IsContinuedBy> ;
+        void:triples          "370"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_format>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_format> ;
+        void:distinctObjects  "17763"^^xsd:int ;
+        void:property         dct:format ;
+        void:triples          "311483"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Collection_hasVersion>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Collection_hasVersion> ;
+        void:distinctObjects  "4"^^xsd:int ;
+        void:property         dct:hasVersion ;
+        void:triples          "4"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO>
+        dct:conformsTo          <https://shacl-play.sparna.fr/shapes/ProvidedCHO> ;
+        void:class              <http://www.europeana.eu/schemas/edm/ProvidedCHO> ;
+        void:entities           "895036"^^xsd:int ;
+        void:propertyPartition  <https://www.nakala.fr/sparql/partition_ProvidedCHO_IsRequiredBy> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_IsCompiledBy> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_modified> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_dateCopyrighted> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_source> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_isGatheredInto> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_dateSubmitted> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_IsPartOf> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_provenance> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_publisher> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_educationLevel> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_Reviews> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_IsDescribedBy> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_isPartOf> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_references> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_hasVersion> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_IsPreviousVersionOf> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_isAggregatedBy> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_bibliographicCitation> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_IsMetadataFor> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_issued> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_Requires> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_coverage> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_IsSourceOf> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_HasMetadata> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_rightsHolder> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_Describes> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_isRequiredBy> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_language> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_conformsTo> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_type> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_format> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_IsDerivedFrom> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_description> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_hasFormat> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_Documents> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_IsSupplementedBy> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_IsOriginalFormOf> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_temporal> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_IsVariantFormOf> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_HasVersion> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_extent> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_IsVersionOf> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_isFormatOf> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_HasPart> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_IsSupplementTo> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_relation> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_instructionalMethod> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_identifier> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_alternative> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_dateAccepted> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_date> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_isReplacedBy> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_IsDocumentedBy> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_hasPart> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_IsIdenticalTo> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_rights> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_contributor> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_isReferencedBy> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_abstract> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_tableOfContents> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_medium> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_audience> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_Continues> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_IsReviewedBy> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_created> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_IsNewVersionOf> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_IsObsoletedBy> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_title> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_spatial> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_license> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_IsCitedBy> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_subject> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_accessRights> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_isVersionOf> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_requires> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_Compiles> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_Cites> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_IsContinuedBy> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_creator> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_IsReferencedBy> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_hasType> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_available> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_Obsoletes> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_mediator> , <https://www.nakala.fr/sparql/partition_ProvidedCHO_References> .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_IsObsoletedBy>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_IsObsoletedBy> ;
+        void:distinctObjects  "4"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/IsObsoletedBy> ;
+        void:triples          "4"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Collection>
+        dct:conformsTo          <https://shacl-play.sparna.fr/shapes/Collection> ;
+        void:class              <http://www.europeana.eu/schemas/edm/Collection> ;
+        void:entities           "11064"^^xsd:int ;
+        void:propertyPartition  <https://www.nakala.fr/sparql/partition_Collection_hasPart> , <https://www.nakala.fr/sparql/partition_Collection_isFormatOf> , <https://www.nakala.fr/sparql/partition_Collection_provenance> , <https://www.nakala.fr/sparql/partition_Collection_extent> , <https://www.nakala.fr/sparql/partition_Collection_type> , <https://www.nakala.fr/sparql/partition_Collection_rights> , <https://www.nakala.fr/sparql/partition_Collection_temporal> , <https://www.nakala.fr/sparql/partition_Collection_title> , <https://www.nakala.fr/sparql/partition_Collection_format> , <https://www.nakala.fr/sparql/partition_Collection_publisher> , <https://www.nakala.fr/sparql/partition_Collection_alternative> , <https://www.nakala.fr/sparql/partition_Collection_accessRights> , <https://www.nakala.fr/sparql/partition_Collection_created> , <https://www.nakala.fr/sparql/partition_Collection_date> , <https://www.nakala.fr/sparql/partition_Collection_references> , <https://www.nakala.fr/sparql/partition_Collection_hasFormat> , <https://www.nakala.fr/sparql/partition_Collection_isVersionOf> , <https://www.nakala.fr/sparql/partition_Collection_creator> , <https://www.nakala.fr/sparql/partition_Collection_language> , <https://www.nakala.fr/sparql/partition_Collection_available> , <https://www.nakala.fr/sparql/partition_Collection_license> , <https://www.nakala.fr/sparql/partition_Collection_coverage> , <https://www.nakala.fr/sparql/partition_Collection_accrualPeriodicity> , <https://www.nakala.fr/sparql/partition_Collection_modified> , <https://www.nakala.fr/sparql/partition_Collection_abstract> , <https://www.nakala.fr/sparql/partition_Collection_bibliographicCitation> , <https://www.nakala.fr/sparql/partition_Collection_medium> , <https://www.nakala.fr/sparql/partition_Collection_spatial> , <https://www.nakala.fr/sparql/partition_Collection_audience> , <https://www.nakala.fr/sparql/partition_Collection_hasVersion> , <https://www.nakala.fr/sparql/partition_Collection_isReferencedBy> , <https://www.nakala.fr/sparql/partition_Collection_tableOfContents> , <https://www.nakala.fr/sparql/partition_Collection_identifier> , <https://www.nakala.fr/sparql/partition_Collection_source> , <https://www.nakala.fr/sparql/partition_Collection_issued> , <https://www.nakala.fr/sparql/partition_Collection_accrualMethod> , <https://www.nakala.fr/sparql/partition_Collection_dateSubmitted> , <https://www.nakala.fr/sparql/partition_Collection_rightsHolder> , <https://www.nakala.fr/sparql/partition_Collection_relation> , <https://www.nakala.fr/sparql/partition_Collection_subject> , <https://www.nakala.fr/sparql/partition_Collection_dateCopyrighted> , <https://www.nakala.fr/sparql/partition_Collection_contributor> , <https://www.nakala.fr/sparql/partition_Collection_isRequiredBy> , <https://www.nakala.fr/sparql/partition_Collection_isPartOf> , <https://www.nakala.fr/sparql/partition_Collection_isAggregatedBy> , <https://www.nakala.fr/sparql/partition_Collection_description> .
+
+<https://www.nakala.fr/sparql/partition_Aggregation_isDescribedBy>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Aggregation_isDescribedBy> ;
+        void:distinctObjects  "905034"^^xsd:int ;
+        void:property         <http://www.openarchives.org/ore/terms/isDescribedBy> ;
+        void:triples          "905034"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_date>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_date> ;
+        void:distinctObjects  "3086"^^xsd:int ;
+        void:property         dct:date ;
+        void:triples          "67230"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_WebResource_format>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/WebResource_format> ;
+        void:distinctObjects  "272"^^xsd:int ;
+        void:property         dct:format ;
+        void:triples          "2044706"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_tableOfContents>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_tableOfContents> ;
+        void:distinctObjects  "7656"^^xsd:int ;
+        void:property         dct:tableOfContents ;
+        void:triples          "23450"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_rightsHolder>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_rightsHolder> ;
+        void:distinctObjects  "1235"^^xsd:int ;
+        void:property         dct:rightsHolder ;
+        void:triples          "133213"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_instructionalMethod>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_instructionalMethod> ;
+        void:distinctObjects  "22"^^xsd:int ;
+        void:property         dct:instructionalMethod ;
+        void:triples          "574"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_audience>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_audience> ;
+        void:distinctObjects  "76"^^xsd:int ;
+        void:property         dct:audience ;
+        void:triples          "584"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Collection_subject>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Collection_subject> ;
+        void:distinctObjects  "6776"^^xsd:int ;
+        void:property         dct:subject ;
+        void:triples          "9451"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_created>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_created> ;
+        void:distinctObjects  "49313"^^xsd:int ;
+        void:property         dct:created ;
+        void:triples          "965710"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_Describes>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_Describes> ;
+        void:distinctObjects  "228"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/Describes> ;
+        void:triples          "232"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_mediator>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_mediator> ;
+        void:distinctObjects  "52"^^xsd:int ;
+        void:property         dct:mediator ;
+        void:triples          "153"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Collection_hasFormat>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Collection_hasFormat> ;
+        void:distinctObjects  "1"^^xsd:int ;
+        void:property         dct:hasFormat ;
+        void:triples          "1"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_TimeSpan_begin>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/TimeSpan_begin> ;
+        void:distinctObjects  "488"^^xsd:int ;
+        void:property         <http://www.europeana.eu/schemas/edm/begin> ;
+        void:triples          "5707"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_References>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_References> ;
+        void:distinctObjects  "3"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/References> ;
+        void:triples          "6"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_Concept_semanticRelation>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/Concept_semanticRelation> ;
+        void:distinctObjects  "200"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#semanticRelation> ;
+        void:triples          "200"^^xsd:int .
+
+<https://www.nakala.fr/sparql/partition_ProvidedCHO_requires>
+        dct:conformsTo        <https://shacl-play.sparna.fr/shapes/ProvidedCHO_requires> ;
+        void:distinctObjects  "40"^^xsd:int ;
+        void:property         dct:requires ;
+        void:triples          "75"^^xsd:int .

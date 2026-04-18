@@ -11,6 +11,9 @@ import { HTMLComponent } from "../../../../HtmlComponent";
 import { DagIfc, DagNodeIfc} from "../../../../../dag/Dag";
 import { ISpecificationEntity } from "../../../../../spec-providers/ISpecificationEntity";
 import { ISpecificationEntry } from "../../../../../spec-providers/ISpecificationEntry";
+import { SelectKeyInfoBtn } from "../../../../buttons/SelectKeyInfoBtn";
+import { SHACLSpecificationEntity } from "../../../../../spec-providers/shacl/SHACLSpecificationEntity";
+import { DASH, NodeShape } from "rdf-shacl-commons";
 
 /**
  * Handles the selection of a Class, either in the DOMAIN selection or the RANGE selection.
@@ -38,6 +41,8 @@ class ClassTypeId extends HTMLComponent {
 
   // this is controlled from the outside of this class currently
   selectViewVariableBtn: SelectViewVariableBtn;
+  keyInfoBtn: SelectKeyInfoBtn;
+
   specProvider: ISparnaturalSpecification;
   htmlCurentValue: JQuery<HTMLElement>; 
   temporaryLabel: string;
@@ -58,11 +63,6 @@ class ClassTypeId extends HTMLComponent {
 
   render() {
     this.widgetHtml = null;
-    // this is created but not rendered yet
-    this.selectViewVariableBtn = new SelectViewVariableBtn(
-      this,
-      this.#onchangeViewVariable
-    );
     super.render();
 
 
@@ -72,14 +72,33 @@ class ClassTypeId extends HTMLComponent {
     }
 
     let currentWrapper = $('<div class="currentWrapper"></div>') ;
+    let labelLine = $('<div class="labelLine"></div>') ;
+    currentWrapper.append(labelLine) ;
+
     // append label to currentWrapper
     this.htmlCurentValue = $(`<span class="current">${this.temporaryLabel}</span>`) ;
-    currentWrapper.append(this.htmlCurentValue) ;
+    labelLine.append(this.htmlCurentValue) ;
+
+    let selectVarWrapper = $('<div class="selectVarWrapper"></div>') ;
+    labelLine.append(selectVarWrapper) ;
+
     this.html.append(currentWrapper);
 
     // also append eye button to currentWrapper
-    this.selectViewVariableBtn.htmlParent = currentWrapper ;
-    
+    this.selectViewVariableBtn = new SelectViewVariableBtn(
+      this,
+      this.#onchangeViewVariable
+    );
+    this.selectViewVariableBtn.htmlParent = selectVarWrapper ;
+    this.selectViewVariableBtn.render();
+
+    // Add the "+ info" btn
+    this.keyInfoBtn = new SelectKeyInfoBtn(
+      this,
+      this.#onChangeKeyInfoVariable
+    );
+    this.keyInfoBtn.htmlParent = selectVarWrapper;
+    this.keyInfoBtn.render();
     
     if (isStartClassGroup(this.parentComponent)) {
       if(!this.startClassVal?.type) {
@@ -166,8 +185,28 @@ class ClassTypeId extends HTMLComponent {
      // The first StartClass gets an eye Btn to de/select
     if(isStartClassGroup(this.parentComponent) && this.parentComponent.renderEyeBtn) 
       this.#onSelectViewVar(this.parentComponent.startClassVal,selected)
-    
+
+    // if there are some key infos, then display the key info btn
+    let entity = this.specProvider.getEntity(this.parentComponent.getTypeSelected());
+    if(
+      entity instanceof SHACLSpecificationEntity
+      &&
+      ((entity as SHACLSpecificationEntity).shape as NodeShape).findPropertyShapesByDashPropertyRole(DASH.KEY_INFO_ROLE).length > 0) 
+    {
+      var hasKeyInfo = true ;
+    } else {
+      var hasKeyInfo = false ;
+    }
+
+    if(selected && hasKeyInfo) {
+      this.keyInfoBtn.show();
+    } else {
+      this.keyInfoBtn.hide();
+    }    
   };
+
+  #onChangeKeyInfoVariable = (selected: boolean) => {
+  }
 
   #onSelectViewVar(val:SelectedVal,selected:boolean){
     let payload ={
@@ -203,10 +242,6 @@ class ClassTypeId extends HTMLComponent {
 
   getSelectViewVariableBtn() {
     return this.selectViewVariableBtn;
-  }
-
-  showSelectViewVariableBtn() {
-    this.selectViewVariableBtn.render();
   }
 
 }

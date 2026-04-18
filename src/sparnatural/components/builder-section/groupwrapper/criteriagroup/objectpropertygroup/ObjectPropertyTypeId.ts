@@ -46,23 +46,25 @@ class ObjectPropertyTypeId extends HTMLComponent {
   render() {
     super.render(); 
 
-      this.htmlCurentValue = $(`<span class="current temporary-label"></span>`) ;
-      let currentWrapper = $('<div class="currentWrapper"></div>') ;
-      currentWrapper.append(this.htmlCurentValue) ;
-      this.html.append(currentWrapper);
+    let currentWrapper = $('<div class="currentWrapper"></div>') ;
+    let labelLine = $('<div class="labelLine"></div>') ;
+    currentWrapper.append(labelLine) ;
+
+    this.htmlCurentValue = $(`<span class="current temporary-label"></span>`) ;
+    labelLine.append(this.htmlCurentValue) ;
+    this.html.append(currentWrapper);
+
     // if there is an Object selected
     if (this.endClassVal) {
       this.#removeTempLbl();
       // set the correct objectProperty matching to Start and End value
-
-     
-      
+  
       this.widgetHtml = this.#getObjectProperty();
       
       this.html.append(this.widgetHtml);
       this.oldWidget = this.selectBuilder.selectWidget.getInput();
       
-    this.selectBuilder.selectWidget.initSelectUiUxListsHeight() ; //force init heigh after dominsertion.
+      this.selectBuilder.selectWidget.initSelectUiUxListsHeight() ; //force init heigh after dominsertion.
 
       //this.html.append(this.oldWidget);
       this.#addOnChangeListener(this.oldWidget);
@@ -84,12 +86,6 @@ class ObjectPropertyTypeId extends HTMLComponent {
       // there hasn't been an Object in Endclassgroup chosen. render a temporary label
       this.htmlCurentValue[0].innerHTML = this.temporaryLabel
       this.htmlCurentValue[0].classList.add('temporary-label')
-
-      /*this.widgetHtml = $(
-        '<span class="current temporary-label">' +
-          this.temporaryLabel +
-          "</span>"
-      );*/
     }
     this.html.append(this.widgetHtml);
     this.arrow.render();

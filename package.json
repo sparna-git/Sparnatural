@@ -130,7 +130,7 @@
     "n3": "^1.3.5",
     "rdf-data-factory": "^1.1.2",
     "rdf-parse": "^2.1.0",
-    "rdf-shacl-commons": "^0.3.3",
+    "rdf-shacl-commons": "^0.3.4",
     "rdf-stores": "^1.0.0",
     "select2": "^4.0.13",
     "sortablejs": "^1.14.0",

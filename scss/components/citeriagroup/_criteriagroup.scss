@@ -86,17 +86,51 @@
         background: rgba(0, 0, 0, 0);
         border-color: rgba(0, 0, 0, 0);
         padding-left: 8px;
-        padding-right: 12px;
         border-width: 0;
         border-top-width: 3px;
         border-bottom-width: 3px;
         border-top: 3px solid #fff;
         border-bottom: 3px solid #fff;
 
-		span.current {
-			display: inline-block;
+		.labelLine {
 			height: 42px;
 			line-height: 40px;
+			// Use flex so trailing actions align vertically without absolute positioning
+			display: flex;
+			align-items: center;
+			overflow: visible; // allow right-side action area to extend
+		}
+
+		// Allow the label to take remaining space and truncate if needed
+		.labelLine span.current {
+			flex: 1 1 auto;
+			min-width: 0; // enable ellipsis when space is tight
+		}
+
+		// Container for the variable button stays at the far right
+		.labelLine .selectVarWrapper {
+			margin-left: -2px;
+			margin-right: -4px; // tuck the button slightly inside the front arrow 
+			display: inline-flex; // size to content so it can grow with more icons
+			align-items: center;
+			flex: 0 0 auto; // prevent shrinking; reserve exact space for its children
+			min-width: max-content; // keep enough width for 1..n icons
+			white-space: nowrap; // keep icons on one line
+			gap: 3px; // spacing between icons
+			overflow: visible; // avoid clipping newly inserted icons
+		}
+
+		// Ensure the eye icon stays square, but don't constrain labeled pills
+		.labelLine .selectVarWrapper > span.selectViewVariableBtn {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			height: 20px;
+			width: 20px;
+		}
+
+		span.current {
+			display: inline-block;
 			vertical-align: bottom;
 			white-space: nowrap;
 			opacity: 0.6;

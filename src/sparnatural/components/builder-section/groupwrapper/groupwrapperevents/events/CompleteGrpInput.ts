@@ -2,9 +2,12 @@ import GroupWrapper from "../../GroupWrapper";
 
 //Input is completed by either choosing widgetvalue or adding a whereChild
 export function completeGrpInput(grpWrapper: GroupWrapper) {
-  grpWrapper.criteriaGroup.endClassGroup.renderSelectViewVar();
+  grpWrapper.criteriaGroup.endClassGroup.inputSelector.getSelectViewVariableBtn().show();
 
   if(grpWrapper.criteriaGroup.startClassGroup.renderEyeBtn){
+    grpWrapper.criteriaGroup.startClassGroup.inputSelector.getSelectViewVariableBtn().show();
+    grpWrapper.criteriaGroup.startClassGroup.inputSelector.getSelectViewVariableBtn().click();
+
     // only highlite when eye Btn is rendered.
     grpWrapper.criteriaGroup.startClassGroup.inputSelector.html[0].classList.add(
       "Highlited"

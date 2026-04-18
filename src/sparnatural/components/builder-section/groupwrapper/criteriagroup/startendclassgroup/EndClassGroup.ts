@@ -122,11 +122,6 @@ class EndClassGroup extends HTMLComponent {
     }
   }
 
-  // renders the "eye" btn
-  renderSelectViewVar() {
-    this.inputSelector.showSelectViewVariableBtn();
-  }
-
   #valueWasSelected() {
     this.#renderUnselectBtn();
     // trigger the event that will call the ObjectPropertyGroup

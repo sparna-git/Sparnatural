@@ -34,8 +34,6 @@ class ComponentsList extends HTMLComponent {
       // render eye button on the root StartClassGroup
       true
     ).render();
-    // The first criteriaGrp always has the "eye" icon to select it as a variable in the result set
-    this.rootGroupWrapper.criteriaGroup.startClassGroup.inputSelector.showSelectViewVariableBtn() ;
   }
 
   /**
