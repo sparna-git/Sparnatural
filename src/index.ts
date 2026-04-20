@@ -1,6 +1,7 @@
 export * from "./SparnaturalAttributes";
 export * from "./SparnaturalElement";
 export * from "./sparnatural/SparnaturalQueryIfc";
+export * from "./sparnatural/SparnaturalQueryIfc-v13";
 
 // export * from "./sparnatural/SparnaturalQueryIfc-v13";
 
