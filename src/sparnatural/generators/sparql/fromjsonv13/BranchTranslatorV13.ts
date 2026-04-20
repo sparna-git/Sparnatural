@@ -10,6 +10,7 @@ import {
   ObjectCriteria,
   SparnaturalQuery,
   TermTypedVariable,
+  SelectVariable,
 } from "../../../SparnaturalQueryIfc-v13";
 
 import {
@@ -24,6 +25,8 @@ import {
   translateFilters,
   translateObjectValues,
 } from "../../../querypreloading/QueryAdapterFunc";
+import TypedVariableTranslatorV13 from "./TypedVariableTranslatorV13";
+import { JsonV13SparqlTranslator } from "./JsonV13SparqlTranslator";
 
 const factory = new DataFactory();
 
@@ -37,13 +40,11 @@ export default class BranchTranslatorV13 {
   #rootSubject: TermTypedVariable;
   #object: ObjectCriteria;
 
-  // full query (for isVarSelected)
-  #fullQuery: SparnaturalQuery;
-
-  #specProvider: ISparnaturalSpecification;
+  
   #isVeryFirst: boolean;
   #isInOption: boolean;
-  settings: any;
+
+  #translator: JsonV13SparqlTranslator;
 
   // derived "legacy-like" fields
   #s: string;
@@ -66,8 +67,10 @@ export default class BranchTranslatorV13 {
   // final result
   #resultPtrns: Pattern[] = [];
 
-  // default vars gathered from children
-  #defaultVars: Variable[] = [];
+  // default vars gathered from this branch + children
+  #defaultLabelVars: Variable[] = [];
+
+  #extraPropertiesVars: Variable[] = [];
 
   #hasValues = false;
 
@@ -76,25 +79,20 @@ export default class BranchTranslatorV13 {
     pair: PredicateObjectPair,
     // the root subject (shared for the whole bgpSameSubject)
     rootSubject: TermTypedVariable,
-    // the full query (we need it to test if variables are selected)
-    fullQuery: SparnaturalQuery,
-    // the sparnatural spec
-    specProvider: ISparnaturalSpecification,
     // true if this branch is the very first of the query (not a child of another, not a sibling of the first one)
     isVeryFirst: boolean,
     // true if this branch is under (recursively) of another that is itself in an option
     isInOption: boolean,
-    settings: any,
+    translator: JsonV13SparqlTranslator,
   ) {
     this.#pair = pair;
     this.#rootSubject = rootSubject;
     this.#object = pair.object;
 
-    this.#fullQuery = fullQuery;
-    this.#specProvider = specProvider;
     this.#isVeryFirst = isVeryFirst;
     this.#isInOption = isInOption;
-    this.settings = settings;
+
+    this.#translator = translator;
 
     // derive legacy-like vars
     this.#s = rootSubject.value;
@@ -114,15 +112,15 @@ export default class BranchTranslatorV13 {
     // this is because the query generation may be triggered while the end class is not there yet
     if (endClassValue != null) {
       this.#valueBuilder = new ValueBuilderFactory().buildValueBuilder(
-        this.#specProvider.getProperty(this.#p).getPropertyType(endClassValue),
+        this.#translator.specProvider.getProperty(this.#p).getPropertyType(endClassValue),
       );
       // pass everything needed to generate SPARQL
       this.#valueBuilder.init(
-        this.#specProvider,
+        this.#translator.specProvider,
         { variable: this.#s, type: this.#sType },
         { variable: null, type: this.#p },
         { variable: this.#o, type: this.#oType },
-        BranchTranslatorV13.isVarSelected(fullQuery, this.#o),
+        this.#translator.isVarSelected(this.#o),
         criterias.map((v) => v.criteria),
       );
     }
@@ -160,20 +158,19 @@ export default class BranchTranslatorV13 {
           // subject of children becomes the current object variable
           // In v13, nested predicateObjectPairs are under ObjectCriteria, so the "same subject" at that level is the object variable.
           this.#object.variable,
-          this.#fullQuery,
-          this.#specProvider,
           false,
           // children are in option if parent is optional/notExists
           this.#pair.subType === "optional" || this.#pair.subType === "notExists",
-          this.settings,
+          this.#translator
         );
 
         builder.build();
         this.#whereChildPtrns.push(...builder.getResultPtrns());
         // gather default vars from children
-        this.#defaultVars.push(...builder.getDefaultVars());
+        this.#defaultLabelVars.push(...builder.getDefaultLabelVars());
         // gather patterns to be executed after
         this.#executedAfterPtrns.push(...builder.getExecutedAfterPtrns());
+        this.#extraPropertiesVars.push(...builder.getExtraPropertiesVars());
       });
     }
   }
@@ -205,45 +202,51 @@ export default class BranchTranslatorV13 {
   /**
    * Subject class pattern (same as legacy)
    */
-
   #buildSubjectClassPtrn() {
-    let typeTranslator: TypedVariableTranslator = new TypedVariableTranslator(
+    let typeTranslator: TypedVariableTranslatorV13 = new TypedVariableTranslatorV13(
       this.#s,
       this.#sType,
       // same semantics as legacy: subject variable selectable only if very first
-      BranchTranslatorV13.isVarSelected(this.#fullQuery, this.#s) &&
-        this.#isVeryFirst,
+      this.#translator.isVarSelected(this.#s) && this.#isVeryFirst,
+      this.#translator.getExtraPropertyRoles(this.#s),
       this.#valueBuilder?.isBlockingStart(),
-      this.#specProvider,
-      this.settings,
+      this.#translator
     );
     typeTranslator.build();
+    
     this.#startClassPtrn = typeTranslator.resultPtrns;
     // if there was any default label patterns generated, gather the variable names of the default label
     if (typeTranslator.defaultLblPatterns.length > 0) {
-      this.#defaultVars.push(
+      this.#defaultLabelVars.push(
         factory.variable(typeTranslator.defaultLabelVarName),
       );
     }
+
+    // also gather extra selected variables
+    this.#extraPropertiesVars.push(...typeTranslator.extraPropertiesVars);
   }
 
   #buildObjectClassPtrn() {
-    let typeTranslator: TypedVariableTranslator = new TypedVariableTranslator(
+    let typeTranslator: TypedVariableTranslatorV13 = new TypedVariableTranslatorV13(
       this.#o,
       this.#oType,
-      BranchTranslatorV13.isVarSelected(this.#fullQuery, this.#o),
+      this.#translator.isVarSelected(this.#o),
+      this.#translator.getExtraPropertyRoles(this.#o),
       this.#valueBuilder?.isBlockingEnd(),
-      this.#specProvider,
-      this.settings,
+      this.#translator
     );
     typeTranslator.build();
 
+    // gather result patterns and default label vars if any
     this.#endClassPtrn = typeTranslator.resultPtrns;
     if (typeTranslator.defaultLblPatterns.length > 0) {
-      this.#defaultVars.push(
+      this.#defaultLabelVars.push(
         factory.variable(typeTranslator.defaultLabelVarName),
       );
     }
+
+    // also gather extra selected variables
+    this.#extraPropertiesVars.push(...typeTranslator.extraPropertiesVars);
   }
 
   #buildIntersectionPtrn() {
@@ -251,7 +254,7 @@ export default class BranchTranslatorV13 {
     if (!this.#s || !this.#o || this.#valueBuilder?.isBlockingObjectProp())
       return;
 
-    const specProperty = this.#specProvider.getProperty(this.#p);
+    const specProperty = this.#translator.specProvider.getProperty(this.#p);
 
     if (
       specProperty.getBeginDateProperty() &&
@@ -316,7 +319,7 @@ export default class BranchTranslatorV13 {
       this.#intersectionPtrn.push(
         SparqlFactory.buildFilterLangEquals(
           factory.variable(this.#o),
-          factory.literal(this.settings.language),
+          factory.literal(this.#translator.settings.language),
         ),
       );
     }
@@ -337,7 +340,7 @@ export default class BranchTranslatorV13 {
 
     if (
       this.#o &&
-      !this.#specProvider.getEntity(this.#oType).isLiteralEntity()
+      !this.#translator.specProvider.getEntity(this.#oType).isLiteralEntity()
     ) {
       exceptStartPtrn.push(...this.#endClassPtrn);
     }
@@ -351,7 +354,7 @@ export default class BranchTranslatorV13 {
 
   #createOptionStatePtrn(exceptStartPtrn: Pattern[]) {
     // create a SERVICE clause of needed
-    const sparqlService = this.#specProvider
+    const sparqlService = this.#translator.specProvider
       .getProperty(this.#p)
       ?.getServiceEndpoint();
 
@@ -393,7 +396,7 @@ export default class BranchTranslatorV13 {
     // or in patterns that shall be executed after the rest of the query
     if (
       servicePtrn &&
-      this.#specProvider.getProperty(this.#p)?.isLogicallyExecutedAfter()
+      this.#translator.specProvider.getProperty(this.#p)?.isLogicallyExecutedAfter()
     ) {
       this.#executedAfterPtrns.push(...finalResultPtrns);
     } else {
@@ -401,34 +404,16 @@ export default class BranchTranslatorV13 {
     }
   }
 
-  /**
-   *
-   * @param query The query to test
-   * @param varName The variable to test the selection for
-   * @returns true if the varName is selected in the query
-   */
-
-  static isVarSelected(query: SparnaturalQuery, varName: string): boolean {
-    return (
-      query.variables.filter((v) => {
-        // PatternBind (aggregate)
-        if (v.type === "pattern" && v.subType === "bind") {
-          return v.expression.expression[0].value === varName;
-        }
-        // TermVariable
-        return (
-          v.type === "term" && v.subType === "variable" && v.value === varName
-        );
-      }).length === 1
-    );
-  }
-
   getResultPtrns() {
     return this.#resultPtrns;
   }
 
-  getDefaultVars() {
-    return this.#defaultVars;
+  getDefaultLabelVars(): Variable[] {
+    return this.#defaultLabelVars;
+  }
+
+  getExtraPropertiesVars(): Variable[] {
+    return this.#extraPropertiesVars;
   }
 
   getExecutedAfterPtrns() {

@@ -1,0 +1,5 @@
+SELECT ?x ?o WHERE {
+  ?x a <http://example.com/Person> ;
+     <http://example.com/Person_knows> ?o .
+  ?o a <http://example.com/Person> .
+}

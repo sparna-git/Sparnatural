@@ -1,0 +1,7 @@
+SELECT ?Person ?Person_2 ?Concept WHERE {
+  ?Person a <http://example.com/Person> ;
+     <http://example.com/Person_knows> ?Person_2 .
+  ?Person_2 a <http://example.com/Person> .
+  ?Person_2 <http://example.com/Person_topicInterest> ?Concept .
+  ?Concept a <http://example.com/Concept> .
+}

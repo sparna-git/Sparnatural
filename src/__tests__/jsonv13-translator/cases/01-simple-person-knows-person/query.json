@@ -1,0 +1,38 @@
+{
+  "type": "query",
+  "subType": "SELECT",
+  "variables": [
+    { "type": "term", "subType": "variable", "value": "x" },
+    { "type": "term", "subType": "variable", "value": "o" }
+  ],
+  "solutionModifiers": {},
+  "where": {
+    "type": "pattern",
+    "subType": "bgpSameSubject",
+    "subject": {
+      "type": "term",
+      "subType": "variable",
+      "value": "x",
+      "rdfType": "http://example.com/Person"
+    },
+    "predicateObjectPairs": [
+      {
+        "type": "predicateObjectPair",
+        "predicate": {
+          "type": "term",
+          "subType": "namedNode",
+          "value": "http://example.com/Person_knows"
+        },
+        "object": {
+          "type": "objectCriteria",
+          "variable": {
+            "type": "term",
+            "subType": "variable",
+            "value": "o",
+            "rdfType": "http://example.com/Person"
+          }
+        }
+      }
+    ]
+  }
+}

@@ -3,13 +3,14 @@ import { HTMLComponent } from "../HtmlComponent";
 import GroupWrapper from "./groupwrapper/GroupWrapper";
 
 /*
-    Componentslist does correspond to the <ul class="componentsListe"> OR <ul class="childsList">
-    Depending on the ParentComponent. If BGWrapper is parent, then it is the root Componentslist
+    Componentslist does correspond to the <ul class="componentsListe">
     Componentslist holds a list of GroupWrapper siblings added with 'addAndComponent'.
 */
 class ComponentsList extends HTMLComponent {
+  
   specProvider: ISparnaturalSpecification;
   rootGroupWrapper: GroupWrapper;
+
   constructor(ParentComponent: HTMLComponent, specProvider: ISparnaturalSpecification) {
     super("componentsListe", ParentComponent, null);
     this.specProvider = specProvider;

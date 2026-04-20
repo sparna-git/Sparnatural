@@ -11,6 +11,7 @@ import { Model } from "rdf-shacl-commons";
  * Selection of the start class in a criteria/line
  **/
 class StartClassGroup extends HTMLComponent {
+  
   startClassVal: SelectedVal;
   inputSelector: ClassTypeId;
   parentCriteriaGroup: CriteriaGroup;

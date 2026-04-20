@@ -8,10 +8,10 @@ import {
   PatternBgpSameSubject,
   PredicateObjectPair,
   ObjectCriteria,
-  TermVariable,
   TermTypedVariable,
-  PatternBind,
   ExpressionAggregate,
+  SelectVariable,
+  TermIri,
 } from "../../SparnaturalQueryIfc-v13";
 
 import {
@@ -50,7 +50,14 @@ export class SparnaturalJsonGeneratorV13 {
 
   #toVariables(
     vars: DraggableComponentState[],
-  ): (TermVariable | PatternBind)[] {
+  ): (SelectVariable)[] {
+    
+    let DASH_KEY_INFO_ROLE: TermIri = {
+      type: "term",
+      subType: "namedNode",
+      value: "http://datashapes.org/dash#KeyInfoRole",
+    };
+
     return vars.map((v) => {
       if (v.aggregateFunction) {
         const expr: ExpressionAggregate = {
@@ -67,7 +74,7 @@ export class SparnaturalJsonGeneratorV13 {
           ],
         };
 
-        return {
+        let basePatternBind: SelectVariable = {
           type: "pattern",
           subType: "bind",
           expression: expr,
@@ -77,13 +84,27 @@ export class SparnaturalJsonGeneratorV13 {
             value: v.selectedVariable.variable,
           },
         };
+
+        if(v.isKeyInfo) {
+          basePatternBind.with = [ DASH_KEY_INFO_ROLE ];
+        }
+
+        return basePatternBind;
       }
 
-      return {
+      let baseVariable: SelectVariable = {
         type: "term",
         subType: "variable",
         value: v.selectedVariable.variable,
       };
+
+      if(v.isKeyInfo) {
+        baseVariable.with = [ DASH_KEY_INFO_ROLE ];
+      }
+      
+      console.log(baseVariable, "is key info: ", v.isKeyInfo);
+
+      return baseVariable;
     });
   }
 

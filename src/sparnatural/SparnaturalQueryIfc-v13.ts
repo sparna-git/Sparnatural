@@ -9,7 +9,8 @@ export type SparnaturalQuery = {
   // context: ContextDefinition[];
   // variables: (TermVariable | PatternBind)[] | [Wildcard];
   // idea : we could support Wildcard, in this case all variables get selected
-  variables: (TermVariable | PatternBind)[];
+  // variables: (TermVariable | PatternBind)[];
+  variables: SelectVariable[];
   solutionModifiers: SolutionModifiers;
   distinct?: true;
   where: PatternBgpSameSubject;
@@ -32,6 +33,10 @@ export type SparnaturalQuery = {
     // any other metadata are allowed here
     [key: string]: any;
   };
+};
+
+export type SelectVariable = (TermVariable | PatternBind) & {
+  with?: TermIri[];
 };
 
 export type PatternBase = { type: "pattern"; subType: string };

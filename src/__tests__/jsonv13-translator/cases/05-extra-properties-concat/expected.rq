@@ -1,0 +1,7 @@
+SELECT ?x ?o (GROUP_CONCAT(DISTINCT ?o_givenName) AS ?o_givenName_concat) WHERE {
+  ?x a <http://example.com/Person> ;
+     <http://example.com/Person_knows> ?o .
+  ?o a <http://example.com/Person> .
+  ?o <http://example.com/Person_givenName> ?o_givenName .
+}
+GROUP BY ?x ?o

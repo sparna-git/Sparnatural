@@ -1,0 +1,6 @@
+SELECT ?x ?o ?o_givenName WHERE {
+  ?x a <http://example.com/Person> ;
+     <http://example.com/Person_knows> ?o .
+  ?o a <http://example.com/Person> .
+  OPTIONAL { ?o <http://example.com/Person_givenName> ?o_givenName . }
+}

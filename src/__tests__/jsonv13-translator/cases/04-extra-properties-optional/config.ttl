@@ -1,0 +1,25 @@
+@prefix ex: <http://example.com/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix sc: <http://data.sparna.fr/ontologies/sparnatural-config-core#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Define a Sparnatural class Person
+ex:Person a sh:NodeShape ;
+    sh:targetClass foaf:Person ;
+    sh:property ex:Person_knows, ex:Person_givenName ;
+.
+
+ex:Person_knows 
+    sh:path foaf:knows ;
+    sh:class foaf:Person ;
+.
+
+ex:Person_givenName 
+    sh:path foaf:givenName ;
+    sh:datatype xsd:string ;
+    sh:maxCount 1 ;
+    dash:propertyRole dash:KeyInfoRole ;
+.

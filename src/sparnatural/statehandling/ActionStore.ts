@@ -10,6 +10,7 @@ import { selectViewVar } from "./actions/SelectViewVar";
 import GroupWrapper from "../components/builder-section/groupwrapper/GroupWrapper";
 import { QueryGenerator } from "./actions/GenerateQuery";
 import { Model } from "rdf-shacl-commons";
+import { DraggableComponent } from "../components/variables-section/variableorder/DraggableComponent";
 
 export enum MaxVarAction {
   INCREASE,
@@ -52,6 +53,7 @@ class ActionStore {
         new QueryGenerator(this).generateQuery();
       }
     );
+
     // executed by VariableSelection, Start-EndclassGroup & VariableSelector
     // called by click on "Eye" btn
     this.sparnatural.html[0].addEventListener(
@@ -65,6 +67,31 @@ class ActionStore {
         // add variable to selected variables
         selectViewVar(this, e.detail, e.target);
         // trigger query generation + re-enable submit button
+        new QueryGenerator(this).generateQuery();
+      }
+    );
+
+    this.sparnatural.html[0].addEventListener(
+      "onSelectKeyInfo",
+      (e: CustomEvent) => {
+        e.stopImmediatePropagation();
+        if (!("val" in e.detail && "selected" in e.detail))
+          throw Error(
+            "onSelectKeyInfo expects object of type {val:SelectedVal,selected:boolean}"
+          );
+        
+        console.log("Key info selected for variable ", e.detail.val.variable, " with value ", e.detail.selected);
+        // pass flag to selected variable so that it can be easily retrieved when generating the query
+        let variable = e.detail.val.variable;
+        let draggable = this.sparnatural.variableSection.variableOrderMenu.draggables.find((d:DraggableComponent)=>{
+            return d.state.selectedVariable.variable === variable
+        });
+
+        if(draggable) {
+          draggable.state.isKeyInfo = e.detail.selected;
+        }
+        
+        // trigger query generation
         new QueryGenerator(this).generateQuery();
       }
     );
@@ -117,18 +144,7 @@ class ActionStore {
         
         e.stopImmediatePropagation();
 
-        let maxVariableIndexPerTypes = this.sparnatural.getMaxVariableIndexByTypes();
-        let currentTypeIndex = maxVariableIndexPerTypes.get(payload.type) || 0;
-
-        // return the variable name in callback
-        if(currentTypeIndex === 0) {
-          // if first variable of this type don't add the index to have more readable variable names when there's only one of each type,
-          // e.g ?Country instead of ?Country_1
-          payload.callback(`${Model.getSparqlVariableNameFromUri(payload.type)}`);
-        } else {
-          payload.callback(`${Model.getSparqlVariableNameFromUri(payload.type)}_${currentTypeIndex + 1}`);
-        }
-        
+        payload.callback(this.sparnatural.generateNewVariableName(payload.type));        
       }
     );
 

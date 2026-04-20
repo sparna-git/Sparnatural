@@ -12,6 +12,7 @@ export class SparnaturalSpecificationFactory {
     if (cfg.includes("@prefix") || cfg.includes("<http")) {
       // inline Turtle
       RdfStoreReader.buildStoreFromString(cfg, "https://sparnatural.eu", (theStore:RdfStore) => {
+        console.log("Configuring from inline Turtle with "+theStore.size+" triples");
         if(theStore.asDataset().has(
           DF.quad(
             null,

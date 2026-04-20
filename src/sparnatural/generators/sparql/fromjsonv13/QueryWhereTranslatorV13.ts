@@ -4,45 +4,41 @@ import { ISparnaturalSpecification } from "../../../spec-providers/ISparnaturalS
 import {
   SparnaturalQuery,
   PredicateObjectPair,
+  SelectVariable,
 } from "../../../SparnaturalQueryIfc-v13";
 import BranchTranslatorV13 from "./BranchTranslatorV13";
+import { JsonV13SparqlTranslator } from "./JsonV13SparqlTranslator";
 
 const factory = new DataFactory();
 
 export default class QueryWhereTranslatorV13 {
   // variables set in constructor
-  #jsonQuery: SparnaturalQuery;
-  #specProvider: ISparnaturalSpecification;
+  #translator: JsonV13SparqlTranslator;
 
   // patterns built in the build process
   #resultPtrns: Pattern[] = [];
   #executedAfterPtrns: Pattern[] = [];
 
   // default vars gathered from children
-  #defaultVars: Variable[] = [];
-
-  settings: any;
+  #defaultLabelVars: Variable[] = [];
+  #extraPropertiesVars: Variable[] = [];
 
   constructor(
-    jsonQuery: SparnaturalQuery,
-    specProvider: ISparnaturalSpecification,
-    settings: any,
+    translator: JsonV13SparqlTranslator,
   ) {
-    this.#jsonQuery = jsonQuery;
-    this.#specProvider = specProvider;
-    this.settings = settings;
+    this.#translator = translator;
   }
 
   build() {
-    const where = this.#jsonQuery?.where;
+    const where = this.#translator?.jsonQuery?.where;
     const pairs: PredicateObjectPair[] | undefined =
       where?.predicateObjectPairs;
 
     if (
-      this.#jsonQuery &&
+      this.#translator.jsonQuery &&
       where &&
       pairs &&
-      this.#specProvider &&
+      this.#translator.specProvider &&
       Array.isArray(pairs)
     ) {
       pairs.forEach((pair, index) => {
@@ -53,20 +49,17 @@ export default class QueryWhereTranslatorV13 {
           pair,
           // root subject (shared for the whole bgpSameSubject)
           where.subject,
-          // full query (needed for isVarSelected + selected variables)
-          this.#jsonQuery,
-          // spec provider
-          this.#specProvider,
           // indicates if it is the very first (same semantics as v1)
           index === 0,
           // first level is never "inside" optional/notExists
           false,
-          this.settings,
+          this.#translator,
         );
 
         branchBuilder.build();
 
-        this.#defaultVars.push(...branchBuilder.getDefaultVars());
+        this.#defaultLabelVars.push(...branchBuilder.getDefaultLabelVars());
+        this.#extraPropertiesVars.push(...branchBuilder.getExtraPropertiesVars());
         this.#resultPtrns.push(...branchBuilder.getResultPtrns());
       });
     } else {
@@ -79,7 +72,11 @@ export default class QueryWhereTranslatorV13 {
   }
 
   getDefaultVars() {
-    return this.#defaultVars;
+    return this.#defaultLabelVars;
+  }
+
+  getExtraPropertiesVars(): Variable[] {
+    return this.#extraPropertiesVars;
   }
 
   getExecutedAfterPtrns() {

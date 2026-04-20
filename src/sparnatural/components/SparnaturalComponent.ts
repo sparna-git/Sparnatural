@@ -9,6 +9,9 @@ import { HTMLComponent } from "./HtmlComponent";
 import { SparnaturalElement } from "../../SparnaturalElement";
 import { I18n } from "../settings/I18n";
 import { Catalog, Model } from "rdf-shacl-commons";
+import CriteriaGroup from "./builder-section/groupwrapper/criteriagroup/CriteriaGroup";
+import EndClassGroup from "./builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
+import StartClassGroup from "./builder-section/groupwrapper/criteriagroup/startendclassgroup/StartClassGroup";
 
 class SparnaturalComponent extends HTMLComponent {
   specProvider: ISparnaturalSpecification;
@@ -137,6 +140,9 @@ class SparnaturalComponent extends HTMLComponent {
     }
   }
 
+  /**
+   * @returns A map with the max variable index for each type, based on the variables used in the current SPARQL query. 
+   */
   getMaxVariableIndexByTypes(): Map<string, number> {
     let maxVariableIndexPerType = new Map<string, number>();
 
@@ -190,5 +196,19 @@ class SparnaturalComponent extends HTMLComponent {
 
     return maxVariableIndexPerType;
   }
+
+  generateNewVariableName(type: string): string {
+    let maxVariableIndexPerType = this.getMaxVariableIndexByTypes();
+    let currentTypeIndex = maxVariableIndexPerType.get(type) || 0;
+
+    if(currentTypeIndex === 0) {
+      // if first variable of this type don't add the index to have more readable variable names when there's only one of each type,
+      // e.g ?Country instead of ?Country_1
+      return `${Model.getSparqlVariableNameFromUri(type)}`;
+    } else {
+      return `${Model.getSparqlVariableNameFromUri(type)}_${currentTypeIndex + 1}`;
+    }
+  }
+
 }
 export default SparnaturalComponent;

@@ -206,6 +206,23 @@ class ClassTypeId extends HTMLComponent {
   };
 
   #onChangeKeyInfoVariable = (selected: boolean) => {
+    let val:SelectedVal ;
+    if (isEndClassGroup(this.parentComponent)) {
+      val = this.parentComponent.endClassVal ;
+    } else if(isStartClassGroup(this.parentComponent) && this.parentComponent.renderEyeBtn) {
+      val = this.parentComponent.startClassVal ;
+    } else {
+      throw Error("No class value found for key info btn") ;
+    }
+    
+    let payload ={
+      val: val,
+      selected: selected
+    }
+
+    this.keyInfoBtn.widgetHtml[0].dispatchEvent(
+      new CustomEvent("onSelectKeyInfo", { bubbles: true, detail: payload })
+    );
   }
 
   #onSelectViewVar(val:SelectedVal,selected:boolean){

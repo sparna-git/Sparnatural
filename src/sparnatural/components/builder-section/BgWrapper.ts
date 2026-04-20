@@ -6,15 +6,18 @@ import { HTMLComponent } from "../HtmlComponent";
 import { SparnaturalElement } from "../../../SparnaturalElement";
 
 class BgWrapper extends HTMLComponent {
+
   ParentSparnatural: SparnaturalComponent;
   resetBtn: ResetBtn;
   componentsList: ComponentsList;
   specProvider: ISparnaturalSpecification;
+
   constructor(ParentComponent: SparnaturalComponent, specProvider: ISparnaturalSpecification) {
     super("builder-section", ParentComponent, null);
     this.specProvider = specProvider;
     this.ParentSparnatural = ParentComponent;
   }
+
   render(): this {
     super.render();
     this.#renderComponents();
@@ -45,5 +48,6 @@ class BgWrapper extends HTMLComponent {
       }
     }));
   };
+  
 }
 export default BgWrapper;

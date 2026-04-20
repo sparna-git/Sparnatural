@@ -340,4 +340,6 @@ export interface DraggableComponentState {
    */
   originalVariable?:SelectedVal;
 
+  isKeyInfo?: boolean;
+
  }
