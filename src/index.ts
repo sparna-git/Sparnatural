@@ -2,8 +2,8 @@ export * from "./SparnaturalAttributes";
 export * from "./SparnaturalElement";
 export * from "./sparnatural/SparnaturalQueryIfc";
 export * from "./sparnatural/SparnaturalQueryIfc-v13";
-
-// export * from "./sparnatural/SparnaturalQueryIfc-v13";
+// tis is to avoid name clash between v12 and v13
+export { LatLng } from "./sparnatural/SparnaturalQueryIfc-v13";
 
 export * from "./sparnatural/components/HtmlComponent";
 // export * from "./sparnatural/components/SelectedVal";
