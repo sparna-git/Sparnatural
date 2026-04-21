@@ -26,7 +26,7 @@ Sparnatural offers a dedicated feature to search on date range. To use it:
 
 1. Create a Sparnatural TimeProperty, either that provides a widget to select with years only, or with a date.
 2. Annotate your Sparnatural property with [`core:beginDateProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#beginDateProperty) and [`core:endDateProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#endDateProperty) to indicate the properties used in the RDF graph that express the begin date and the end date of your resources.
-3. Optionnaly, if resources in the graph can also indicate an exact date, annotate your Sparnatural property with [`core:exactDateProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#exactDateProperty) to indicate it.
+3. Optionaly, if resources in the graph can also indicate an exact date, annotate your Sparnatural property with [`core:exactDateProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#exactDateProperty) to indicate it.
 
 The properties you indicate can be either:
   - IRIs of properties from the graph

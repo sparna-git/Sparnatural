@@ -105,7 +105,7 @@ The JSON data structure encodes the list of fields in the form, and for each fie
   - the variable to which the field is associated in the underlying Sparnatural query passed in the `query` attribute of the form
   - optionaly, some user tooltips
 
-The data structure can also optionnaly list the variables from the original query that should be retained when the query results are displayed onscreen (versus when a full export is done).
+The data structure can also optionaly list the variables from the original query that should be retained when the query results are displayed onscreen (versus when a full export is done).
 
 ### Form specification structure
 
@@ -187,7 +187,7 @@ Then you may configure a form field this way:
 
 ### Variables structure
 
-This part is optionnal.
+This part is optional.
 
 ```json
 "variables": {
