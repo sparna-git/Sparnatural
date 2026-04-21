@@ -129,7 +129,7 @@ _none_
     - amends / amended_by
     - is_another_publication_of / has_another_publication
 
-  - additionnal properties were also added to accomodate with situations where a property value can be either a literal or a URI :
+  - additional properties were also added to accomodate with situations where a property value can be either a literal or a URI :
     - responsibility_of_agent vs. responsibility_of
     - published_in_format vs. published_in
     - publisher_agent vs. publisher
@@ -151,7 +151,7 @@ _none_
 V1.1 is backward compatible with v1.0, with 1 following exception :
   - starting from v1.1, is_member_of / has_member should be used instead of is_part_of / has_part for conceptual inclusions;
 
-Additionnally, ELI implementers are strongly encouraged to use applies / applied_by instead of implements / implemented_by; note however that implements/implemented_by currently remain in the ontology so publishers can take the time to transition smoothly.
+Additionally, ELI implementers are strongly encouraged to use applies / applied_by instead of implements / implemented_by; note however that implements/implemented_by currently remain in the ontology so publishers can take the time to transition smoothly.
 
 ## 1.0
 
@@ -1053,7 +1053,7 @@ v1.2 : replaced reference of RDA with FRBRoo.</skos:historyNote>
         <specificPropertyOf rdf:resource="http://purl.org/dc/terms/relation"/>
         <rdfs:comment xml:lang="en">Indicates that this resource is a new publication, in a different official journal, of another resource already published elsewhere, and cannot be considered to be the same resource (owl:sameAs cannot be used to avoid potential duplication of certain metadata, like the date of publication, or the publisher).
 
-Note that this is different from the exceptionnal cases of &quot;republication&quot;, where the same resource is actually republished in the same official journal a few days after its initial publication, in case of errors.</rdfs:comment>
+Note that this is different from the exceptional cases of &quot;republication&quot;, where the same resource is actually republished in the same official journal a few days after its initial publication, in case of errors.</rdfs:comment>
         <rdfs:label xml:lang="en">is another publication of</rdfs:label>
         <owl:versionInfo xml:lang="en">created in v1.1</owl:versionInfo>
     </owl:ObjectProperty>

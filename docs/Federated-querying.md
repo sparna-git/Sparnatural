@@ -25,7 +25,7 @@ We will illustrate this configuration with federated queries on Wikidata.
 
 1. Add a `http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlService` annotation on a property shape that is to be executed as a SERVICE
 2. This annotation will point to an entity that itself is the subject of an `http://www.w3.org/ns/sparql-service-description#endpoint` predicate holding the actual SPARQL endpoint URL
-3. Optionnaly you can add `http://data.sparna.fr/ontologies/sparnatural-config-core#executedAfter` on the property shape to force the rest of the query to be put in subquery that will be evalued before the SERVICE clause is sent
+3. Optionaly you can add `http://data.sparna.fr/ontologies/sparnatural-config-core#executedAfter` on the property shape to force the rest of the query to be put in subquery that will be evalued before the SERVICE clause is sent
 
 
 ```turtle
@@ -104,7 +104,7 @@ Now when a query is issued involving this property, it is automatically wrapped 
 
 ![](assets/images/protege-screenshot-service-final-sparql.png)
 
-### Additionnal (experimental) config : executedAfter
+### Additional (experimental) config : executedAfter
 
 Some - if not most - of the federated query use-cases involve *first* querying the local triplestore, retrieve some URIs, and *then second* fetch some properties of these URIs in a remote federated triplestore. And not the reverse. For these kinds of query to be successfull, we need to instruct Sparnatural to execute first the local part of the query, and in a second time the remote part of the query. This involves wrapping the first part of the query in nested SELECT clause.
 

@@ -158,7 +158,7 @@ sparnatural.addEventListener("reset", (event) => {
 
 ### "init" event
 
-The `init` event is triggered when Sparnatural has finished reading its configuration. Listen to this event to pass additionnal JSON customization with `sparnatural.customization = { ... }` (see below).
+The `init` event is triggered when Sparnatural has finished reading its configuration. Listen to this event to pass additional JSON customization with `sparnatural.customization = { ... }` (see below).
 
 The `init` event includes the Sparnatural configuration object in the `detail.config` variable, to be passed to other components that would need it.
 
@@ -214,7 +214,7 @@ In particular this object allows to pass in functions to provide data to the dif
 
 ### Sparnatural customization object reference
 
-The customization object structure is outlined below. All items are optionnal.
+The customization object structure is outlined below. All items are optional.
 
 
 ```typescript

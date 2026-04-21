@@ -57,7 +57,7 @@ To use the range as a criteria in the query and filter the list based on the typ
 
 ### Preconfigured datasources for an AutocompleteProperty
 
-Sparnatural comes preconfigured with datasources that can populate autocomplete fields based on `rdfs:label`, `skos:prefLabel`, `foaf:name`, `dcterms:title`, `schema:name` or the URI of the entity. For each of these properties, 3 flavors of datasource exist : either searching by the beginning of the value with `strstarts()`, anywhere in the value with `contains()` or using Virtuoso-specific `bif:contains()` function. Additionnally, a search datasource can search on the URI using the `contains()` function.
+Sparnatural comes preconfigured with datasources that can populate autocomplete fields based on `rdfs:label`, `skos:prefLabel`, `foaf:name`, `dcterms:title`, `schema:name` or the URI of the entity. For each of these properties, 3 flavors of datasource exist : either searching by the beginning of the value with `strstarts()`, anywhere in the value with `contains()` or using Virtuoso-specific `bif:contains()` function. Additionally, a search datasource can search on the URI using the `contains()` function.
 
 The preconfigured datasource identifiers for an AutocompleteProperty are :
 
@@ -148,7 +148,7 @@ You can provide your own SPARQL queries to populate lists or autocomplete sugges
 
 **The SPARQL query MUST return 2 variables : `?uri` and `?label`, populated anyway you like.** 
 
-Additionnally, the query can return, optionnally:
+Additionally, the query can return, optionally:
 - an extra `?group` variable, which will be used to generate `optgroup` sections in lists widgets, and will be used as hover tooltips in autocompletion lists. This is used to indicate the source endpoint of the result in cases of multiple endpoints.
 - an extra `?itemLabel` variable, which will be used, if present, as the label of the selected value; for exemple, `?label` can hold a count, like _"Italy (307)"_, while `?itemLabel` can be just _"Italy"_.
 

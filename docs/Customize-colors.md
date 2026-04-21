@@ -7,7 +7,7 @@ _/!\This feature is available since version 8.1 of Sparnatural._
 
 ## Include a theme CSS
 
-To customize the colors of Sparnatural, you need to include an additionnal "sparnatural-theme" CSS in your webpage and overwrite the color variables declaration inside it. This reference needs to be placed _after_ the reference to Sparnatural main CSS
+To customize the colors of Sparnatural, you need to include an additional "sparnatural-theme" CSS in your webpage and overwrite the color variables declaration inside it. This reference needs to be placed _after_ the reference to Sparnatural main CSS
 
 ```html
 	<!-- Sparnatural Main CSS -->

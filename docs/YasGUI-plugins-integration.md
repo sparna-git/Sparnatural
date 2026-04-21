@@ -13,7 +13,7 @@ First, download the javascript of the plugins from the [release section of the s
 Then follow these steps:
 
 1. Load plugins code in your webpage with `<script>` tag
-2. Register additionnal plugins with YasR
+2. Register additional plugins with YasR
 	- For the TableX plugin, delete the default "table" plugin and use TableX instead
 3. optionally, configure individual plugins to adjust their behavior
 4. adjust the integration between Sparnatural and the plugins so that the plugins are notified of the configuration and the query (see below)

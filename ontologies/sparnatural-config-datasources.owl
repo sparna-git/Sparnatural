@@ -125,15 +125,15 @@
 
 The SPARQL template holds a SPARQL query string in which the placeholders $domain, $property, $range will be replaced by their corresponding values before executing the query.
 
-For autocomplete field, the additionnal placeholders $key and $lang will also be replaced by their corresponding values before executing the query
+For autocomplete field, the additional placeholders $key and $lang will also be replaced by their corresponding values before executing the query
 
 The placeholder $labelPath will be replaced by the value indicated in the SparqlDatasource in the labelPath (for a full SPARQL property path) or labelProperty (for a single property URI).</rdfs:comment>
         <rdfs:label xml:lang="en">query template</rdfs:label>
     </owl:ObjectProperty>
-    
 
 
-    <!-- 
+
+    <!--
     ///////////////////////////////////////////////////////////////////////////////////////
     //
     // Data properties
@@ -141,7 +141,7 @@ The placeholder $labelPath will be replaced by the value indicated in the Sparql
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    
+
 
 
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#queryString -->
