@@ -142,7 +142,6 @@ export default class BranchTranslatorV13 {
   /**
    * Converts all children
    */
-
   #buildChildrenPatterns() {
     const children = this.#object.predicateObjectPairs;
     if (!children || children.length === 0) return;
@@ -203,11 +202,22 @@ export default class BranchTranslatorV13 {
    * Subject class pattern (same as legacy)
    */
   #buildSubjectClassPtrn() {
+    let includeDefaultLabel:boolean = 
+      this.#translator.isVarSelected(this.#s) 
+      &&
+      (
+        !this.#translator.isVarAggregated(this.#s)
+        ||
+        this.#translator.isVarAggregatedGroupConcat(this.#s)
+      )
+      &&
+      this.#isVeryFirst;
+
     let typeTranslator: TypedVariableTranslatorV13 = new TypedVariableTranslatorV13(
       this.#s,
       this.#sType,
-      // same semantics as legacy: subject variable selectable only if very first
-      this.#translator.isVarSelected(this.#s) && this.#isVeryFirst,
+      // same semantics as legacy: subject variable selectable only if very first and not aggregated
+      includeDefaultLabel,
       this.#translator.getExtraPropertyRoles(this.#s),
       this.#valueBuilder?.isBlockingStart(),
       this.#translator
@@ -227,10 +237,20 @@ export default class BranchTranslatorV13 {
   }
 
   #buildObjectClassPtrn() {
+    let includeDefaultLabel:boolean = 
+      this.#translator.isVarSelected(this.#o) 
+      &&
+      (
+        !this.#translator.isVarAggregated(this.#o)
+        ||
+        this.#translator.isVarAggregatedGroupConcat(this.#o)
+      )
+    ;
+
     let typeTranslator: TypedVariableTranslatorV13 = new TypedVariableTranslatorV13(
       this.#o,
       this.#oType,
-      this.#translator.isVarSelected(this.#o),
+      includeDefaultLabel,
       this.#translator.getExtraPropertyRoles(this.#o),
       this.#valueBuilder?.isBlockingEnd(),
       this.#translator

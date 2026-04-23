@@ -21,8 +21,8 @@ export default class TypedVariableTranslatorV13 {
   #variableName: string;
   // The URI of the type in the config
   #variableType: string;
-  // whether the variable is selected or not
-  #variableIsSelected: boolean;
+  // whether to include default label patterns or not (only if the variable is selected)
+  #includeDefaultLabel: boolean;
   // extra property roles
   #withExtraPropertyRoles: string[];
   // the full translator
@@ -47,7 +47,7 @@ export default class TypedVariableTranslatorV13 {
   constructor(
     variableName: string,
     variableType: string,
-    variableIsSelected: boolean,
+    includeDefaultLabel: boolean,
     withExtraPropertyRoles: string[],
     propertyIsBlocking: boolean,
     translator: JsonV13SparqlTranslator,
@@ -56,7 +56,7 @@ export default class TypedVariableTranslatorV13 {
     this.#variableType = variableType;
     this.#propertyIsBlocking = propertyIsBlocking;
     this.#translator = translator;
-    this.#variableIsSelected = variableIsSelected;
+    this.#includeDefaultLabel = includeDefaultLabel;
     this.#withExtraPropertyRoles = withExtraPropertyRoles;
 
     // build default label var name
@@ -66,10 +66,10 @@ export default class TypedVariableTranslatorV13 {
   build() {
     this.#buildTypeTriple();
 
-    if (this.#variableIsSelected && this.hasDefaultLabel()) {
+    if (this.#includeDefaultLabel && this.hasDefaultLabel()) {
       this.#buildDefaultLblTrpl();
     }
-    if (this.#variableIsSelected && this.#withExtraPropertyRoles && this.#withExtraPropertyRoles.length > 0) {
+    if (this.#includeDefaultLabel && this.#withExtraPropertyRoles && this.#withExtraPropertyRoles.length > 0) {
       this.#buildExtraPropertiesPtrns();
     }
     this.#createResultPtrns();
@@ -118,6 +118,10 @@ export default class TypedVariableTranslatorV13 {
   #buildDefaultLblTrpl() {
     let defaultLabelProp: ISpecificationProperty =
       this.getDefaultLabelProperty();
+
+      
+      console.log("Default label property for variable " + this.#variableName + " : ", defaultLabelProp);
+      console.log(this.#variableType);
 
     if (defaultLabelProp.isMultilingual()) {
       // default label property is multilingual
@@ -250,10 +254,14 @@ export default class TypedVariableTranslatorV13 {
     // generate a new variable name. Ideal is to use the range name, just as in Sparnatural
     // but we default to other options if we cannot
     let variableName;
+    /*
     if(property.getRangeShapes().length == 1) {
       // single range, use the type of the range shape for the variable
       variableName = this.#translator.generateNewVariableName(property.getRangeShapes()[0].resource.value);
-    } else if(property.getShPath().termType == "NamedNode") {
+    } else 
+    */
+      
+    if(property.getShPath().termType == "NamedNode") {
       // multiple ranges, but a simple property path, use the property name for the variable
       variableName = this.#variableName + "_" + Model.getSparqlVariableNameFromUri(property.getShPath().value);
     } else {

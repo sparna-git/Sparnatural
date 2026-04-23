@@ -3,6 +3,8 @@ import {
   TermVariable,
   PatternBind,
   SelectVariable,
+  PredicateObjectPair,
+  TermTypedVariable,
 } from "../../../SparnaturalQueryIfc-v13";
 import { VariableExpression, VariableTerm } from "../../../SparnaturalQueryIfc";
 import { Pattern, VariableTerm as SparqlVariableTerm } from "sparqljs";
@@ -15,6 +17,7 @@ import ISpecificationProperty from "../../../spec-providers/ISpecificationProper
 import QueryWhereTranslatorV13 from "./QueryWhereTranslatorV13";
 import { Model } from "rdf-shacl-commons";
 import SparnaturalQueryTraversalV13 from "./SparnaturalQueryTraversal";
+import { ISpecificationEntity } from "../../../spec-providers/ISpecificationEntity";
 
 const factory = new DataFactory();
 
@@ -55,7 +58,7 @@ export class JsonV13SparqlTranslator {
       order: this.#orderFromSolutionModifiers(jsonQuery),
       // sets a limit if provided, otherwise leave to undefined
       limit:
-        jsonQuery.solutionModifiers?.limitOffset?.limit > 0
+        jsonQuery.solutionModifiers?.limitOffset?.limit && jsonQuery.solutionModifiers?.limitOffset?.limit > 0
           ? jsonQuery.solutionModifiers.limitOffset.limit
           : undefined,
     };
@@ -99,7 +102,7 @@ export class JsonV13SparqlTranslator {
    * @param variables The list variables of the SELECT query
    * @returns GROUP BY clause if needed, of all non-aggregated variables, or undefined if not needed
    */
-  #addGroupBy(variables: Variable[]): Grouping[] {
+  #addGroupBy(variables: Variable[]): Grouping[] | undefined {
     if (this.#needsGrouping(variables)) {
       let g: Grouping[] = [];
 
@@ -149,52 +152,111 @@ export class JsonV13SparqlTranslator {
     const where = this.jsonQuery.where;
     const pairs = where?.predicateObjectPairs ?? [];
 
+    let varName:string;
+    
+
     const variablesArray: Variable[][] = variables.map((v) => {
+      
+
+      const findVarEntity = (
+          subject: TermTypedVariable,
+          pairs: PredicateObjectPair[],
+          varName: string,
+      ): ISpecificationEntity | undefined => {
+        for (const pair of pairs) {
+          if (pair.object?.variable?.value === varName) return this.specProvider.getEntity(pair.object?.variable?.rdfType);
+          // also look in subject
+          if(subject.value === varName ) return this.specProvider.getEntity(subject.rdfType);
+          if (pair.object?.predicateObjectPairs) {
+            const result = findVarEntity(pair.object.variable, pair.object?.predicateObjectPairs, varName);
+            if (result) return result;
+          }
+        }
+        return undefined;
+      };
+
       if (v.type === "pattern" && v.subType === "bind") {
+
+        varName = v.expression.expression[0].value;
+
+        // Vérifier si cette variable a un default label généré
+        // en cherchant dans les branches la variable et son type
+        let concatOnLabel = false;
+
+        // seulement si c'est un group_concat
+        if(v.expression.aggregation.toLowerCase() === "group_concat") {
+          // chercher le type de cette variable
+          let entity:ISpecificationEntity | undefined = findVarEntity(where.subject, where.predicateObjectPairs, varName);
+
+          if (
+            entity
+            &&
+            !entity.isLiteralEntity()
+            &&
+            entity.getDefaultLabelProperty()
+          ) {
+            concatOnLabel = true;
+          }
+        }
+
+        const actualVar = concatOnLabel ? varName + "_label" : varName;
+
         return [
           SparqlFactory.buildAggregateFunctionExpression(
             v.expression.aggregation,
-            factory.variable(v.expression.expression[0].value),
+            factory.variable(actualVar),
             factory.variable(v.variable.value),
           ),
         ];
       }
+      else {
+        varName = v.value;
 
-      let varName = v.value;
-      let specProperty: ISpecificationProperty | undefined;
+        const findVarProperty = (
+            pairs: PredicateObjectPair[],
+            varName: string,
+        ): ISpecificationProperty | undefined => {
+          for (const pair of pairs) {
+            if (pair.object?.variable?.value === varName) return this.specProvider.getProperty(pair.predicate.value);
+            if (pair.object?.predicateObjectPairs) {
+              const result = findVarProperty(pair.object?.predicateObjectPairs, varName);
+              if (result) return result;
+            }
+          }
+          return undefined;
+        };
 
-      // chercher la propriété qui produit cette variable
-      pairs.forEach((pair) => {
-        if (pair.object?.variable?.value === varName) {
-          specProperty = this.specProvider.getProperty(pair.predicate.value);
+        // chercher la propriété qui produit cette variable
+        let specProperty: ISpecificationProperty | undefined = findVarProperty(where.predicateObjectPairs, varName);
+
+        if (!specProperty) {
+          return [factory.variable(varName)];
         }
-      });
 
-      if (!specProperty) {
+        if (
+          specProperty.getBeginDateProperty() ||
+          specProperty.getEndDateProperty() ||
+          specProperty.getExactDateProperty()
+        ) {
+          const result: Variable[] = [];
+
+          if (specProperty.getBeginDateProperty()) {
+            result.push(factory.variable(`${varName}_begin`));
+          }
+          if (specProperty.getEndDateProperty()) {
+            result.push(factory.variable(`${varName}_end`));
+          }
+          if (specProperty.getExactDateProperty()) {
+            result.push(factory.variable(`${varName}_exact`));
+          }
+
+          return result;
+        }
+
         return [factory.variable(varName)];
       }
 
-      if (
-        specProperty.getBeginDateProperty() ||
-        specProperty.getEndDateProperty() ||
-        specProperty.getExactDateProperty()
-      ) {
-        const result: Variable[] = [];
 
-        if (specProperty.getBeginDateProperty()) {
-          result.push(factory.variable(`${varName}_begin`));
-        }
-        if (specProperty.getEndDateProperty()) {
-          result.push(factory.variable(`${varName}_end`));
-        }
-        if (specProperty.getExactDateProperty()) {
-          result.push(factory.variable(`${varName}_exact`));
-        }
-
-        return result;
-      }
-
-      return [factory.variable(varName)];
     });
 
     const finalResult: Variable[] = [];
@@ -232,23 +294,55 @@ export class JsonV13SparqlTranslator {
     } else {
       varName = (extraVar as VariableTerm).value;
     }
-    let originalVar = varName.split("_")[0];
 
-    for (var i = 0; i < sparqlQuery.variables.length; i++) {
-      // find variable with the original name
-      if (
-        (sparqlQuery.variables[i] as SparqlVariableTerm).value == originalVar
-      ) {
-        // insert the default label var after this one
-        sparqlQuery.variables.splice(i + 1, 0, extraVar);
-        // don't forget, otherwise infinite loop
-        break;
+    if(varName.includes("_")) {
+      let originalVar = varName.split("_")[0];
+
+      let found:boolean = false;
+      for (var i = 0; i < sparqlQuery.variables.length; i++) {
+        // find variable with the original name
+        if (
+          (sparqlQuery.variables[i] as SparqlVariableTerm).value == originalVar
+        ) {
+          // insert the default label var after this one
+          sparqlQuery.variables.splice(i + 1, 0, extraVar);
+          found = true;
+          // don't forget, otherwise infinite loop
+          break;
+        }
       }
+
+      if(!found) {
+        // insert at the end
+        (sparqlQuery.variables as Variable[]).push(extraVar);
+      }
+    } else {
+      // if the var name doesn't follow the expected pattern, just add it at the end
+      (sparqlQuery.variables as Variable[]).push(extraVar);
     }
+
   }
 
   isVarSelected(varName: string): boolean {
     return JsonV13SparqlTranslator.isVarSelected(this.jsonQuery, varName);
+  }
+
+  isVarAggregated(varName: string): boolean {
+    return (
+      this.isVarSelected(varName)
+      &&
+      (JsonV13SparqlTranslator.findSelectedVariableByName(this.jsonQuery, varName) as PatternBind)?.expression !== undefined
+    );
+  }
+
+  isVarAggregatedGroupConcat(varName: string): boolean {
+    return (
+      this.isVarSelected(varName)
+      &&
+      (JsonV13SparqlTranslator.findSelectedVariableByName(this.jsonQuery, varName) as PatternBind)?.expression !== undefined
+      &&
+      (JsonV13SparqlTranslator.findSelectedVariableByName(this.jsonQuery, varName) as PatternBind)?.expression.aggregation.toLowerCase() === "group_concat"
+    );
   }
 
   getExtraPropertyRoles(varName: string): string[] {
@@ -265,7 +359,8 @@ export class JsonV13SparqlTranslator {
    * @returns true if the varName is selected in the query
    */
   static isVarSelected(query: SparnaturalQuery, varName: string): boolean {
-    return JsonV13SparqlTranslator.findSelectedVariableByName(query, varName) !== undefined;
+    let result = JsonV13SparqlTranslator.findSelectedVariableByName(query, varName) !== undefined;
+    return result;
   }
 
   static findSelectedVariableByName(query: SparnaturalQuery, varName: string): SelectVariable | undefined {

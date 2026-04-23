@@ -95,11 +95,10 @@ export class QueryGenerator {
 
     // fire the event
     let payload: QueryUpdatedPayload = {      
-      queryString: queryStringOld,
-      queryJson: jsonQueryOld,
-      // when switching to v13, replace with those 2 lines
-      queryJsonNew: jsonQuery,
-      queryStringNew: queryString,
+      queryString: queryString,
+      queryJson: jsonQuery,
+      queryStringOld: queryString,
+      queryJsonOld: jsonQueryOld,
       querySparqlJs: selectQueryFromJson,
     };
     this.fireQueryUpdatedEvent(payload);
@@ -123,8 +122,8 @@ export class QueryGenerator {
 export class QueryUpdatedPayload {
   queryString: string;
   // queryJson: SparnaturalQuery;
-  queryJson: SparnaturalQueryIfc;
-  queryStringNew: string;
-  queryJsonNew: SparnaturalQuery;
+  queryJson: SparnaturalQuery;
+  queryStringOld: string;
+  queryJsonOld:SparnaturalQueryIfc ;
   querySparqlJs: Object;
 }

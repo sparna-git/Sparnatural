@@ -156,7 +156,7 @@ class CriteriaGroup extends HTMLComponent {
       this.endClassWidgetGroup.setSelectAll();
     });
 
-    // when inputgot selected then we remove the where btn and EditComponents
+    // when input got selected then we remove the where btn and EditComponents
     this.html[0].addEventListener("removeEditComponents", (e: CustomEvent) => {
       e.stopImmediatePropagation();
       this.endClassGroup.editComponents?.html?.empty()?.remove();

@@ -1,10 +1,7 @@
 import { DataFactory } from "rdf-data-factory";
 import { Pattern, Variable } from "sparqljs";
-import { ISparnaturalSpecification } from "../../../spec-providers/ISparnaturalSpecification";
 import {
-  SparnaturalQuery,
   PredicateObjectPair,
-  SelectVariable,
 } from "../../../SparnaturalQueryIfc-v13";
 import BranchTranslatorV13 from "./BranchTranslatorV13";
 import { JsonV13SparqlTranslator } from "./JsonV13SparqlTranslator";

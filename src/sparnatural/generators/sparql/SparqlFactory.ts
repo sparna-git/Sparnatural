@@ -29,7 +29,7 @@ export default class SparqlFactory {
     }
 
     // group_concat will always use ";" as separator
-    if(aggregation === "group_concat") {
+    if(aggregation.toLowerCase() === "group_concat") {
       aggregateExpression.separator = "; ";
     }  
 
