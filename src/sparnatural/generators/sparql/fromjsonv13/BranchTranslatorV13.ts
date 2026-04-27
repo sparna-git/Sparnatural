@@ -70,8 +70,6 @@ export default class BranchTranslatorV13 {
   // default vars gathered from this branch + children
   #defaultLabelVars: Variable[] = [];
 
-  #extraPropertiesVars: Variable[] = [];
-
   #hasValues = false;
 
   constructor(
@@ -169,7 +167,6 @@ export default class BranchTranslatorV13 {
         this.#defaultLabelVars.push(...builder.getDefaultLabelVars());
         // gather patterns to be executed after
         this.#executedAfterPtrns.push(...builder.getExecutedAfterPtrns());
-        this.#extraPropertiesVars.push(...builder.getExtraPropertiesVars());
       });
     }
   }
@@ -218,7 +215,6 @@ export default class BranchTranslatorV13 {
       this.#sType,
       // same semantics as legacy: subject variable selectable only if very first and not aggregated
       includeDefaultLabel,
-      this.#translator.getExtraPropertyRoles(this.#s),
       this.#valueBuilder?.isBlockingStart(),
       this.#translator
     );
@@ -231,9 +227,6 @@ export default class BranchTranslatorV13 {
         factory.variable(typeTranslator.defaultLabelVarName),
       );
     }
-
-    // also gather extra selected variables
-    this.#extraPropertiesVars.push(...typeTranslator.extraPropertiesVars);
   }
 
   #buildObjectClassPtrn() {
@@ -251,7 +244,6 @@ export default class BranchTranslatorV13 {
       this.#o,
       this.#oType,
       includeDefaultLabel,
-      this.#translator.getExtraPropertyRoles(this.#o),
       this.#valueBuilder?.isBlockingEnd(),
       this.#translator
     );
@@ -264,9 +256,6 @@ export default class BranchTranslatorV13 {
         factory.variable(typeTranslator.defaultLabelVarName),
       );
     }
-
-    // also gather extra selected variables
-    this.#extraPropertiesVars.push(...typeTranslator.extraPropertiesVars);
   }
 
   #buildIntersectionPtrn() {
@@ -430,10 +419,6 @@ export default class BranchTranslatorV13 {
 
   getDefaultLabelVars(): Variable[] {
     return this.#defaultLabelVars;
-  }
-
-  getExtraPropertiesVars(): Variable[] {
-    return this.#extraPropertiesVars;
   }
 
   getExecutedAfterPtrns() {

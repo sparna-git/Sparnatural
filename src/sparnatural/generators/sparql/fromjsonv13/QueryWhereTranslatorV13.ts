@@ -18,7 +18,6 @@ export default class QueryWhereTranslatorV13 {
 
   // default vars gathered from children
   #defaultLabelVars: Variable[] = [];
-  #extraPropertiesVars: Variable[] = [];
 
   constructor(
     translator: JsonV13SparqlTranslator,
@@ -56,7 +55,6 @@ export default class QueryWhereTranslatorV13 {
         branchBuilder.build();
 
         this.#defaultLabelVars.push(...branchBuilder.getDefaultLabelVars());
-        this.#extraPropertiesVars.push(...branchBuilder.getExtraPropertiesVars());
         this.#resultPtrns.push(...branchBuilder.getResultPtrns());
       });
     } else {
@@ -70,10 +68,6 @@ export default class QueryWhereTranslatorV13 {
 
   getDefaultVars() {
     return this.#defaultLabelVars;
-  }
-
-  getExtraPropertiesVars(): Variable[] {
-    return this.#extraPropertiesVars;
   }
 
   getExecutedAfterPtrns() {

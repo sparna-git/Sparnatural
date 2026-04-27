@@ -8,6 +8,7 @@ import BranchTranslatorV13 from "./BranchTranslatorV13";
 import { PredicateObjectPair, SelectVariable, TermTypedVariable } from "../../../SparnaturalQueryIfc-v13";
 import { JsonV13SparqlTranslator } from "./JsonV13SparqlTranslator";
 import { SHACLSpecificationProperty } from "../../../spec-providers/shacl/SHACLSpecificationProperty";
+import { SparnaturalQueryUtils } from "./SparnaturalQueryUtils";
 
 const factory = new DataFactory();
 
@@ -23,8 +24,6 @@ export default class TypedVariableTranslatorV13 {
   #variableType: string;
   // whether to include default label patterns or not (only if the variable is selected)
   #includeDefaultLabel: boolean;
-  // extra property roles
-  #withExtraPropertyRoles: string[];
   // the full translator
   #translator: JsonV13SparqlTranslator;
 
@@ -41,14 +40,11 @@ export default class TypedVariableTranslatorV13 {
   // whether the property is blocking the generation of the type triple (but not the default label triples)
   #propertyIsBlocking: boolean;
 
-  public extraPropertiesPatterns: Pattern[] = [];
-  public extraPropertiesVars: (VariableExpression | VariableTerm)[] = [];
 
   constructor(
     variableName: string,
     variableType: string,
     includeDefaultLabel: boolean,
-    withExtraPropertyRoles: string[],
     propertyIsBlocking: boolean,
     translator: JsonV13SparqlTranslator,
   ) {
@@ -57,7 +53,6 @@ export default class TypedVariableTranslatorV13 {
     this.#propertyIsBlocking = propertyIsBlocking;
     this.#translator = translator;
     this.#includeDefaultLabel = includeDefaultLabel;
-    this.#withExtraPropertyRoles = withExtraPropertyRoles;
 
     // build default label var name
     this.defaultLabelVarName = this.#variableName + "_label";
@@ -69,9 +64,7 @@ export default class TypedVariableTranslatorV13 {
     if (this.#includeDefaultLabel && this.hasDefaultLabel()) {
       this.#buildDefaultLblTrpl();
     }
-    if (this.#includeDefaultLabel && this.#withExtraPropertyRoles && this.#withExtraPropertyRoles.length > 0) {
-      this.#buildExtraPropertiesPtrns();
-    }
+
     this.#createResultPtrns();
   }
 
@@ -212,125 +205,6 @@ export default class TypedVariableTranslatorV13 {
     }
   }
 
-  #buildExtraPropertiesPtrns() {
-    if(this.#withExtraPropertyRoles && this.#withExtraPropertyRoles.length > 0) {
-      // first read the entity
-      let e = this.#translator.specProvider.getEntity(this.#variableType);
-      if(!(e instanceof SHACLSpecificationEntity)) return;
-      let entity = e as SHACLSpecificationEntity;
-
-      this.#withExtraPropertyRoles.forEach((propertyRole) => {
-        // retrieve the properties with the given role
-        let properties = (entity.shape as NodeShape).findPropertyShapesByDashPropertyRole(factory.namedNode(propertyRole));
-        properties.forEach((property) => {
-
-          let branchAndVar = this.#buildVirtualBranchAndSelectedVarForProperty(property); 
-
-          let subjectTerm : TermTypedVariable = {
-            type: "term",
-            subType: "variable",
-            value: this.#variableName,
-            rdfType: this.#variableType
-          };
-
-          let branchTranslator = new BranchTranslatorV13(      
-            branchAndVar.branch,
-            subjectTerm,
-            false, // isVeryFirst set to false
-            false, // isInOption forced to false
-            this.#translator
-          );
-          branchTranslator.build();
-          this.extraPropertiesPatterns.push(...branchTranslator.getResultPtrns());
-          this.extraPropertiesVars.push(branchAndVar.variable);
-        });
-      });
-    }
-  }
-
-  #buildVirtualBranchAndSelectedVarForProperty(property: PropertyShape)
-  : { branch: PredicateObjectPair, variable: VariableExpression | VariableTerm } {
-
-    // generate a new variable name. Ideal is to use the range name, just as in Sparnatural
-    // but we default to other options if we cannot
-    let variableName;
-    /*
-    if(property.getRangeShapes().length == 1) {
-      // single range, use the type of the range shape for the variable
-      variableName = this.#translator.generateNewVariableName(property.getRangeShapes()[0].resource.value);
-    } else 
-    */
-      
-    if(property.getShPath().termType == "NamedNode") {
-      // multiple ranges, but a simple property path, use the property name for the variable
-      variableName = this.#variableName + "_" + Model.getSparqlVariableNameFromUri(property.getShPath().value);
-    } else {
-      variableName = this.#variableName + "_" + Model.getSparqlVariableNameFromUri(property.resource.value);
-    }
-
-    // either there is a single range and we use it, but we cannot set it if there are multiple ranges
-    let range = property.getRangeShapes().length > 0 ? property.getRangeShapes()[0].resource.value : undefined;
-    
-    let variableTerm: TermTypedVariable = {
-      type: "term",
-      subType: "variable",
-      value: variableName,
-      rdfType: range
-    };
-
-    // 1. Build base virtual criteria
-    let pair:PredicateObjectPair = {
-      type: "predicateObjectPair",
-      predicate: {
-        type: "term",
-        subType: "namedNode",
-        value: property.resource.value
-      },
-      object: {
-        type: "objectCriteria",
-        variable: variableTerm,
-      }
-    };
-
-    // 2. set subType to "optional" if the property is not mandatory according to SHACL shapes
-    let specProperty = this.#translator.specProvider.getProperty(property.resource.value) as SHACLSpecificationProperty;
-    if(
-      specProperty
-      && (
-        // either no sh:minCount is defined, or sh:minCount is 0
-        !(specProperty.shape as PropertyShape).getShMinCount()
-        ||
-        (specProperty.shape as PropertyShape).getShMinCount() === 0) 
-    ) {
-      pair.subType = "optional";
-    }
-
-    // 3. aggregate the variable if the property can be repeated according to SHACL shapes (maxCount > 1 or qualifiedMaxCount > 1 or no maxCount at all)
-    let finalSelectedVar: VariableExpression | VariableTerm = factory.variable(variableName);
-    if(
-      specProperty
-      && (
-        // sh:maxCount is anything but 1
-        (specProperty.shape as PropertyShape).getShMaxCount() !== 1
-        ||
-        // sh:qualifiedMaxCount is anything but 1
-        (specProperty.shape as PropertyShape).getShQualifiedMaxCount() !== 1
-      )
-    ) {
-      finalSelectedVar = SparqlFactory.buildAggregateFunctionExpression(
-        "GROUP_CONCAT",
-        factory.variable(variableName),
-        factory.variable(variableName+"_concat"),
-      );
-    }
-    
-    return {
-      branch: pair,
-      variable: finalSelectedVar
-    }
-
-  }
-
   #createResultPtrns() {
     // push the type triple first
     if (this.#typeTriple) {
@@ -351,11 +225,6 @@ export default class TypedVariableTranslatorV13 {
         // simply push the default label patterns
         this.resultPtrns.push(...this.defaultLblPatterns);
       }
-    }
-
-    // also concat extra properties patterns if any
-    if(this.extraPropertiesPatterns.length > 0) {
-      this.resultPtrns.push(...this.extraPropertiesPatterns);
     }
   }
 

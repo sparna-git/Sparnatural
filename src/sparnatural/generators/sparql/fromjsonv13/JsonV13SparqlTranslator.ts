@@ -16,8 +16,8 @@ import { DataFactory } from "rdf-data-factory";
 import ISpecificationProperty from "../../../spec-providers/ISpecificationProperty";
 import QueryWhereTranslatorV13 from "./QueryWhereTranslatorV13";
 import { Model } from "rdf-shacl-commons";
-import SparnaturalQueryTraversalV13 from "./SparnaturalQueryTraversal";
 import { ISpecificationEntity } from "../../../spec-providers/ISpecificationEntity";
+import { SparnaturalQueryTraversal, SparnaturalQueryUtils } from "./SparnaturalQueryUtils";
 
 const factory = new DataFactory();
 
@@ -29,7 +29,6 @@ export class JsonV13SparqlTranslator {
   settings: any;
 
   defaultLabelVars: Variable[] = [];
-  extraPropertiesVars: Variable[] = [];
 
   constructor(
     // the Sparnatural configuration
@@ -47,6 +46,8 @@ export class JsonV13SparqlTranslator {
    */
   generateQuery(jsonQuery: SparnaturalQuery): SelectQuery {
     this.jsonQuery = jsonQuery;
+
+    SparnaturalQueryUtils.postProcessKeyInfo(this.jsonQuery, this.specProvider);
 
     const sparqlJsQuery: SelectQuery = {
       queryType: "SELECT",
@@ -77,12 +78,6 @@ export class JsonV13SparqlTranslator {
     if (this.defaultLabelVars.length > 0) {
       this.defaultLabelVars.forEach((v) =>
         this.#insertExtraVariableInSelect(sparqlJsQuery, v),
-      );
-    }
-
-    if(this.extraPropertiesVars.length > 0) {
-      this.extraPropertiesVars.forEach((v) =>
-        this.#insertExtraVariableInSelect(sparqlJsQuery, v)
       );
     }
 
@@ -137,7 +132,6 @@ export class JsonV13SparqlTranslator {
     const whereBuilder = new QueryWhereTranslatorV13(this);
     whereBuilder.build();
     this.defaultLabelVars = whereBuilder.getDefaultVars();
-    this.extraPropertiesVars = whereBuilder.getExtraPropertiesVars();
     return whereBuilder.getResultPtrns();
   }
 
@@ -176,7 +170,7 @@ export class JsonV13SparqlTranslator {
       };
 
       if (v.type === "pattern" && v.subType === "bind") {
-
+       
         varName = v.expression.expression[0].value;
 
         // Vérifier si cette variable a un default label généré
@@ -188,6 +182,7 @@ export class JsonV13SparqlTranslator {
           // chercher le type de cette variable
           let entity:ISpecificationEntity | undefined = findVarEntity(where.subject, where.predicateObjectPairs, varName);
 
+          console.log("entity is ", entity)
           if (
             entity
             &&
@@ -320,18 +315,18 @@ export class JsonV13SparqlTranslator {
       // if the var name doesn't follow the expected pattern, just add it at the end
       (sparqlQuery.variables as Variable[]).push(extraVar);
     }
-
   }
 
+
   isVarSelected(varName: string): boolean {
-    return JsonV13SparqlTranslator.isVarSelected(this.jsonQuery, varName);
+    return SparnaturalQueryUtils.isVarSelected(this.jsonQuery, varName);
   }
 
   isVarAggregated(varName: string): boolean {
     return (
       this.isVarSelected(varName)
       &&
-      (JsonV13SparqlTranslator.findSelectedVariableByName(this.jsonQuery, varName) as PatternBind)?.expression !== undefined
+      (SparnaturalQueryUtils.findSelectedVariableByName(this.jsonQuery, varName) as PatternBind)?.expression !== undefined
     );
   }
 
@@ -339,44 +334,12 @@ export class JsonV13SparqlTranslator {
     return (
       this.isVarSelected(varName)
       &&
-      (JsonV13SparqlTranslator.findSelectedVariableByName(this.jsonQuery, varName) as PatternBind)?.expression !== undefined
+      (SparnaturalQueryUtils.findSelectedVariableByName(this.jsonQuery, varName) as PatternBind)?.expression !== undefined
       &&
-      (JsonV13SparqlTranslator.findSelectedVariableByName(this.jsonQuery, varName) as PatternBind)?.expression.aggregation.toLowerCase() === "group_concat"
+      (SparnaturalQueryUtils.findSelectedVariableByName(this.jsonQuery, varName) as PatternBind)?.expression.aggregation.toLowerCase() === "group_concat"
     );
   }
 
-  getExtraPropertyRoles(varName: string): string[] {
-    let selectVar:SelectVariable | undefined = JsonV13SparqlTranslator.findSelectedVariableByName(this.jsonQuery, varName);
-    if(selectVar && selectVar.with) {
-      return selectVar.with.map((t) => t.value);
-    }
-    return [];
-  }
-
-  /**
-   * @param query The query to test
-   * @param varName The variable to test the selection for
-   * @returns true if the varName is selected in the query
-   */
-  static isVarSelected(query: SparnaturalQuery, varName: string): boolean {
-    let result = JsonV13SparqlTranslator.findSelectedVariableByName(query, varName) !== undefined;
-    return result;
-  }
-
-  static findSelectedVariableByName(query: SparnaturalQuery, varName: string): SelectVariable | undefined {
-    return (
-      query.variables.find((v) => {
-        // PatternBind (aggregate)
-        if (v.type === "pattern" && v.subType === "bind") {
-          if(v.expression.expression[0].value === varName) return true;        
-        }
-        // TermVariable
-        return (
-          v.type === "term" && v.subType === "variable" && v.value === varName
-        );
-      }) as SelectVariable
-    );
-  }
 
   /**
    * @returns A map with the max variable index for each type, based on the variables used in the current SPARQL query. 
@@ -406,7 +369,7 @@ export class JsonV13SparqlTranslator {
       }
     };
 
-    SparnaturalQueryTraversalV13.traverse(this.jsonQuery, {
+    SparnaturalQueryTraversal.traverse(this.jsonQuery, {
       subject: (s) => processTypeVar(s?.rdfType, s?.value),
       objectCriteria: (obj) => processTypeVar(obj?.variable?.rdfType, obj?.variable?.value),
     });
