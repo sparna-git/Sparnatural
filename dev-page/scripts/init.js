@@ -41,6 +41,7 @@ sparnatural.addEventListener("init", (event) => {
 sparnatural.addEventListener("queryUpdated", (event) => {
   var queryString = sparnatural.expandSparql(event.detail.queryString);
   console.log("Expanded query string Sparnatural:", queryString);
+  console.log(event.detail.queryJson);
   yasqe.setValue(queryString);
 
   // store JSON in hidden field
@@ -57,7 +58,7 @@ sparnatural.addEventListener("queryUpdated", (event) => {
 });
 
 sparnatural.addEventListener("queryUpdated", (event) => {
-  var queryStringNew = sparnatural.expandSparql(event.detail.queryStringNew);
+  var queryStringNew = sparnatural.expandSparql(event.detail.queryString);
   var queryString = sparnatural.expandSparql(event.detail.queryString);
   // Ajouter une ligne au tableau
   const tableBody = document.getElementById("sparql-comparison-table");
