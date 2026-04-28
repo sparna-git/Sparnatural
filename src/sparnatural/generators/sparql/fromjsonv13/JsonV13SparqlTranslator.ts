@@ -45,22 +45,24 @@ export class JsonV13SparqlTranslator {
    * @returns a SPARQL query translated from the Sparnatural JSON query structure
    */
   generateQuery(jsonQuery: SparnaturalQuery): SelectQuery {
-    this.jsonQuery = jsonQuery;
+    // make a deep copy of the query since we will expand it during SPARQL
+    // Warning : everything velow should now operate on this.jsonQuery, and not on jsonQuery
+    this.jsonQuery = (JSON.parse(JSON.stringify(jsonQuery)));
 
-    SparnaturalQueryUtils.postProcessKeyInfo(this.jsonQuery, this.specProvider);
+    SparnaturalQueryUtils.addKeyInfoSelection(this.jsonQuery, this.specProvider);
 
     const sparqlJsQuery: SelectQuery = {
       queryType: "SELECT",
-      distinct: jsonQuery.distinct,
+      distinct: this.jsonQuery.distinct,
       type: "query",
-      variables: this.#varsToRDFJS(jsonQuery.variables),
+      variables: this.#varsToRDFJS(this.jsonQuery.variables),
       where: this.#createWhereClause(),
       prefixes: this.prefixes,
-      order: this.#orderFromSolutionModifiers(jsonQuery),
+      order: this.#orderFromSolutionModifiers(this.jsonQuery),
       // sets a limit if provided, otherwise leave to undefined
       limit:
-        jsonQuery.solutionModifiers?.limitOffset?.limit && jsonQuery.solutionModifiers?.limitOffset?.limit > 0
-          ? jsonQuery.solutionModifiers.limitOffset.limit
+        this.jsonQuery.solutionModifiers?.limitOffset?.limit && this.jsonQuery.solutionModifiers?.limitOffset?.limit > 0
+          ? this.jsonQuery.solutionModifiers.limitOffset.limit
           : undefined,
     };
 
@@ -76,9 +78,15 @@ export class JsonV13SparqlTranslator {
     }
 
     if (this.defaultLabelVars.length > 0) {
-      this.defaultLabelVars.forEach((v) =>
-        this.#insertExtraVariableInSelect(sparqlJsQuery, v),
-      );
+      this.defaultLabelVars.forEach((v) => {
+        let varName = (v as VariableTerm).value;
+        // avoid inserting it if the same variable name has already been selected trough some KeyInfo (additional) property selections
+        // e.g. the KeyInfo inserts a "virtual branch" in the query that will select the variable explicitely AND the default label processing
+        // attemps to add it again in the SELECT
+        if(!varName.endsWith("_label") || !SparnaturalQueryUtils.isVarSelected(this.jsonQuery, varName.substring(0,varName.length-"_label".length))) {
+          this.#insertExtraVariableInSelect(sparqlJsQuery, v);
+        }
+      });
     }
 
     if (!sparqlJsQuery.order) delete sparqlJsQuery.order;
@@ -144,7 +152,6 @@ export class JsonV13SparqlTranslator {
 
   #varsToRDFJS(variables: Array<TermVariable | PatternBind>): Variable[] {
     const where = this.jsonQuery.where;
-    const pairs = where?.predicateObjectPairs ?? [];
 
     let varName:string;
     

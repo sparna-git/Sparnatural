@@ -115,10 +115,11 @@ export class SparnaturalQueryUtils {
   /**
    * @param query The query to test
    * @param varName The variable to test the selection for
-   * @returns true if the varName is selected in the query
+   * @returns true if the varName is selected in the query, ether directly, or aggregated
    */
   static isVarSelected(query: SparnaturalQuery, varName: string): boolean {
     let result = SparnaturalQueryUtils.findSelectedVariableByName(query, varName) !== undefined;
+    console.log("isVarSelected "+varName+" ? "+result)
     return result;
   }
 
@@ -127,6 +128,7 @@ export class SparnaturalQueryUtils {
       query.variables.find((v) => {
         // PatternBind (aggregate)
         if (v.type === "pattern" && v.subType === "bind") {
+          console.log(v.expression.expression[0].value+ " / "+varName)
           if(v.expression.expression[0].value === varName) return true;        
         }
         // TermVariable
@@ -137,7 +139,7 @@ export class SparnaturalQueryUtils {
     );
   }
 
-  static postProcessKeyInfo(query: SparnaturalQuery, specProvider: ISparnaturalSpecification) {
+  static addKeyInfoSelection(query: SparnaturalQuery, specProvider: ISparnaturalSpecification) {
     let processor:AdditionalInfoProcessor = new AdditionalInfoProcessor(DASH.KEY_INFO_ROLE.value, specProvider);
 
     SparnaturalQueryTraversal.traverse(query, processor);
@@ -167,7 +169,6 @@ class AdditionalInfoProcessor implements SparnaturalQueryVisitor {
       let properties = this.getExtraPropertyRoles(bgpSameSubject.subject.rdfType);
       properties.forEach((property) => {
         let branchAndVar = this.#buildVirtualBranchAndSelectedVarForProperty(bgpSameSubject.subject.value, property); 
-        console.log("bgpSamSubject")
         // add the variable in the select
         SparnaturalQueryUtils.insertSelectVariable(this.fullQuery!, branchAndVar.variable);
 
@@ -200,7 +201,8 @@ class AdditionalInfoProcessor implements SparnaturalQueryVisitor {
     let e = this.specProvider.getEntity(type);
     if(!(e instanceof SHACLSpecificationEntity)) return [];
     let entity = e as SHACLSpecificationEntity;
-    return (entity.shape as NodeShape).findPropertyShapesByDashPropertyRole(factory.namedNode(this.extraPropertyRole));
+    let propertyShapesWithRole:PropertyShape[] = (entity.shape as NodeShape).findPropertyShapesByDashPropertyRole(factory.namedNode(this.extraPropertyRole));    
+    return propertyShapesWithRole;
   }
 
   findWithOfVariable(varName: string): string[] {
@@ -304,7 +306,8 @@ class AdditionalInfoProcessor implements SparnaturalQueryVisitor {
         variable: {
           type: "term",
           subType: "variable",
-          value: variableName+"_concat"
+          // add an "s" at the end to make it plural
+          value: variableName+"s"
         }
       }
     }
