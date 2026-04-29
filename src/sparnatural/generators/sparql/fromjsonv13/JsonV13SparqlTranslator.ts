@@ -80,12 +80,7 @@ export class JsonV13SparqlTranslator {
     if (this.defaultLabelVars.length > 0) {
       this.defaultLabelVars.forEach((v) => {
         let varName = (v as VariableTerm).value;
-        // avoid inserting it if the same variable name has already been selected trough some KeyInfo (additional) property selections
-        // e.g. the KeyInfo inserts a "virtual branch" in the query that will select the variable explicitely AND the default label processing
-        // attemps to add it again in the SELECT
-        if(!varName.endsWith("_label") || !SparnaturalQueryUtils.isVarSelected(this.jsonQuery, varName.substring(0,varName.length-"_label".length))) {
-          this.#insertExtraVariableInSelect(sparqlJsQuery, v);
-        }
+        this.#insertExtraVariableInSelect(sparqlJsQuery, v);
       });
     }
 

@@ -59,7 +59,7 @@ export class DraggableComponent extends HTMLComponent {
             <ul>
               <li data-value="" class="reducted-visible">`+I18n.labels.AggrLabelNone+`</li>
               <li data-value="count" data class="reducted-visible" data-suffix="_count">`+I18n.labels.AggrLabelCount+`</li>
-              <li data-value="group_concat" data-suffix="_group_concat">`+I18n.labels.AggrLabelGroupConcat+`</li>
+              <li data-value="group_concat" data-suffix="_concat">`+I18n.labels.AggrLabelGroupConcat+`</li>
               <li data-value="max" data-suffix="_max" class="revealIf revealIf-num revealIf-time">`+I18n.labels.AggrLabelMax+`</li>
               <li data-value="min" data-suffix="_min" class="revealIf revealIf-num revealIf-time">`+I18n.labels.AggrLabelMin+`</li>
               <li data-value="sample" data-suffix="_sample">`+I18n.labels.AggrLabelSample+`</li>
