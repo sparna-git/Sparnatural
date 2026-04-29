@@ -174,6 +174,30 @@ screencast :
 ![](docs/assets/screencasts/no-selection-widget.gif)
 
 
+## Automatic fetch of human-readable label
+
+### Select a variable
+
+Variables can be selected in the SELECT clause by clicking on the "eye" button in orange arrows.
+
+![](docs/assets/images/readme/20-eye.png)
+
+### Default label
+
+If the type of the variable that is being selected has a human-readable label indicated in the config, through `dash:propertyRole dash:LabelRole`, then this property will be fetched automatically (see [dash:LabelRole](https://www.datashapes.org/propertyroles.html#LabelRole)). The name of the variables are built by concatenating `_label` to the selected variable name : if the variable name was `Foo`, the name of the label variable will be `Foo_label`.
+
+![](docs/assets/images/readme/21-default-label.png)
+
+### Additional info (Key info)
+
+If the type of the variable that is being selected has some "key properties" indicated in the config, through `dash:propertyRole dash:KeyInfoRole` (see [dash:KeyInfoRole](https://www.datashapes.org/propertyroles.html#KeyInfoRole)), then an additional button will be displayed to retrieve these properties, in addition to the human-readable label:
+
+![](docs/assets/images/readme/22-key-info.png)
+
+The name of the extra variables are built by concatenating the original variable name, with `_{predicateUri}` (if the property shape corresponds to a single predicate), or `_{propertyShapeUri}` : if the variable name was `Foo`, and key info properties are `dcterms:identifier` and `skos:prefLabel`, then the name of the 2 extra variables will be `Foo_identifier` and `Foo_prefLabel`.
+
+
+
 ## Multilingual
 
 Sparnatural is multilingual and supports displaying labels of classes and properties in multiple languages.
