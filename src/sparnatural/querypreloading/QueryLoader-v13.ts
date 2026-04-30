@@ -336,6 +336,12 @@ export default class QueryLoader {
               patternBindToVariableExpression(v),
             );
           }
+
+          // Restore isKeyInfo flag from the loaded query's `with` property
+          if (v.with?.some((iri) => iri.value === "http://datashapes.org/dash#KeyInfoRole")) {
+            newDraggable.state.isKeyInfo = true;
+            this.#restoreKeyInfoBtn(varName);
+          }
         }
       });
     });
@@ -407,6 +413,33 @@ export default class QueryLoader {
       return v.expression?.expression?.[0]?.value ?? v.variable.value;
     }
     return v.value;
+  }
+
+  // Restore the keyInfoBtn visual state for a given variable name after query loading
+  static #restoreKeyInfoBtn(variableName: string) {
+    this.sparnatural.BgWrapper.componentsList.rootGroupWrapper.traversePreOrder(
+      (grpWrapper: GroupWrapper) => {
+        const endGrp = grpWrapper.criteriaGroup.endClassGroup;
+        if (endGrp.endClassVal?.variable === variableName) {
+          const btn = (endGrp.inputSelector as ClassTypeId)?.keyInfoBtn;
+          if (btn) {
+            btn.selected = true;
+            btn.visible = true;
+            btn.html.attr("aria-pressed", "true").addClass("is-selected").show();
+          }
+        }
+
+        const startGrp = grpWrapper.criteriaGroup.startClassGroup;
+        if (startGrp.renderEyeBtn && startGrp.startClassVal?.variable === variableName) {
+          const btn = (startGrp.inputSelector as ClassTypeId)?.keyInfoBtn;
+          if (btn) {
+            btn.selected = true;
+            btn.visible = true;
+            btn.html.attr("aria-pressed", "true").addClass("is-selected").show();
+          }
+        }
+      },
+    );
   }
 
   static #clickOn(el: JQuery<HTMLElement>) {

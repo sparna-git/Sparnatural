@@ -29,7 +29,7 @@ var queries = [
               "https://data.mydomain.com/ontologies/sparnatural-config/Artwork",
             oType:
               "https://data.mydomain.com/ontologies/sparnatural-config/Museum",
-            values: [],
+            criterias: [],
           },
           children: [
             {
@@ -41,12 +41,14 @@ var queries = [
                   "https://data.mydomain.com/ontologies/sparnatural-config/Museum",
                 oType:
                   "https://data.mydomain.com/ontologies/sparnatural-config/Country",
-                values: [
+                criterias: [
                   {
                     label: "Italy",
-                    rdfTerm: {
-                      type: "uri",
-                      value: "http://dbpedia.org/resource/Italy",
+                    criteria: {
+                      rdfTerm: {
+                        type: "uri",
+                        value: "http://dbpedia.org/resource/Italy",
+                      },
                     },
                   },
                 ],
@@ -88,7 +90,7 @@ var queries = [
               "https://data.mydomain.com/ontologies/sparnatural-config/Museum",
             oType:
               "https://data.mydomain.com/ontologies/sparnatural-config/Artwork",
-            values: [],
+            criterias: [],
           },
           children: [
             {
@@ -100,12 +102,14 @@ var queries = [
                   "https://data.mydomain.com/ontologies/sparnatural-config/Artwork",
                 oType:
                   "https://data.mydomain.com/ontologies/sparnatural-config/Person",
-                values: [
+                criterias: [
                   {
                     label: "Vincent van Gogh",
-                    rdfTerm: {
-                      type: "uri",
-                      value: "http://dbpedia.org/resource/Vincent_van_Gogh",
+                    criteria: {
+                      rdfTerm: {
+                        type: "uri",
+                        value: "http://dbpedia.org/resource/Vincent_van_Gogh",
+                      },
                     },
                   },
                 ],
@@ -157,13 +161,15 @@ var queries = [
               "https://data.mydomain.com/ontologies/sparnatural-config/Person",
             oType:
               "https://data.mydomain.com/ontologies/sparnatural-config/Category",
-            values: [
+            criterias: [
               {
                 label: "19th-century French women artists",
-                rdfTerm: {
-                  type: "uri",
-                  value:
-                    "http://dbpedia.org/resource/Category:19th-century_French_women_artists",
+                criteria: {
+                  rdfTerm: {
+                    type: "uri",
+                    value:
+                      "http://dbpedia.org/resource/Category:19th-century_French_women_artists",
+                  },
                 },
               },
             ],
@@ -179,7 +185,7 @@ var queries = [
               "https://data.mydomain.com/ontologies/sparnatural-config/Person",
             oType:
               "https://data.mydomain.com/ontologies/sparnatural-config/Movement",
-            values: [],
+            criterias: [],
           },
           children: [],
           optional: true,
@@ -193,7 +199,7 @@ var queries = [
               "https://data.mydomain.com/ontologies/sparnatural-config/Person",
             oType:
               "https://data.mydomain.com/ontologies/sparnatural-config/Artwork",
-            values: [],
+            criterias: [],
           },
           children: [
             {
@@ -205,7 +211,7 @@ var queries = [
                   "https://data.mydomain.com/ontologies/sparnatural-config/Artwork",
                 oType:
                   "https://data.mydomain.com/ontologies/sparnatural-config/Museum",
-                values: [],
+                criterias: [],
               },
               children: [],
               optional: true,
