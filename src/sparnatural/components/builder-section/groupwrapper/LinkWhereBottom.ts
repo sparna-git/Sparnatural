@@ -13,7 +13,6 @@ import GroupWrapper from "./GroupWrapper";
      - window.scrollX | window.scrollY is used to correct the positioning of the line if the window is scrollable.
      - ax & ay are the position of the upper Element
      - bx & by are the position of the lower Element
-     - (posUpperStart.left + (posUpperStart.right - posUpperStart.left) / 4) is used to calculate one quarter of the width from the left side
 */
 class LinkWhereBottom extends HTMLComponent {
 
@@ -111,7 +110,9 @@ class LinkWhereBottom extends HTMLComponent {
   #drawLowerVertical(whereChild: GroupWrapper, parentRect: DOMRect) {
     const startClassClientRect =
       whereChild.criteriaGroup.startClassGroup.html[0].getBoundingClientRect();
-    const bx = Math.round(startClassClientRect.left - parentRect.left + (startClassClientRect.right - startClassClientRect.left) / 4 - 1);
+
+    const marginLeft = parseInt(whereChild.html.css('margin-left')) || 75;
+    const bx = Math.round(marginLeft + marginLeft / 2);
     // -2 so that it looks connected to white group
     const by = Math.round(startClassClientRect.top - parentRect.top);
 

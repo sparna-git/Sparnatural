@@ -1,4 +1,5 @@
 @use '../base';
+@use 'sass:math';
 .link-where-bottom {
     .upper-vertical, .horizontal, .lower-vertical{
         position: absolute;
@@ -6,10 +7,16 @@
         display: block;
         z-index: 0;
     }
-    .upper-vertical, .lower-vertical {
+    .upper-vertical {
         width: 2px;
         top: var(--link-top);
         left: var(--link-left);
+        height: var(--link-height);
+    }
+    .lower-vertical {
+        width: 2px;
+        top: var(--link-top);
+        left: base.$margin-children-li + math.div(base.$margin-children-li, 2);
         height: var(--link-height);
     }
     .horizontal{

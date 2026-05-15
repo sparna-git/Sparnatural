@@ -1,8 +1,9 @@
 @use '../base';
+@use 'sass:math';
 .link-and-bottom {
     position:absolute;
     top: var(--link-top);
-    left: var(--link-left);
+    left: math.div(base.$margin-children-li, 2);
     height: var(--link-height);
     width: 2px;
     background-color: var(--primary-color-main);

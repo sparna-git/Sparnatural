@@ -6,9 +6,8 @@ import GroupWrapper from "./GroupWrapper";
   This class is used to draw the connecting line between two group wrappers if an AND connection is made
   Some helpful notes:
    - window.scrollX | window.scrollY is used to correct the positioning of the line if the window is scrollable.
-   - ax & ay are the position of the upper (Parent) group wrapper
-   - bx & by are the position of the lower (Sibling) group wrapper
-   - (posUpperStart.left + (posUpperStart.right - posUpperStart.left) / 4) is used to calculate one quarter of the width from the left side
+   - ay is the position of the upper (Parent) group wrapper
+   - by is the position of the lower (Sibling) group wrapper
 */
 
 class LinkAndBottom extends HTMLComponent {
@@ -38,7 +37,6 @@ class LinkAndBottom extends HTMLComponent {
       grpWrapper.andSibling.criteriaGroup.startClassGroup.html[0].getBoundingClientRect();
 
     // Position relative au parent <li>
-    const ax = Math.round(posUpperStart.left - parentRect.left + (posUpperStart.right - posUpperStart.left) / 4 - 1);
     // +3 so that it looks connected to white group and not orange arrow
     const ay = Math.round(posUpperStart.bottom - parentRect.top);
     const by = Math.round(posLowerStart.top - parentRect.top);
@@ -48,7 +46,6 @@ class LinkAndBottom extends HTMLComponent {
 
     this.html.css({
       '--link-top': ay + 'px',
-      '--link-left': ax + 'px',
       '--link-height': distance + 'px',
     });
 
