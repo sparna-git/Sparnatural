@@ -2,7 +2,58 @@
     width: auto;
     padding: 0 15px 0 0;
     margin-left: -43px;
+    position: relative;        
     display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    
+    .EndClassWidgetValuesWrapper {
+        display: flex;
+        flex-wrap: wrap;           
+        width: auto;
+        flex: 0 1 auto;
+        
+        &.expanded {
+            position: absolute;    
+            z-index: 100; // Increase z-index
+            top: -2px;
+            left: 15px;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 3px 15px 3px 0;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+            box-sizing: border-box;
+            
+            // 220px per chip, minus 13px overlap = 207px per chip visible width.
+            // 3 chips = 3 * 207 + 13 = 634px.
+            // We set width to 634px to force 3 items per row.
+
+            .EndClassWidgetValue {
+                display: flex !important; // Ensure they are visible when expanded
+            }
+
+            .popoverCloseBtn {
+                position: absolute;
+                top: -10px;
+                right: -10px;           // ou selon l'alignement souhaité : 5px pour rester dans la zone
+                cursor: pointer;
+                z-index: 101;           // au-dessus du contenu du popover (z-index: 100)
+                svg {
+                    fill: var(--primary-color-important);
+                    width: 18px;
+                    height: 18px;
+                    background-color: white;
+                    border-radius: 100%;
+                    box-shadow: 0px 1px 3px rgba(0,0,0,0.2);
+                }
+                &:hover svg {
+                    fill: darkred;       // ou un rouge plus foncé au hover
+                }
+            }
+        }
+    }
+
     span.unselect {
         top: -10px;
     }

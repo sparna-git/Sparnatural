@@ -111,7 +111,7 @@
               prefixes="rdfs:http://www.w3.org/2000/01/rdf-schema#"
             />-->
 
-            <spar-natural
+            <!-- <spar-natural
               id="sparnatural"
               src="configs/sparnatural-config_oresm_nov2025-bis.ttl"
               lang="en"
@@ -123,7 +123,18 @@
               maxDepth="10"
               debug="false"
               prefixes="rdfs:http://www.w3.org/2000/01/rdf-schema#"
-            />
+            />-->
+
+            <spar-natural
+                    src="../configs/sparnatural-config.ttl"
+                    endpoint="https://smt.esante.gouv.fr/api/sparql"
+                    typePredicate="<http://www.w3.org/2000/01/rdf-schema#subClassOf>"
+                    prefixes="skos:http://www.w3.org/2004/02/skos/core# dct:http://purl.org/dc/terms/"
+                    lang="fr"
+                    defaultLang="fr"
+                    distinct="true"
+                    debug="true"
+            ></spar-natural>
 
             <!--       
         <spar-natural

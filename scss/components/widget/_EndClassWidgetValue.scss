@@ -19,6 +19,7 @@
         line-height: 21px;
     }
     max-width: 220px;
+    min-width: 80px;     
     height: 46px;
     margin-right: -13px;
     p {
@@ -30,7 +31,8 @@
         padding: 0 5px 0 5px;
         display: inline-block;
         overflow: hidden;
-        /*text-overflow: ellipsis;*/
+        min-width: 40px;   
+        max-width: 180px;  
         border: base.$center-arrow-bd-width solid #fff;
         border-left: 0;
         border-right: 0;
@@ -45,6 +47,7 @@
             white-space: nowrap;
             color:var(--default-text-color);
             width: 100%;
+            max-width: 170px; 
 
             &.notFound {
                 color: red;
