@@ -70,7 +70,7 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
       this.hierarchyData = hierarchyData;
       this.defaultValue = defaultValue;
     }
-  
+
     render(): this {
       super.render();
       return this;
@@ -453,7 +453,7 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
       let count_attr = `data-count="${count}"` ;
       let countUiUX = `<span class="item-count"><span></span></span><span class="item-count-number"></span>`;
 
-      let color = element.color != undefined ? `data-color="${element.color}"` : "";
+      let color = element.color != undefined ? `data-color="${element.color}" style="--item-color: ${element.color}"` : "";
 
       let item = $(`<li value="${element.id}" data-id="${element.id}" data-parent="`+ parent +`" ${selected} ${color} ${iconValue} ${count_attr} class="${enabledClass}">${countUiUX}<span class="item-sel" ${tooltip}><span class="label-icon">${icon}</span><span class="item-label">${element.label}</span></span><span class="item-traverse">${UiuxConfig.ICON_DAG_ARROW_RIGHT}</span></li>`) ;
       return item ;

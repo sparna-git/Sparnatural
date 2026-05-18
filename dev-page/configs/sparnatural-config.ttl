@@ -4,6 +4,7 @@
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix volipi: <http://data.sparna.fr/ontologies/volipi#> .
 @base <https://sparna-git.github.io/sparnatural-demonstrateur-an/ontology> .
 
 <https://sparna-git.github.io/sparnatural-demonstrateur-an/ontology> rdf:type owl:Ontology ;
@@ -24,6 +25,10 @@
 
 ###  http://data.sparna.fr/ontologies/sparnatural-config-core#tooltip
 <http://data.sparna.fr/ontologies/sparnatural-config-core#tooltip> rdf:type owl:AnnotationProperty .
+
+
+###  http://data.sparna.fr/ontologies/volipi#color
+volipi:color rdf:type owl:AnnotationProperty .
 
 
 ###  http://data.sparna.fr/ontologies/sparnatural-config-datasources#queryTemplate
@@ -465,6 +470,7 @@ rdfs:Literal rdf:type owl:Class .
           <http://data.sparna.fr/ontologies/sparnatural-config-core#defaultLabelProperty> :aPourIntitule ;
           <http://data.sparna.fr/ontologies/sparnatural-config-core#faIcon> "fad fa-archive" ;
           <http://data.sparna.fr/ontologies/sparnatural-config-core#order> 20 ;
+          volipi:color "#ff0000" ;
           <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<https://sparnatural-demo-anf.huma-num.fr/ontology#Archive>" ;
           <http://data.sparna.fr/ontologies/sparnatural-config-core#tooltip> "Any type of archival resource, whether it is an item (such as a minute or a registry) or a group of documents (series of minutes or registry of a notary, bundle of minutes, client file...)."@en ,
                                                                              "Tout type de ressource archivistique, qu'il s'agisse d'un item (comme une minute ou un répertoire) ou d'un groupe de documents (série des minutes ou des répertoires d'un notaire, liasse de minutes, dossier de client...)."@fr ;
@@ -518,6 +524,7 @@ rdfs:Literal rdf:type owl:Class .
       <http://data.sparna.fr/ontologies/sparnatural-config-core#defaultLabelProperty> :aPourNom ;
       <http://data.sparna.fr/ontologies/sparnatural-config-core#faIcon> "fas fa-map-marker-alt" ;
       <http://data.sparna.fr/ontologies/sparnatural-config-core#order> 4 ;
+      volipi:color "#ff00ff" ;
       <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<https://www.ica.org/standards/RiC/ontology#Place>" ;
       <http://data.sparna.fr/ontologies/sparnatural-config-core#tooltip> "Any geo-historical entity, be it an inhabited place, a building, a district, a natural place. Here, it includes the districts and parishes of Paris, the Parisian roads and the buildings mentioned in the notarial archives, whether they still exist or not."@en ,
                                                                          "Toute entité géo-historique, qu'il s'agisse d'un lieu habité, d'un édifice, d'une circonscription, d'un lieu naturel. Ici, inclut notamment les quartiers et paroisses de Paris, les voies parisiennes et les édifices mentionnés dans les archives notariales, qu'ils existent toujours ou non."@fr ;
@@ -555,6 +562,7 @@ rdfs:Literal rdf:type owl:Class .
               <http://data.sparna.fr/ontologies/sparnatural-config-core#defaultLabelProperty> :aPourNom ;
               <http://data.sparna.fr/ontologies/sparnatural-config-core#faIcon> "fad fa-building" ;
               <http://data.sparna.fr/ontologies/sparnatural-config-core#order> 3 ;
+              volipi:color "#00ff00" ;
               <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<https://www.ica.org/standards/RiC/ontology#CorporateBody>" ;
               <http://data.sparna.fr/ontologies/sparnatural-config-core#tooltip> "An organization, i.e., a group of persons with an identity or a social status. It includes notarial offices, and all organizations mentioned in the notarial records."@en ,
                                                                                  "Un organisme, c'est-à-dire un groupe de personnes physiques ayant une identité ou un statut social. Inclut les études notariales, et toutes les collectivités mentionnées dans les archives notariales."@fr ;
@@ -575,6 +583,7 @@ rdfs:Literal rdf:type owl:Class .
           <http://data.sparna.fr/ontologies/sparnatural-config-core#defaultLabelProperty> :aPourNom ;
           <http://data.sparna.fr/ontologies/sparnatural-config-core#faIcon> "fas fa-user" ;
           <http://data.sparna.fr/ontologies/sparnatural-config-core#order> 2 ;
+          volipi:color "#0000ff" ;
           <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<https://www.ica.org/standards/RiC/ontology#Person>"@fr ;
           <http://data.sparna.fr/ontologies/sparnatural-config-core#tooltip> "Any person. It includes notaries, and any person mentioned in notarial records."@en ,
                                                                              "Toute personne physique. Inclut les notaires, et toute personne mentionnée dans les archives notariales."@fr ;
