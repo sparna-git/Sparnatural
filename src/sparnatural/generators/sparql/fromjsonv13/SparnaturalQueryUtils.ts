@@ -119,7 +119,6 @@ export class SparnaturalQueryUtils {
    */
   static isVarSelected(query: SparnaturalQuery, varName: string): boolean {
     let result = SparnaturalQueryUtils.findSelectedVariableByName(query, varName) !== undefined;
-    console.log("isVarSelected "+varName+" ? "+result)
     return result;
   }
 
