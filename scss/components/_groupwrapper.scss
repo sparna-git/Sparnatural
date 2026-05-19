@@ -11,6 +11,7 @@ li.groupe {
     display: block;
     clear: both;
     /*overflow: hidden;*/
+    z-index: auto;
 
     /*first line*/
     &>li.groupe {
