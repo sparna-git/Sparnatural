@@ -62,24 +62,39 @@
 	}
 	
 	/* Unselect to graphique  */
-	span.unselect {
-		/*position: absolute;*/
-		display: block;
-		position: absolute;
-		top: 15px;
-		right: 10px;
-		width: 22px;
-		height: 22px !important;
-		padding: 0 0;
-		text-align: center;
-		cursor: pointer;
-		color: var(--primary-color-important);
-		line-height: 22px;
-		font-size: 18px;
-		box-sizing: border-box;
-		border-radius: 11px;
-		z-index: 2;
-	}
+		&>span.unselect {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			position: absolute;
+			top: -10px;
+			right: -10px;
+			width: 22px;
+			height: 22px !important;
+			cursor: pointer;
+			box-sizing: border-box;
+			border-radius: 11px;
+			z-index: 2;
+			background: #fff;
+			box-shadow: 0px 1px 2px rgba(0,0,0,0.2);
+
+			span {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				line-height: 0;
+			}
+
+			svg {
+				width: 14px;
+				height: 14px;
+				fill: var(--primary-color-important);
+			}
+
+			&:hover svg {
+				fill: darkred;
+			}
+		}
 
 	.currentWrapper {
         height: 48px;
