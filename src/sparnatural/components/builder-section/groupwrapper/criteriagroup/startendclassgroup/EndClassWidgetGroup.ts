@@ -28,6 +28,8 @@ export class EndClassWidgetGroup extends HTMLComponent {
   addWidgetValueBtn: AddWidgetValueBtn;
   expandBtn: ExpandWidgetValuesBtn | undefined;
   valuesWrapper: JQuery;
+  expandedValuesWrapper: JQuery;
+  popoverCloseBtn: JQuery;
   isSelectAll:boolean = false;
   #clickOutsideHandler: ((e: JQuery.ClickEvent) => void) | null = null;
   #resizeHandler: (() => void) | null = null;
@@ -41,23 +43,42 @@ export class EndClassWidgetGroup extends HTMLComponent {
     super.render();
 
     this.valuesWrapper = $('<div class="EndClassWidgetValuesWrapper"></div>');
+    this.expandedValuesWrapper = $('<div class="EndClassWidgetExpandedWrapper"></div>');
+    this.expandedValuesWrapper.hide();
     this.html.append(this.valuesWrapper);
+    this.html.append(this.expandedValuesWrapper);
 
-    let popoverCloseBtn = $(`<span class="popoverCloseBtn">${UiuxConfig.ICON_REG_XMARK}</span>`);
-    this.valuesWrapper.append(popoverCloseBtn);
-    popoverCloseBtn.on("click", (e) => {
+    this.popoverCloseBtn = $(`<span class="popoverCloseBtn">${UiuxConfig.ICON_ARROW_TOP}</span>`);
+    this.expandedValuesWrapper.append(this.popoverCloseBtn);
+    this.popoverCloseBtn.on("click", (e) => {
       e.stopPropagation();
-      this.valuesWrapper.removeClass("expanded");
+      this.expandedValuesWrapper.removeClass("expanded");
+      this.expandedValuesWrapper.hide();
+      this.popoverCloseBtn.hide();
       this.valuesWrapper.css("max-width", "");
       this.valuesWrapper.css("width", "");
       this.html.css("width", "");
-      if (this.#resizeHandler) {
-        window.removeEventListener("resize", this.#resizeHandler);
-        this.#resizeHandler = null;
-      }
       this.html[0].dispatchEvent(new CustomEvent("redrawBackgroundAndLinks", { bubbles: true }));
       this.#updateLayout();
     });
+
+    // Permanent resize handler for chip widths + expanded wrapper
+    let resizeTimeout: any;
+    this.#resizeHandler = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        if (this.expandedValuesWrapper.hasClass("expanded")) {
+          const criteriaGroup = this.parentComponent as CriteriaGroup;
+          const newWidth = this.#calculatePopoverWidth(criteriaGroup.html[0], this.html[0]);
+          this.expandedValuesWrapper.css("width", newWidth + "px");
+          this.#positionCloseBtn();
+        }
+        if (this.widgetValues.length > 0) {
+          this.#calculateChipWidths();
+        }
+      }, 150);
+    };
+    window.addEventListener("resize", this.#resizeHandler);
 
     this.#addEventListener();
     this.#addEditEventListener();
@@ -67,14 +88,11 @@ export class EndClassWidgetGroup extends HTMLComponent {
       $(document).off("click", this.#clickOutsideHandler);
     }
     this.#clickOutsideHandler = (e) => {
-      if (this.valuesWrapper.hasClass("expanded") && !$(e.target).closest(this.html).length) {
+      if (this.expandedValuesWrapper.hasClass("expanded") && !$(e.target).closest(this.html).length) {
         this.html.css("width", "");
-        this.valuesWrapper.css("width", "");
-        this.valuesWrapper.removeClass("expanded");
-        if (this.#resizeHandler) {
-          window.removeEventListener("resize", this.#resizeHandler);
-          this.#resizeHandler = null;
-        }
+        this.expandedValuesWrapper.removeClass("expanded");
+        this.expandedValuesWrapper.hide();
+        this.popoverCloseBtn?.hide();
         this.#updateLayout();
         this.html[0].dispatchEvent(
           new CustomEvent("redrawBackgroundAndLinks", { bubbles: true })
@@ -178,6 +196,9 @@ export class EndClassWidgetGroup extends HTMLComponent {
       this.expandBtn?.html?.remove();
       this.expandBtn = undefined;
       this.valuesWrapper.empty();
+      this.expandedValuesWrapper.hide();
+      this.expandedValuesWrapper.removeClass("expanded");
+      this.popoverCloseBtn?.hide();
 
       this.html[0].dispatchEvent(
         new CustomEvent("renderWidgetWrapper", {
@@ -187,6 +208,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
       );
     }
 
+    this.#redistributeValues();
     this.#updateLayout();
 
     this.html[0].dispatchEvent(
@@ -259,50 +281,55 @@ export class EndClassWidgetGroup extends HTMLComponent {
     }
   }
 
-  #updateLayout() {
+  #redistributeValues() {
     const maxPerRow = getSettings().maxVisiblePerRow || 3;
-    const total = this.widgetValues.length;
-    const isExpanded = this.valuesWrapper.hasClass("expanded");
-
     this.widgetValues.forEach((val, index) => {
-      if (!isExpanded && index >= maxPerRow) {
-        val.html.hide();
+      val.html.detach();
+      if (index < maxPerRow) {
+        this.valuesWrapper.append(val.html);
+        val.html.show();
       } else {
+        this.expandedValuesWrapper.append(val.html);
         val.html.show();
       }
     });
+  }
+  #updateLayout() {
+    const maxPerRow = getSettings().maxVisiblePerRow || 3;
+    const total = this.widgetValues.length;
+    const isExpanded = this.expandedValuesWrapper.hasClass("expanded");
+
+    this.#redistributeValues();
+
+    if (isExpanded) {
+      this.expandedValuesWrapper.show();
+      this.#positionCloseBtn();
+    } else {
+      this.expandedValuesWrapper.hide();
+      this.popoverCloseBtn?.hide();
+    }
 
     if (total > maxPerRow) {
       if (!this.expandBtn) {
         this.expandBtn = new ExpandWidgetValuesBtn(this, (e) => {
           e.stopImmediatePropagation();
-          
-          if (!this.valuesWrapper.hasClass("expanded")) {
+
+          if (!this.expandedValuesWrapper.hasClass("expanded")) {
             const criteriaGroup = this.parentComponent as CriteriaGroup;
             const availableWidth = this.#calculatePopoverWidth(criteriaGroup.html[0], this.html[0]);
-            this.valuesWrapper.css("width", availableWidth + "px");
-
-            // Add resize listener with debounce
-            let resizeTimeout: any;
-            this.#resizeHandler = () => {
-              clearTimeout(resizeTimeout);
-              resizeTimeout = setTimeout(() => {
-                if (this.valuesWrapper.hasClass("expanded")) {
-                  const newWidth = this.#calculatePopoverWidth(criteriaGroup.html[0], this.html[0]);
-                  this.valuesWrapper.css("width", newWidth + "px");
-                }
-              }, 150);
-            };
-            window.addEventListener("resize", this.#resizeHandler);
+            this.expandedValuesWrapper.css("width", availableWidth + "px");
           } else {
-            this.valuesWrapper.css("width", "");
-            if (this.#resizeHandler) {
-              window.removeEventListener("resize", this.#resizeHandler);
-              this.#resizeHandler = null;
-            }
+            this.expandedValuesWrapper.css("width", "");
           }
 
-          this.valuesWrapper.toggleClass("expanded");
+          this.expandedValuesWrapper.toggleClass("expanded");
+          if (this.expandedValuesWrapper.hasClass("expanded")) {
+            this.expandedValuesWrapper.show();
+            this.#positionCloseBtn();
+          } else {
+            this.expandedValuesWrapper.hide();
+            this.popoverCloseBtn?.hide();
+          }
           this.#updateLayout();
           this.html[0].dispatchEvent(
             new CustomEvent("redrawBackgroundAndLinks", { bubbles: true })
@@ -316,6 +343,8 @@ export class EndClassWidgetGroup extends HTMLComponent {
       this.expandBtn.html.show();
     } else {
       this.expandBtn?.html.hide();
+      this.expandedValuesWrapper.removeClass("expanded");
+      this.expandedValuesWrapper.hide();
     }
 
     // if the widget allows multiple values to be selected then AddWidgetValueBtn
@@ -336,12 +365,81 @@ export class EndClassWidgetGroup extends HTMLComponent {
 
       if (total >= getSettings().maxOr) {
         this.addWidgetValueBtn.html.hide();
+      } else if (total === 0) {
+        this.addWidgetValueBtn.html.hide();
       } else {
         this.addWidgetValueBtn.html.show();
       }
     } else {
       this.addWidgetValueBtn?.html.hide();
     }
+
+    // Calculate chip max-width to fit maxPerRow items on one line
+    if (total > 0) {
+      this.#calculateChipWidths();
+    } else {
+      this.valuesWrapper[0].style.removeProperty('--chip-max-width');
+      this.expandedValuesWrapper[0].style.removeProperty('--chip-max-width');
+    }
+  }
+
+  #calculateChipWidths() {
+    const maxPerRow = getSettings().maxVisiblePerRow || 3;
+    const total = this.widgetValues.length;
+
+    // --- Chip width for valuesWrapper (main row) ---
+    const criteriaGroupEl = (this.parentComponent as CriteriaGroup).html[0] as HTMLElement;
+    const criteriaGroupRect = criteriaGroupEl.getBoundingClientRect();
+
+    let otherElementsWidth = 0;
+    for (const child of Array.from(criteriaGroupEl.children)) {
+      const childEl = child as HTMLElement;
+      const childStyle = window.getComputedStyle(childEl);
+      if (childStyle.position === "absolute") continue;
+      if (childEl === this.html[0]) continue;
+      const childRect = childEl.getBoundingClientRect();
+      const ml = parseFloat(childStyle.marginLeft) || 0;
+      const mr = parseFloat(childStyle.marginRight) || 0;
+      otherElementsWidth += childRect.width + ml + mr;
+    }
+
+    const ecwgStyle = window.getComputedStyle(this.html[0]);
+    const ecwgML = parseFloat(ecwgStyle.marginLeft) || 0;
+    const ecwgPR = parseFloat(ecwgStyle.paddingRight) || 0;
+
+    let availableWidth = criteriaGroupRect.width - otherElementsWidth - ecwgML - ecwgPR;
+
+    const expandEl = this.expandBtn?.html?.[0] as HTMLElement | undefined;
+    if (expandEl && expandEl.offsetParent !== null) {
+      availableWidth -= expandEl.getBoundingClientRect().width;
+    }
+    const addEl = this.addWidgetValueBtn?.html?.[0] as HTMLElement | undefined;
+    if (addEl && addEl.offsetParent !== null) {
+      availableWidth -= addEl.getBoundingClientRect().width;
+    }
+
+    const visibleCount = Math.min(total, maxPerRow);
+    const chipWidth = (availableWidth + (visibleCount - 1) * 13) / visibleCount;
+    const clampedWidth = Math.max(80, Math.min(220, Math.floor(chipWidth)));
+    this.valuesWrapper[0].style.setProperty('--chip-max-width', clampedWidth + 'px');
+
+    // --- Chip width for expandedValuesWrapper (based on its own width) ---
+    if (this.expandedValuesWrapper.hasClass("expanded") && this.expandedValuesWrapper.is(":visible")) {
+      const expandedEl = this.expandedValuesWrapper[0] as HTMLElement;
+      const expandedWidth = expandedEl.getBoundingClientRect().width;
+      const expandedPR = parseFloat(getComputedStyle(expandedEl).paddingRight) || 0;
+      const expandedAvailWidth = expandedWidth - expandedPR;
+      const expandedChipWidth = (expandedAvailWidth + (maxPerRow - 1) * 13) / maxPerRow;
+      const expandedClamped = Math.max(80, Math.min(220, Math.floor(expandedChipWidth)));
+      this.expandedValuesWrapper[0].style.setProperty('--chip-max-width', expandedClamped + 'px');
+    } else {
+      this.expandedValuesWrapper[0].style.removeProperty('--chip-max-width');
+    }
+  }
+
+  #positionCloseBtn() {
+    if (!this.popoverCloseBtn) return;
+    this.popoverCloseBtn.show();
   }
 
   // when more values should be added then render the inputypecomponent again
@@ -376,51 +474,12 @@ export class EndClassWidgetGroup extends HTMLComponent {
 
   #calculatePopoverWidth(criteriaGroupEl: HTMLElement, endClassWidgetGroupEl: HTMLElement): number {
     const criteriaGroupRect = criteriaGroupEl.getBoundingClientRect();
-    
-    // Calculer la largeur totale des enfants SAUF EndClassWidgetGroup
-    let otherElementsWidth = 0;
-    const children = Array.from(criteriaGroupEl.children);
-    
-    console.log("--- EndClassWidgetGroup Expand Calculation ---");
-    console.log(`CriteriaGroup total width (rect): ${criteriaGroupRect.width.toFixed(1)}`);
+    const ecwgRect = endClassWidgetGroupEl.getBoundingClientRect();
 
-    for (const child of children) {
-      const childEl = child as HTMLElement;
-      const style = window.getComputedStyle(childEl);
-      
-      // Skip elements positioned as 'absolute' (e.g., ActionsGroup, UnselectBtn)
-      if (style.position === "absolute") {
-        console.log(`- Skipping absolute child ${childEl.className || childEl.tagName}`);
-        continue;
-      }
+    // Align right edge of expanded wrapper with right edge of CriteriaGroup
+    const expandedWidth = criteriaGroupRect.right - ecwgRect.left;
 
-      if (childEl === endClassWidgetGroupEl) continue; // ignorer EndClassWidgetGroup
-      const childRect = childEl.getBoundingClientRect();
-      
-      const marginLeft = parseFloat(style.marginLeft) || 0;
-      const marginRight = parseFloat(style.marginRight) || 0;
-      
-      const totalChildWidth = childRect.width + marginLeft + marginRight;
-      otherElementsWidth += totalChildWidth;
-      
-      console.log(`- Child ${childEl.className || childEl.tagName}: w=${childRect.width.toFixed(1)}, m=${marginLeft}/${marginRight}, total=${totalChildWidth.toFixed(1)}`);
-    }
-
-    // Marges de EndClassWidgetGroup lui-même
-    const ecwgStyle = window.getComputedStyle(endClassWidgetGroupEl);
-    const ecwgMarginLeft = parseFloat(ecwgStyle.marginLeft) || 0;
-    console.log(`ECWG margin-left: ${ecwgMarginLeft.toFixed(1)}`);
-
-    // Largeur disponible = largeur du parent - largeur des autres éléments - marge-gauche ECWG - 15px de sécurité
-    let availableWidth = criteriaGroupRect.width - otherElementsWidth - ecwgMarginLeft - 15;
-    
-    console.log(`Calculation: ${criteriaGroupRect.width.toFixed(1)} (parent) - ${otherElementsWidth.toFixed(1)} (others) - ${ecwgMarginLeft.toFixed(1)} (ecwg ml) - 15 (safety) = ${availableWidth.toFixed(1)}`);
-
-    const finalWidth = Math.max(200, Math.floor(availableWidth));
-    console.log(`Final width applied: ${finalWidth}`);
-    console.log("----------------------------------------------");
-
-    return finalWidth;
+    return Math.max(200, Math.floor(expandedWidth));
   }
 }
 
