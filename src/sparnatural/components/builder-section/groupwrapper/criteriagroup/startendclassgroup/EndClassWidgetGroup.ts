@@ -63,20 +63,16 @@ export class EndClassWidgetGroup extends HTMLComponent {
     });
 
     // Permanent resize handler for chip widths + expanded wrapper
-    let resizeTimeout: any;
     this.#resizeHandler = () => {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(() => {
-        if (this.expandedValuesWrapper.hasClass("expanded")) {
-          const criteriaGroup = this.parentComponent as CriteriaGroup;
-          const newWidth = this.#calculatePopoverWidth(criteriaGroup.html[0], this.html[0]);
-          this.expandedValuesWrapper.css("width", newWidth + "px");
-          this.#positionCloseBtn();
-        }
-        if (this.widgetValues.length > 0) {
-          this.#calculateChipWidths();
-        }
-      }, 150);
+      if (this.expandedValuesWrapper.hasClass("expanded")) {
+        const criteriaGroup = this.parentComponent as CriteriaGroup;
+        const newWidth = this.#calculatePopoverWidth(criteriaGroup.html[0], this.html[0]);
+        this.expandedValuesWrapper.css("width", newWidth + "px");
+        this.#positionCloseBtn();
+      }
+      if (this.widgetValues.length > 0) {
+        this.#calculateChipWidths();
+      }
     };
     window.addEventListener("resize", this.#resizeHandler);
 
@@ -479,7 +475,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
     // Align right edge of expanded wrapper with right edge of CriteriaGroup
     const expandedWidth = criteriaGroupRect.right - ecwgRect.left;
 
-    return Math.max(200, Math.floor(expandedWidth));
+    return Math.max(200, Math.floor(expandedWidth + 3));
   }
 }
 

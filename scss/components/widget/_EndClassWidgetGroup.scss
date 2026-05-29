@@ -1,8 +1,9 @@
 .EndClassWidgetGroup {
     width: auto;
     padding: 0 15px 0 0;
-    margin-left: -43px;
+    margin-left: -49px;
     position: relative;
+    top: -1px;
     display: flex;
     align-items: center;
     flex-wrap: nowrap;
@@ -18,19 +19,20 @@
         position: absolute;
         z-index: 100;
         top: 100%;
-        left: 1px;
+        left: -2px;
         background: #fff;
         border: 1px solid #ddd;
         border-top: none;
         border-radius: 0 0 5px 5px;
         padding: 5px 15px 5px 0;
-      box-shadow: 0px 2px 3px 0px #cfcfcf;
+        box-shadow: 0px 2px 2px 0px #cfcfcf;
         box-sizing: border-box;
         display: flex;
         flex-wrap: wrap;
 
         .EndClassWidgetValue {
             display: flex !important;
+            margin-bottom: 7px;
         }
 
         .popoverCloseBtn {
