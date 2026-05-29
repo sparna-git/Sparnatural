@@ -79,6 +79,15 @@ export class EndClassWidgetGroup extends HTMLComponent {
     this.#addEventListener();
     this.#addEditEventListener();
 
+    // Recalculate chip widths when optional/notExists toggles change the criteria border
+    // Listen on CriteriaGroup (parent) since OptionsGroup is a sibling, not an ancestor
+    const criteriaGroupEl = (this.parentComponent as CriteriaGroup).html[0];
+    criteriaGroupEl.addEventListener("redrawBackgroundAndLinks", () => {
+      if (this.widgetValues.length > 0) {
+        this.#resizeHandler();
+      }
+    });
+
     // click outside to collapse
     if (this.#clickOutsideHandler) {
       $(document).off("click", this.#clickOutsideHandler);

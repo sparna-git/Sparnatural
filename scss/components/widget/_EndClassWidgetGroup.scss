@@ -1,7 +1,7 @@
 .EndClassWidgetGroup {
     width: auto;
     padding: 0 15px 0 0;
-    margin-left: -49px;
+    margin-left: -45px;
     position: relative;
     top: -1px;
     display: flex;
@@ -60,7 +60,9 @@
     }
 
     span.unselect {
-        top: -10px;
+      top: -8px;
+      position: absolute;
+      right: 14px;
     }
 
     /* Unselect to graphique  */
