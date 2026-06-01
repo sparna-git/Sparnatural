@@ -27,8 +27,9 @@
         height: 48px;
         background: var(--primary-color-medium);
         background-clip: padding-box;
-        margin: 0;
-        padding: 0 3px 0 3px;
+        /* marge à droite négative pour faire rentrer la valeur dans la flèche */
+        margin: 0 -8px 0 0;
+        padding: 0 0px 0 3px;
         display: inline-block;
         overflow: hidden;
         min-width: 40px;
