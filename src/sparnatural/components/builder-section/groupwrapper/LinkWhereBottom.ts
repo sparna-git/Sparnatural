@@ -92,7 +92,7 @@ class LinkWhereBottom extends HTMLComponent {
     const distance = Math.round(bx - ax + 2); // keep +3 for overlap safety
 
     this.horizontal.css({
-      '--link-top': Math.round(xyLower.y - 1) + 'px',
+      '--link-top': Math.round(xyLower.y) + 'px',
       '--link-left': Math.round(ax) + 'px',
       '--link-width': distance + 'px',
     });
