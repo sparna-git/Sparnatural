@@ -16,8 +16,8 @@
         height: 48px;
         background: var(--primary-color-medium);
         background-clip: padding-box;
-        margin: 0;
-        padding: 0 3px 0 3px;
+        margin: 0 -4px 0 0;
+        padding: 0 2px 0 2px;
         display: inline-flex;
         align-items: center;
         border: base.$center-arrow-bd-width solid #fff;
