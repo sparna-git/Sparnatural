@@ -52,12 +52,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
     this.expandedValuesWrapper.append(this.popoverCloseBtn);
     this.popoverCloseBtn.on("click", (e) => {
       e.stopPropagation();
-      this.expandedValuesWrapper.removeClass("expanded");
-      this.expandedValuesWrapper.hide();
-      this.popoverCloseBtn.hide();
-      this.valuesWrapper.css("max-width", "");
-      this.valuesWrapper.css("width", "");
-      this.html.css("width", "");
+      this.#collapseExpanded();
       this.html[0].dispatchEvent(new CustomEvent("redrawBackgroundAndLinks", { bubbles: true }));
       this.#updateLayout();
     });
@@ -94,10 +89,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
     }
     this.#clickOutsideHandler = (e) => {
       if (this.expandedValuesWrapper.hasClass("expanded") && !$(e.target).closest(this.html).length) {
-        this.html.css("width", "");
-        this.expandedValuesWrapper.removeClass("expanded");
-        this.expandedValuesWrapper.hide();
-        this.popoverCloseBtn?.hide();
+        this.#collapseExpanded();
         this.#updateLayout();
         this.html[0].dispatchEvent(
           new CustomEvent("redrawBackgroundAndLinks", { bubbles: true })
@@ -201,9 +193,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
       this.expandBtn?.html?.remove();
       this.expandBtn = undefined;
       this.valuesWrapper.empty();
-      this.expandedValuesWrapper.hide();
-      this.expandedValuesWrapper.removeClass("expanded");
-      this.popoverCloseBtn?.hide();
+      this.#collapseExpanded();
 
       this.html[0].dispatchEvent(
         new CustomEvent("renderWidgetWrapper", {
@@ -348,8 +338,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
       this.expandBtn.html.show();
     } else {
       this.expandBtn?.html.hide();
-      this.expandedValuesWrapper.removeClass("expanded");
-      this.expandedValuesWrapper.hide();
+      this.#collapseExpanded();
     }
 
     // if the widget allows multiple values to be selected then AddWidgetValueBtn
@@ -447,8 +436,18 @@ export class EndClassWidgetGroup extends HTMLComponent {
     this.popoverCloseBtn.show();
   }
 
+  #collapseExpanded() {
+    this.expandedValuesWrapper.removeClass("expanded");
+    this.expandedValuesWrapper.hide();
+    this.popoverCloseBtn?.hide();
+    this.valuesWrapper.css("max-width", "");
+    this.valuesWrapper.css("width", "");
+    this.html.css("width", "");
+  }
+
   // when more values should be added then render the inputypecomponent again
   #addMoreValues = () => {
+    this.#collapseExpanded();
     // tell it is not completed so that it is higher
     this.html[0].dispatchEvent(
       new CustomEvent("onGrpInputNotCompleted", { bubbles: true })
