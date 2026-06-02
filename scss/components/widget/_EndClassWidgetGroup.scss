@@ -7,12 +7,13 @@
     display: flex;
     align-items: center;
     flex-wrap: nowrap;
+  flex-grow: 1;
 
     .EndClassWidgetValuesWrapper {
         display: flex;
         flex-wrap: wrap;
         width: auto;
-        flex: 0 1 auto;
+      flex: 1 1 auto;
     }
 
     .EndClassWidgetExpandedWrapper {
@@ -24,7 +25,7 @@
         border: 1px solid #ddd;
         border-top: none;
         border-radius: 0 0 5px 5px;
-        padding: 5px 15px 5px 0;
+        padding: 5px 15px 2px 0;
         box-shadow: 0px 2px 2px 0px #cfcfcf;
         box-sizing: border-box;
         display: flex;
