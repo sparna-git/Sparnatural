@@ -495,7 +495,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
     // Align right edge of expanded wrapper with right edge of CriteriaGroup
     const expandedWidth = criteriaGroupRect.right - ecwgRect.left;
 
-    return Math.max(200, Math.floor(expandedWidth + 2));
+    return Math.max(200, Math.round(expandedWidth + 2));
   }
 }
 
