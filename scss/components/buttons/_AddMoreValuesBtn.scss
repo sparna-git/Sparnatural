@@ -25,9 +25,11 @@
         width: 0px;
         overflow: visible;
         position: relative;
+        display: flex;
+        align-items: center;
         span {
-            line-height: 42px;
             color: var(--default-text-color);
+            margin-top: -2px;
         }
         // so that it works even without Bootstrap
         margin-top: 0;
