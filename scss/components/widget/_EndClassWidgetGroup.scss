@@ -1,6 +1,6 @@
 .EndClassWidgetGroup {
     width: auto;
-    padding: 0 15px 0 0;
+    padding: 0 5px 0 0;
     margin-left: -45px;
     position: relative;
     top: -1px;
@@ -11,9 +11,8 @@
 
     .EndClassWidgetValuesWrapper {
         display: flex;
-        flex-wrap: wrap;
-        width: auto;
-      flex: 1 1 auto;
+        flex-wrap: nowrap;
+        flex: none;
     }
 
     .EndClassWidgetExpandedWrapper {
@@ -25,7 +24,7 @@
         border: 1px solid #ddd;
         border-top: none;
         border-radius: 0 0 5px 5px;
-        padding: 5px 15px 2px 0;
+        padding: 5px 5px 2px 0;
         box-shadow: 0px 2px 2px 0px #cfcfcf;
         box-sizing: border-box;
         display: flex;

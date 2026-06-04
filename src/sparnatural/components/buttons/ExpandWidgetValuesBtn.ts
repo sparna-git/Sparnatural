@@ -25,7 +25,7 @@ export class ExpandWidgetValuesBtn extends HTMLComponent {
         this.html.append($(label));
         this.frontArrow.render();
         
-        this.html.on("click", (e) => this.onClick(e));
+        this.html.off("click").on("click", (e) => this.onClick(e));
         return this;
     }
 }

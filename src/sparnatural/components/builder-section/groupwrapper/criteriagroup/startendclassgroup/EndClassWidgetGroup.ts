@@ -66,7 +66,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
         this.#positionCloseBtn();
       }
       if (this.widgetValues.length > 0) {
-        this.#calculateChipWidths();
+        requestAnimationFrame(() => this.#calculateChipWidths());
       }
     };
     window.addEventListener("resize", this.#resizeHandler);
@@ -289,7 +289,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
       }
     });
   }
-  #updateLayout() {
+  #updateLayout(skipRecalc?: boolean) {
     const maxPerRow = getSettings().maxVisiblePerRow || 3;
     const total = this.widgetValues.length;
     const isExpanded = this.expandedValuesWrapper.hasClass("expanded");
@@ -325,7 +325,8 @@ export class EndClassWidgetGroup extends HTMLComponent {
             this.expandedValuesWrapper.hide();
             this.popoverCloseBtn?.hide();
           }
-          this.#updateLayout();
+          this.#updateLayout(true);
+          this.#calculateExpandedChipWidths();
           this.html[0].dispatchEvent(
             new CustomEvent("redrawBackgroundAndLinks", { bubbles: true })
           );
@@ -369,10 +370,11 @@ export class EndClassWidgetGroup extends HTMLComponent {
     }
 
     // Calculate chip max-width to fit maxPerRow items on one line
-    if (total > 0) {
-      this.#calculateChipWidths();
+    if (total > 0 && !skipRecalc) {
+      requestAnimationFrame(() => this.#calculateChipWidths());
     } else {
       this.valuesWrapper[0].style.removeProperty('--chip-max-width');
+      this.valuesWrapper[0].style.removeProperty('width');
       this.expandedValuesWrapper[0].style.removeProperty('--chip-max-width');
     }
   }
@@ -401,7 +403,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
     const ecwgML = parseFloat(ecwgStyle.marginLeft) || 0;
     const ecwgPR = parseFloat(ecwgStyle.paddingRight) || 0;
 
-    let availableWidth = criteriaGroupRect.width - otherElementsWidth - ecwgML - ecwgPR;
+    let availableWidth = criteriaGroupRect.width - otherElementsWidth - ecwgML - ecwgPR + 10;
 
     const expandEl = this.expandBtn?.html?.[0] as HTMLElement | undefined;
     if (expandEl && expandEl.offsetParent !== null) {
@@ -411,13 +413,22 @@ export class EndClassWidgetGroup extends HTMLComponent {
     if (addEl && addEl.offsetParent !== null) {
       availableWidth -= addEl.getBoundingClientRect().width;
     }
+    let extra_width = 0;
+    if (total > maxPerRow) {
+      extra_width = 10 ;
+    }
 
     const visibleCount = Math.min(total, maxPerRow);
-    const chipWidth = (availableWidth + (visibleCount - 1) * 13) / visibleCount;
+    const chipWidth = (availableWidth + extra_width + (visibleCount - 1) * 13) / Math.max(visibleCount, maxPerRow-1) ;
     const clampedWidth = Math.max(80, Math.min(220, Math.floor(chipWidth)));
     this.valuesWrapper[0].style.setProperty('--chip-max-width', clampedWidth + 'px');
 
     // --- Chip width for expandedValuesWrapper (based on its own width) ---
+    this.#calculateExpandedChipWidths();
+  }
+
+  #calculateExpandedChipWidths() {
+    const maxPerRow = getSettings().maxVisiblePerRow || 3;
     if (this.expandedValuesWrapper.hasClass("expanded") && this.expandedValuesWrapper.is(":visible")) {
       const expandedEl = this.expandedValuesWrapper[0] as HTMLElement;
       const expandedWidth = expandedEl.getBoundingClientRect().width;
@@ -448,6 +459,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
   // when more values should be added then render the inputypecomponent again
   #addMoreValues = () => {
     this.#collapseExpanded();
+    this.#updateLayout();
     // tell it is not completed so that it is higher
     this.html[0].dispatchEvent(
       new CustomEvent("onGrpInputNotCompleted", { bubbles: true })
