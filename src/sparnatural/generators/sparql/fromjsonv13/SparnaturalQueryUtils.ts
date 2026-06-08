@@ -14,6 +14,7 @@ import { ISparnaturalSpecification } from "../../../spec-providers/ISparnaturalS
 import { SHACLSpecificationProperty } from "../../../spec-providers/shacl/SHACLSpecificationProperty";
 import { SHACLSpecificationEntity } from "../../../spec-providers/shacl/SHACLSpecificationEntity";
 import { DataFactory } from "rdf-data-factory";
+import { ISpecificationEntity } from "../../../..";
 
 const factory = new DataFactory();
 
@@ -97,7 +98,6 @@ export class SparnaturalQueryUtils {
       if (newVarName.startsWith(currentVarName)) {
         // insert the new variable after this one
         query.variables.splice(i + 1, 0, newVariable);
-        console.log("inserted after ",currentVarName);
         found = true;
         // don't forget, otherwise infinite loop
         break;
@@ -107,7 +107,6 @@ export class SparnaturalQueryUtils {
     // if no variable was found that starts with newVariable name, then insert it at the end
     if(!found) {
       // insert at the end
-      console.log("inserted at the end ");
       query.variables.push(newVariable);
     }
   }
@@ -127,7 +126,6 @@ export class SparnaturalQueryUtils {
       query.variables.find((v) => {
         // PatternBind (aggregate)
         if (v.type === "pattern" && v.subType === "bind") {
-          console.log(v.expression.expression[0].value+ " / "+varName)
           if(v.expression.expression[0].value === varName) return true;        
         }
         // TermVariable
@@ -136,6 +134,53 @@ export class SparnaturalQueryUtils {
         );
       }) as SelectVariable
     );
+  }
+
+  static isVarRequiresAggregationOnLabel(query: SparnaturalQuery, varName: string, specProvider: ISparnaturalSpecification): boolean {
+    // 1. find the selected variable
+    const selectedVariable = this.findSelectedVariableByName(query, varName);
+    if (!selectedVariable) return false;
+
+    // 2. check if it's an concat aggregate function
+    if (
+      selectedVariable.type === "pattern"
+      &&
+      selectedVariable.subType === "bind"
+      &&
+      selectedVariable.expression.aggregation.toLowerCase() === "group_concat"
+    ) {
+      // 3. check if the aggregated variable corresponds to an entity in the config which as a default label property
+      const findVarEntity = (
+          subject: TermTypedVariable,
+          pairs: PredicateObjectPair[],
+          varName: string,
+      ): ISpecificationEntity | undefined => {
+        for (const pair of pairs) {
+          if (pair.object?.variable?.value === varName) return specProvider.getEntity(pair.object?.variable?.rdfType);
+          // also look in subject
+          if(subject.value === varName ) return specProvider.getEntity(subject.rdfType);
+          if (pair.object?.predicateObjectPairs) {
+            const result = findVarEntity(pair.object.variable, pair.object?.predicateObjectPairs, varName);
+            if (result) return result;
+          }
+        }
+        return undefined;
+      };
+
+      let entity:ISpecificationEntity | undefined = findVarEntity(query.where.subject, query.where.predicateObjectPairs, varName);
+
+      if (
+        entity
+        &&
+        !entity.isLiteralEntity()
+        &&
+        entity.getDefaultLabelProperty()
+      ) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   static addKeyInfoSelection(query: SparnaturalQuery, specProvider: ISparnaturalSpecification) {

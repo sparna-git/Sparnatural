@@ -46,7 +46,7 @@ export class JsonV13SparqlTranslator {
    */
   generateQuery(jsonQuery: SparnaturalQuery): SelectQuery {
     // make a deep copy of the query since we will expand it during SPARQL
-    // Warning : everything velow should now operate on this.jsonQuery, and not on jsonQuery
+    // Warning : everything below should now operate on this.jsonQuery, and not on jsonQuery
     this.jsonQuery = (JSON.parse(JSON.stringify(jsonQuery)));
 
     SparnaturalQueryUtils.addKeyInfoSelection(this.jsonQuery, this.specProvider);
@@ -80,7 +80,19 @@ export class JsonV13SparqlTranslator {
     if (this.defaultLabelVars.length > 0) {
       this.defaultLabelVars.forEach((v) => {
         let varName = (v as VariableTerm).value;
-        this.#insertExtraVariableInSelect(sparqlJsQuery, v);
+
+        // TODO : special - we present insertion of deffault label var if it was already used in an aggregation
+        // this shouldn't happen if the extrac variables were inserted as a pre-process in the query before converting to SPARQL
+        let doInsert = true;
+        if(varName.endsWith("_label")) {
+          varName = varName.substring(0, varName.length - "_label".length);
+          if (SparnaturalQueryUtils.isVarRequiresAggregationOnLabel(this.jsonQuery, varName, this.specProvider)) {
+            doInsert = false;
+          }
+        }
+        if(doInsert) {
+          this.#insertExtraVariableInSelect(sparqlJsQuery, v);
+        }
       });
     }
 
@@ -130,7 +142,6 @@ export class JsonV13SparqlTranslator {
    * Generates the WHERE clause of the SparqlJs query from the original JSON structure
    * @returns an array of SparqlJs Pattern representing the complete content of the WHERE clause
    */
-
   #createWhereClause(): Pattern[] {
     const whereBuilder = new QueryWhereTranslatorV13(this);
     whereBuilder.build();
@@ -138,38 +149,17 @@ export class JsonV13SparqlTranslator {
     return whereBuilder.getResultPtrns();
   }
 
-  // a voir encore
   /**
    * Converts SparnaturalQuery variables to SparqlJs Variable or Aggregate expressions
    * @param variables The list of variables from SparnaturalQuery
    * @returns The list of variables as SparqlJs Variable or Aggregate expressions
    */
-
   #varsToRDFJS(variables: Array<TermVariable | PatternBind>): Variable[] {
+
     const where = this.jsonQuery.where;
-
     let varName:string;
-    
 
-    const variablesArray: Variable[][] = variables.map((v) => {
-      
-
-      const findVarEntity = (
-          subject: TermTypedVariable,
-          pairs: PredicateObjectPair[],
-          varName: string,
-      ): ISpecificationEntity | undefined => {
-        for (const pair of pairs) {
-          if (pair.object?.variable?.value === varName) return this.specProvider.getEntity(pair.object?.variable?.rdfType);
-          // also look in subject
-          if(subject.value === varName ) return this.specProvider.getEntity(subject.rdfType);
-          if (pair.object?.predicateObjectPairs) {
-            const result = findVarEntity(pair.object.variable, pair.object?.predicateObjectPairs, varName);
-            if (result) return result;
-          }
-        }
-        return undefined;
-      };
+    const variablesArray: Variable[][] = variables.map((v) => {    
 
       if (v.type === "pattern" && v.subType === "bind") {
        
@@ -177,25 +167,7 @@ export class JsonV13SparqlTranslator {
 
         // Vérifier si cette variable a un default label généré
         // en cherchant dans les branches la variable et son type
-        let concatOnLabel = false;
-
-        // seulement si c'est un group_concat
-        if(v.expression.aggregation.toLowerCase() === "group_concat") {
-          // chercher le type de cette variable
-          let entity:ISpecificationEntity | undefined = findVarEntity(where.subject, where.predicateObjectPairs, varName);
-
-          console.log("entity is ", entity)
-          if (
-            entity
-            &&
-            !entity.isLiteralEntity()
-            &&
-            entity.getDefaultLabelProperty()
-          ) {
-            concatOnLabel = true;
-          }
-        }
-
+        let concatOnLabel = SparnaturalQueryUtils.isVarRequiresAggregationOnLabel(this.jsonQuery, varName, this.specProvider);
         const actualVar = concatOnLabel ? varName + "_label" : varName;
 
         return [
@@ -252,8 +224,6 @@ export class JsonV13SparqlTranslator {
 
         return [factory.variable(varName)];
       }
-
-
     });
 
     const finalResult: Variable[] = [];
