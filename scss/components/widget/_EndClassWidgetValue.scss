@@ -9,16 +9,16 @@
     @include mixins.arrow-front-colors(var(--primary-color-medium), #fff);
     position: relative;
     display: flex;
-    /*line-height: 0;*/
+    flex-grow: 0;
     color: black;
     font-size: 14px;
-    /*display: inline-block;*/
     padding: 0;
     span.label-two-line {
         line-height: math.div(base.$height-components-under, 2);
         line-height: 21px;
     }
-    max-width: 220px;
+    min-width: 80px;
+    width: calc(var(--chip-max-width, 220px));
     height: 46px;
     margin-right: -13px;
     p {
@@ -26,15 +26,17 @@
         height: 48px;
         background: var(--primary-color-medium);
         background-clip: padding-box;
-        margin: 0;
-        padding: 0 5px 0 5px;
-        display: inline-block;
+        /* marge à droite négative pour faire rentrer la valeur dans la flèche */
+        margin: 0 -8px 0 0;
+        padding: 0 0px 0 3px;
+        display: flex;
+        flex-grow: 1;
         overflow: hidden;
-        /*text-overflow: ellipsis;*/
+        min-width: 40px;
         border: base.$center-arrow-bd-width solid #fff;
         border-left: 0;
         border-right: 0;
-        
+
         text-align: center;
         &>span {
             line-height: 42px;
@@ -45,6 +47,7 @@
             white-space: nowrap;
             color:var(--default-text-color);
             width: 100%;
+            max-width: calc(var(--chip-max-width, 220px) - 50px);
 
             &.notFound {
                 color: red;

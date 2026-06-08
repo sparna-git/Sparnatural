@@ -7,6 +7,7 @@ export class UnselectBtn extends HTMLComponent {
     super("unselect", ParentComponent, widgetHtml);
     // add clicklistener
     this.widgetHtml.on("click", function (e: JQuery.ClickEvent) {
+      e.stopPropagation();
       callBack();
     });
   }

@@ -6,7 +6,8 @@ const defaultSettings: ISettings = {
   language: "en",
   defaultLanguage: "en",
   maxDepth: 4, // max amount of where clauses in a branch
-  maxOr: 3,
+  maxOr: 100,
+  maxVisiblePerRow: 3,
   addDistinct: true,
   limit: -1,
   typePredicate: "<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>",
@@ -31,6 +32,7 @@ let settings: ISettings = {
   typePredicate: "",
   maxDepth: 0,
   maxOr: 0,
+  maxVisiblePerRow: 0,
   debug: false,
 };
 export function getSettings() {

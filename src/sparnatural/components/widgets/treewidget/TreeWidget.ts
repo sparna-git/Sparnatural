@@ -10,6 +10,8 @@ import { TreeDataProviderIfc, RdfTermTreeDatasourceItem } from "../../datasource
 import { NoOpTreeDataProvider } from "../../datasources/NoOpDataProviders";
 import { LabelledCriteria, RdfTermCriteria } from "../../../SparnaturalQueryIfc";
 
+import { getSettings } from "../../../settings/defaultSettings";
+
 const factory = new DataFactory();
 
 
@@ -21,9 +23,11 @@ export interface TreeConfiguration {
 export class TreeWidget extends AbstractWidget {
 
   // The default implementation of TreeConfiguration
-  static defaultConfiguration: TreeConfiguration = {
-    dataProvider: new NoOpTreeDataProvider(),
-    maxSelectedItems: 3
+  static get defaultConfiguration(): TreeConfiguration {
+    return {
+      dataProvider: new NoOpTreeDataProvider(),
+      maxSelectedItems: getSettings().maxOr
+    }
   }
 
   configuration:TreeConfiguration;

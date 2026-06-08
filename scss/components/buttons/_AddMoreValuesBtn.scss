@@ -11,12 +11,12 @@
     cursor: pointer;
     vertical-align: middle;
     max-width: 220px;
-    height: 48px;
+    height: 46px;
     margin-right: -13px;
     position: relative;
     padding: 0;
     p {
-        height: inherit;
+        height: 48px;
         background: var(--primary-color-medium);
         padding: 0 0 0 3px;
         border: base.$center-arrow-bd-width solid #fff;
@@ -25,9 +25,11 @@
         width: 0px;
         overflow: visible;
         position: relative;
+        display: flex;
+        align-items: center;
         span {
-            line-height: 42px;
             color: var(--default-text-color);
+            margin-top: -2px;
         }
         // so that it works even without Bootstrap
         margin-top: 0;

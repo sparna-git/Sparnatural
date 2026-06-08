@@ -14,6 +14,7 @@ interface ISettings {
   typePredicate: string;
   maxDepth: number;
   maxOr: number;
+  maxVisiblePerRow?: number;
   sparqlPrefixes?: { [key: string]: string };
   endpoints?: string[];
   catalog?: string;

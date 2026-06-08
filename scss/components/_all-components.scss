@@ -28,6 +28,7 @@
 //Widget
 @use './widget/EndClassWidgetGroup';
 @use './widget/EndClassWidgetValue';
+@use './widget/ExpandWidgetValuesBtn';
 @use './widget/WidgetWrapper';
 @use './widget/AutocompleteWidget';
 @use './widget/ListWidget';
@@ -40,4 +41,4 @@
 @use './link-and-component';
 @use './link-where-child';
 // jquery nice-select
-@use './citeriagroup/nice-select/nice-select'
+@use './citeriagroup/nice-select/nice-select';

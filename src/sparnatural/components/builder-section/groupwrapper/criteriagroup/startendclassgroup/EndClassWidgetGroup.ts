@@ -15,6 +15,9 @@ import { LabelledCriteria, equalsCriteria, getCriteriaType, MapCriteria, Criteri
 import { I18n } from "../../../../../settings/I18n";
 
 
+import { ExpandWidgetValuesBtn } from "../../../../buttons/ExpandWidgetValuesBtn";
+import { TippyInfo } from "../../../../buttons/TippyInfo";
+
 /*
   This class is responsible for rendering the WidgetValues, selected by a widget.
   This values are added in a 'list' after the EndClassGroup
@@ -23,7 +26,13 @@ export class EndClassWidgetGroup extends HTMLComponent {
   widgetValues?: Array<EndClassWidgetValue> = [];
   specProvider: ISparnaturalSpecification;
   addWidgetValueBtn: AddWidgetValueBtn;
+  expandBtn: ExpandWidgetValuesBtn | undefined;
+  valuesWrapper: JQuery;
+  expandedValuesWrapper: JQuery;
+  popoverCloseBtn: JQuery;
   isSelectAll:boolean = false;
+  #clickOutsideHandler: ((e: JQuery.ClickEvent) => void) | null = null;
+  #resizeHandler: (() => void) | null = null;
 
   constructor(parentComponent: HTMLComponent, specProvider: ISparnaturalSpecification) {
     super("EndClassWidgetGroup", parentComponent, null);
@@ -32,9 +41,75 @@ export class EndClassWidgetGroup extends HTMLComponent {
 
   render() {
     super.render();
+
+    this.valuesWrapper = $('<div class="EndClassWidgetValuesWrapper"></div>');
+    this.expandedValuesWrapper = $('<div class="EndClassWidgetExpandedWrapper"></div>');
+    this.expandedValuesWrapper.hide();
+    this.html.append(this.valuesWrapper);
+    this.html.append(this.expandedValuesWrapper);
+
+    this.popoverCloseBtn = $(`<span class="popoverCloseBtn">${UiuxConfig.ICON_ARROW_TOP}</span>`);
+    this.expandedValuesWrapper.append(this.popoverCloseBtn);
+    this.popoverCloseBtn.on("click", (e) => {
+      e.stopPropagation();
+      this.#collapseExpanded();
+      this.html[0].dispatchEvent(new CustomEvent("redrawBackgroundAndLinks", { bubbles: true }));
+      this.#updateLayout();
+    });
+
+    // Permanent resize handler for chip widths + expanded wrapper
+    this.#resizeHandler = () => {
+      if (this.expandedValuesWrapper.hasClass("expanded")) {
+        const criteriaGroup = this.parentComponent as CriteriaGroup;
+        const newWidth = this.#calculatePopoverWidth(criteriaGroup.html[0], this.html[0]);
+        this.expandedValuesWrapper.css("width", newWidth + "px");
+        this.#positionCloseBtn();
+      }
+      if (this.widgetValues.length > 0) {
+        requestAnimationFrame(() => this.#calculateChipWidths());
+      }
+    };
+    window.addEventListener("resize", this.#resizeHandler);
+
     this.#addEventListener();
     this.#addEditEventListener();
+
+    // Recalculate chip widths when optional/notExists toggles change the criteria border
+    // Listen on CriteriaGroup (parent) since OptionsGroup is a sibling, not an ancestor
+    const criteriaGroupEl = (this.parentComponent as CriteriaGroup).html[0];
+    criteriaGroupEl.addEventListener("redrawBackgroundAndLinks", () => {
+      if (this.widgetValues.length > 0) {
+        this.#resizeHandler();
+      }
+    });
+
+    // click outside to collapse
+    if (this.#clickOutsideHandler) {
+      $(document).off("click", this.#clickOutsideHandler);
+    }
+    this.#clickOutsideHandler = (e) => {
+      if (this.expandedValuesWrapper.hasClass("expanded") && !$(e.target).closest(this.html).length) {
+        this.#collapseExpanded();
+        this.#updateLayout();
+        this.html[0].dispatchEvent(
+          new CustomEvent("redrawBackgroundAndLinks", { bubbles: true })
+        );
+      }
+    };
+    $(document).on("click", this.#clickOutsideHandler);
+
     return this;
+  }
+
+  destroy() {
+    if (this.#clickOutsideHandler) {
+      $(document).off("click", this.#clickOutsideHandler);
+    }
+    if (this.#resizeHandler) {
+      window.removeEventListener("resize", this.#resizeHandler);
+      this.#resizeHandler = null;
+    }
+    super.destroy();
   }
 
   #addEventListener() {
@@ -115,6 +190,10 @@ export class EndClassWidgetGroup extends HTMLComponent {
       this.#addEventListener();
       //if there is an addWidgetValueBtn then remove it as well
       this.addWidgetValueBtn?.html?.remove();
+      this.expandBtn?.html?.remove();
+      this.expandBtn = undefined;
+      this.valuesWrapper.empty();
+      this.#collapseExpanded();
 
       this.html[0].dispatchEvent(
         new CustomEvent("renderWidgetWrapper", {
@@ -124,10 +203,10 @@ export class EndClassWidgetGroup extends HTMLComponent {
       );
     }
 
-    // if the number of widgetValues is now less than the maximum
-    if (this.widgetValues.length < getSettings().maxOr && this.addWidgetValueBtn?.html) {
-      this.addWidgetValueBtn.html.show();
-    }
+    const maxPerRow = getSettings().maxVisiblePerRow || 3;
+    const remainingValues = this.widgetValues.length;
+    this.#redistributeValues();
+    this.#updateLayout(true, remainingValues > maxPerRow);
 
     this.html[0].dispatchEvent(
       new CustomEvent("updateWidgetList", {
@@ -158,6 +237,8 @@ export class EndClassWidgetGroup extends HTMLComponent {
     let endClassWidgetVal = new EndClassWidgetValue(this, null, true);
     this.#renderNewSelectedValue(endClassWidgetVal);
 
+    this.#updateLayout();
+
     // asks to remove the value selection part, with 1 and 2
     this.html[0].dispatchEvent(
       new CustomEvent("removeEditComponents", { bubbles: true })
@@ -170,28 +251,11 @@ export class EndClassWidgetGroup extends HTMLComponent {
 
   #renderEndClassWidgetVal(widgetVal: LabelledCriteria<Criteria>) {
     let endClassWidgetVal = new EndClassWidgetValue(this, widgetVal);
-    this.widgetValues.push(endClassWidgetVal);
+    this.widgetValues.unshift(endClassWidgetVal);
 
     this.#renderNewSelectedValue(endClassWidgetVal);
 
-    // if the widget allows multiple values to be selected then AddWidgetValueBtn
-    // undefined for NON_SELECTABLE_PROPERTY
-    const widgetComp:AbstractWidget | undefined = (this.parentComponent as CriteriaGroup).endClassGroup.getWidgetComponent()
-    if(widgetComp && widgetComp.valueRepetition == ValueRepetition.MULTIPLE) {
-      // now (re)render the addMoreValuesButton
-      this.addWidgetValueBtn?.html
-        ? this.addWidgetValueBtn.render()
-        : (this.addWidgetValueBtn = new AddWidgetValueBtn(
-            this,
-            this.#addMoreValues
-          ).render());
-    }
-
-    
-    // If we reached maxOr hide the AddWidgetValueBtn
-    if (this.widgetValues.length == getSettings().maxOr) {
-      this.addWidgetValueBtn.html.hide();
-    }
+    this.#updateLayout();
 
     // asks to remove the value selection part, with 1 and 2
     this.html[0].dispatchEvent(
@@ -206,10 +270,200 @@ export class EndClassWidgetGroup extends HTMLComponent {
   // All items which got selected in the widget will be added add the back of the EndClassGroup.
   #renderNewSelectedValue(endClassWidgetVal: EndClassWidgetValue) {
     endClassWidgetVal.render();
+    // Insert in first in DOM wrapper
+    if (this.valuesWrapper[0].firstChild) {
+      this.valuesWrapper[0].insertBefore(endClassWidgetVal.html[0], this.valuesWrapper[0].firstChild);
+    } else {
+      this.valuesWrapper.append(endClassWidgetVal.html);
+    }
+  }
+
+  #redistributeValues() {
+    const maxPerRow = getSettings().maxVisiblePerRow || 3;
+    this.widgetValues.forEach((val, index) => {
+      val.html.detach();
+      if (index < maxPerRow) {
+        this.valuesWrapper.append(val.html);
+        val.html.show();
+      } else {
+        this.expandedValuesWrapper.append(val.html);
+        val.html.show();
+      }
+    });
+  }
+  #updateLayout(skipRecalc?: boolean, preventAutoCollapse?: boolean) {
+    const maxPerRow = getSettings().maxVisiblePerRow || 3;
+    const total = this.widgetValues.length;
+    const isExpanded = this.expandedValuesWrapper.hasClass("expanded");
+
+    this.#redistributeValues();
+
+    if (isExpanded) {
+      this.expandedValuesWrapper.show();
+      this.#positionCloseBtn();
+    } else {
+      this.expandedValuesWrapper.hide();
+      this.popoverCloseBtn?.hide();
+    }
+
+    if (total > maxPerRow) {
+      if (!this.expandBtn) {
+        this.expandBtn = new ExpandWidgetValuesBtn(this, (e) => {
+          e.stopImmediatePropagation();
+
+          if (!this.expandedValuesWrapper.hasClass("expanded")) {
+            const criteriaGroup = this.parentComponent as CriteriaGroup;
+            const availableWidth = this.#calculatePopoverWidth(criteriaGroup.html[0], this.html[0]);
+            this.expandedValuesWrapper.css("width", availableWidth + "px");
+          } else {
+            this.expandedValuesWrapper.css("width", "");
+          }
+
+          this.expandedValuesWrapper.toggleClass("expanded");
+          if (this.expandedValuesWrapper.hasClass("expanded")) {
+            this.expandedValuesWrapper.show();
+            this.#positionCloseBtn();
+          } else {
+            this.expandedValuesWrapper.hide();
+            this.popoverCloseBtn?.hide();
+          }
+          this.#updateLayout(true);
+          this.#calculateExpandedChipWidths();
+          this.html[0].dispatchEvent(
+            new CustomEvent("redrawBackgroundAndLinks", { bubbles: true })
+          );
+        });
+      }
+      this.expandBtn.render(total - maxPerRow);
+      if (!this.html.find(this.expandBtn.html).length) {
+        this.html.append(this.expandBtn.html);
+      }
+      this.expandBtn.html.show();
+    } else {
+      if (!preventAutoCollapse) {
+        this.expandBtn?.html.hide();
+        this.#collapseExpanded();
+      }
+    }
+
+    // if the widget allows multiple values to be selected then AddWidgetValueBtn
+    // undefined for NON_SELECTABLE_PROPERTY
+    const widgetComp:AbstractWidget | undefined = (this.parentComponent as CriteriaGroup).endClassGroup.getWidgetComponent()
+    if(widgetComp && widgetComp.valueRepetition == ValueRepetition.MULTIPLE) {
+      // now (re)render the addMoreValuesButton
+      this.addWidgetValueBtn?.html
+        ? this.addWidgetValueBtn.render()
+        : (this.addWidgetValueBtn = new AddWidgetValueBtn(
+          this,
+          this.#addMoreValues
+        ).render());
+      
+      if (!this.html.find(this.addWidgetValueBtn.html).length) {
+        this.html.append(this.addWidgetValueBtn.html);
+      }
+
+      if (total >= getSettings().maxOr) {
+        this.addWidgetValueBtn.html.hide();
+      } else if (total === 0) {
+        this.addWidgetValueBtn.html.hide();
+      } else {
+        this.addWidgetValueBtn.html.show();
+      }
+    } else {
+      this.addWidgetValueBtn?.html.hide();
+    }
+
+    // Calculate chip max-width to fit maxPerRow items on one line
+    if (total > 0 && !skipRecalc) {
+      requestAnimationFrame(() => this.#calculateChipWidths());
+    } else {
+      this.valuesWrapper[0].style.removeProperty('--chip-max-width');
+      this.valuesWrapper[0].style.removeProperty('width');
+      this.expandedValuesWrapper[0].style.removeProperty('--chip-max-width');
+    }
+  }
+
+  #calculateChipWidths() {
+    const maxPerRow = getSettings().maxVisiblePerRow || 3;
+    const total = this.widgetValues.length;
+
+    // --- Chip width for valuesWrapper (main row) ---
+    const criteriaGroupEl = (this.parentComponent as CriteriaGroup).html[0] as HTMLElement;
+    const criteriaGroupRect = criteriaGroupEl.getBoundingClientRect();
+
+    let otherElementsWidth = 0;
+    for (const child of Array.from(criteriaGroupEl.children)) {
+      const childEl = child as HTMLElement;
+      const childStyle = window.getComputedStyle(childEl);
+      if (childStyle.position === "absolute") continue;
+      if (childEl === this.html[0]) continue;
+      const childRect = childEl.getBoundingClientRect();
+      const ml = parseFloat(childStyle.marginLeft) || 0;
+      const mr = parseFloat(childStyle.marginRight) || 0;
+      otherElementsWidth += childRect.width + ml + mr;
+    }
+
+    const ecwgStyle = window.getComputedStyle(this.html[0]);
+    const ecwgML = parseFloat(ecwgStyle.marginLeft) || 0;
+    const ecwgPR = parseFloat(ecwgStyle.paddingRight) || 0;
+
+    let availableWidth = criteriaGroupRect.width - otherElementsWidth - ecwgML - ecwgPR + 10;
+
+    const expandEl = this.expandBtn?.html?.[0] as HTMLElement | undefined;
+    if (expandEl && expandEl.offsetParent !== null) {
+      availableWidth -= expandEl.getBoundingClientRect().width;
+    }
+    const addEl = this.addWidgetValueBtn?.html?.[0] as HTMLElement | undefined;
+    if (addEl && addEl.offsetParent !== null) {
+      availableWidth -= addEl.getBoundingClientRect().width;
+    }
+    let extra_width = 0;
+    if (total > maxPerRow) {
+      extra_width = 10 ;
+    }
+
+    const visibleCount = Math.min(total, maxPerRow);
+    const chipWidth = (availableWidth + extra_width + (visibleCount - 1) * 13) / Math.max(visibleCount, maxPerRow-1) ;
+    const clampedWidth = Math.max(80, Math.min(220, Math.floor(chipWidth)));
+    this.valuesWrapper[0].style.setProperty('--chip-max-width', clampedWidth + 'px');
+
+    // --- Chip width for expandedValuesWrapper (based on its own width) ---
+    this.#calculateExpandedChipWidths();
+  }
+
+  #calculateExpandedChipWidths() {
+    const maxPerRow = getSettings().maxVisiblePerRow || 3;
+    if (this.expandedValuesWrapper.hasClass("expanded") && this.expandedValuesWrapper.is(":visible")) {
+      const expandedEl = this.expandedValuesWrapper[0] as HTMLElement;
+      const expandedWidth = expandedEl.getBoundingClientRect().width;
+      const expandedPR = parseFloat(getComputedStyle(expandedEl).paddingRight) || 0;
+      const expandedAvailWidth = expandedWidth - expandedPR;
+      const expandedChipWidth = (expandedAvailWidth + (maxPerRow - 1) * 13) / maxPerRow;
+      const expandedClamped = Math.max(80, Math.min(220, Math.floor(expandedChipWidth)));
+      this.expandedValuesWrapper[0].style.setProperty('--chip-max-width', expandedClamped + 'px');
+    } else {
+      this.expandedValuesWrapper[0].style.removeProperty('--chip-max-width');
+    }
+  }
+
+  #positionCloseBtn() {
+    if (!this.popoverCloseBtn) return;
+    this.popoverCloseBtn.show();
+  }
+
+  #collapseExpanded() {
+    this.expandedValuesWrapper.removeClass("expanded");
+    this.expandedValuesWrapper.hide();
+    this.popoverCloseBtn?.hide();
+    this.valuesWrapper.css("max-width", "");
+    this.valuesWrapper.css("width", "");
+    this.html.css("width", "");
   }
 
   // when more values should be added then render the inputypecomponent again
   #addMoreValues = () => {
+    this.#collapseExpanded();
+    this.#updateLayout();
     // tell it is not completed so that it is higher
     this.html[0].dispatchEvent(
       new CustomEvent("onGrpInputNotCompleted", { bubbles: true })
@@ -236,6 +490,16 @@ export class EndClassWidgetGroup extends HTMLComponent {
    */
   hasAnyValue():boolean {
     return this.isSelectAll;
+  }
+
+  #calculatePopoverWidth(criteriaGroupEl: HTMLElement, endClassWidgetGroupEl: HTMLElement): number {
+    const criteriaGroupRect = criteriaGroupEl.getBoundingClientRect();
+    const ecwgRect = endClassWidgetGroupEl.getBoundingClientRect();
+
+    // Align right edge of expanded wrapper with right edge of CriteriaGroup
+    const expandedWidth = criteriaGroupRect.right - ecwgRect.left;
+
+    return Math.max(200, Math.round(expandedWidth + 2));
   }
 }
 
@@ -270,9 +534,18 @@ export class EndClassWidgetValue extends HTMLComponent {
     ) {
       extraClass = 'class="notFound"'
     }
-    var tooltip = (theLabel.length > 25)?'title="'+this.#stripLabelHtml(theLabel)+'"':"";
-    let valuelbl = `<p ${tooltip}><span ${extraClass}> ${theLabel} </span></p>`;
+
+    let valuelbl = `<p><span ${extraClass}> ${theLabel} </span></p>`;
     this.html.append($(valuelbl));
+
+    if (theLabel.length > 25) {
+      new TippyInfo(this, this.#stripLabelHtml(theLabel), {
+        placement: 'top',
+        delay: [500, 100],
+        theme: 'sparnatural',
+      });
+    }
+
     this.frontArrow.render();
     this.unselectBtn = new UnselectBtn(this, () => {
       this.html[0].dispatchEvent(
