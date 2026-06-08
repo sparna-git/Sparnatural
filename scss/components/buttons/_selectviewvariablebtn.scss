@@ -25,11 +25,12 @@
 .EndClassGroup{
     .selectViewVariableBtn {
         color: #fff;
-        position: absolute;
-        top: 50%;
-        right: 40px;
-        height: 16px;
-        margin-top: -8px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 18px;
+        line-height: 1;
+        margin-left: 8px;
         z-index: 2;
         cursor: pointer;
         // when the button is disabled e.g. in "not exists"
