@@ -533,6 +533,8 @@ export class EndClassWidgetValue extends HTMLComponent {
       && (this.widgetVal.criteria as RdfTermCriteria).rdfTerm.value == "https://services.sparnatural.eu/api/v1/URI_NOT_FOUND"
     ) {
       extraClass = 'class="notFound"'
+    } else if (this.selectAll) {
+      extraClass = 'class="all"';
     }
 
     let valuelbl = `<p><span ${extraClass}> ${theLabel} </span></p>`;
