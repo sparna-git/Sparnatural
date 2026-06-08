@@ -203,8 +203,10 @@ export class EndClassWidgetGroup extends HTMLComponent {
       );
     }
 
+    const maxPerRow = getSettings().maxVisiblePerRow || 3;
+    const remainingValues = this.widgetValues.length;
     this.#redistributeValues();
-    this.#updateLayout();
+    this.#updateLayout(true, remainingValues > maxPerRow);
 
     this.html[0].dispatchEvent(
       new CustomEvent("updateWidgetList", {
@@ -289,7 +291,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
       }
     });
   }
-  #updateLayout(skipRecalc?: boolean) {
+  #updateLayout(skipRecalc?: boolean, preventAutoCollapse?: boolean) {
     const maxPerRow = getSettings().maxVisiblePerRow || 3;
     const total = this.widgetValues.length;
     const isExpanded = this.expandedValuesWrapper.hasClass("expanded");
@@ -338,8 +340,10 @@ export class EndClassWidgetGroup extends HTMLComponent {
       }
       this.expandBtn.html.show();
     } else {
-      this.expandBtn?.html.hide();
-      this.#collapseExpanded();
+      if (!preventAutoCollapse) {
+        this.expandBtn?.html.hide();
+        this.#collapseExpanded();
+      }
     }
 
     // if the widget allows multiple values to be selected then AddWidgetValueBtn
