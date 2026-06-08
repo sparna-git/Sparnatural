@@ -1,29 +1,31 @@
 @use '../base';
+@use 'sass:math';
 .link-and-bottom {
     position:absolute;
+    top: calc(var(--link-top) + 3px);
+    left: math.div(base.$margin-children-li, 2);
+    height: var(--link-height);
+    width: 3px;
     background-color: var(--primary-color-main);
-    height: 3px;
     z-index: 0;
     span {
-        transform: rotate(-90deg); //line will get transformed 90deg. transform the span back to horizontal
         display: block;
         background: #fff;
-        position:relative;
-        // left: 50%;
-        left: 13px;
-        top:-12px;
-        border: 2px solid var(--primary-color-main) ;
+        position:absolute;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border: 3px solid var(--primary-color-main) ;
         border-radius: 15px;
         height: 30px;
-        line-height: 20px;
+        line-height: 17px;
         padding: 2px 10px;
         width: fit-content;
     }
     &.optionalEnabled{
-        height: 3px;
+        width: 2px;
         position: absolute;
         // rgba(255,255,255,0) is white transparent = completely transparent
-        background: repeating-linear-gradient( 90deg, rgba(255,255,255,0), rgba(255,255,255,0) 8px, var(--primary-color-main) 8px, var(--primary-color-main) 16px);
+        background: repeating-linear-gradient( 0deg, rgba(255,255,255,0), rgba(255,255,255,0) 8px, var(--primary-color-main) 8px, var(--primary-color-main) 16px);
         display: block;
         span{
             border: 2px dashed var(--primary-color-main)
@@ -31,17 +33,17 @@
     }
     &.notExistsEnabled {
 		// rgba(255,255,255,0) is white transparent = completely transparent
-        background: repeating-linear-gradient( 90deg, rgba(255,255,255,0), rgba(255,255,255,0) 8px, #000 8px, #000 16px);
+        background: repeating-linear-gradient( 0deg, rgba(255,255,255,0), rgba(255,255,255,0) 8px, #000 8px, #000 16px);
 		span {
-			border: 3px dashed #000;
+			border: 2px dashed #000;
 			border-radius: 15px;
 		}
 	}
     &.serviceEnabled {
-        height: 3px;
+        width: 4px;
         position: absolute;
         // rgba(255,255,255,0) is white transparent = completely transparent
-        background: repeating-linear-gradient( 90deg, rgba(255,255,255,0), rgba(255,255,255,0) 8px, var(--ternary-color-main) 8px, var(--ternary-color-main) 16px);
+        background: repeating-linear-gradient( 0deg, rgba(255,255,255,0), rgba(255,255,255,0) 8px, var(--ternary-color-main) 8px, var(--ternary-color-main) 16px);
         display: block;
         span{
             border: 2px dashed var(--ternary-color-main)

@@ -110,12 +110,12 @@
               debug="false"
               prefixes="rdfs:http://www.w3.org/2000/01/rdf-schema#"
             />-->
-            <!-- Isidore config : https://xls2rdf.sparna.fr/rest/convert?url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2F1agVVLh6Am0-4pz7-PzjcJm8RcJ1MWqUu%2Fexport%3Fformat%3Dxlsx&noPostProcessings=true -->
-            <spar-natural
+
+            <!-- <spar-natural
               id="sparnatural"
-              src="https://xls2rdf.sparna.fr/rest/convert?url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2F1agVVLh6Am0-4pz7-PzjcJm8RcJ1MWqUu%2Fexport%3Fformat%3Dxlsx&noPostProcessings=true"
+              src="configs/sparnatural-config-ruim.ttl"
               lang="fr"
-              endpoint="https://isidore-ref.huma-num.fr/sparql"
+              endpoint="https://smt.esante.gouv.fr/api/sparql"
               defaultLang="fr"
               distinct="true"
               limit="1000"
@@ -123,7 +123,18 @@
               maxDepth="10"
               debug="false"
               prefixes="rdfs:http://www.w3.org/2000/01/rdf-schema#"
-            />
+            />-->
+
+            <spar-natural
+                    src="../configs/sparnatural-config-ruim.ttl"
+                    endpoint="https://smt.esante.gouv.fr/api/sparql"
+                    typePredicate="<http://www.w3.org/2000/01/rdf-schema#subClassOf>"
+                    prefixes="skos:http://www.w3.org/2004/02/skos/core# dct:http://purl.org/dc/terms/"
+                    lang="fr"
+                    defaultLang="fr"
+                    distinct="true"
+                    debug="true"
+            ></spar-natural>
 
             <!--       
         <spar-natural
@@ -155,8 +166,8 @@
                 Les requêtes sont envoyées à
                 <a
                   id="endpoint"
-                  href="http://graphdb.sparna.fr/repositories/oresm"
-                  >http://graphdb.sparna.fr/repositories/oresm</a
+                  href="https://smt.esante.gouv.fr/api/sparql"
+                  >https://smt.esante.gouv.fr/api/sparql</a
                 >
               </span>
             </div>
