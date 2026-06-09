@@ -294,6 +294,11 @@ export class JsonV13SparqlTranslator {
     return SparnaturalQueryUtils.isVarSelected(this.jsonQuery, varName);
   }
 
+  isObjectVarHasChildren(varName: string): boolean {
+    let criteria = SparnaturalQueryUtils.findObjectCriteriaByObjectVarName(this.jsonQuery, varName);
+    return (!!criteria && !!criteria.predicateObjectPairs && criteria.predicateObjectPairs.length > 0);
+  }
+
   isVarAggregated(varName: string): boolean {
     return (
       this.isVarSelected(varName)

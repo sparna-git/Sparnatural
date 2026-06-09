@@ -10,14 +10,14 @@ import {
   ValuePatternRow,
   ValuesPattern,
 } from "sparqljs";
-import { SelectedVal } from "../../components/SelectedVal";
+import { TermIri, TermTypedVariable } from "../../SparnaturalQueryIfc-v13";
 import SparqlFactory from "./SparqlFactory";
 import { DataFactory } from "rdf-data-factory";
 import { ISparnaturalSpecification } from "../../spec-providers/ISparnaturalSpecification";
 import { Config } from "../../ontologies/SparnaturalConfig";
 import ISpecificationProperty from "../../spec-providers/ISpecificationProperty";
 import { SHACLSpecificationEntity } from "../../spec-providers/shacl/SHACLSpecificationEntity";
-import { DateCriteria, RDFTerm, RdfTermCriteria, LabelledCriteria, Criteria, BooleanCriteria, NumberCriteria, SearchCriteria, MapCriteria } from "../../SparnaturalQueryIfc";
+import { DateCriteria, RDFTerm, RdfTermCriteria, Criteria, BooleanCriteria, NumberCriteria, SearchCriteria, MapCriteria } from "../../SparnaturalQueryIfc";
 import { GEOFUNCTIONS, GEOSPARQL } from "rdf-shacl-commons";
 
 const factory = new DataFactory();
@@ -73,10 +73,11 @@ export class ValueBuilderFactory {
 export default interface ValueBuilderIfc {
   init(
     specProvider: ISparnaturalSpecification,
-    startClassVal: SelectedVal,
-    propertyVal: SelectedVal,
-    endClassVal: SelectedVal,
+    startClassVal: TermTypedVariable,
+    propertyVal: TermIri,
+    endClassVal: TermTypedVariable,
     endClassVarSelected: boolean,
+    criteriaHasChildren: boolean,
     values: Array<Criteria>
   ): void;
 
@@ -96,25 +97,29 @@ export default interface ValueBuilderIfc {
   isBlockingEnd(): boolean;
 
   /**
-   * @returns true if the triple criteria between the subject and the object must not be generated
+   * @returns true if the triple criteria between the subject and the object must not be generated, in which case
+   * the ValueBuilder itself is responsible for generating the triple if necessary
+   * (e.g. in case of a single value for an object property, we can directly generate the triple with the value as an object)
    */
   isBlockingObjectProp(): boolean;
 }
 
 export abstract class BaseValueBuilder implements ValueBuilderIfc {
-  protected specProvider: ISparnaturalSpecification;
-  protected startClassVal: SelectedVal;
-  protected propertyVal: SelectedVal;
-  protected endClassVal: SelectedVal;
-  protected values: Array<Criteria>;
-  protected endClassVarSelected: boolean;
+  protected specProvider!: ISparnaturalSpecification;
+  protected startClassVal!: TermTypedVariable;
+  protected propertyVal!: TermIri;
+  protected endClassVal!: TermTypedVariable;
+  protected values!: Array<Criteria>;
+  protected endClassVarSelected!: boolean;
+  protected criteriaHasChildren!: boolean;
 
   init(
     specProvider: ISparnaturalSpecification,
-    startClassVal: SelectedVal,
-    propertyVal: SelectedVal,
-    endClassVal: SelectedVal,
+    startClassVal: TermTypedVariable,
+    propertyVal: TermIri,
+    endClassVal: TermTypedVariable,
     endClassVarSelected: boolean,
+    criteriaHasChildren: boolean,
     values: Array<Criteria>
   ): void {
     this.specProvider = specProvider;
@@ -122,6 +127,7 @@ export abstract class BaseValueBuilder implements ValueBuilderIfc {
     this.propertyVal = propertyVal;
     this.endClassVal = endClassVal;
     this.endClassVarSelected = endClassVarSelected;
+    this.criteriaHasChildren = criteriaHasChildren;
     this.values = values;
   }
 
@@ -153,7 +159,7 @@ export class RdfTermValueBuilder
 
     if (this.isBlockingObjectProp()) {
       let singleTriple: Triple = SparqlFactory.buildTriple(
-        factory.variable(this.startClassVal.variable),
+        factory.variable(this.startClassVal.value),
         factory.namedNode(this.propertyVal.type),
         this.#rdfTermToSparqlQuery(widgetValues[0].rdfTerm)
       );
@@ -167,7 +173,7 @@ export class RdfTermValueBuilder
     } else {
       let vals = widgetValues.map((v) => {
         let vl: ValuePatternRow = {};
-        vl["?" + this.endClassVal.variable] = this.#rdfTermToSparqlQuery(
+        vl["?" + this.endClassVal.value] = this.#rdfTermToSparqlQuery(
           v.rdfTerm
         );
         return vl;
@@ -216,9 +222,11 @@ export class RdfTermValueBuilder
   }
 
   /**
-   * @returns true if there is a single value and the end class is not selected (in which case we need the variable
-   * to put it in the SELECT clause), and the target entity is not associated to a SPARQL query, in which case the variable
-   * must not disappear from the query
+   * @returns true if 
+   *   - there is a single value
+   *   - and the end class is not selected (in which case we need the variable to put it in the SELECT clause)
+   *   - and the target entity is not associated to a SPARQL query, in which case the variable must not disappear from the query
+   *   - and the criteriain which the variable appears does not have any children
    */
   isBlockingObjectProp(): boolean {
     return (
@@ -231,6 +239,8 @@ export class RdfTermValueBuilder
         &&
         (this.specProvider.getEntity(this.endClassVal.type) as SHACLSpecificationEntity).hasShTarget()
       )
+      &&
+      !this.criteriaHasChildren
     );
   }
 }
@@ -251,9 +261,9 @@ export class BooleanValueBuilder
         type: "bgp",
         triples: [
           {
-            subject: factory.variable(this.startClassVal.variable),
+            subject: factory.variable(this.startClassVal.value),
             predicate: factory.namedNode(this.propertyVal.type),
-            object: factory.variable(this.endClassVal.variable),
+            object: factory.variable(this.endClassVal.value),
           },
         ],
       };
@@ -273,7 +283,7 @@ export class BooleanValueBuilder
           type: "bgp",
           triples: [
             {
-              subject: factory.variable(this.startClassVal.variable),
+              subject: factory.variable(this.startClassVal.value),
               predicate: factory.namedNode(this.propertyVal.type),
               object: factory.literal(
                 widgetValues[0].boolean.toString(),
@@ -287,7 +297,7 @@ export class BooleanValueBuilder
         // otherwise the object prop is created and we create a VALUES clause with the actual boolean
         let vals = (this.values as BooleanCriteria[]).map((v) => {
           let vl: ValuePatternRow = {};
-          vl["?" + this.endClassVal.variable] = factory.literal(
+          vl["?" + this.endClassVal.value] = factory.literal(
             widgetValues[0].boolean.toString(),
             factory.namedNode("http://www.w3.org/2001/XMLSchema#boolean")
           );
@@ -304,13 +314,15 @@ export class BooleanValueBuilder
   }
 
   /**
-   * @returns true if a value is selected but the variable is not selected
+   * @returns true if a value is selected but the variable is not selected and criteria has no children
    */
   isBlockingObjectProp() {
     return (
       this.values?.length == 1 
       &&
       !this.endClassVarSelected
+      &&
+      !this.criteriaHasChildren
     );
   }
 
@@ -344,7 +356,7 @@ export class NumberValueBuilder
               factory.namedNode("http://www.w3.org/2001/XMLSchema#decimal")
             )
           : null,
-        factory.variable(this.endClassVal.variable)
+        factory.variable(this.endClassVal.value)
       ),
     ];
   }
@@ -377,7 +389,7 @@ export class SearchRegexValueBuilder
           widgetValues.map((v) => {
             return SparqlFactory.buildOperationLcaseEquals(
               factory.literal(`${v.search}`),
-              factory.variable(this.endClassVal.variable)
+              factory.variable(this.endClassVal.value)
             );
           })
         ) ];
@@ -388,7 +400,7 @@ export class SearchRegexValueBuilder
         widgetValues.map((v) => {
           return SparqlFactory.buildRegexOperation(
             factory.literal(`${v.search}`),
-            factory.variable(this.endClassVal.variable)
+            factory.variable(this.endClassVal.value)
           );
         })
        ) ];
@@ -399,18 +411,18 @@ export class SearchRegexValueBuilder
           type: "bgp",
           triples: [
             {
-              subject: factory.variable(this.startClassVal.variable),
+              subject: factory.variable(this.startClassVal.value),
               predicate: factory.namedNode(
                 "http://www.ontotext.com/connectors/lucene#query"
               ),
               object: factory.literal(`text:${widgetValues[0].search}`),
             },
             {
-              subject: factory.variable(this.startClassVal.variable),
+              subject: factory.variable(this.startClassVal.value),
               predicate: factory.namedNode(
                 "http://www.ontotext.com/connectors/lucene#entities"
               ),
-              object: factory.variable(this.endClassVal.variable),
+              object: factory.variable(this.endClassVal.value),
             },
           ],
         };
@@ -427,7 +439,7 @@ export class SearchRegexValueBuilder
           type: "bgp",
           triples: [
             {
-              subject: factory.variable(this.endClassVal.variable),
+              subject: factory.variable(this.endClassVal.value),
               predicate: factory.namedNode(
                 "http://www.openlinksw.com/schemas/bif#contains"
               ),
@@ -470,11 +482,11 @@ export class DateTimePickerValueBuilder extends BaseValueBuilder implements Valu
               this.#formatSparqlDate(widgetValues[0].stop),
               factory.namedNode("http://www.w3.org/2001/XMLSchema#dateTime")
             ):null,
-            factory.variable(this.startClassVal.variable),
+            factory.variable(this.startClassVal.value),
             factory.namedNode(beginDateProp),
             factory.namedNode(endDateProp),
             exactDateProp != null?factory.namedNode(exactDateProp):null,
-            factory.variable(this.endClassVal.variable)
+            factory.variable(this.endClassVal.value)
           )
         ];
         
@@ -491,7 +503,7 @@ export class DateTimePickerValueBuilder extends BaseValueBuilder implements Valu
               this.#formatSparqlDate(widgetValues[0].stop),
               factory.namedNode("http://www.w3.org/2001/XMLSchema#dateTime")
             ):null,
-            factory.variable(this.endClassVal.variable)
+            factory.variable(this.endClassVal.value)
           )
         ];
       } 
@@ -569,7 +581,7 @@ export class MapValueBuilder
         type: "functionCall",
         function: GEOFUNCTIONS.WITHIN,
         args: [
-          factory.variable(this.endClassVal.variable),
+          factory.variable(this.endClassVal.value),
           this.#buildPolygon(widgetValues[0].coordinates[0]),
         ],
       }),

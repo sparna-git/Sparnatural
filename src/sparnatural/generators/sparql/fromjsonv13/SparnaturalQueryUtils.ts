@@ -136,6 +136,18 @@ export class SparnaturalQueryUtils {
     );
   }
 
+  static findObjectCriteriaByObjectVarName(query: SparnaturalQuery, varName: string): ObjectCriteria | undefined {
+    let result:ObjectCriteria | undefined = undefined;
+    SparnaturalQueryTraversal.traverse(query, {
+      objectCriteria: (obj) => {
+        if(obj.variable.value === varName) {
+          result = obj;
+        }
+      }
+    });
+    return result;
+  }
+
   static isVarRequiresAggregationOnLabel(query: SparnaturalQuery, varName: string, specProvider: ISparnaturalSpecification): boolean {
     // 1. find the selected variable
     const selectedVariable = this.findSelectedVariableByName(query, varName);

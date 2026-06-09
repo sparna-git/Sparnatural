@@ -8,16 +8,12 @@ import TypedVariableTranslator from "../../sparql/fromjson/TypedVariableTranslat
 import {
   PredicateObjectPair,
   ObjectCriteria,
-  SparnaturalQuery,
   TermTypedVariable,
-  SelectVariable,
 } from "../../../SparnaturalQueryIfc-v13";
 
 import {
   LabelledCriteria,
-  Criteria,
-  VariableExpression,
-  VariableTerm,
+  Criteria
 } from "../../../SparnaturalQueryIfc";
 
 // adaptateurs v13 -> v1
@@ -54,7 +50,7 @@ export default class BranchTranslatorV13 {
   #oType: string;
 
   // to translate widget values to SPARQL
-  #valueBuilder: ValueBuilderIfc;
+  #valueBuilder!: ValueBuilderIfc;
 
   // intermediate patterns
   #startClassPtrn: Pattern[] = [];
@@ -115,10 +111,11 @@ export default class BranchTranslatorV13 {
       // pass everything needed to generate SPARQL
       this.#valueBuilder.init(
         this.#translator.specProvider,
-        { variable: this.#s, type: this.#sType },
-        { variable: null, type: this.#p },
-        { variable: this.#o, type: this.#oType },
+        this.#rootSubject,
+        this.#pair.predicate,
+        this.#object.variable,
         this.#translator.isVarSelected(this.#o),
+        this.#translator.isObjectVarHasChildren(this.#o),
         criterias.map((v) => v.criteria),
       );
     }
@@ -144,31 +141,25 @@ export default class BranchTranslatorV13 {
     const children = this.#object.predicateObjectPairs;
     if (!children || children.length === 0) return;
 
-    // do not build children patterns if there are criterias on the branch
-    // this is normally not possible in the Sparnatural UI, but can be possible if a value is injected in the query JSON structure by Sparnatural-form
-    // otherwise we take the risk that the object is set to a URI, while the subject of the cildren pattern will be a variable
-    // e.g. `?x :p <http://xxxx> . ?Actor a :Actor` 
-    if (!this.#hasValues) {
-      children.forEach((childPair) => {
-        const builder = new BranchTranslatorV13(
-          childPair,
-          // subject of children becomes the current object variable
-          // In v13, nested predicateObjectPairs are under ObjectCriteria, so the "same subject" at that level is the object variable.
-          this.#object.variable,
-          false,
-          // children are in option if parent is optional/notExists
-          this.#pair.subType === "optional" || this.#pair.subType === "notExists",
-          this.#translator
-        );
+    children.forEach((childPair) => {
+      const builder = new BranchTranslatorV13(
+        childPair,
+        // subject of children becomes the current object variable
+        // In v13, nested predicateObjectPairs are under ObjectCriteria, so the "same subject" at that level is the object variable.
+        this.#object.variable,
+        false,
+        // children are in option if parent is optional/notExists
+        this.#pair.subType === "optional" || this.#pair.subType === "notExists",
+        this.#translator
+      );
 
-        builder.build();
-        this.#whereChildPtrns.push(...builder.getResultPtrns());
-        // gather default vars from children
-        this.#defaultLabelVars.push(...builder.getDefaultLabelVars());
-        // gather patterns to be executed after
-        this.#executedAfterPtrns.push(...builder.getExecutedAfterPtrns());
-      });
-    }
+      builder.build();
+      this.#whereChildPtrns.push(...builder.getResultPtrns());
+      // gather default vars from children
+      this.#defaultLabelVars.push(...builder.getDefaultLabelVars());
+      // gather patterns to be executed after
+      this.#executedAfterPtrns.push(...builder.getExecutedAfterPtrns());
+    });
   }
 
   /**
