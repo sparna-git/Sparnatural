@@ -51,6 +51,7 @@ export class SelectKeyInfoBtn extends HTMLComponent {
 
   hide() {
     this.visible = false;
+    this.selected = false;
     this.render();
   }
 

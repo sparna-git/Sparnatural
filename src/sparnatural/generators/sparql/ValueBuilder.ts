@@ -160,7 +160,7 @@ export class RdfTermValueBuilder
     if (this.isBlockingObjectProp()) {
       let singleTriple: Triple = SparqlFactory.buildTriple(
         factory.variable(this.startClassVal.value),
-        factory.namedNode(this.propertyVal.type),
+        factory.namedNode(this.propertyVal.value),
         this.#rdfTermToSparqlQuery(widgetValues[0].rdfTerm)
       );
 
@@ -284,7 +284,7 @@ export class BooleanValueBuilder
           triples: [
             {
               subject: factory.variable(this.startClassVal.value),
-              predicate: factory.namedNode(this.propertyVal.type),
+              predicate: factory.namedNode(this.propertyVal.value),
               object: factory.literal(
                 widgetValues[0].boolean.toString(),
                 factory.namedNode("http://www.w3.org/2001/XMLSchema#boolean")
@@ -377,7 +377,7 @@ export class SearchRegexValueBuilder
 {
   build(): Pattern[] {
     let widgetType = this.specProvider
-      .getProperty(this.propertyVal.type)
+      .getProperty(this.propertyVal.value)
       .getPropertyType(this.endClassVal.type);
     
      let widgetValues = this.values as SearchCriteria[];
@@ -462,7 +462,7 @@ export class DateTimePickerValueBuilder extends BaseValueBuilder implements Valu
       
       let widgetValues = this.values as DateCriteria[];
       
-      let specProperty:ISpecificationProperty = this.specProvider.getProperty(this.propertyVal.type);
+      let specProperty:ISpecificationProperty = this.specProvider.getProperty(this.propertyVal.value);
       let beginDateProp = specProperty.getBeginDateProperty();
       let endDateProp = specProperty.getEndDateProperty();
   

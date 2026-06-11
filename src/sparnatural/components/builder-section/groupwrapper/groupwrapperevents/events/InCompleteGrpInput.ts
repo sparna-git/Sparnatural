@@ -3,6 +3,7 @@ import GroupWrapper from "../../GroupWrapper";
 //Input is incompleted
 export function inCompleteGrpInput(grpWrapper: GroupWrapper) {
   grpWrapper.criteriaGroup.endClassGroup.inputSelector.getSelectViewVariableBtn().hide();
+  grpWrapper.criteriaGroup.endClassGroup.inputSelector.getSelectKeyInfoBtn().hide();
   if(grpWrapper.criteriaGroup.startClassGroup.renderEyeBtn){
     // is only highlited when "eye" btn is rendered
     grpWrapper.criteriaGroup.startClassGroup.inputSelector.html[0].classList.remove(

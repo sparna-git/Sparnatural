@@ -39,6 +39,7 @@ sparnatural.addEventListener("init", (event) => {
 });
 
 sparnatural.addEventListener("queryUpdated", (event) => {
+  console.log("Query before expansion:", event.detail.queryString);
   var queryString = sparnatural.expandSparql(event.detail.queryString);
   console.log("Expanded query string Sparnatural:", queryString);
   console.log(event.detail.queryJson);

@@ -261,6 +261,10 @@ class ClassTypeId extends HTMLComponent {
     return this.selectViewVariableBtn;
   }
 
+  getSelectKeyInfoBtn() {
+    return this.keyInfoBtn;
+  }
+
 }
 export default ClassTypeId;
 
