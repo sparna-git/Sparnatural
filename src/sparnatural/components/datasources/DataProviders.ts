@@ -2,12 +2,16 @@ import { Term } from "@rdfjs/types/data-model";
 import { RDFTerm } from "../../SparnaturalQueryIfc";
 
 /**
- * An item returned by a list widget datasource
+ * An item returned by a list or autocompletewidget datasource
  */
 export interface RdfTermDatasourceItem {
+    // precise value that is returned (URi or literal+lang or literal+datatype)
     term:RDFTerm;
+    // display label for the item - can include extr information like "France (38)"
     label:string;
+    // optional group for optgroup in lists
     group?:string;
+    // pure label of the value, e.g. "France" for "France (38)" 
     itemLabel?:string;
 }
 
@@ -17,6 +21,21 @@ export interface RdfTermDatasourceItem {
 export interface RdfTermTreeDatasourceItem extends RdfTermDatasourceItem {
     hasChildren:boolean;
     disabled:boolean;
+}
+
+export interface SinglePredicateDataProviderIfc {
+
+    init(
+        lang:string,
+        defaultLang:string
+    ):void;
+    
+    getSinglePredicate(
+        uri:string,
+        predicate:string,
+        callback:(items:RdfTermDatasourceItem[]) => void,
+        errorCallback?:(payload:any) => void
+    ):void
 }
 
 /**

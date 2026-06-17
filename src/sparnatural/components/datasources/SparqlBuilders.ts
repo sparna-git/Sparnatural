@@ -7,6 +7,52 @@ import { Term } from "@rdfjs/types/data-model";
  */
 
 /**
+ * Interface for building SPARQL queries to retrieve labels (or other values) for a given URI in a specific predicate.
+ */
+export interface SinglePredicateSparqlQueryBuilderIfc  {
+
+    /**
+     * Builds a single column query with the value of the given predicate for the given URI, in the given language (or default language if not available)
+     */
+    buildSparqlQuery(
+        uri:string,
+        predicate:string,
+        language: any,
+        defaultLanguage: any
+    ):string;
+
+}
+
+export class SinglePredicateSparqlQueryBuilder implements SinglePredicateSparqlQueryBuilderIfc {
+
+    sparqlPostProcessor: any;
+
+    constructor(
+        sparqlPostProcessor: any
+    ) {
+        this.sparqlPostProcessor = sparqlPostProcessor;
+    }
+
+    buildSparqlQuery(
+        uri:string,
+        predicate:string,
+        language: any,
+        defaultLanguage: any
+    ):string {
+        // 1. construire la requête SPARQL 
+        var sparql = null;
+
+        // 2. passer en semanticPostProcess
+        sparql = this.sparqlPostProcessor.semanticPostProcess(sparql);
+
+        return sparql;
+    }
+
+
+}
+
+
+/**
  * Interface for building SPARQL queries to list items based on a domain, predicate, and range (coming from the query), and other attributes from Sparnatural itself
  */
 export interface ListSparqlQueryBuilderIfc  {
