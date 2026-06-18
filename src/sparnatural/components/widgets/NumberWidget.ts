@@ -73,10 +73,10 @@ export class NumberWidget extends AbstractWidget {
     tippySettings.offset = [40, -20];
     tippySettings.delay = [0, 0];
 
-    let tooltip = this.#getValueLabel(
-      this.configuration.min,
-      this.configuration.max
-    );
+    let tooltip = this.getValueLabel({
+      min: this.configuration.min ? Number(this.configuration.min) : undefined,
+      max: this.configuration.max ? Number(this.configuration.max) : undefined,
+    });
 
     this.infoBtn = new InfoBtn(this, tooltip, tippySettings).render();
 
@@ -114,14 +114,9 @@ export class NumberWidget extends AbstractWidget {
 
     this.#checkInput(value);
 
-    let numberWidgetValue:LabelledCriteria<NumberCriteria> = {
-      label: this.#getValueLabel(
-        this.minInput.val().toString(),
-        this.maxInput.val().toString()
-      ),
-      criteria: value
-    };
-    
+    let numberWidgetValue: LabelledCriteria<NumberCriteria> =
+      this.buildValueFromCriteria(value);
+
     this.triggerRenderWidgetVal(numberWidgetValue);
 
     // prevent actual form submission
@@ -139,10 +134,11 @@ export class NumberWidget extends AbstractWidget {
       throw Error("lower bound is bigger than upper bound!");
   }
 
-  #getValueLabel = function (
-    startLabel: string | undefined,
-    stopLabel: string | undefined
-  ) {
+  // Computes the label from the min/max bounds of the criteria only (DOM-free).
+  getValueLabel(criteria: NumberCriteria): string {
+    let startLabel = criteria.min != undefined ? criteria.min.toString() : "";
+    let stopLabel = criteria.max != undefined ? criteria.max.toString() : "";
+
     let valueLabel = "";
     if (startLabel != "" && stopLabel != "") {
       valueLabel =
@@ -160,9 +156,18 @@ export class NumberWidget extends AbstractWidget {
     }
 
     return valueLabel;
-  };
+  }
 
   parseInput(input: LabelledCriteria<NumberCriteria>): LabelledCriteria<NumberCriteria> {
     return input;
+  }
+
+  // Parses "min|max" (or "min|" / "|max") into a NumberCriteria.
+  parseRawValue(raw: string): NumberCriteria {
+    let { first, second } = this.splitRawRange(raw);
+    return {
+      min: first !== "" ? Number(first) : undefined,
+      max: second !== "" ? Number(second) : undefined,
+    };
   }
 }

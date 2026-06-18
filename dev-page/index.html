@@ -126,6 +126,16 @@
             />-->
 
             <spar-natural
+              id="sparnatural"
+              src="form-configs/sapa-test/instantiations-shacl.ttl form-configs/sapa-test/collections-shacl.ttl form-configs/sapa-test/sparnatural-extension.ttl form-configs/sapa-test/autorites-shacl.ttl form-configs/sapa-test/performances-shacl.ttl"
+              lang="en"
+              endpoint="https://www.dev.performing-arts.ch/sparql"
+              distinct="true"
+              limit="1000"
+              prefixes="skos:http://www.w3.org/2004/02/skos/core# rico:https://www.ica.org/standards/RiC/ontology# spao:http://ontology.performing-arts.ch/ ebucore:https://www.ebu.ch/metadata/ontologies/ebucore# crm:http://www.cidoc-crm.org/cidoc-crm/ premis:http://www.loc.gov/premis/rdf/v1#"
+            />
+            <!-- 
+            <spar-natural
                     src="../configs/sparnatural-config-ruim.ttl"
                     endpoint="https://smt.esante.gouv.fr/api/sparql"
                     typePredicate="<http://www.w3.org/2000/01/rdf-schema#subClassOf>"
@@ -134,7 +144,7 @@
                     defaultLang="fr"
                     distinct="true"
                     debug="true"
-            ></spar-natural>
+            ></spar-natural>-->
 
             <!--       
         <spar-natural
@@ -164,9 +174,7 @@
             <div class="col-md-12">
               <span style="font-size: 90%">
                 Les requêtes sont envoyées à
-                <a
-                  id="endpoint"
-                  href="https://smt.esante.gouv.fr/api/sparql"
+                <a id="endpoint" href="https://smt.esante.gouv.fr/api/sparql"
                   >https://smt.esante.gouv.fr/api/sparql</a
                 >
               </span>

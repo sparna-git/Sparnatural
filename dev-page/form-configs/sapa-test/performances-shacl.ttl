@@ -1,0 +1,1055 @@
+@prefix premis: <http://www.loc.gov/premis/rdf/v1#> .
+@prefix schema: <http://schema.org/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix volipi: <http://data.sparna.fr/ontologies/volipi#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix skosthes: <http://purl.org/iso25964/skos-thes#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix qb: <http://purl.org/linked-data/cube#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix rico: <https://www.ica.org/standards/RiC/ontology#> .
+@prefix vocab: <http://vocab.performing-arts.ch/> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix euvoc: <http://publications.europa.eu/ontology/euvoc#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix crm: <http://www.cidoc-crm.org/cidoc-crm/> .
+@prefix spao-at: <http://shapes.performing-arts.ch/authorities/> .
+@prefix temp: <http://temp.performing-arts.ch/> .
+@prefix adms: <http://www.w3.org/ns/adms#> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix xls2rdf: <https://xls2rdf.sparna.fr/vocabulary#> .
+@prefix spao-pf: <http://shapes.performing-arts.ch/performances/> .
+@prefix core: <http://data.sparna.fr/ontologies/sparnatural-config-core#> .
+@prefix olo: <http://purl.org/ontology/olo/core#> .
+@prefix shacl-play: <https://shacl-play.sparna.fr/ontology#> .
+@prefix datasources: <http://data.sparna.fr/ontologies/sparnatural-config-datasources#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ebucore: <https://www.ebu.ch/metadata/ontologies/ebucore#> .
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix spao: <http://ontology.performing-arts.ch/> .
+@prefix frbroo: <http://iflastandards.info/ns/fr/frbr/frbroo/> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix skosxl: <http://www.w3.org/2008/05/skos-xl#> .
+
+<http://shapes.performing-arts.ch/performances> a owl:Ontology;
+  dct:title "Documentation of Swiss Performing Arts Performances model";
+  dct:abstract """(_english_) This page documents the data model used by the SAPA Foundation (Switzerland) to model entities specific to the performing arts. In particular, it models [productions](#spao-pf:F25_Performance_Plan), [performance series](#spao-pf:Performance_Serie), [individual performances](#spao-pf:Single_Performance), [standalone performances](#spao-pf:Performance_Standalone), [seasons](#spao-pf:E4_Period) and [recordings](spao-pf:F26_Recording). This model is mainly based on the FRBRoo and CIDOC-CRM ontologies. The following aspects should also be noted:
+
+ - Literary and musical works that serve as sources for performances are not represented in this model. Only their authors are represented. The link between the ‘Performance’ entities and these individuals is made via the ‘Non-Performative Expression’ entities of type `frbroo:F22_Self-Contained_Expression`. The latter are not intended to be reconciled or completed. For example, they do not have any labels.
+ - The FRBRoo ontology was replaced by LRMoo (IFLA Library Reference Model object-oriented) in 2024. An update to this new model is planned for the future.
+ - The entities `frbroo:F20_Performance_Work` and `frbroo:F25_Performance_Plan` are used in a very similar way. They model the creative and economic process that made the performance possible. It is not impossible that in the future they will be merged into a single entity of type `lrmoo:F1_Work`.
+ - The entities ‘Performance Series’, ‘Performance Single’ and ‘Performance Stand-alone’ are all of type frbroo:F31_Performance. Their distinction is indicated via a controlled vocabulary used with the `schema:additionalType` property.
+ - ‘Performance Series’ represent a series of performances in the same venue. ‘Performance Single’ are always linked to a ‘Performance Series’.
+ - ‘Performance Stand-alone’ entities include atypical performances such as work stages, improvisations or workshops given as part of a training course. They have no link to a ‘Performance Work’ or ‘Performance Series’. They are most often modelled because they are linked to a recording.
+ - Entities of type `crm:E42_Identifier` linked to ‘Performance Plans’ have so far only been used for internal management purposes within the SAPA Foundation. They serve to link to other databases maintained by the foundation.
+ - Linguistic Objects are simple annotations. There are plans to migrate them to `crm:E62_String` in the future.
+
+-----
+
+(_français_) Cette page documente le modèle de données utilisé par la Fondation SAPA (Suisse) pour modéliser les entités spécifiques aux arts de la scène. Y sont modélisées en particulier les [productions](#spao-pf:F25_Performance_Plan), les [séries de représentations](#spao-pf:Performance_Serie), les [représentations individuelles](#spao-pf:Single_Performance), les [représentations isolées](#spao-pf:Performance_Standalone), les [saisons](#spao-pf:E4_Period) et les [captations](spao-pf:F26_Recording). Ce modèle est principalement basé sur les ontologies FRBRoo et CIDOC-CRM. Il faut aussi bien noter les aspects suivants :
+
+ - Les œuvres littéraires et musicales qui servent de sources aux spectacles ne sont pas représentées dans cette modélisation. Seules leurs autrices ou auteurs le sont. Le lien entre les entités «Performance» et ces personnes se fait via les entités «Non-Performative Expression» de type `frbroo:F22_Self-Contained_Expression`. Ces dernières n’ont pas vocation à être réconciliées ou complétées. Elles ne disposent par exemple d’aucun libellé.
+ - L’ontologie FRBRoo a été remplacée par celle LRMoo (IFLA Library Reference Model object-oriented) en 2024. Une mise à jour vers cette nouvelle modélisation est envisagée dans l’avenir.
+ - Les entités de type `frbroo:F20_Performance_Work` et `frbroo:F25_Performance_Plan` sont utilisées dans une compréhension très proche. On y modélise le processus créatif et économique qui a rendu possible le spectacle. Il n’est pas impossible qu’à l’avenir elles soient fusionnées au sein d’une même entité de type `lrmoo:F1_Work`.
+ - Les entités \"Performance Serie\", \"Performance Single\", \"Performance Stand-alone\" sont toutes de type `frbroo:F31_Performance`. Leur distinction est signalée via un vocabulaire contrôlé utilisé avec la propriété `schema:additionalType`.
+ - Les \"Performance Série\" représentent les séries de représentations dans un même lieu. Les \"Performance Single\" sont toujours reliées à une \"Performance Serie\".
+ - Les \"Performance Stand-alone\" regroupent les représentations atypiques comme des étapes de travail, des improvisations ou encore des ateliers donnés dans le cadre d’une formation. Elles ne disposent d’aucun lien avec une \"Performance Work\" ou \"Performance Serie\". Elles sont le plus souvent modélisées car en lien avec une captation.
+ - Les entités de type `crm:E42_Identifier` liées aux «Performance Plan» n’ont qu’une vocation de gestion interne à la Fondation SAPA jusqu’ici. Elles servent à faire le lien vers d’autres bases de données maintenues par la fondation.
+ - Les «Linguistic Object» sont de simples annotations. Il est envisagé de les migrer vers des `crm:E62_String` à l’avenir.""";
+  foaf:depiction <http://shapes.performing-arts.ch/images/diagramme-performances.png>;
+  dcat:distribution _:4303a167aa6b4c56bda6c5b3138407b924937;
+  owl:versionInfo "1.0.0";
+  adms:versionNotes """1.0.0 - 2026-02
+- First public release of the Performancesmodel"""@en;
+  dct:hasFormat <https://docs.google.com/spreadsheets/d/1kV0VCF5p8f-9A3LjGo9Vbz7sU8wP2mcp/export?format=xlsx>,
+    <https://xls2rdf.sparna.fr/rest/convert?url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2F1kV0VCF5p8f-9A3LjGo9Vbz7sU8wP2mcp%2Fexport%3Fformat%3Dxlsx&noPostProcessings=true>;
+  rdfs:seeAlso <https://shacl-play.sparna.fr/play/doc?url=https%3A%2F%2Fxls2rdf.sparna.fr%2Frest%2Fconvert%3Furl%3Dhttps%253A%252F%252Fdocs.google.com%252Fspreadsheets%252Fd%252F1kV0VCF5p8f-9A3LjGo9Vbz7sU8wP2mcp%252Fexport%253Fformat%253Dxlsx%26noPostProcessings%3Dtrue&includeDiagram=true&language=en>,
+    <https://app.diagrams.net/#G1flBrt3fxLjf54wIwNkhwMRpWozFkNMa2#%7B%22pageId%22%3A%22phH6dvL8-G4Sl0bLUEO3%22%7D> .
+
+_:4303a167aa6b4c56bda6c5b3138407b924937 dct:format <https://www.iana.org/assignments/media-types/text/turtle>;
+  dcat:downloadURL spao-pf:sapa-performances.ttl .
+
+spao-pf:F25_Performance_Plan a sh:NodeShape;
+  sh:targetClass frbroo:F25_Performance_Plan;
+  rdfs:label "Performance Plan"@en;
+  sh:closed true;
+  sh:ignoredProperties _:4303a167aa6b4c56bda6c5b3138407b924938;
+  foaf:depiction spao-pf:Performative_Work;
+  shacl-play:background-color "FDDE34";
+  sh:property spao-pf:F25_Performance_Plan_comment, spao-pf:F25_Performance_Plan_hasMusicTitle,
+    spao-pf:F25_Performance_Plan_label, spao-pf:F25_Performance_Plan_P102_has_title, spao-pf:F25_Performance_Plan_P1_is_identified_by,
+    spao-pf:F25_Performance_Plan_P67_is_referred_to_by, spao-pf:F25_Performance_Plan_R14_incorporates,
+    spao-pf:F25_Performance_Plan_sameAs .
+
+_:4303a167aa6b4c56bda6c5b3138407b924938 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+spao-pf:Single_Performance a sh:NodeShape;
+  rdfs:label "Performance Single"@en;
+  sh:target spao-pf:Single_Performance-target;
+  skos:definition "A single performance is a performance that does not consists_of other performances"@en;
+  sh:closed true;
+  sh:ignoredProperties _:4303a167aa6b4c56bda6c5b3138407b924939;
+  foaf:depiction spao-pf:Performances;
+  shacl-play:background-color "83DDFF";
+  sh:property spao-pf:Single_Performance_P9i_forms_part_of, spao-pf:Single_Performance_label,
+    spao-pf:Single_Performance_P102_has_title, spao-pf:Single_Performance_P2_has_type,
+    spao-pf:Single_Performance_P4_has_time-span, spao-pf:Single_Performance_P67i_is_referred_to_by,
+    spao-pf:Single_Performance_additionalType .
+
+spao-pf:Single_Performance-target sh:select """PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+PREFIX frbroo: <http://iflastandards.info/ns/fr/frbr/frbroo/>
+PREFIX schema: <http://schema.org/>
+SELECT $this
+WHERE {
+ $this a frbroo:F31_Performance .
+ $this schema:additionalType <http://vocab.performing-arts.ch/hlsin> .
+}""" .
+
+_:4303a167aa6b4c56bda6c5b3138407b924939 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+spao-pf:Performance_Serie a sh:NodeShape;
+  rdfs:label "Performance Serie"@en;
+  sh:target spao-pf:Performance_Serie-target;
+  skos:definition "A performance serie consists of other performances"@en;
+  sh:closed true;
+  sh:ignoredProperties _:4303a167aa6b4c56bda6c5b3138407b924940;
+  foaf:depiction spao-pf:Performances;
+  shacl-play:background-color "83DDFF";
+  sh:property spao-pf:Performance_Serie_label, spao-pf:Performance_Serie_P102_has_title,
+    spao-pf:Performance_Serie_P2_has_type, spao-pf:Performance_Serie_P67i_is_referred_to_by,
+    spao-pf:Performance_Serie_P8_took_place_on_or_within, spao-pf:Performance_Serie_P9_consists_of,
+    spao-pf:Performance_Serie_R25_performed, spao-pf:Performance_Serie_additionalType,
+    spao-pf:Performance_Serie_P10_falls_within .
+
+spao-pf:Performance_Serie-target sh:select """PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+PREFIX frbroo: <http://iflastandards.info/ns/fr/frbr/frbroo/>
+PREFIX schema: <http://schema.org/>
+SELECT $this
+WHERE {
+ $this a frbroo:F31_Performance .
+ $this schema:additionalType <http://vocab.performing-arts.ch/hlser> .
+}""" .
+
+_:4303a167aa6b4c56bda6c5b3138407b924940 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+spao-pf:Performance_Standalone a sh:NodeShape;
+  rdfs:label "Performance Stand-alone"@en;
+  sh:target spao-pf:Performance_Standalone-target;
+  skos:definition "A stand-alone performance with no predefined serie, e.g. a workshop, etc."@en;
+  sh:closed true;
+  sh:ignoredProperties _:4303a167aa6b4c56bda6c5b3138407b924941;
+  foaf:depiction spao-pf:Performances;
+  shacl-play:background-color "83DDFF";
+  sh:property spao-pf:Performance_Standalone_P102_has_title, spao-pf:Performance_Standalone_P2_has_type,
+    spao-pf:Performance_Standalone_P9_consists_of, spao-pf:Performance_Standalone_P67i_is_referred_to_by,
+    spao-pf:Performance_Standalone_label, spao-pf:Performance_Standalone_P4_has_time-span,
+    spao-pf:Performance_Standalone_P8_took_place_on_or_within, spao-pf:Performance_Standalone_hasMusicTitle,
+    spao-pf:Performance_Standalone_additionalType .
+
+spao-pf:Performance_Standalone-target sh:select """PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+PREFIX frbroo: <http://iflastandards.info/ns/fr/frbr/frbroo/>
+PREFIX schema: <http://schema.org/>
+SELECT $this
+WHERE {
+ $this a frbroo:F31_Performance .
+ $this schema:additionalType <http://vocab.performing-arts.ch/hlsta> .
+}""" .
+
+_:4303a167aa6b4c56bda6c5b3138407b924941 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+spao-pf:F22_Self-Contained_Expression a sh:NodeShape;
+  sh:targetClass frbroo:F22_Self-Contained_Expression;
+  rdfs:label "Non-Performative Expression"@en;
+  skos:definition "In this class we can find URI in /u/ and /a/"@en;
+  sh:closed true;
+  sh:ignoredProperties _:4303a167aa6b4c56bda6c5b3138407b924942;
+  foaf:depiction spao-pf:Non-Performative_Work;
+  shacl-play:background-color "FDDE34";
+  sh:property spao-pf:F22_Self-Contained_Expression_label, spao-pf:F22_Self-Contained_Expression_P102_has_title .
+
+_:4303a167aa6b4c56bda6c5b3138407b924942 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+spao-pf:F20_Performance_Work a sh:NodeShape;
+  sh:targetClass frbroo:F20_Performance_Work;
+  rdfs:label "Performance Work"@en;
+  skos:definition "In this class we can find URI in /u/ and /a/"@en;
+  sh:closed true;
+  sh:ignoredProperties _:4303a167aa6b4c56bda6c5b3138407b924943;
+  foaf:depiction spao-pf:Performative_Work;
+  shacl-play:background-color "FDDE34";
+  sh:property spao-pf:F20_Performance_Work_inLanguage, spao-pf:F20_Performance_Work_label,
+    spao-pf:F20_Performance_Work_P2_has_type, spao-pf:F20_Performance_Work_R12_is_realised_in,
+    spao-pf:F20_Performance_Work_subtitleLanguage .
+
+_:4303a167aa6b4c56bda6c5b3138407b924943 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+spao-pf:F26_Recording a sh:NodeShape;
+  sh:targetClass frbroo:F26_Recording;
+  rdfs:label "Recording"@en;
+  sh:closed true;
+  sh:ignoredProperties _:4303a167aa6b4c56bda6c5b3138407b924944;
+  shacl-play:background-color "FDDE34";
+  sh:property spao-pf:F26_Recording_duration, spao-pf:F26_Recording_label, spao-pf:F26_Recording_P102_has_title,
+    spao-pf:F26_Recording_P2_has_type, spao-pf:F26_Recording_P67_is_referred_to_by, spao-pf:F26_Recording_P70_documents,
+    spao-pf:F26_Recording_R14_incorporates, spao-pf:F26_Recording_seeAlso .
+
+_:4303a167aa6b4c56bda6c5b3138407b924944 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+spao-pf:Creation_of_Performance_Plan a sh:NodeShape;
+  rdfs:label "Expression creation: Performance Plan"@en;
+  sh:target spao-pf:Creation_of_Performance_Plan-target;
+  sh:closed true;
+  sh:ignoredProperties _:4303a167aa6b4c56bda6c5b3138407b924945;
+  foaf:depiction spao-pf:Performative_Work;
+  shacl-play:background-color "83DDFF";
+  sh:property spao-pf:Creation_of_Performance_Plan_P9_consists_of, spao-pf:Creation_of_Performance_Plan_R17_created,
+    spao-pf:Creation_of_Performance_Plan_R19_created_a_realisation_of .
+
+spao-pf:Creation_of_Performance_Plan-target sh:select """PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+PREFIX frbroo: <http://iflastandards.info/ns/fr/frbr/frbroo/>
+SELECT $this
+WHERE {
+ $this a frbroo:F28_Expression_Creation .
+ $this frbroo:R17_created ?something . 
+ ?something a frbroo:F25_Performance_Plan . 
+}""" .
+
+_:4303a167aa6b4c56bda6c5b3138407b924945 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+spao-pf:Creation_of_Recording a sh:NodeShape;
+  rdfs:label "Expression creation: Recording"@en;
+  sh:target spao-pf:Creation_of_Recording-target;
+  sh:closed true;
+  sh:ignoredProperties _:4303a167aa6b4c56bda6c5b3138407b924946;
+  shacl-play:background-color "83DDFF";
+  sh:property spao-pf:Creation_of_Recording_P9_consists_of, spao-pf:Creation_of_Recording_R17_created,
+    spao-pf:Creation_of_Recording_P4_has_time-span .
+
+spao-pf:Creation_of_Recording-target sh:select """PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+PREFIX frbroo: <http://iflastandards.info/ns/fr/frbr/frbroo/>
+SELECT $this
+WHERE {
+ $this a frbroo:F28_Expression_Creation .
+ $this frbroo:R17_created ?something . 
+ ?something a frbroo:F26_Recording . 
+}""" .
+
+_:4303a167aa6b4c56bda6c5b3138407b924946 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+spao-pf:Creation_of_non-performative_work a sh:NodeShape;
+  rdfs:label "Expression creation: Non-Performative Expression"@en;
+  sh:target spao-pf:Creation_of_non-performative_work-target;
+  sh:closed true;
+  sh:ignoredProperties _:4303a167aa6b4c56bda6c5b3138407b924947;
+  foaf:depiction spao-pf:Non-Performative_Work;
+  shacl-play:background-color "83DDFF";
+  sh:property spao-pf:Creation_of_non-performative_work_P9_consists_of, spao-pf:Creation_of_non-performative_work_R17_created .
+
+spao-pf:Creation_of_non-performative_work-target sh:select """PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+PREFIX frbroo: <http://iflastandards.info/ns/fr/frbr/frbroo/>
+SELECT $this
+WHERE {
+ $this a frbroo:F28_Expression_Creation .
+ $this frbroo:R17_created ?something . 
+ ?something a frbroo:F22_Self-Contained_Expression . 
+}""" .
+
+_:4303a167aa6b4c56bda6c5b3138407b924947 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+spao-pf:Activity_Participation a sh:NodeShape;
+  rdfs:label "Activity Participation"@en;
+  sh:closed true;
+  sh:ignoredProperties _:4303a167aa6b4c56bda6c5b3138407b924948;
+  foaf:depiction spao-pf:Performances, spao-pf:Performative_Work, spao-pf:Non-Performative_Work;
+  shacl-play:background-color "83DDFF";
+  sh:property spao-pf:Activity_Participation_P14_carried_out_by, spao-pf:Activity_Participation_P2_has_type,
+    spao-pf:Activity_Participation_index, spao-pf:Activity_Participation_comment, spao-pf:Activity_Participation_certainty,
+    spao-pf:Activity_Participation_label, spao-pf:Activity_Participation_additionalType .
+
+_:4303a167aa6b4c56bda6c5b3138407b924948 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+spao-pf:E35_Title a sh:NodeShape;
+  sh:targetClass crm:E35_Title;
+  rdfs:label "Title"@en;
+  sh:closed true;
+  sh:ignoredProperties _:4303a167aa6b4c56bda6c5b3138407b924949;
+  shacl-play:background-color "FEF1BC";
+  sh:property spao-pf:E35_Title_P2_has_type, spao-pf:E35_Title_value .
+
+_:4303a167aa6b4c56bda6c5b3138407b924949 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+spao-pf:E33_Linguistic_Object a sh:NodeShape;
+  rdfs:label "Linguistic Object"@en;
+  sh:target spao-pf:E33_Linguistic_Object-target;
+  sh:closed true;
+  sh:ignoredProperties _:4303a167aa6b4c56bda6c5b3138407b924950;
+  shacl-play:background-color "FDDE34";
+  sh:property spao-pf:E33_Linguistic_Object_P2_has_type, spao-pf:E33_Linguistic_Object_value .
+
+spao-pf:E33_Linguistic_Object-target sh:select """PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+PREFIX frbroo: <http://iflastandards.info/ns/fr/frbr/frbroo/>
+SELECT $this
+WHERE {
+ $this a crm:E33_Linguistic_Object.
+}""" .
+
+_:4303a167aa6b4c56bda6c5b3138407b924950 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+spao-pf:E52_Time-Span a sh:NodeShape;
+  sh:targetClass crm:E52_Time-Span;
+  rdfs:label "Time-Span"@en;
+  sh:closed true;
+  sh:ignoredProperties _:4303a167aa6b4c56bda6c5b3138407b924951;
+  shacl-play:background-color "86BCC8";
+  sh:property spao-pf:E52_Time-Span_label, spao-pf:E52_Time-Span_P82a_begin_of_the_begin,
+    spao-pf:E52_Time-Span_P82b_end_of_the_end .
+
+_:4303a167aa6b4c56bda6c5b3138407b924951 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+spao-pf:E42_Identifier a sh:NodeShape;
+  sh:targetClass crm:E42_Identifier;
+  rdfs:label "Identifier"@en;
+  skos:definition "Ces identifiants font référence à d'autres base de données internes à SAPA"@en;
+  sh:closed true;
+  sh:ignoredProperties _:4303a167aa6b4c56bda6c5b3138407b924952;
+  shacl-play:background-color "FEF1BC";
+  sh:property spao-pf:E42_Identifier_P2_has_type, spao-pf:E42_Identifier_value .
+
+_:4303a167aa6b4c56bda6c5b3138407b924952 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+spao-pf:E4_Period a sh:NodeShape;
+  rdfs:label "Saison"@en;
+  sh:target spao-pf:E4_Period-target;
+  sh:closed true;
+  sh:ignoredProperties _:4303a167aa6b4c56bda6c5b3138407b924953;
+  foaf:depiction spao-pf:Performances;
+  shacl-play:background-color "83DDFF";
+  sh:property spao-pf:E4_Period_label, spao-pf:E4_Period_P4_has_time-span .
+
+spao-pf:E4_Period-target sh:select """PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+PREFIX frbroo: <http://iflastandards.info/ns/fr/frbr/frbroo/>
+SELECT $this
+WHERE {
+ $this a crm:E4_Period .
+}""" .
+
+_:4303a167aa6b4c56bda6c5b3138407b924953 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+spao-pf:Performance_Type a sh:NodeShape;
+  rdfs:label "Type of Performance"@en;
+  shacl-play:background-color "FAB665";
+  sh:property spao-pf:Performance_Type_inScheme .
+
+spao-pf:Title_Type a sh:NodeShape;
+  rdfs:label "Type of Title"@en;
+  shacl-play:background-color "FAB666";
+  sh:property spao-pf:Title_Type_inScheme .
+
+spao-pf:Linguistic_Object_Type a sh:NodeShape;
+  rdfs:label "Type of Linguistic Object"@en;
+  shacl-play:background-color "FAB667";
+  sh:property spao-pf:Linguistic_Object_Type_inScheme .
+
+spao-pf:Activity_Type a sh:NodeShape;
+  rdfs:label "Type of Activity"@en;
+  shacl-play:background-color "FAB668";
+  sh:property spao-pf:Activity_Type_inScheme .
+
+spao-pf:Certainty a sh:NodeShape;
+  rdfs:label "Type of Confidence (Certainty)"@en;
+  shacl-play:background-color "FAB669";
+  sh:property spao-pf:Certainty_inScheme .
+
+spao-pf:Performance_Work_Type a sh:NodeShape;
+  rdfs:label "Type of Performance Work"@en;
+  shacl-play:background-color "FAB670";
+  sh:property spao-pf:Performance_Work_Type_inScheme .
+
+spao-pf:Identifier_Type a sh:NodeShape;
+  rdfs:label "Type of Identifier"@en;
+  shacl-play:background-color "FAB671";
+  sh:property spao-pf:Identifier_Type_inScheme .
+
+spao-pf:Language a sh:NodeShape;
+  rdfs:label "Type of Language"@en;
+  shacl-play:background-color "FAB672";
+  sh:property spao-pf:Language_inScheme .
+
+spao-pf:RecordingGenre a sh:NodeShape;
+  rdfs:label "Type of Recording"@en;
+  shacl-play:background-color "FAB673";
+  sh:property spao-pf:RecordingGenre_inScheme .
+
+spao-pf:Performance_Serie_label sh:path rdfs:label;
+  sh:name "label"@en;
+  skos:editorialNote """Bizarre qu'on n'ait pas une cardinalité minimale.
+
+Requête SPARQL:
+
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX frbroo: <http://iflastandards.info/ns/fr/frbr/frbroo/>
+PREFIX spav: <http://vocab.performing-arts.ch/>
+SELECT ?x
+WHERE {
+ ?x a frbroo:F31_Performance
+ FILTER NOT EXISTS { ?x rdfs:label ?l }
+}
+LIMIT 1000
+
+On met une cardinalité minimale à 1"""@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-pf:Performance_Serie_P102_has_title sh:path crm:P102_has_title;
+  sh:name "has title"@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E35_Title .
+
+spao-pf:Performance_Serie_P2_has_type sh:path crm:P2_has_type;
+  sh:name "has type"@en;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  sh:node spao-pf:Performance_Type;
+  sh:group _:4303a167aa6b4c56bda6c5b3138407b924954 .
+
+_:4303a167aa6b4c56bda6c5b3138407b924954 rdfs:label "" .
+
+spao-pf:Performance_Serie_P67i_is_referred_to_by sh:path crm:P67i_is_referred_to_by;
+  sh:name "is referred to by"@en;
+  skos:editorialNote """Attention, l'URI de la propriété est fausse. Cela devrait être P67i car c'est une propriété inverse.
+
+20240626: j'ajuste en metttant le \"i\" dans l' URI."""@en;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E33_Linguistic_Object;
+  sh:node spao-pf:E33_Linguistic_Object .
+
+spao-pf:Performance_Serie_P8_took_place_on_or_within sh:path crm:P8_took_place_on_or_within;
+  sh:name "took place on or within"@en;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E22_Man-Made_Object .
+
+spao-pf:Performance_Serie_P9_consists_of sh:path crm:P9_consists_of;
+  sh:name "consists of (participation)"@en;
+  skos:editorialNote """Toutes les singles sont liées à une série:
+
+PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+PREFIX frbroo: <http://iflastandards.info/ns/fr/frbr/frbroo/>
+PREFIX schema: <http://schema.org/>
+SELECT ?this
+WHERE {
+ ?this a frbroo:F31_Performance .
+ ?this schema:additionalType <http://vocab.performing-arts.ch/hlsin> .
+ FILTER NOT EXISTS { 
+ ?serie a frbroo:F31_Performance .
+ ?serie schema:additionalType <http://vocab.performing-arts.ch/hlser> .
+ ?serie crm:P9_consists_of ?this .
+ }
+}"""@en;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E7_Activity;
+  sh:node spao-pf:Activity_Participation .
+
+spao-pf:Performance_Serie_R25_performed sh:path frbroo:R25_performed;
+  sh:name "performed"@en;
+  skos:editorialNote """Toutes les séries sont liées à un plan:
+
+PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+PREFIX frbroo: <http://iflastandards.info/ns/fr/frbr/frbroo/>
+PREFIX schema: <http://schema.org/>
+SELECT ?this
+WHERE {
+ ?this a frbroo:F31_Performance .
+ ?this schema:additionalType <http://vocab.performing-arts.ch/hlser> .
+ FILTER NOT EXISTS { 
+ ?this frbroo:R25_performed ?plan
+ }
+}"""@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class frbroo:F25_Performance_Plan .
+
+spao-pf:Performance_Serie_additionalType sh:path schema:additionalType;
+  sh:name "additional type"@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:hasValue vocab:hlser .
+
+spao-pf:Performance_Serie_P10_falls_within sh:path crm:P10_falls_within;
+  sh:name "falls within (saison)"@en;
+  sh:nodeKind sh:IRI;
+  sh:node spao-pf:E4_Period .
+
+spao-pf:Single_Performance_P9i_forms_part_of sh:path crm:P9i_forms_part_of;
+  sh:name "forms part of (serie)"@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:node spao-pf:Performance_Serie .
+
+spao-pf:Single_Performance_label sh:path rdfs:label;
+  sh:name "label"@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-pf:Single_Performance_P102_has_title sh:path crm:P102_has_title;
+  sh:name "has title"@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E35_Title .
+
+spao-pf:Single_Performance_P2_has_type sh:path crm:P2_has_type;
+  sh:name "has type"@en;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  sh:node spao-pf:Performance_Type .
+
+spao-pf:Single_Performance_P4_has_time-span sh:path crm:P4_has_time-span;
+  sh:name "has time-span"@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E52_Time-Span .
+
+spao-pf:Single_Performance_P67i_is_referred_to_by sh:path crm:P67i_is_referred_to_by;
+  sh:name "is referred to by"@en;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E33_Linguistic_Object;
+  sh:node spao-pf:E33_Linguistic_Object .
+
+spao-pf:Single_Performance_additionalType sh:path schema:additionalType;
+  sh:name "additional type"@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:hasValue vocab:hlsin .
+
+spao-pf:Performance_Standalone_P102_has_title sh:path crm:P102_has_title;
+  sh:name "has title"@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E35_Title .
+
+spao-pf:Performance_Standalone_P2_has_type sh:path crm:P2_has_type;
+  sh:name "type (P2)"@en;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  sh:node spao-pf:Performance_Type .
+
+spao-pf:Performance_Standalone_P9_consists_of sh:path crm:P9_consists_of;
+  sh:name "consists of (participation)"@en;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E7_Activity;
+  sh:node spao-pf:Activity_Participation .
+
+spao-pf:Performance_Standalone_P67i_is_referred_to_by sh:path crm:P67i_is_referred_to_by;
+  sh:name "is referred to by"@en;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E33_Linguistic_Object;
+  sh:node spao-pf:E33_Linguistic_Object .
+
+spao-pf:Performance_Standalone_label sh:path rdfs:label;
+  sh:name "label"@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-pf:Performance_Standalone_P4_has_time-span sh:path crm:P4_has_time-span;
+  sh:name "has time-span"@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E52_Time-Span .
+
+spao-pf:Performance_Standalone_P8_took_place_on_or_within sh:path crm:P8_took_place_on_or_within;
+  sh:name "took place on or within"@en;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E22_Man-Made_Object .
+
+spao-pf:Performance_Standalone_hasMusicTitle sh:path spao:hasMusicTitle;
+  sh:name "has music title"@en;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-pf:Performance_Standalone_additionalType sh:path schema:additionalType;
+  sh:name "additional type"@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:hasValue vocab:hlsta .
+
+spao-pf:F25_Performance_Plan_comment sh:path rdfs:comment;
+  sh:name "comment"@en;
+  skos:editorialNote """Environ 150 Plan ne sont pas référencés dans des works:
+
+Exemple http://data.performing-arts.ch/w/6928a7dc-496c-42e4-a171-d4734164b9a9
+
+Vient du formulaire
+
+PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+PREFIX frbroo: <http://iflastandards.info/ns/fr/frbr/frbroo/>
+PREFIX schema: <http://schema.org/>
+SELECT ?this
+WHERE {
+ ?this a frbroo:F25_Performance_Plan .
+ FILTER NOT EXISTS { 
+ ?performanceWork frbroo:R12_is_realised_in ?this .
+ }
+}
+
+On laisse comme ça"""@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-pf:F25_Performance_Plan_hasMusicTitle sh:path spao:hasMusicTitle;
+  sh:name "has music title"@en;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-pf:F25_Performance_Plan_label sh:path rdfs:label;
+  sh:name "label"@en;
+  skos:editorialNote """La label n'est pas obligatoire ? liste des PP sans label :
+
+PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+PREFIX frbroo: <http://iflastandards.info/ns/fr/frbr/frbroo/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT ?x WHERE {
+ ?x a frbroo:F25_Performance_Plan .
+ FILTER NOT EXISTS {?x rdfs:label ?l}
+} 
+
+Tickets https://github.com/sapa/performing-arts-ch-cleaning/issues/87"""@en;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-pf:F25_Performance_Plan_P102_has_title sh:path crm:P102_has_title;
+  sh:name "has title"@en;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E35_Title .
+
+spao-pf:F25_Performance_Plan_P1_is_identified_by sh:path crm:P1_is_identified_by;
+  sh:name "is identified by"@en;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E42_Identifier .
+
+spao-pf:F25_Performance_Plan_P67_is_referred_to_by sh:path crm:P67_is_referred_to_by;
+  sh:name "is referred to by"@en;
+  skos:editorialNote "A changer en P67i car c'est une propriété inverse"@en;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E33_Linguistic_Object;
+  sh:node spao-pf:E33_Linguistic_Object .
+
+spao-pf:F25_Performance_Plan_R14_incorporates sh:path frbroo:R14_incorporates;
+  sh:name "incorporates"@en;
+  sh:nodeKind sh:IRI;
+  sh:class frbroo:F22_Self-Contained_Expression .
+
+spao-pf:F25_Performance_Plan_sameAs sh:path owl:sameAs;
+  sh:name "same as"@en;
+  sh:nodeKind sh:IRI .
+
+spao-pf:F26_Recording_duration sh:path schema:duration;
+  sh:name "duration"@en;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-pf:F26_Recording_label sh:path rdfs:label;
+  sh:name "label"@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:or _:4303a167aa6b4c56bda6c5b3138407b924957 .
+
+_:4303a167aa6b4c56bda6c5b3138407b924955 sh:datatype xsd:string .
+
+_:4303a167aa6b4c56bda6c5b3138407b924956 sh:datatype rdf:langString .
+
+_:4303a167aa6b4c56bda6c5b3138407b924957 a rdf:List;
+  rdf:first _:4303a167aa6b4c56bda6c5b3138407b924955;
+  rdf:rest _:4303a167aa6b4c56bda6c5b3138407b924958 .
+
+_:4303a167aa6b4c56bda6c5b3138407b924958 rdf:first _:4303a167aa6b4c56bda6c5b3138407b924956;
+  rdf:rest rdf:nil .
+
+spao-pf:F26_Recording_P102_has_title sh:path crm:P102_has_title;
+  sh:name "has title"@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E35_Title .
+
+spao-pf:F26_Recording_P2_has_type sh:path crm:P2_has_type;
+  sh:name "type (P2)"@en;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  sh:node spao-pf:RecordingGenre .
+
+spao-pf:F26_Recording_P67_is_referred_to_by sh:path crm:P67_is_referred_to_by;
+  sh:name "is referred to by"@en;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E33_Linguistic_Object;
+  sh:node spao-pf:E33_Linguistic_Object .
+
+spao-pf:F26_Recording_P70_documents sh:path crm:P70_documents;
+  sh:name "documents"@en;
+  sh:description "Link to the performance being recorded"@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:or _:4303a167aa6b4c56bda6c5b3138407b924961 .
+
+_:4303a167aa6b4c56bda6c5b3138407b924959 sh:class spao-pf:Single_Performance .
+
+_:4303a167aa6b4c56bda6c5b3138407b924960 sh:class spao-pf:Performance_Standalone .
+
+_:4303a167aa6b4c56bda6c5b3138407b924961 a rdf:List;
+  rdf:first _:4303a167aa6b4c56bda6c5b3138407b924959;
+  rdf:rest _:4303a167aa6b4c56bda6c5b3138407b924962 .
+
+_:4303a167aa6b4c56bda6c5b3138407b924962 rdf:first _:4303a167aa6b4c56bda6c5b3138407b924960;
+  rdf:rest rdf:nil .
+
+spao-pf:F26_Recording_R14_incorporates sh:path frbroo:R14_incorporates;
+  sh:name "incorporates"@en;
+  sh:description "Link to the production"@en;
+  sh:nodeKind sh:IRI;
+  sh:class frbroo:F25_Performance_Plan .
+
+spao-pf:F26_Recording_seeAlso sh:path spao:seeAlso;
+  sh:name "see also"@en;
+  sh:description "Note : the range of the property is left intentionnally open. It can points to RecordResource, Instantiation, File or other Recordings"@en;
+  sh:nodeKind sh:IRI .
+
+spao-pf:F22_Self-Contained_Expression_label sh:path rdfs:label;
+  sh:name "label"@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-pf:F22_Self-Contained_Expression_P102_has_title sh:path crm:P102_has_title;
+  sh:name "has title"@en;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E35_Title .
+
+spao-pf:Creation_of_Performance_Plan_P9_consists_of sh:path crm:P9_consists_of;
+  sh:name "consists of"@en;
+  sh:minCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E7_Activity;
+  sh:node spao-pf:Activity_Participation .
+
+spao-pf:Creation_of_Performance_Plan_R17_created sh:path frbroo:R17_created;
+  sh:name "created"@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class frbroo:F25_Performance_Plan .
+
+spao-pf:Creation_of_Performance_Plan_R19_created_a_realisation_of sh:path frbroo:R19_created_a_realisation_of;
+  sh:name "created a realisation of"@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class frbroo:F20_Performance_Work .
+
+spao-pf:Creation_of_non-performative_work_P9_consists_of sh:path crm:P9_consists_of;
+  sh:name "consists of"@en;
+  sh:minCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E7_Activity;
+  sh:node spao-pf:Activity_Participation .
+
+spao-pf:Creation_of_non-performative_work_R17_created sh:path frbroo:R17_created;
+  sh:name "created"@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class frbroo:F22_Self-Contained_Expression .
+
+spao-pf:Creation_of_Recording_P9_consists_of sh:path crm:P9_consists_of;
+  sh:name "consists of"@en;
+  sh:minCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E7_Activity;
+  sh:node spao-pf:Activity_Participation .
+
+spao-pf:Creation_of_Recording_R17_created sh:path frbroo:R17_created;
+  sh:name "created"@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class frbroo:F26_Recording .
+
+spao-pf:Creation_of_Recording_P4_has_time-span sh:path crm:P4_has_time-span;
+  sh:name "has time-span"@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E52_Time-Span .
+
+spao-pf:Activity_Participation_P14_carried_out_by sh:path crm:P14_carried_out_by;
+  sh:name "carried out by"@en;
+  sh:minCount 1;
+  sh:nodeKind sh:IRI;
+  sh:or _:4303a167aa6b4c56bda6c5b3138407b924966 .
+
+_:4303a167aa6b4c56bda6c5b3138407b924963 sh:class crm:E21_Person .
+
+_:4303a167aa6b4c56bda6c5b3138407b924964 sh:class crm:E74_Group .
+
+_:4303a167aa6b4c56bda6c5b3138407b924965 sh:class crm:E39_Actor .
+
+_:4303a167aa6b4c56bda6c5b3138407b924966 a rdf:List;
+  rdf:first _:4303a167aa6b4c56bda6c5b3138407b924963;
+  rdf:rest _:4303a167aa6b4c56bda6c5b3138407b924967 .
+
+_:4303a167aa6b4c56bda6c5b3138407b924967 rdf:first _:4303a167aa6b4c56bda6c5b3138407b924964;
+  rdf:rest _:4303a167aa6b4c56bda6c5b3138407b924968 .
+
+_:4303a167aa6b4c56bda6c5b3138407b924968 rdf:first _:4303a167aa6b4c56bda6c5b3138407b924965;
+  rdf:rest rdf:nil .
+
+spao-pf:Activity_Participation_P2_has_type sh:path crm:P2_has_type;
+  sh:name "has type"@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  sh:node spao-pf:Activity_Type;
+  datasources:datasource spao-pf:list_activitytypes_alpha .
+
+spao-pf:Activity_Participation_index sh:path olo:index;
+  sh:name "index"@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:integer .
+
+spao-pf:Activity_Participation_comment sh:path rdfs:comment;
+  sh:name "comment"@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-pf:Activity_Participation_certainty sh:path rico:certainty;
+  sh:name "certainty"@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:node spao-pf:Certainty .
+
+spao-pf:Activity_Participation_label sh:path rdfs:label;
+  sh:name "label"@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-pf:Activity_Participation_additionalType sh:path schema:additionalType;
+  sh:name "additional type"@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  sh:node spao-pf:Activity_Type .
+
+spao-pf:F20_Performance_Work_inLanguage sh:path schema:inLanguage;
+  sh:name "in language"@en;
+  skos:editorialNote "Note : les Works ne devraient théoriquement pas avoir de langue..."@en;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  sh:node spao-pf:Language .
+
+spao-pf:F20_Performance_Work_label sh:path rdfs:label;
+  sh:name "label"@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-pf:F20_Performance_Work_P2_has_type sh:path crm:P2_has_type;
+  sh:name "has type"@en;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  sh:node spao-pf:Performance_Work_Type .
+
+spao-pf:F20_Performance_Work_R12_is_realised_in sh:path frbroo:R12_is_realised_in;
+  sh:name "is realised in"@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class frbroo:F25_Performance_Plan .
+
+spao-pf:F20_Performance_Work_subtitleLanguage sh:path schema:subtitleLanguage;
+  sh:name "subtitle language"@en;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  sh:node spao-pf:Language .
+
+spao-pf:E33_Linguistic_Object_P2_has_type sh:path crm:P2_has_type;
+  sh:name "has type"@en;
+  skos:editorialNote "Note : on force qu'il y ait toujours un type et une valeur, est-ce correct ?"@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  sh:node spao-pf:Linguistic_Object_Type;
+  sh:group _:4303a167aa6b4c56bda6c5b3138407b924969 .
+
+_:4303a167aa6b4c56bda6c5b3138407b924969 rdfs:label "" .
+
+spao-pf:E33_Linguistic_Object_value sh:path rdf:value;
+  sh:name "value"@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal .
+
+spao-pf:E35_Title_P2_has_type sh:path crm:P2_has_type;
+  sh:name "has type"@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  sh:node spao-pf:Title_Type;
+  sh:group _:4303a167aa6b4c56bda6c5b3138407b924970 .
+
+_:4303a167aa6b4c56bda6c5b3138407b924970 rdfs:label "" .
+
+spao-pf:E35_Title_value sh:path rdf:value;
+  sh:name "value"@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:or _:4303a167aa6b4c56bda6c5b3138407b924973;
+  dash:searchWidget core:SearchProperty .
+
+_:4303a167aa6b4c56bda6c5b3138407b924971 sh:datatype xsd:string .
+
+_:4303a167aa6b4c56bda6c5b3138407b924972 sh:datatype rdf:langString .
+
+_:4303a167aa6b4c56bda6c5b3138407b924973 a rdf:List;
+  rdf:first _:4303a167aa6b4c56bda6c5b3138407b924971;
+  rdf:rest _:4303a167aa6b4c56bda6c5b3138407b924974 .
+
+_:4303a167aa6b4c56bda6c5b3138407b924974 rdf:first _:4303a167aa6b4c56bda6c5b3138407b924972;
+  rdf:rest rdf:nil .
+
+spao-pf:E42_Identifier_P2_has_type sh:path crm:P2_has_type;
+  sh:name "has type"@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  sh:node spao-pf:Identifier_Type .
+
+spao-pf:E42_Identifier_value sh:path rdf:value;
+  sh:name "value"@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-pf:E52_Time-Span_label sh:path rdfs:label;
+  sh:name "label"@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-pf:E52_Time-Span_P82a_begin_of_the_begin sh:path crm:P82a_begin_of_the_begin;
+  sh:name "begin of the begin"@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:date .
+
+spao-pf:E52_Time-Span_P82b_end_of_the_end sh:path crm:P82b_end_of_the_end;
+  sh:name "end of the end"@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:date .
+
+spao-pf:E4_Period_label sh:path rdfs:label;
+  sh:name "label"@en;
+  sh:minCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype rdf:langString .
+
+spao-pf:E4_Period_P4_has_time-span sh:path crm:P4_has_time-span;
+  sh:name "has time-span"@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E52_Time-Span .
+
+spao-pf:Performance_Type_inScheme sh:path skos:inScheme;
+  sh:name "in scheme"@en;
+  sh:hasValue vocab:hl .
+
+spao-pf:Title_Type_inScheme sh:path skos:inScheme;
+  sh:name "in scheme"@en;
+  sh:hasValue vocab:go .
+
+spao-pf:Linguistic_Object_Type_inScheme sh:path skos:inScheme;
+  sh:name "in scheme"@en;
+  sh:hasValue vocab:eo .
+
+spao-pf:Activity_Type_inScheme sh:path skos:inScheme;
+  sh:name "in scheme"@en;
+  sh:hasValue vocab:mu .
+
+spao-pf:Certainty_inScheme sh:path skos:inScheme;
+  sh:name "in scheme"@en;
+  sh:hasValue vocab:ct .
+
+spao-pf:Performance_Work_Type_inScheme sh:path skos:inScheme;
+  sh:name "in scheme"@en;
+  sh:hasValue vocab:mn .
+
+spao-pf:Identifier_Type_inScheme sh:path skos:inScheme;
+  sh:name "in scheme"@en;
+  sh:hasValue vocab:id .
+
+spao-pf:Language_inScheme sh:path skos:inScheme;
+  sh:name "in scheme"@en;
+  sh:hasValue vocab:lg .
+
+spao-pf:RecordingGenre_inScheme sh:path skos:inScheme;
+  sh:name "in scheme"@en;
+  sh:hasValue vocab:rg .
+
+spao-pf:list_activitytypes_alpha a datasources:SPARQLQuery;
+  datasources:queryString """PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+SELECT DISTINCT ?uri ?label 
+WHERE { 
+ ?uri skos:inScheme <http://vocab.performing-arts.ch/mu> .
+ ?uri skos:prefLabel ?label .
+ FILTER(isIRI(?uri)) FILTER(lang(?label) = \"\" || lang(?label) = $lang) 
+} 
+ORDER BY UCASE(STR(?label))
+LIMIT 500""" .
+
+spao-pf:Performances dct:title "Performances"@fr, "Performances"@en;
+  sh:order 1 .
+
+spao-pf:Performative_Work dct:title "Oeuvre Performative & Performance Plan"@fr, "Performative Work & Performance Plan"@en;
+  sh:order 2 .
+
+spao-pf:Non-Performative_Work dct:title "Oeuvre non-performative"@fr, "Non-Performative Work"@en;
+  sh:order 3 .

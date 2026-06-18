@@ -3,7 +3,7 @@ import { AddUserInputBtn } from "../buttons/AddUserInputBtn";
 import { AbstractWidget, ValueRepetition } from "./AbstractWidget";
 import { I18n } from "../../settings/I18n";
 import { HTMLComponent } from "../HtmlComponent";
-import { LabelledCriteria, DateCriteria } from "../../SparnaturalQueryIfc";
+import { LabelledCriteria, DateCriteria, Criteria } from "../../SparnaturalQueryIfc";
 
 
 /**
@@ -195,5 +195,29 @@ export class DatesWidget extends AbstractWidget {
     }
     return lbl;
   };
+
+  // Reuses parseInput (DOM-free) which normalizes the bounds and computes the label.
+  buildValueFromCriteria<T extends Criteria>(criteria: T): LabelledCriteria<T> {
+    return this.parseInput({
+      label: "",
+      criteria: criteria as unknown as DateCriteria,
+    }) as unknown as LabelledCriteria<T>;
+  }
+
+  // Label of a date criteria, computed from its start/stop bounds (DOM-free).
+  getValueLabel(criteria: DateCriteria): string {
+    let start = criteria.start ? new Date(criteria.start) : "";
+    let stop = criteria.stop ? new Date(criteria.stop) : "";
+    return this.#getValueLabel(start, stop);
+  }
+
+  // Parses "start|stop" (or "start|" / "|stop") into a DateCriteria.
+  parseRawValue(raw: string): DateCriteria {
+    let { first, second } = this.splitRawRange(raw);
+    return {
+      start: first !== "" ? first : "",
+      stop: second !== "" ? second : "",
+    };
+  }
 
 }

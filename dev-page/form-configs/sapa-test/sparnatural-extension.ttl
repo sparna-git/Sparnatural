@@ -1,0 +1,1354 @@
+@prefix premis: <http://www.loc.gov/premis/rdf/v1#> .
+@prefix schema: <http://schema.org/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix volipi: <http://data.sparna.fr/ontologies/volipi#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix skosthes: <http://purl.org/iso25964/skos-thes#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix qb: <http://purl.org/linked-data/cube#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix rico: <https://www.ica.org/standards/RiC/ontology#> .
+@prefix vocab: <http://vocab.performing-arts.ch/> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix euvoc: <http://publications.europa.eu/ontology/euvoc#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix crm: <http://www.cidoc-crm.org/cidoc-crm/> .
+@prefix spao-at: <http://shapes.performing-arts.ch/authorities/> .
+@prefix rda-u: <http://rdaregistry.info/Elements/u/> .
+@prefix adms: <http://www.w3.org/ns/adms#> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix xls2rdf: <https://xls2rdf.sparna.fr/vocabulary#> .
+@prefix spao-pf: <http://shapes.performing-arts.ch/performances/> .
+@prefix spao-sparnatural: <http://shapes.performing-arts.ch/sparnatural/> .
+@prefix crypto: <http://id.loc.gov/vocabulary/preservation/cryptographicHashFunctions/> .
+@prefix core: <http://data.sparna.fr/ontologies/sparnatural-config-core#> .
+@prefix spao-i: <http://shapes.performing-arts.ch/instantiations/> .
+@prefix olo: <http://purl.org/ontology/olo/core#> .
+@prefix shacl-play: <https://shacl-play.sparna.fr/ontology#> .
+@prefix datasources: <http://data.sparna.fr/ontologies/sparnatural-config-datasources#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ebucore: <https://www.ebu.ch/metadata/ontologies/ebucore#> .
+@prefix spao-co: <http://shapes.performing-arts.ch/collections/> .
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix spao: <http://ontology.performing-arts.ch/> .
+@prefix frbroo: <http://iflastandards.info/ns/fr/frbr/frbroo/> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix skosxl: <http://www.w3.org/2008/05/skos-xl#> .
+
+<http://shapes.performing-arts.ch/sparnatural> a owl:Ontology;
+  dct:hasFormat <https://docs.google.com/spreadsheets/d/1UWfCJmgvgwJ0yOs6Ox_qzn47heaiQ0cx/export?format=xlsx>,
+    <https://xls2rdf.sparna.fr/rest/convert?url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2F1UWfCJmgvgwJ0yOs6Ox_qzn47heaiQ0cx%2Fexport%3Fformat%3Dxlsx&noPostProcessings=true>;
+  rdfs:seeAlso <https://shacl-play.sparna.fr/play/doc?url=https%3A%2F%2Fxls2rdf.sparna.fr%2Frest%2Fconvert%3Furl%3Dhttps%253A%252F%252Fdocs.google.com%252Fspreadsheets%252Fd%252F1UWfCJmgvgwJ0yOs6Ox_qzn47heaiQ0cx%252Fexport%253Fformat%253Dxlsx%26noPostProcessings%3Dtrue&includeDiagram=true&language=en> .
+
+spao-sparnatural:Fonds a sh:NodeShape;
+  sh:target spao-sparnatural:Fonds-target;
+  rdfs:label "Fonds"@en;
+  sh:node spao-co:RecordSet;
+  skos:definition "This is the subset of RecordSet that are of type \"fonds\""@en .
+
+spao-sparnatural:Fonds-target sh:select """SELECT $this
+WHERE {
+ $this a <https://www.ica.org/standards/RiC/ontology#RecordSet> .
+ $this <https://www.ica.org/standards/RiC/ontology#hasRecordSetType> <http://vocab.performing-arts.ch/rsfnd> .
+}""" .
+
+spao-sparnatural:MainIdentifier a sh:NodeShape;
+  sh:target spao-sparnatural:MainIdentifier-target;
+  rdfs:label "Identifier (main)"@en;
+  sh:node spao-i:Identifier, spao-co:Identifier;
+  skos:definition "Identifiers which are unique IDs"@en .
+
+spao-sparnatural:MainIdentifier-target sh:select """SELECT $this
+WHERE {
+ $this a <https://www.ica.org/standards/RiC/ontology#Identifier> .
+ $this <http://www.cidoc-crm.org/cidoc-crm/P2_has_type> <http://vocab.performing-arts.ch/iduni>
+}""" .
+
+spao-sparnatural:Type a sh:NodeShape;
+  sh:target spao-sparnatural:Type-target;
+  rdfs:label "Type"@en .
+
+spao-sparnatural:Type-target sh:select """SELECT $this
+WHERE {
+ VALUES $this { <http://www.loc.gov/premis/rdf/v1#Representation> <https://www.ebu.ch/metadata/ontologies/ebucore#MediaResource> }
+}""" .
+
+spao-sparnatural:TypeActor a sh:NodeShape;
+  rdfs:label "Type of actor"@en .
+
+spao-sparnatural:Instantiation-IIIF a sh:NodeShape;
+  sh:target spao-sparnatural:Instantiation-IIIF-target;
+  rdfs:label "Instantiation IIIF"@en;
+  sh:node spao-i:Instantiation .
+
+spao-sparnatural:Instantiation-IIIF-target sh:select """SELECT $this
+WHERE {
+ $this <https://www.ica.org/standards/RiC/ontology#hasCarrierType> <http://vocab.performing-arts.ch/fvtif>.
+}""" .
+
+spao-sparnatural:Instantiation-IIIF-Man a sh:NodeShape;
+  sh:target spao-sparnatural:Instantiation-IIIF-Man-target;
+  rdfs:label "Instantiation IIIF Manifest"@en;
+  sh:node spao-i:Instantiation .
+
+spao-sparnatural:Instantiation-IIIF-Man-target sh:select """SELECT $this
+WHERE {
+ $this <https://www.ica.org/standards/RiC/ontology#hasCarrierType> <http://vocab.performing-arts.ch/fvman>.
+}""" .
+
+spao-sparnatural:Instantiation-Vimeo a sh:NodeShape;
+  sh:target spao-sparnatural:Instantiation-Vimeo-target;
+  rdfs:label "Instantiation Vimeo"@en;
+  sh:node spao-i:Instantiation .
+
+spao-sparnatural:Instantiation-Vimeo-target sh:select """SELECT $this
+WHERE {
+ $this <https://www.ica.org/standards/RiC/ontology#hasCarrierType> <http://vocab.performing-arts.ch/fvonl>. FILTER(REGEX(str($this), \"vimeo\"))
+}""" .
+
+spao-sparnatural:Instantiation-PDF a sh:NodeShape;
+  sh:target spao-sparnatural:Instantiation-PDF-target;
+  rdfs:label "Instantiation PDF"@en;
+  sh:node spao-i:Instantiation .
+
+spao-sparnatural:Instantiation-PDF-target sh:select """SELECT $this
+WHERE {
+ $this <https://www.ica.org/standards/RiC/ontology#hasCarrierType> <http://vocab.performing-arts.ch/fvonl>. FILTER(REGEX(str($this), \"pdf$\"))
+}""" .
+
+spao-sparnatural:Actor a sh:NodeShape;
+  rdfs:label "Actor"@en;
+  sh:property spao-sparnatural:Actor_label, spao-sparnatural:Actor_type .
+
+spao-sparnatural:Agent a sh:NodeShape;
+  sh:target spao-sparnatural:Agent-target;
+  rdfs:label "Agent"@en;
+  sh:property spao-sparnatural:Agent_label, spao-sparnatural:Agent_type, spao-sparnatural:Agent_name,
+    spao-sparnatural:Agent_firstDate, spao-sparnatural:Agent_endDate, spao-sparnatural:Agent_description,
+    spao-sparnatural:Agent_gender .
+
+spao-sparnatural:Agent-target sh:select """SELECT $this
+WHERE {
+ $this a ?type .
+ VALUES ?type {
+ # All except E39_Actor
+ <http://www.cidoc-crm.org/cidoc-crm/E21_Person>
+ <http://www.cidoc-crm.org/cidoc-crm/E74_Group>
+ <http://www.cidoc-crm.org/cidoc-crm/E40_Legal_Body>
+ <http://www.cidoc-crm.org/cidoc-crm/E28_Conceptual_Object>
+ <https://www.ica.org/standards/RiC/ontology#Family>
+ }
+}""" .
+
+spao-sparnatural:Place a sh:NodeShape;
+  sh:targetClass rico:Place;
+  rdfs:label "Place"@en;
+  sh:property spao-sparnatural:Place_label .
+
+spao-sparnatural:Thing a sh:NodeShape;
+  rdfs:label "Thing"@en;
+  sh:property spao-sparnatural:Thing_label .
+
+spao-sparnatural:RecordResource_optional_isOrWasConstituentOf_zeroOrMore_isOrWasIncludedIn_Fonds
+  sh:path _:c3c52ee914074bcb8ccadd35b78ff86c675;
+  sh:name "is in fonds"@en;
+  sh:description "Connects this RecordResource (Record or RecortPart) to its Fonds - this is used to be retrieved as a column in the result set"@fr;
+  sh:minCount 1;
+  sh:maxCount "sh:IRI"^^xsd:integer;
+  sh:node spao-sparnatural:Fonds;
+  dash:searchWidget core:AutocompleteProperty;
+  datasources:datasource spao-sparnatural:search_rdfslabel_without_language .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c675 rdf:first _:c3c52ee914074bcb8ccadd35b78ff86c676;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c677 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c676 sh:zeroOrOnePath rico:isOrWasConstituentOf .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c677 rdf:first _:c3c52ee914074bcb8ccadd35b78ff86c678;
+  rdf:rest rdf:nil .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c678 sh:zeroOrMorePath rico:isOrWasIncludedIn .
+
+spao-co:RecordResource sh:property spao-sparnatural:RecordResource_optional_isOrWasConstituentOf_zeroOrMore_isOrWasIncludedIn_Fonds,
+    spao-sparnatural:RecordResource_optional_isOrWasConstituentOf_zeroOrMore_isOrWasIncludedIn,
+    spao-sparnatural:Instantiation_hasInstantiation_NonSelectable, spao-sparnatural:RecordResource_type,
+    spao-sparnatural:RecordResource_hasRecordSetType, spao-sparnatural:RecordResource_deliveryNumber,
+    spao-sparnatural:RecordResource_parent, spao-sparnatural:RecordResource_hasExtent,
+    spao-sparnatural:RecordResource_hasOrHadLocation_rec, spao-sparnatural:RecordResource_hasOrHadLocation,
+    spao-sparnatural:RecordResource_hasPacking, spao-sparnatural:RecordResource_hasDoublets,
+    spao-sparnatural:RecordResource_history, spao-sparnatural:RecordResource_isAssociatedWithEvent,
+    spao-sparnatural:RecordResource_hasCreator, spao-sparnatural:RecordResource_hasProvenance,
+    spao-sparnatural:RecordResource_isAssociatedWithPlace, spao-sparnatural:RecordResource_hasDocumentaryFormType_rec,
+    spao-sparnatural:RecordResource_hasDocumentaryFormType, spao-sparnatural:RecordResource_hasOrHadLanguage_rec,
+    spao-sparnatural:RecordResource_hasOrHadLanguage, spao-sparnatural:RecordResource_hasAnnotationRecto,
+    spao-sparnatural:RecordResource_hasAnnotationVerso, spao-sparnatural:RecordResource_hasRecordState,
+    spao-sparnatural:RecordResource_conditionsOfAccess, spao-sparnatural:RecordResource_copyrightNotice,
+    spao-sparnatural:RecordResource_hasCredit, spao-sparnatural:RecordResource_conditionsOfUse,
+    spao-sparnatural:RecordResource_hasResponsibleEmployee, spao-sparnatural:RecordResource_comment,
+    spao-sparnatural:RecordResource_hasOrhadSubject .
+
+spao-sparnatural:RecordResource_optional_isOrWasConstituentOf_zeroOrMore_isOrWasIncludedIn
+  sh:path _:c3c52ee914074bcb8ccadd35b78ff86c679;
+  sh:name "is under"@en;
+  sh:description "Connects this RecordResource (Record or RecortPart) to an ancestor Record Resource"@fr;
+  sh:minCount 1;
+  sh:maxCount "sh:IRI"^^xsd:integer;
+  sh:node spao-co:RecordResource;
+  dash:searchWidget core:AutocompleteProperty;
+  datasources:datasource spao-sparnatural:search_rdfslabel_without_language .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c679 rdf:first _:c3c52ee914074bcb8ccadd35b78ff86c680;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c681 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c680 sh:zeroOrOnePath rico:isOrWasConstituentOf .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c681 rdf:first _:c3c52ee914074bcb8ccadd35b78ff86c682;
+  rdf:rest rdf:nil .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c682 sh:zeroOrMorePath rico:isOrWasIncludedIn .
+
+spao-sparnatural:Instantiation_inversePath_includedIn sh:path _:c3c52ee914074bcb8ccadd35b78ff86c683;
+  sh:name "includes file"@en;
+  sh:nodeKind sh:IRI;
+  sh:node spao-i:File .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c683 sh:inversePath premis:isIncludedIn .
+
+spao-i:Instantiation sh:property spao-sparnatural:Instantiation_inversePath_includedIn,
+    spao-sparnatural:Instantiation_inversePath_hasInstantiation, spao-sparnatural:Instantiation_inversePath_hasDerivedInstantiation,
+    spao-sparnatural:Instantiation_hasCarrierType_rec, spao-sparnatural:Instantiation_hasOrHadLocation_rec,
+    spao-sparnatural:Instantiation_hasArchivalStatus_rec, spao-sparnatural:Instantiation_P45_consists_of,
+    spao-sparnatural:Instantiation_physicalCharacteristics, spao-sparnatural:Instantiation_aspectRatio_FileOrInst,
+    spao-sparnatural:Instantiation_channels_FileOrInst, spao-sparnatural:Instantiation_frameRate_FileOrInst,
+    spao-sparnatural:Instantiation_hasStandard_FileOrInst, spao-sparnatural:Instantiation_height_FileOrInst,
+    spao-sparnatural:Instantiation_width_FileOrInst, spao-sparnatural:Instantiation_P60558_FileOrInst,
+    spao-sparnatural:Instantiation_samplingRate_FileOrInst, spao-sparnatural:Instantiation_scanningFormat_FileOrInst,
+    spao-sparnatural:Instantiation_scanningOrder_FileOrInst, spao-sparnatural:Instantiation_type;
+  sh:deactivated false .
+
+spao-sparnatural:Instantiation_inversePath_hasInstantiation sh:path _:c3c52ee914074bcb8ccadd35b78ff86c684;
+  sh:name "instantiates"@en;
+  sh:nodeKind sh:IRI;
+  sh:node spao-co:RecordResource .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c684 sh:inversePath rico:hasInstantiation .
+
+spao-sparnatural:Instantiation_inversePath_hasDerivedInstantiation sh:path _:c3c52ee914074bcb8ccadd35b78ff86c685;
+  sh:name "is derived from instantiation"@en;
+  sh:nodeKind sh:IRI;
+  sh:class rico:Instantiation .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c685 sh:inversePath rico:hasDerivedInstantiation .
+
+spao-sparnatural:Instantiation_hasCarrierType_rec sh:path _:c3c52ee914074bcb8ccadd35b78ff86c686;
+  sh:name "has carrier type (or more specific)"@en;
+  sh:nodeKind sh:IRI;
+  sh:class rico:CarrierType;
+  sh:node spao-i:CarrierType;
+  dash:searchWidget core:TreeProperty;
+  datasources:datasource datasources:list_skospreflabel_alpha;
+  datasources:treeRootsDatasource spao-i:tree_root_carriertype_datasource;
+  datasources:treeChildrenDatasource spao-i:tree_children_skos_datasource .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c686 rdf:first rico:hasCarrierType;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c687 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c687 rdf:first _:c3c52ee914074bcb8ccadd35b78ff86c688;
+  rdf:rest rdf:nil .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c688 sh:zeroOrMorePath skos:broader .
+
+spao-sparnatural:Instantiation_hasOrHadLocation_rec sh:path _:c3c52ee914074bcb8ccadd35b78ff86c689;
+  sh:name "has or had location (or more specific)"@en;
+  sh:nodeKind sh:IRI;
+  sh:class spao:ArchivalPlace;
+  dash:searchWidget core:TreeProperty;
+  datasources:treeRootsDatasource spao-i:tree_root_archivalplace_datasource;
+  datasources:treeChildrenDatasource spao-i:tree_children_archivalplace_datasource .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c689 rdf:first rico:hasOrHadLocation;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c690 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c690 rdf:first _:c3c52ee914074bcb8ccadd35b78ff86c691;
+  rdf:rest rdf:nil .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c691 sh:zeroOrMorePath rico:containedBy .
+
+spao-sparnatural:Instantiation_hasArchivalStatus_rec sh:path _:c3c52ee914074bcb8ccadd35b78ff86c692;
+  sh:name "has archival status (or more specific)"@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  sh:node spao-i:PreservationState;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource datasources:list_skospreflabel_alpha .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c692 rdf:first spao:hasArchivalStatus;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c693 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c693 rdf:first _:c3c52ee914074bcb8ccadd35b78ff86c694;
+  rdf:rest rdf:nil .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c694 sh:zeroOrMorePath skos:broader .
+
+spao-sparnatural:File_originalName_search sh:path premis:originalName;
+  sh:name "original name (search)"@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string;
+  dash:searchWidget core:SearchProperty .
+
+spao-i:File sh:property spao-sparnatural:File_originalName_search;
+  sh:deactivated false .
+
+spao-sparnatural:Instantiation_P45_consists_of sh:path crm:P45_consists_of;
+  sh:name "material"@en;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  sh:node spao-i:Material;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource datasources:list_skospreflabel_alpha .
+
+spao-sparnatural:Instantiation_physicalCharacteristics sh:path rico:physicalCharacteristics;
+  sh:name "physical characteristics"@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-sparnatural:Instantiation_aspectRatio_FileOrInst sh:path _:c3c52ee914074bcb8ccadd35b78ff86c695;
+  sh:name "aspect ratio (Instantiation or File)"@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource datasources:list_skospreflabel_alpha .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c695 sh:alternativePath _:c3c52ee914074bcb8ccadd35b78ff86c696 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c696 rdf:first ebucore:aspectRatio;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c697 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c697 rdf:first _:c3c52ee914074bcb8ccadd35b78ff86c698;
+  rdf:rest rdf:nil .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c698 rdf:first _:c3c52ee914074bcb8ccadd35b78ff86c699;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c700 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c699 sh:inversePath premis:isIncludedIn .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c700 rdf:first ebucore:aspectRatio;
+  rdf:rest rdf:nil .
+
+spao-sparnatural:Instantiation_channels_FileOrInst sh:path _:c3c52ee914074bcb8ccadd35b78ff86c701;
+  sh:name "channels (Instantiation or File)"@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource datasources:list_skospreflabel_alpha .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c701 sh:alternativePath _:c3c52ee914074bcb8ccadd35b78ff86c702 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c702 rdf:first ebucore:channels;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c703 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c703 rdf:first _:c3c52ee914074bcb8ccadd35b78ff86c704;
+  rdf:rest rdf:nil .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c704 rdf:first _:c3c52ee914074bcb8ccadd35b78ff86c705;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c706 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c705 sh:inversePath premis:isIncludedIn .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c706 rdf:first ebucore:channels;
+  rdf:rest rdf:nil .
+
+spao-sparnatural:Instantiation_frameRate_FileOrInst sh:path _:c3c52ee914074bcb8ccadd35b78ff86c707;
+  sh:name "frame rate (Instantiation or File)"@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource datasources:list_skospreflabel_alpha .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c707 sh:alternativePath _:c3c52ee914074bcb8ccadd35b78ff86c708 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c708 rdf:first ebucore:frameRate;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c709 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c709 rdf:first _:c3c52ee914074bcb8ccadd35b78ff86c710;
+  rdf:rest rdf:nil .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c710 rdf:first _:c3c52ee914074bcb8ccadd35b78ff86c711;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c712 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c711 sh:inversePath premis:isIncludedIn .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c712 rdf:first ebucore:frameRate;
+  rdf:rest rdf:nil .
+
+spao-sparnatural:Instantiation_hasStandard_FileOrInst sh:path _:c3c52ee914074bcb8ccadd35b78ff86c713;
+  sh:name "has standard (Instantiation or File)"@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class ebucore:Standard;
+  sh:node spao-i:Standard;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource datasources:list_skospreflabel_alpha .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c713 sh:alternativePath _:c3c52ee914074bcb8ccadd35b78ff86c714 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c714 rdf:first ebucore:hasStandard;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c715 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c715 rdf:first _:c3c52ee914074bcb8ccadd35b78ff86c716;
+  rdf:rest rdf:nil .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c716 rdf:first _:c3c52ee914074bcb8ccadd35b78ff86c717;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c718 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c717 sh:inversePath premis:isIncludedIn .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c718 rdf:first ebucore:hasStandard;
+  rdf:rest rdf:nil .
+
+spao-sparnatural:Instantiation_height_FileOrInst sh:path _:c3c52ee914074bcb8ccadd35b78ff86c719;
+  sh:name "height (Instantiation or File)"@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource datasources:list_skospreflabel_alpha .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c719 sh:alternativePath _:c3c52ee914074bcb8ccadd35b78ff86c720 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c720 rdf:first ebucore:height;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c721 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c721 rdf:first _:c3c52ee914074bcb8ccadd35b78ff86c722;
+  rdf:rest rdf:nil .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c722 rdf:first _:c3c52ee914074bcb8ccadd35b78ff86c723;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c724 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c723 sh:inversePath premis:isIncludedIn .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c724 rdf:first ebucore:height;
+  rdf:rest rdf:nil .
+
+spao-sparnatural:Instantiation_width_FileOrInst sh:path _:c3c52ee914074bcb8ccadd35b78ff86c725;
+  sh:name "width (Instantiation or File)"@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource datasources:list_skospreflabel_alpha .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c725 sh:alternativePath _:c3c52ee914074bcb8ccadd35b78ff86c726 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c726 rdf:first ebucore:width;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c727 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c727 rdf:first _:c3c52ee914074bcb8ccadd35b78ff86c728;
+  rdf:rest rdf:nil .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c728 rdf:first _:c3c52ee914074bcb8ccadd35b78ff86c729;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c730 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c729 sh:inversePath premis:isIncludedIn .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c730 rdf:first ebucore:width;
+  rdf:rest rdf:nil .
+
+spao-sparnatural:Instantiation_P60558_FileOrInst sh:path _:c3c52ee914074bcb8ccadd35b78ff86c731;
+  sh:name "color content (Instantiation or File)"@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  sh:node spao-i:ColorContent;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource datasources:list_skospreflabel_alpha .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c731 sh:alternativePath _:c3c52ee914074bcb8ccadd35b78ff86c732 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c732 rdf:first rda-u:P60558;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c733 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c733 rdf:first _:c3c52ee914074bcb8ccadd35b78ff86c734;
+  rdf:rest rdf:nil .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c734 rdf:first _:c3c52ee914074bcb8ccadd35b78ff86c735;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c736 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c735 sh:inversePath premis:isIncludedIn .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c736 rdf:first rda-u:P60558;
+  rdf:rest rdf:nil .
+
+spao-sparnatural:Instantiation_samplingRate_FileOrInst sh:path _:c3c52ee914074bcb8ccadd35b78ff86c737;
+  sh:name "sampling rate (Instantiation or File)"@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource datasources:list_skospreflabel_alpha .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c737 sh:alternativePath _:c3c52ee914074bcb8ccadd35b78ff86c738 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c738 rdf:first ebucore:samplingRate;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c739 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c739 rdf:first _:c3c52ee914074bcb8ccadd35b78ff86c740;
+  rdf:rest rdf:nil .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c740 rdf:first _:c3c52ee914074bcb8ccadd35b78ff86c741;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c742 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c741 sh:inversePath premis:isIncludedIn .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c742 rdf:first ebucore:samplingRate;
+  rdf:rest rdf:nil .
+
+spao-sparnatural:Instantiation_scanningFormat_FileOrInst sh:path _:c3c52ee914074bcb8ccadd35b78ff86c743;
+  sh:name "scanning format (Instantiation or File)"@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  sh:node spao-i:ScanningFormat;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource datasources:list_skospreflabel_alpha .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c743 sh:alternativePath _:c3c52ee914074bcb8ccadd35b78ff86c744 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c744 rdf:first ebucore:scanningFormat;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c745 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c745 rdf:first _:c3c52ee914074bcb8ccadd35b78ff86c746;
+  rdf:rest rdf:nil .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c746 rdf:first _:c3c52ee914074bcb8ccadd35b78ff86c747;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c748 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c747 sh:inversePath premis:isIncludedIn .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c748 rdf:first ebucore:scanningFormat;
+  rdf:rest rdf:nil .
+
+spao-sparnatural:Instantiation_scanningOrder_FileOrInst sh:path _:c3c52ee914074bcb8ccadd35b78ff86c749;
+  sh:name "scanning order (Instantiation or File)"@en;
+  sh:class skos:Concept;
+  sh:node spao-i:ScanningOrder;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource datasources:list_skospreflabel_alpha .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c749 sh:alternativePath _:c3c52ee914074bcb8ccadd35b78ff86c750 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c750 rdf:first ebucore:scanningOrder;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c751 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c751 rdf:first _:c3c52ee914074bcb8ccadd35b78ff86c752;
+  rdf:rest rdf:nil .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c752 rdf:first _:c3c52ee914074bcb8ccadd35b78ff86c753;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c754 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c753 sh:inversePath premis:isIncludedIn .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c754 rdf:first ebucore:scanningOrder;
+  rdf:rest rdf:nil .
+
+spao-sparnatural:Instantiation_type sh:path rdf:type;
+  sh:name "type"@en;
+  sh:nodeKind sh:IRI;
+  sh:node spao-sparnatural:Type;
+  sh:in _:c3c52ee914074bcb8ccadd35b78ff86c755;
+  dash:searchWidget core:ListProperty .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c755 rdf:first premis:Representation;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c756 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c756 rdf:first ebucore:MediaResource;
+  rdf:rest rdf:nil .
+
+spao-sparnatural:Instantiation_hasInstantiation_NonSelectable sh:path rico:hasInstantiation;
+  sh:name "with instantiation (yes/no)"@en;
+  sh:nodeKind sh:IRI;
+  sh:node spao-i:Instantiation;
+  dash:searchWidget core:NonSelectableProperty .
+
+spao-sparnatural:RecordResource_type sh:path rdf:type;
+  sh:name "type"@en;
+  sh:nodeKind sh:IRI;
+  sh:in _:c3c52ee914074bcb8ccadd35b78ff86c757 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c757 rdf:first spao-co:Record;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c758 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c758 rdf:first spao-co:RecordSet;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c759 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c759 rdf:first spao-co:RecordPart;
+  rdf:rest rdf:nil .
+
+spao-sparnatural:RecordResource_hasRecordSetType sh:path rico:hasRecordSetType;
+  sh:name "has record set type"@en;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource datasources:list_skospreflabel_alpha .
+
+spao-sparnatural:RecordResource_deliveryNumber sh:path spao:deliveryNumber;
+  sh:name "delivery number"@en;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string;
+  dash:searchWidget core:SearchProperty .
+
+spao-sparnatural:RecordResource_parent sh:path _:c3c52ee914074bcb8ccadd35b78ff86c760;
+  sh:name "parent"@en;
+  sh:nodeKind sh:IRI;
+  sh:node spao-co:RecordResource .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c760 sh:alternativePath _:c3c52ee914074bcb8ccadd35b78ff86c761 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c761 rdf:first rico:isOrWasIncludedIn;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c762 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c762 rdf:first rico:isOrWasConstituentOf;
+  rdf:rest rdf:nil .
+
+spao-sparnatural:RecordResource_hasExtent sh:path rico:hasExtent;
+  sh:name "has extent"@en;
+  sh:nodeKind sh:IRI;
+  sh:class rico:RecordResourceExtent .
+
+spao-sparnatural:RecordResource_hasOrHadLocation_rec sh:path _:c3c52ee914074bcb8ccadd35b78ff86c763;
+  sh:name "has or had location (or more specific)"@en;
+  sh:nodeKind sh:IRI;
+  sh:node spao-co:ArchivalPlace;
+  dash:searchWidget core:TreeProperty;
+  datasources:datasource datasources:list_skospreflabel_alpha;
+  datasources:treeRootsDatasource spao-co:tree_root_archivalplace_datasource;
+  datasources:treeChildrenDatasource spao-co:tree_children_archivalplace_datasource .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c763 rdf:first rico:hasOrHadLocation;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c764 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c764 rdf:first _:c3c52ee914074bcb8ccadd35b78ff86c765;
+  rdf:rest rdf:nil .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c765 sh:zeroOrMorePath rico:containedBy .
+
+spao-sparnatural:RecordResource_hasOrHadLocation sh:path rico:hasOrHadLocation;
+  sh:name "has or had location"@en;
+  sh:nodeKind sh:IRI;
+  sh:class spao:ArchivalPlace;
+  sh:node spao-co:ArchivalPlace .
+
+spao-sparnatural:RecordResource_hasPacking sh:path spao:hasPacking;
+  sh:name "has packing"@en;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource datasources:list_skospreflabel_alpha .
+
+spao-sparnatural:RecordResource_hasDoublets sh:path spao:hasDoublets;
+  sh:name "has doublets"@en;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string;
+  dash:searchWidget core:ListProperty .
+
+spao-sparnatural:RecordResource_history sh:path rico:history;
+  sh:name "history"@en;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-sparnatural:RecordResource_isAssociatedWithEvent sh:path rico:isAssociatedWithEvent;
+  sh:name "isAssociatedWithEvent"@en;
+  sh:nodeKind sh:IRI;
+  sh:class rico:Event;
+  dash:searchWidget core:NonSelectableProperty .
+
+spao-sparnatural:RecordResource_hasCreator sh:path rico:hasCreator;
+  sh:name "hasCreator"@en;
+  sh:nodeKind sh:IRI;
+  sh:node spao-sparnatural:Actor;
+  dash:searchWidget core:AutocompleteProperty .
+
+spao-sparnatural:RecordResource_hasProvenance sh:path rico:hasProvenance;
+  sh:name "hasProvenance"@en;
+  sh:nodeKind sh:IRI;
+  sh:node spao-sparnatural:Actor;
+  dash:searchWidget core:AutocompleteProperty .
+
+spao-sparnatural:RecordResource_isAssociatedWithPlace sh:path rico:isAssociatedWithPlace;
+  sh:name "isAssociatedWithPlace"@en;
+  sh:nodeKind sh:IRI;
+  sh:class rico:Place .
+
+spao-sparnatural:RecordResource_hasDocumentaryFormType_rec sh:path _:c3c52ee914074bcb8ccadd35b78ff86c766;
+  sh:name "hasDocumentaryFormType (or more specific)"@en;
+  sh:nodeKind sh:IRI;
+  sh:class rico:DocumentaryFormType;
+  dash:searchWidget core:TreeProperty;
+  datasources:treeRootsDatasource spao-co:tree_root_documentaryformtype_datasource .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c766 rdf:first rico:hasDocumentaryFormType;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c767 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c767 rdf:first _:c3c52ee914074bcb8ccadd35b78ff86c768;
+  rdf:rest rdf:nil .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c768 sh:zeroOrMorePath skos:broader .
+
+spao-sparnatural:RecordResource_hasDocumentaryFormType sh:path rico:hasDocumentaryFormType;
+  sh:name "hasDocumentaryFormType"@en;
+  sh:nodeKind sh:IRI;
+  sh:class rico:DocumentaryFormType;
+  sh:node spao-co:DocumentaryFormType .
+
+spao-sparnatural:RecordResource_hasOrHadLanguage_rec sh:path _:c3c52ee914074bcb8ccadd35b78ff86c769;
+  sh:name "hasOrHadLanguage (or more specific)"@en;
+  sh:nodeKind sh:IRI;
+  sh:node spao-co:Language;
+  dash:searchWidget core:TreeProperty;
+  datasources:treeRootsDatasource spao-co:tree_root_language_datasource .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c769 rdf:first rico:hasOrHadLanguage;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c770 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c770 rdf:first _:c3c52ee914074bcb8ccadd35b78ff86c771;
+  rdf:rest rdf:nil .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c771 sh:zeroOrMorePath skos:broader .
+
+spao-sparnatural:RecordResource_hasOrHadLanguage sh:path rico:hasOrHadLanguage;
+  sh:name "hasOrHadLanguage"@en;
+  sh:nodeKind sh:IRI;
+  sh:class rico:Language;
+  sh:node spao-co:Language .
+
+spao-sparnatural:RecordResource_hasAnnotationRecto sh:path spao:hasAnnotationRecto;
+  sh:name "hasAnnotationRecto"@en;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string;
+  dash:searchWidget core:ListProperty .
+
+spao-sparnatural:RecordResource_hasAnnotationVerso sh:path spao:hasAnnotationVerso;
+  sh:name "hasAnnotationVerso"@en;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string;
+  dash:searchWidget core:ListProperty .
+
+spao-sparnatural:RecordResource_hasRecordState sh:path rico:hasRecordState;
+  sh:name "hasRecordState"@en;
+  sh:nodeKind sh:IRI;
+  sh:node spao-co:RecordState;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource datasources:list_skospreflabel_alpha .
+
+spao-sparnatural:RecordResource_conditionsOfAccess sh:path rico:conditionsOfAccess;
+  sh:name "conditionsOfAccess"@en;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string;
+  dash:searchWidget core:ListProperty .
+
+spao-sparnatural:RecordResource_copyrightNotice sh:path schema:copyrightNotice;
+  sh:name "copyrightNotice"@en;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string;
+  dash:searchWidget core:SearchProperty .
+
+spao-sparnatural:RecordResource_hasCredit sh:path spao:hasCredit;
+  sh:name "hasCredit"@en;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string;
+  dash:searchWidget core:ListProperty .
+
+spao-sparnatural:RecordResource_conditionsOfUse sh:path rico:conditionsOfUse;
+  sh:name "conditionsOfUse"@en;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string;
+  dash:searchWidget core:ListProperty .
+
+spao-sparnatural:RecordResource_hasResponsibleEmployee sh:path spao:hasResponsibleEmployee;
+  sh:name "hasResponsibleEmployee"@en;
+  sh:nodeKind sh:IRI;
+  dash:searchWidget core:SearchProperty .
+
+spao-sparnatural:RecordResource_comment sh:path rdfs:comment;
+  sh:name "comment"@en;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string;
+  dash:searchWidget core:SearchProperty .
+
+spao-sparnatural:RecordResource_hasOrhadSubject sh:path rico:hasOrHadSubject;
+  sh:name "has or has subject"@en;
+  sh:nodeKind sh:IRI;
+  sh:node spao-sparnatural:Thing;
+  dash:searchWidget core:AutocompleteProperty;
+  datasources:datasource spao-sparnatural:query_search_rdfslabel_contains_without_type .
+
+spao-sparnatural:Actor_label sh:path rdfs:label;
+  sh:name "name"@en;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string;
+  dash:propertyRole dash:LabelRole .
+
+spao-sparnatural:Actor_type sh:path rdf:type;
+  sh:name "type (of actor)"@en;
+  sh:nodeKind sh:IRI;
+  sh:node spao-sparnatural:TypeActor;
+  sh:in _:c3c52ee914074bcb8ccadd35b78ff86c772 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c772 rdf:first crm:E39_Actor;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c773 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c773 rdf:first crm:E74_Group;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c774 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c774 rdf:first crm:E40_Legal_Body;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c775 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c775 rdf:first rico:Family;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c776 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c776 rdf:first crm:E21_Person;
+  rdf:rest rdf:nil .
+
+spao-sparnatural:Agent_label sh:path rdfs:label;
+  sh:name "name"@en;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string;
+  dash:propertyRole dash:LabelRole .
+
+spao-sparnatural:Agent_type sh:path rdf:type;
+  sh:name "type (of agent)"@en;
+  sh:nodeKind sh:IRI;
+  sh:node spao-sparnatural:TypeActor;
+  sh:in _:c3c52ee914074bcb8ccadd35b78ff86c777;
+  dash:searchWidget core:ListProperty .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c777 rdf:first crm:E39_Actor;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c778 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c778 rdf:first crm:E28_Conceptual_Object;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c779 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c779 rdf:first crm:E74_Group;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c780 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c780 rdf:first crm:E40_Legal_Body;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c781 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c781 rdf:first rico:Family;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c782 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c782 rdf:first crm:E21_Person;
+  rdf:rest rdf:nil .
+
+spao-sparnatural:Agent_name sh:path _:c3c52ee914074bcb8ccadd35b78ff86c783;
+  sh:name "name of agent"@en;
+  sh:nodeKind sh:Literal;
+  dash:searchWidget core:SearchProperty .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c783 sh:alternativePath _:c3c52ee914074bcb8ccadd35b78ff86c784 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c784 rdf:first _:c3c52ee914074bcb8ccadd35b78ff86c785;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c787 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c785 rdf:first crm:P131_is_identified_by;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c786 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c786 rdf:first rdf:value;
+  rdf:rest rdf:nil .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c787 rdf:first rdfs:label;
+  rdf:rest rdf:nil .
+
+spao-sparnatural:Agent_firstDate sh:path _:c3c52ee914074bcb8ccadd35b78ff86c788;
+  sh:name "first date of agent"@en;
+  sh:nodeKind sh:IRI;
+  dash:searchWidget core:SearchProperty .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c788 rdf:first _:c3c52ee914074bcb8ccadd35b78ff86c789;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c792 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c789 sh:alternativePath _:c3c52ee914074bcb8ccadd35b78ff86c790 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c790 rdf:first rico:birthDate;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c791 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c791 rdf:first rico:hasBeginningDate;
+  rdf:rest rdf:nil .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c792 rdf:first rico:normalizedDateValue;
+  rdf:rest rdf:nil .
+
+spao-sparnatural:Agent_endDate sh:path _:c3c52ee914074bcb8ccadd35b78ff86c793;
+  sh:name "end date of agent"@en;
+  sh:nodeKind sh:IRI;
+  dash:searchWidget core:SearchProperty .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c793 rdf:first _:c3c52ee914074bcb8ccadd35b78ff86c794;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c797 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c794 sh:alternativePath _:c3c52ee914074bcb8ccadd35b78ff86c795 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c795 rdf:first rico:deathDate;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c796 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c796 rdf:first rico:hasEndDate;
+  rdf:rest rdf:nil .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c797 rdf:first rico:normalizedDateValue;
+  rdf:rest rdf:nil .
+
+spao-sparnatural:Agent_description sh:path _:c3c52ee914074bcb8ccadd35b78ff86c798;
+  sh:name "description of agent"@en;
+  sh:nodeKind sh:Literal;
+  dash:searchWidget core:SearchProperty .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c798 sh:alternativePath _:c3c52ee914074bcb8ccadd35b78ff86c799 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c799 rdf:first _:c3c52ee914074bcb8ccadd35b78ff86c800;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c802 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c800 rdf:first crm:P3_has_note;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c801 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c801 rdf:first rdf:value;
+  rdf:rest rdf:nil .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c802 rdf:first rico:history;
+  rdf:rest rdf:nil .
+
+spao-sparnatural:Agent_gender sh:path crm:P107i_is_current_or_former_member_of;
+  sh:name "gender of agent"@en;
+  sh:nodeKind sh:IRI;
+  sh:node spao-at:Gender;
+  sh:in _:c3c52ee914074bcb8ccadd35b78ff86c803;
+  dash:searchWidget core:ListProperty .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c803 rdf:first <http://data.performing-arts.ch/g/gender/m>;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c804 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c804 rdf:first <http://data.performing-arts.ch/g/gender/f>;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c805 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c805 rdf:first <http://data.performing-arts.ch/g/gender/d>;
+  rdf:rest rdf:nil .
+
+spao-sparnatural:Place_label sh:path rdfs:label;
+  sh:name "name"@en;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string;
+  dash:propertyRole dash:LabelRole .
+
+spao-sparnatural:Thing_label sh:path rdfs:label;
+  sh:name "name"@en;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string;
+  dash:propertyRole dash:LabelRole .
+
+spao-sparnatural:F25_Performance_Plan_person_activities sh:path _:c3c52ee914074bcb8ccadd35b78ff86c806;
+  sh:name "person involvment"@en;
+  sh:nodeKind sh:IRI;
+  sh:node spao-pf:Activity_Participation .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c806 sh:alternativePath _:c3c52ee914074bcb8ccadd35b78ff86c807 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c807 rdf:first _:c3c52ee914074bcb8ccadd35b78ff86c808;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c811 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c808 rdf:first _:c3c52ee914074bcb8ccadd35b78ff86c809;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c810 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c809 sh:inversePath frbroo:R17_created .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c810 rdf:first crm:P9_consists_of;
+  rdf:rest rdf:nil .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c811 rdf:first _:c3c52ee914074bcb8ccadd35b78ff86c812;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c815 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c812 rdf:first _:c3c52ee914074bcb8ccadd35b78ff86c813;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c814 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c813 sh:inversePath frbroo:R25_performed .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c814 rdf:first crm:P9_consists_of;
+  rdf:rest rdf:nil .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c815 rdf:first _:c3c52ee914074bcb8ccadd35b78ff86c816;
+  rdf:rest rdf:nil .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c816 rdf:first frbroo:R14_incorporates;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c817 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c817 rdf:first _:c3c52ee914074bcb8ccadd35b78ff86c818;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c819 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c818 sh:inversePath frbroo:R17_created .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c819 rdf:first crm:P9_consists_of;
+  rdf:rest rdf:nil .
+
+spao-pf:F25_Performance_Plan sh:property spao-sparnatural:F25_Performance_Plan_person_activities,
+    spao-sparnatural:F25_Performance_Plan_inverse_R17_created, spao-sparnatural:F25_Performance_Plan_inverse_R25_performed,
+    spao-sparnatural:F25_Performance_Plan_inverse_R12_is_realised_in .
+
+spao-sparnatural:Activity_participation_carried_out_by_Agent sh:path crm:P14_carried_out_by;
+  sh:nodeKind sh:IRI;
+  sh:node spao-sparnatural:Actor;
+  dash:searchWidget core:AutocompleteProperty;
+  datasources:datasource spao-sparnatural:query_search_rdfslabel_strstarts_without_type .
+
+spao-pf:Activity_Participation sh:property spao-sparnatural:Activity_participation_carried_out_by_Agent,
+    spao-sparnatural:Activity_Participation_hasActivityType_rec .
+
+spao-sparnatural:Activity_Participation_hasActivityType_rec sh:path _:c3c52ee914074bcb8ccadd35b78ff86c820;
+  sh:name "has activity type"@en;
+  sh:nodeKind sh:IRI;
+  sh:node spao-pf:Activity_Type;
+  dash:searchWidget core:TreeProperty;
+  datasources:treeRootsDatasource spao-co:tree_root_activityType_datasource .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c820 rdf:first crm:P2_has_type;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c821 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c821 rdf:first _:c3c52ee914074bcb8ccadd35b78ff86c822;
+  rdf:rest rdf:nil .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c822 sh:zeroOrMorePath skos:broader .
+
+spao-sparnatural:F25_Performance_Plan_inverse_R17_created sh:path _:c3c52ee914074bcb8ccadd35b78ff86c823;
+  sh:name "created by"@en;
+  sh:nodeKind sh:IRI;
+  sh:node spao-pf:Creation_of_Performance_Plan;
+  dash:searchWidget core:NonSelectableProperty .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c823 sh:inversePath frbroo:R17_created .
+
+spao-sparnatural:F25_Performance_Plan_inverse_R25_performed sh:path _:c3c52ee914074bcb8ccadd35b78ff86c824;
+  sh:name "performed by"@en;
+  sh:nodeKind sh:IRI;
+  sh:node spao-pf:Performance_Serie;
+  dash:searchWidget core:NonSelectableProperty .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c824 sh:inversePath frbroo:R25_performed .
+
+spao-sparnatural:F25_Performance_Plan_inverse_R12_is_realised_in sh:path _:c3c52ee914074bcb8ccadd35b78ff86c825;
+  sh:name "realises"@en;
+  sh:nodeKind sh:IRI;
+  sh:node spao-pf:F20_Performance_Work;
+  dash:searchWidget core:NonSelectableProperty .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c825 sh:inversePath frbroo:R12_is_realised_in .
+
+spao-sparnatural:PerformanceWork_hasGenre_rec sh:path _:c3c52ee914074bcb8ccadd35b78ff86c826;
+  sh:name "P2 has type (or more specific)"@en;
+  sh:nodeKind sh:IRI;
+  sh:node spao-pf:Performance_Work_Type;
+  dash:searchWidget core:TreeProperty;
+  datasources:treeRootsDatasource spao-co:tree_root_genre_datasource .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c826 rdf:first crm:P2_has_type;
+  rdf:rest _:c3c52ee914074bcb8ccadd35b78ff86c827 .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c827 rdf:first _:c3c52ee914074bcb8ccadd35b78ff86c828;
+  rdf:rest rdf:nil .
+
+_:c3c52ee914074bcb8ccadd35b78ff86c828 sh:zeroOrMorePath skos:broader .
+
+spao-pf:F20_Performance_Work sh:property spao-sparnatural:PerformanceWork_hasGenre_rec .
+
+spao-sparnatural:Performance_Work_Type_prefLabel sh:path skos:prefLabel;
+  sh:name "prefLabel"@en;
+  sh:minCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype rdf:langString .
+
+spao-pf:Performance_Work_Type sh:property spao-sparnatural:Performance_Work_Type_prefLabel .
+
+spao-sparnatural:list_riconame_with_range a datasources:SparqlDatasource;
+  datasources:queryTemplate datasources:query_list_label_with_range_alpha;
+  datasources:labelProperty rico:name .
+
+spao-sparnatural:search_rdfslabel_without_language a datasources:SparqlDatasource;
+  datasources:queryString """PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rico: <https://www.ica.org/standards/RiC/ontology#>
+SELECT DISTINCT ?uri ?label
+WHERE {
+ ?domain $type $domain .
+ ?domain $property ?uri .
+ ?uri $type $range .
+ ?uri rico:name ?label .
+ FILTER(isIRI(?uri))
+ FILTER(CONTAINS(LCASE(STR(?label)), LCASE(\"$key\"))) 
+} 
+ORDER BY UCASE(?label)
+LIMIT 15""" .
+
+spao-i:tree_root_archivalplace_datasource a datasources:SPARQLQuery;
+  datasources:queryString """PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX spao: <http://ontology.performing-arts.ch/>
+PREFIX rico: <https://www.ica.org/standards/RiC/ontology#>
+SELECT ?uri ?label WHERE {
+ ?uri a spao:ArchivalPlace .
+ ?uri rdfs:label ?label .
+ FILTER(lang(?label) = \"\" || lang(?label) = $lang)
+ FILTER NOT EXISTS{?uri rico:containedBy ?parent}
+}""" .
+
+spao-i:tree_children_archivalplace_datasource a datasources:SPARQLQuery;
+  datasources:queryString """PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX spao: <http://ontology.performing-arts.ch/>
+PREFIX rico: <https://www.ica.org/standards/RiC/ontology#>
+SELECT DISTINCT ?uri ?label ?hasChildren (COUNT(?x) AS ?count) WHERE {
+ $node ^rico:containedBy ?uri .
+ ?uri rdfs:label ?label .
+ FILTER(lang(?label) = \"\" || lang(?label) = $lang)
+ OPTIONAL { ?uri ^rico:containedBy ?children }
+ BIND(IF(bound(?children),true,false) AS ?hasChildren)
+
+ OPTIONAL {
+ ?x a $domain .
+ ?x $property ?uri .
+ }
+}
+GROUP BY ?uri ?label ?hasChildren
+ORDER BY ?label""" .
+
+spao-i:tree_root_carriertype_datasource a datasources:SPARQLQuery;
+  datasources:queryString """PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX spao: <http://ontology.performing-arts.ch/>
+PREFIX rico: <https://www.ica.org/standards/RiC/ontology#>
+SELECT ?uri ?label WHERE {
+ ?uri a skos:Concept .
+ ?uri skos:topConceptOf <http://vocab.performing-arts.ch/fv> .
+ ?uri skos:prefLabel ?label .
+ FILTER(lang(?label) = \"\" || lang(?label) = $lang)
+}""" .
+
+spao-i:tree_children_skos_datasource a datasources:SPARQLQuery;
+  datasources:queryString """PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX spao: <http://ontology.performing-arts.ch/>
+PREFIX rico: <https://www.ica.org/standards/RiC/ontology#>
+SELECT DISTINCT ?uri ?label ?hasChildren (COUNT(?x) AS ?count) WHERE {
+ $node ^skos:broader ?uri .
+ ?uri skos:prefLabel ?label .
+ FILTER(lang(?label) = \"\" || lang(?label) = $lang)
+ OPTIONAL { ?uri ^skos:broader ?children }
+ BIND(IF(bound(?children),true,false) AS ?hasChildren)
+
+ OPTIONAL {
+ ?x a $domain .
+ ?x $property ?uri .
+ }
+}
+GROUP BY ?uri ?label ?hasChildren
+ORDER BY ?label""" .
+
+spao-co:tree_root_archivalplace_datasource a datasources:SPARQLQuery;
+  datasources:queryString """PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX spao: <http://ontology.performing-arts.ch/>
+PREFIX rico: <https://www.ica.org/standards/RiC/ontology#>
+SELECT ?uri ?label WHERE {
+ ?uri a spao:ArchivalPlace .
+ ?uri rdfs:label ?label .
+ FILTER(lang(?label) = \"\" || lang(?label) = $lang)
+ FILTER NOT EXISTS{?uri rico:containedBy ?parent}
+}""" .
+
+spao-co:tree_children_archivalplace_datasource a datasources:SPARQLQuery;
+  datasources:queryString """PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX spao: <http://ontology.performing-arts.ch/>
+PREFIX rico: <https://www.ica.org/standards/RiC/ontology#>
+SELECT DISTINCT ?uri ?label ?hasChildren (COUNT(?x) AS ?count) WHERE {
+ $node ^rico:containedBy ?uri .
+ ?uri rdfs:label ?label .
+ FILTER(lang(?label) = \"\" || lang(?label) = $lang)
+ OPTIONAL { ?uri ^rico:containedBy ?children }
+ BIND(IF(bound(?children),true,false) AS ?hasChildren)
+
+ OPTIONAL {
+ ?x a $domain .
+ ?x $property ?uri .
+ }
+}
+GROUP BY ?uri ?label ?hasChildren
+ORDER BY ?label""" .
+
+spao-co:tree_root_language_datasource a datasources:SPARQLQuery;
+  datasources:queryString """PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX spao: <http://ontology.performing-arts.ch/>
+PREFIX rico: <https://www.ica.org/standards/RiC/ontology#>
+SELECT DISTINCT ?uri ?label ?hasChildren WHERE {
+ ?uri a skos:Concept .
+ ?uri skos:topConceptOf <http://vocab.performing-arts.ch/lg> .
+ ?uri skos:prefLabel ?label .
+ FILTER(lang(?label) = \"\" || lang(?label) = $lang)
+ OPTIONAL { ?uri ^skos:broader ?children }
+ BIND(IF(bound(?children),true,false) AS ?hasChildren)
+}""" .
+
+spao-co:tree_root_documentaryformtype_datasource a datasources:SPARQLQuery;
+  datasources:queryString """PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX spao: <http://ontology.performing-arts.ch/>
+PREFIX rico: <https://www.ica.org/standards/RiC/ontology#>
+SELECT DISTINCT ?uri ?label ?hasChildren WHERE {
+ ?uri a skos:Concept .
+ ?uri skos:topConceptOf <http://vocab.performing-arts.ch/df> .
+ ?uri skos:prefLabel ?label .
+ FILTER(lang(?label) = \"\" || lang(?label) = $lang)
+ OPTIONAL { ?uri ^skos:broader ?children }
+ BIND(IF(bound(?children),true,false) AS ?hasChildren)
+}""" .
+
+spao-sparnatural:query_search_rdfslabel_contains_without_type a datasources:SparqlDatasource;
+  datasources:queryString """PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT DISTINCT ?uri ?label
+WHERE {
+ ?domain $type $domain .
+ ?domain $property ?uri .
+ ?uri rdfs:label ?label .
+ FILTER(isIRI(?uri))
+ FILTER(lang(?label) = '' || lang(?label) = $lang)
+ FILTER(CONTAINS(LCASE(STR(?label)), LCASE(\"$key\"))) 
+ BIND( IF( STRSTARTS(LCASE(STR(?label)), LCASE(\"$key\")),0,9 ) AS ?starts )
+} 
+ORDER BY ?starts UCASE(STR(?label))
+LIMIT 15""" .
+
+spao-sparnatural:query_search_rdfslabel_strstarts_without_type a datasources:SparqlDatasource;
+  datasources:queryString """PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT DISTINCT ?uri ?label
+WHERE {
+ ?domain $type $domain .
+ ?domain $property ?uri .
+ ?uri rdfs:label ?label .
+ FILTER(STRSTARTS(LCASE(STR(?label)), LCASE(\"$key\"))) 
+} 
+ORDER BY UCASE(STR(?label))
+LIMIT 15""" .
+
+spao-co:tree_root_activityType_datasource a datasources:SPARQLQuery;
+  datasources:queryString """PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX spao: <http://ontology.performing-arts.ch/>
+PREFIX rico: <https://www.ica.org/standards/RiC/ontology#>
+SELECT DISTINCT ?uri ?label ?hasChildren WHERE {
+ ?uri a skos:Concept .
+ ?uri skos:topConceptOf <http://vocab.performing-arts.ch/mu> .
+ ?uri skos:prefLabel ?label .
+ FILTER(lang(?label) = \"\" || lang(?label) = $lang)
+ OPTIONAL { ?uri ^skos:broader ?children }
+ BIND(IF(bound(?children),true,false) AS ?hasChildren)
+}""" .
+
+spao-co:tree_root_genre_datasource a datasources:SPARQLQuery;
+  datasources:queryString """PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX spao: <http://ontology.performing-arts.ch/>
+PREFIX rico: <https://www.ica.org/standards/RiC/ontology#>
+SELECT DISTINCT ?uri ?label ?hasChildren WHERE {
+ ?uri a skos:Concept .
+ ?uri skos:topConceptOf <http://vocab.performing-arts.ch/mn> .
+ ?uri skos:prefLabel ?label .
+ FILTER(lang(?label) = \"\" || lang(?label) = $lang)
+ OPTIONAL { ?uri ^skos:broader ?children }
+ BIND(IF(bound(?children),true,false) AS ?hasChildren)
+}""" .
+
+spao-co:Identifier sh:deactivated true .
+
+spao-i:Identifier sh:deactivated true .
+
+spao-i:InstantiationExtent sh:deactivated true .
+
+spao-co:SingleDate sh:deactivated true .
+
+spao-co:Date sh:deactivated true .
+
+spao-co:DateRange sh:deactivated true .
+
+spao-i:Concept sh:deactivated true .
+
+spao-i:Standard sh:deactivated true .
+
+spao-i:AudioFormat sh:deactivated true .
+
+spao-i:ContainerFormat sh:deactivated true .
+
+spao-i:StorageMedium sh:deactivated true .
+
+spao-i:VideoFormat sh:deactivated true .
+
+spao-i:CarrierType sh:deactivated true .
+
+spao-i:RepresentationType sh:deactivated true .
+
+spao-i:Accessibility sh:deactivated true .
+
+spao-i:PreservationState sh:deactivated true .
+
+spao-i:Condition sh:deactivated true .
+
+spao-i:Packing sh:deactivated true .
+
+spao-i:Permission sh:deactivated true .
+
+spao-i:PhysicalUsability sh:deactivated true .
+
+spao-i:TermsOfProtection sh:deactivated true .
+
+spao-i:VideoDamage sh:deactivated true .
+
+spao-i:Material sh:deactivated true .
+
+spao-i:ColorContent sh:deactivated true .
+
+spao-i:RecordingSystem sh:deactivated true .
+
+spao-i:ScanningFormat sh:deactivated true .
+
+spao-i:ScanningOrder sh:deactivated true .
+
+spao-co:ArchivalPlace sh:deactivated true .
+
+spao-co:Event sh:deactivated true .
+
+spao-co:Concept sh:deactivated true .
+
+spao-i:SingleDate_certainty sh:deactivated true;
+  rdfs:comment "We disable properties from these shared objects : we need to keep them here for documentation, we don't want to have them twice since we already have them in the Collections model" .
+
+spao-i:SingleDate_dateQualifier sh:deactivated true .
+
+spao-i:SingleDate_dateStandard sh:deactivated true .
+
+spao-i:SingleDate_expressedDate sh:deactivated true .
+
+spao-i:SingleDate_normalizedDateValue sh:deactivated true .
+
+spao-i:DateRange_hasBeginningDate sh:deactivated true .
+
+spao-i:DateRange_hasEndDate sh:deactivated true .
+
+spao-i:Date_dateStandard sh:deactivated true .
+
+spao-i:Date_expressedDate sh:deactivated true .
+
+spao-i:Date_normalizedDateValue sh:deactivated true .

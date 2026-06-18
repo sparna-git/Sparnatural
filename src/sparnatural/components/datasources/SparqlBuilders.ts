@@ -39,12 +39,19 @@ export class SinglePredicateSparqlQueryBuilder implements SinglePredicateSparqlQ
         language: any,
         defaultLanguage: any
     ):string {
-        // 1. construire la requête SPARQL 
-        var sparql = null;
+        // Fetch <predicate> value(s) for <uri> in the wanted/default/no-tag
+        // language ; predicate may be a path, values are concatenated.
+        var sparql = `
+SELECT ?uri (GROUP_CONCAT(DISTINCT STR(?value) ; separator=", ") AS ?label)
+WHERE {
+  BIND(<${uri}> AS ?uri)
+  ?uri ${predicate} ?value .
+  FILTER(lang(?value) = "" || lang(?value) = "${language}" || lang(?value) = "${defaultLanguage}")
+}
+GROUP BY ?uri
+`;
 
-        // 2. passer en semanticPostProcess
         sparql = this.sparqlPostProcessor.semanticPostProcess(sparql);
-
         return sparql;
     }
 

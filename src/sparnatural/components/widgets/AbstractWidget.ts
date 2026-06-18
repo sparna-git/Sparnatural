@@ -3,7 +3,8 @@ import { HTMLComponent } from "../HtmlComponent";
 import LoadingSpinner from "./LoadingSpinner";
 import { DataFactory, Literal } from "rdf-data-factory";
 import { Term } from "@rdfjs/types/data-model";
-import { RDFTerm, LabelledCriteria, Criteria } from "../../SparnaturalQueryIfc";
+import { RDFTerm, LabelledCriteria, Criteria, RdfTermCriteria } from "../../SparnaturalQueryIfc";
+import { RdfTermDatasourceItem, SinglePredicateDataProviderIfc } from "../datasources/DataProviders";
 
 const factory = new DataFactory();
 
@@ -58,6 +59,78 @@ export abstract class AbstractWidget extends HTMLComponent {
 
   // Is used to parse the inputs from the ISparnaturalJson e.g "preloaded" queries
   abstract parseInput(value: LabelledCriteria<Criteria>): LabelledCriteria<Criteria>;
+
+  // Label of a criteria, from the criteria only (no DOM). Overridden per widget.
+  getValueLabel(criteria: Criteria): string {
+    return "";
+  }
+
+  // Builds { label, criteria } from a criteria (used to prefill a widget).
+  buildValueFromCriteria<T extends Criteria>(criteria: T): LabelledCriteria<T> {
+    return {
+      label: this.getValueLabel(criteria),
+      criteria: criteria,
+    };
+  }
+
+  // Parses a raw string (e.g. URL param) into this widget's criteria. Base is
+  // free-text search ; URI widgets use resolveLabel() instead.
+  parseRawValue(raw: string): Criteria {
+    return { search: raw };
+  }
+
+  // Splits a "min|max" range on the pipe (empty when a bound is missing).
+  protected splitRawRange(raw: string): { first: string; second: string } {
+    let parts = (raw ?? "").split("|");
+    return {
+      first: (parts[0] ?? "").trim(),
+      second: (parts[1] ?? "").trim(),
+    };
+  }
+
+  // URI label resolver, injected by the WidgetFactory (predicate undefined =
+  // nothing to resolve).
+  protected labelResolver?: {
+    dataProvider: SinglePredicateDataProviderIfc;
+    predicate: string | undefined;
+  };
+
+  // Injects the URI label resolver (called by the WidgetFactory).
+  setLabelResolver(
+    dataProvider: SinglePredicateDataProviderIfc,
+    predicate: string | undefined
+  ): void {
+    this.labelResolver = { dataProvider, predicate };
+  }
+
+  // Resolves a URI's label via SPARQL, calling back with { label, criteria } or
+  // undefined (no resolver/predicate/result - caller falls back to the URI).
+  resolveLabel(
+    uri: string,
+    callback: (value: LabelledCriteria<RdfTermCriteria> | undefined) => void,
+    errorCallback?: (payload: any) => void
+  ): void {
+    if (!this.labelResolver || !this.labelResolver.predicate) {
+      callback(undefined);
+      return;
+    }
+
+    this.labelResolver.dataProvider.getSinglePredicate(
+      uri,
+      this.labelResolver.predicate,
+      (items: RdfTermDatasourceItem[]) => {
+        if (items.length > 0 && items[0].label) {
+          callback({
+            label: items[0].label,
+            criteria: { rdfTerm: { type: "uri", value: uri } },
+          });
+        } else {
+          callback(undefined);
+        }
+      },
+      errorCallback
+    );
+  }
 
   // fires the event to render the label of the WidgetValue on the UI
   // can take either a single value or an array of values

@@ -8,7 +8,7 @@ import { ISparnaturalSpecification } from "../../../spec-providers/ISparnaturalS
 import { I18n } from "../../../settings/I18n";
 import { HTMLComponent } from "../../HtmlComponent";
 import { TOOLTIP_CONFIG } from "../../../settings/defaultSettings";
-import { LabelledCriteria, DateCriteria } from "../../../SparnaturalQueryIfc";
+import { LabelledCriteria, DateCriteria, Criteria } from "../../../SparnaturalQueryIfc";
 import { time } from "node:console";
 
 const factory = new DataFactory();
@@ -300,8 +300,37 @@ export class TimeDatePickerWidget extends AbstractWidget {
     return valueLabel;
   };
 
+  // Reuses parseInput (DOM-free) which normalizes the bounds and computes the label.
+  buildValueFromCriteria<T extends Criteria>(criteria: T): LabelledCriteria<T> {
+    return this.parseInput({
+      label: null,
+      criteria: criteria as unknown as DateCriteria,
+    }) as unknown as LabelledCriteria<T>;
+  }
+
+  // Label from the start/stop bounds (buildValueFromCriteria goes via parseInput).
+  getValueLabel(criteria: DateCriteria): string {
+    let startLabel = this.#isValidDate(criteria.start)
+      ? new Date(criteria.start).toLocaleDateString()
+      : "";
+    let stopLabel = this.#isValidDate(criteria.stop)
+      ? new Date(criteria.stop).toLocaleDateString()
+      : "";
+    return this.#getValueLabel(startLabel, stopLabel);
+  }
+
   #isValidDate(dateString:string){
     return (new Date(dateString).toString() !== "Invalid Date") && !isNaN(Date.parse(dateString));
+  }
+
+  // Parses "start|stop" (or "start|" / "|stop") into a DateCriteria. Each bound
+  // is a year or date string, normalized later by buildValueFromCriteria.
+  parseRawValue(raw: string): DateCriteria {
+    let { first, second } = this.splitRawRange(raw);
+    return {
+      start: first !== "" ? first : null,
+      stop: second !== "" ? second : null,
+    };
   }
 }
 export { DateCriteria as DateTimePickerValue };

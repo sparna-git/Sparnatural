@@ -1,0 +1,1289 @@
+@prefix premis: <http://www.loc.gov/premis/rdf/v1#> .
+@prefix schema: <http://schema.org/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix volipi: <http://data.sparna.fr/ontologies/volipi#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix skosthes: <http://purl.org/iso25964/skos-thes#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix qb: <http://purl.org/linked-data/cube#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix rico: <https://www.ica.org/standards/RiC/ontology#> .
+@prefix vocab: <http://vocab.performing-arts.ch/> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix euvoc: <http://publications.europa.eu/ontology/euvoc#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix crm: <http://www.cidoc-crm.org/cidoc-crm/> .
+@prefix spao-at: <http://shapes.performing-arts.ch/authorities/> .
+@prefix temp: <http://temp.performing-arts.ch/> .
+@prefix adms: <http://www.w3.org/ns/adms#> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix xls2rdf: <https://xls2rdf.sparna.fr/vocabulary#> .
+@prefix olo: <http://purl.org/ontology/olo/core#> .
+@prefix shacl-play: <https://shacl-play.sparna.fr/ontology#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ebucore: <https://www.ebu.ch/metadata/ontologies/ebucore#> .
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix spao: <http://ontology.performing-arts.ch/> .
+@prefix frbroo: <http://iflastandards.info/ns/fr/frbr/frbroo/> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix skosxl: <http://www.w3.org/2008/05/skos-xl#> .
+
+<http://shapes.performing-arts.ch/authorities> a owl:Ontology;
+  dct:title "Documentation of Swiss Performing Arts Authority model";
+  dct:abstract """(_english_) This page documents the structure of the Authorities data published by the SAPA Foundation. This regroups in particular the persons, groups, geographical locations and the buildings related to performances. This model is mostly based on CIDOC-CRM. Please note the following specificities:
+
+- Some authorities have been reconciled, and some not. Depending on this status, the data model and the level of detail will be different. Unreconciled authorities will typically have only a label.
+- Authorities corresponding to fictional characters and created only in exceptionnal situations depending on the needs. There are only few of them.
+- It is foreseen that properties and classes taken from RiC-O and SPAO are replaced by the corresponding patterns from the CIDOC-CRM
+- It is also foreseen that the provision of 2 rdf:types to entities will not be done anymore (only the CIDOC-CRM type shall remain)
+
+-----
+
+(_français_) Cette page documente le modèle de données utilisé par la Fondation SAPA pour modéliser les entités de type autorité. Cela regroupe en particulier les personnes, les groupes, les lieux géographiques et les bâtiments relatifs aux spectacles. Ce modèle est principalement basé sur CIDOC-CRM. Il faut aussi bien noter les aspects suivants :
+
+- Il existe toujours des autorités qui ont fait l'objet d'une réconciliation et d'autres non. Selon ce statut, le modèle de données est différent. Les autorités non réconciliées ne possèdent typiquement qu'un libellé.
+- Les entités sur les personnages de fiction ne créés que de façon exceptionnelle selon les besoins. Ils sont en nombre réduit.
+- Il est prévu qu'à l'avenir les propriétés et classes issues des ontologies RiC-O et SPAO soient remplacées par des éléments correspondants dans CIDOC-CRM.
+- Il est aussi prévu de renoncer au double typage à l'avenir (seul le type CIDOC-CRM sera conservé)""";
+  foaf:depiction <http://shapes.performing-arts.ch/images/diagramme-autorites.png>;
+  dcat:distribution _:de6c608aee3c476a8fb357820941e069267;
+  owl:versionInfo "1.0.0";
+  adms:versionNotes """1.0.0 - 2026-02
+- First public release of the Authority model"""@en;
+  dct:hasFormat <https://docs.google.com/spreadsheets/d/1OBpZgVwO_0hLNbX0bXVFCetQBQjPeNFR/export?format=xlsx>,
+    <https://xls2rdf.sparna.fr/rest/convert?url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2F1OBpZgVwO_0hLNbX0bXVFCetQBQjPeNFR%2Fexport%3Fformat%3Dxlsx&noPostProcessings=true>;
+  rdfs:seeAlso <https://shacl-play.sparna.fr/play/doc?url=https%3A%2F%2Fxls2rdf.sparna.fr%2Frest%2Fconvert%3Furl%3Dhttps%253A%252F%252Fdocs.google.com%252Fspreadsheets%252Fd%252F1OBpZgVwO_0hLNbX0bXVFCetQBQjPeNFR%252Fexport%253Fformat%253Dxlsx%26noPostProcessings%3Dtrue&includeDiagram=true&language=en>,
+    <https://app.diagrams.net/#G1R9rr-upZrqz-9Pixq5DCNXtdguDFfE8Z#%7B%22pageId%22%3A%22phH6dvL8-G4Sl0bLUEO3%22%7D> .
+
+_:de6c608aee3c476a8fb357820941e069267 dct:format <https://www.iana.org/assignments/media-types/text/turtle>;
+  dcat:downloadURL spao-at:sapa-authorities.ttl .
+
+spao-at:Venue a sh:NodeShape;
+  rdfs:label "Venue"@en;
+  sh:target spao-at:Venue-target;
+  skos:definition "Known places (buildings, theaters, rooms, etc.) where performances took place. Their URI starts with \"http://data.performing-arts.ch/o/\""@en;
+  sh:pattern "^http://data.performing-arts.ch/o/.*$";
+  sh:closed true;
+  sh:ignoredProperties _:de6c608aee3c476a8fb357820941e069268;
+  foaf:depiction spao-at:Diagram_Venue;
+  shacl-play:background-color "C78D65";
+  sh:property spao-at:Venue_hasBeginningDate, spao-at:Venue_hasEndDate, spao-at:Venue_label,
+    spao-at:Venue_P102_has_title, spao-at:Venue_P131_is_identified_by, spao-at:Venue_P156_occupies,
+    spao-at:Venue_P2_has_type, spao-at:Venue_P3_has_note, spao-at:Venue_P46_is_composed_of,
+    spao-at:Venue_P76_has_contact_point, spao-at:Venue_sameAs .
+
+spao-at:Venue-target sh:select """PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+PREFIX frbroo: <http://iflastandards.info/ns/fr/frbr/frbroo/>
+SELECT $this
+WHERE {
+ $this a crm:E22_Man-Made_Object .
+ FILTER(CONTAINS(STR($this), \"/o/\"))
+ $this crm:P2_has_type <http://vocab.performing-arts.ch/dwmkn> .
+}""" .
+
+_:de6c608aee3c476a8fb357820941e069268 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+spao-at:Venue_unreconciled a sh:NodeShape;
+  rdfs:label "Venue (unreconciled)"@en;
+  sh:target spao-at:Venue_unreconciled-target;
+  skos:definition "Places (buildings, theaters, rooms, etc.) where performances took place, that are not yet reconciled to a known entity. Their URI starts with \"http://data.performing-arts.ch/u/\""@en;
+  foaf:depiction spao-at:Diagram_Venue;
+  shacl-play:background-color "C0BFBC";
+  sh:property spao-at:Venue_unreconciled_label, spao-at:Venue_unreconciled_P2_has_type .
+
+spao-at:Venue_unreconciled-target sh:select """PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+SELECT $this
+WHERE {
+ $this a crm:E22_Man-Made_Object .
+ FILTER(CONTAINS(STR($this), \"/u/\"))
+ $this crm:P2_has_type <http://vocab.performing-arts.ch/dwmkn> .
+}""" .
+
+spao-at:Place_known a sh:NodeShape;
+  rdfs:label "Place"@en;
+  sh:target spao-at:Place_known-target;
+  skos:definition "Known places like cities, regions. Their URI starts with \"http://data.performing-arts.ch/p/\""@en;
+  sh:closed true;
+  sh:ignoredProperties _:de6c608aee3c476a8fb357820941e069269;
+  foaf:depiction spao-at:Diagram_Place;
+  shacl-play:background-color "93CC7D";
+  sh:property spao-at:Place_known_label, spao-at:Place_known_P87_is_identified_by, spao-at:Place_known_P89_falls_within,
+    spao-at:Place_known_sameAs .
+
+spao-at:Place_known-target sh:select """PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+SELECT $this
+WHERE {
+ $this a crm:E53_Place .
+ FILTER(STRSTARTS(STR($this), \"http://data.performing-arts.ch/p/\"))
+}""" .
+
+_:de6c608aee3c476a8fb357820941e069269 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+spao-at:Place_undefined a sh:NodeShape;
+  rdfs:label "Place (undefined)"@en;
+  sh:target spao-at:Place_undefined-target;
+  skos:definition "Undefined places where the venues are located, which are linked to a known place in which this place is included. Their URI starts with \"http://data.performing-arts.ch/x/\""@en;
+  sh:closed true;
+  sh:ignoredProperties _:de6c608aee3c476a8fb357820941e069270;
+  foaf:depiction spao-at:Diagram_Place, spao-at:Diagram_Venue;
+  shacl-play:background-color "C0BFBC";
+  sh:property spao-at:Place_undefined_P89_falls_within .
+
+spao-at:Place_undefined-target sh:select """PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+SELECT $this
+WHERE {
+ $this a crm:E53_Place .
+ FILTER(STRSTARTS(STR($this), \"http://data.performing-arts.ch/x/\"))
+}""" .
+
+_:de6c608aee3c476a8fb357820941e069270 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+spao-at:E21_Person a sh:NodeShape;
+  sh:targetClass crm:E21_Person;
+  rdfs:label "Person"@en;
+  skos:definition "Known persons."@en;
+  sh:closed true;
+  sh:ignoredProperties _:de6c608aee3c476a8fb357820941e069271;
+  foaf:depiction spao-at:Diagram_Person;
+  shacl-play:background-color "FFBDC9";
+  sh:property spao-at:E21_Person_birthDate, spao-at:E21_Person_deathDate, spao-at:E21_Person_hasBibliography,
+    spao-at:E21_Person_history, spao-at:E21_Person_label, spao-at:E21_Person_P100i_died_in,
+    spao-at:E21_Person_P107i_is_current_or_former_member_of, spao-at:E21_Person_P131_is_identified_by,
+    spao-at:E21_Person_P3_has_note, spao-at:E21_Person_P76_has_contact_point, spao-at:E21_Person_P98i_was_born,
+    spao-at:E21_Person_replacedBy, spao-at:E21_Person_sameAs, spao-at:E21_Person_P14i_performed .
+
+_:de6c608aee3c476a8fb357820941e069271 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+spao-at:E39_Actor_unreconciled a sh:NodeShape;
+  rdfs:label "Actor (unreconciled)"@en;
+  sh:target spao-at:E39_Actor_unreconciled-target;
+  skos:definition "Person references that have not been reconciled to a known entity. Their URI starts with \"http://data.performing-arts.ch/u/\""@en;
+  sh:closed true;
+  sh:ignoredProperties _:de6c608aee3c476a8fb357820941e069272;
+  foaf:depiction spao-at:Diagram_Person;
+  shacl-play:background-color "C0BFBC";
+  sh:property spao-at:E39_Actor_unreconciled_label .
+
+spao-at:E39_Actor_unreconciled-target sh:select """PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+SELECT $this
+WHERE {
+ $this a crm:E39_Actor .
+ FILTER(STRSTARTS(STR($this), \"http://data.performing-arts.ch/u/\"))
+}""" .
+
+_:de6c608aee3c476a8fb357820941e069272 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+spao-at:E39_Actor_special a sh:NodeShape;
+  rdfs:label "Actor (special values)"@en;
+  sh:target spao-at:E39_Actor_special-target;
+  skos:definition "Special values of E39_Actor that capture special values such as : _\"et al.\"_, _\"unknown\"_, _\"collectif\"_, _\"folklore\"_, _\"traditional\"_, _\"00\"_ (something exists but is unknown). Their URI starts with \"http://data.performing-arts.ch/a/\""@en;
+  sh:closed true;
+  sh:ignoredProperties _:de6c608aee3c476a8fb357820941e069273;
+  foaf:depiction spao-at:Diagram_Person;
+  shacl-play:background-color "C0BFBC";
+  sh:property spao-at:E39_Actor_special_label .
+
+spao-at:E39_Actor_special-target sh:select """PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+SELECT $this
+WHERE {
+ $this a crm:E39_Actor .
+ FILTER(STRSTARTS(STR($this), \"http://data.performing-arts.ch/a/\"))
+}""" .
+
+_:de6c608aee3c476a8fb357820941e069273 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+spao-at:Group_Legal_Body_Family a sh:NodeShape;
+  rdfs:label "Group, Legal Bodies or Families"@en;
+  sh:target spao-at:Group_Legal_Body_Family-target;
+  skos:definition "Legal entities, (informal) groups or families - excluding the notion of \"human genre\" and \"nationality\" which are managed separately."@en;
+  sh:closed true;
+  sh:ignoredProperties _:de6c608aee3c476a8fb357820941e069274;
+  foaf:depiction spao-at:Diagram_Group_Legal_Body_Family;
+  shacl-play:background-color "FFBDC9";
+  sh:property spao-at:Group_Legal_Body_Family_controlledBy, spao-at:Group_Legal_Body_Family_hasBeginningDate,
+    spao-at:Group_Legal_Body_Family_hasBibliography, spao-at:Group_Legal_Body_Family_hasEndDate,
+    spao-at:Group_Legal_Body_Family_history, spao-at:Group_Legal_Body_Family_isPartOfRepertories,
+    spao-at:Group_Legal_Body_Family_isSuccessorOf, spao-at:Group_Legal_Body_Family_label,
+    spao-at:Group_Legal_Body_Family_P107_has_current_or_former_member, spao-at:Group_Legal_Body_Family_P107i_is_current_or_former_member_of,
+    spao-at:Group_Legal_Body_Family_P131_is_identified_by, spao-at:Group_Legal_Body_Family_P14i_performed,
+    spao-at:Group_Legal_Body_Family_P1_is_identified_by, spao-at:Group_Legal_Body_Family_P2_has_type,
+    spao-at:Group_Legal_Body_Family_P3_has_note, spao-at:Group_Legal_Body_Family_P74_has_current_or_former_residence,
+    spao-at:Group_Legal_Body_Family_P76_has_contact_point, spao-at:Group_Legal_Body_Family_replacedBy,
+    spao-at:Group_Legal_Body_Family_sameAs .
+
+spao-at:Group_Legal_Body_Family-target sh:select """PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+PREFIX rico: <https://www.ica.org/standards/RiC/ontology#>
+SELECT $this
+WHERE {
+ $this a ?type .
+ VALUES ?type { crm:E74_Group crm:E40_Legal_Body rico:Family }
+ FILTER(!REGEX(STR($this), \"http://data.performing-arts.ch/g/.*\"))
+}""" .
+
+_:de6c608aee3c476a8fb357820941e069274 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+spao-at:E28_Conceptual_Object a sh:NodeShape;
+  rdfs:label "Fictional character"@en;
+  sh:target spao-at:E28_Conceptual_Object-target;
+  skos:definition "Fictional characters, considered as conceptual objects. They serve as values for the property rico:hasOrHadSubject from the rico RecordResources"@en;
+  foaf:depiction spao-at:Diagram_Conceptual_Object;
+  shacl-play:background-color "FDDE34";
+  sh:property spao-at:E28_Conceptual_Object_label, spao-at:E28_Conceptual_Object_P107i_is_current_or_former_member_of,
+    spao-at:E28_Conceptual_Object_P131_is_identified_by, spao-at:E28_Conceptual_Object_P3_has_note,
+    spao-at:E28_Conceptual_Object_sameAs .
+
+spao-at:E28_Conceptual_Object-target sh:select """PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+SELECT $this
+WHERE {
+ $this a crm:E28_Conceptual_Object .
+}""" .
+
+spao-at:E48_Place_Name a sh:NodeShape;
+  sh:targetClass crm:E48_Place_Name;
+  rdfs:label "Appellation: Place"@en;
+  skos:definition "The name of a place"@en;
+  sh:closed true;
+  sh:ignoredProperties _:de6c608aee3c476a8fb357820941e069275;
+  foaf:depiction spao-at:Diagram_Place;
+  shacl-play:background-color "FEF1BC";
+  sh:property spao-at:E48_Place_Name_value .
+
+_:de6c608aee3c476a8fb357820941e069275 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+spao-at:E51_Contact_Point a sh:NodeShape;
+  sh:targetClass crm:E51_Contact_Point;
+  rdfs:label "Contact Point"@en;
+  skos:definition "The contact information of a Venue, Person, or Group/LegalBody/Family."@en;
+  sh:closed true;
+  sh:ignoredProperties _:de6c608aee3c476a8fb357820941e069276;
+  foaf:depiction spao-at:Diagram_Person, spao-at:Diagram_Group_Legal_Body_Family, spao-at:Diagram_Venue;
+  shacl-play:background-color "FEF1BC";
+  sh:property spao-at:E51_Contact_Point_P2_has_type, spao-at:E51_Contact_Point_value .
+
+_:de6c608aee3c476a8fb357820941e069276 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+spao-at:Byline a sh:NodeShape;
+  rdfs:label "Appellation: Byline"@en;
+  sh:target spao-at:Byline-target;
+  skos:definition "A note / precision on the nature of an entity (Group/Legalbody/Family)"@en;
+  sh:closed true;
+  sh:ignoredProperties _:de6c608aee3c476a8fb357820941e069277;
+  foaf:depiction spao-at:Diagram_Group_Legal_Body_Family, spao-at:Diagram_Venue;
+  shacl-play:background-color "FEF1BC" .
+
+spao-at:Byline-target sh:select """PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+PREFIX frbroo: <http://iflastandards.info/ns/fr/frbr/frbroo/>
+SELECT $this
+WHERE {
+ $this a crm:E41_Appellation.
+}""" .
+
+_:de6c608aee3c476a8fb357820941e069277 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+spao-at:E62_String a sh:NodeShape;
+  sh:targetClass crm:E62_String;
+  rdfs:label "String"@en;
+  skos:definition "A base string value"@en;
+  sh:closed true;
+  sh:ignoredProperties _:de6c608aee3c476a8fb357820941e069278;
+  foaf:depiction spao-at:Diagram_Person, spao-at:Diagram_Group_Legal_Body_Family, spao-at:Diagram_Venue;
+  shacl-play:background-color "FFFFFF";
+  sh:property spao-at:E62_String_P2_has_type, spao-at:E62_String_value .
+
+_:de6c608aee3c476a8fb357820941e069278 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+spao-at:Date a sh:NodeShape;
+  sh:targetClass rico:Date;
+  rdfs:label "Date"@en;
+  skos:definition "A date value"@en;
+  sh:closed true;
+  sh:ignoredProperties _:de6c608aee3c476a8fb357820941e069279;
+  foaf:depiction spao-at:Diagram_Group_Legal_Body_Family;
+  shacl-play:background-color "FFFFFF";
+  sh:property spao-at:Date_dateStandard, spao-at:Date_expressedDate, spao-at:Date_normalizedDateValue .
+
+_:de6c608aee3c476a8fb357820941e069279 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+spao-at:E69_Death a sh:NodeShape;
+  sh:targetClass crm:E69_Death;
+  rdfs:label "Event: Death"@en;
+  skos:definition "The death event of a Person"@en;
+  sh:closed true;
+  sh:ignoredProperties _:de6c608aee3c476a8fb357820941e069280;
+  foaf:depiction spao-at:Diagram_Person;
+  shacl-play:background-color "83DDFF";
+  sh:property spao-at:E69_Death_P7_took_place_at .
+
+_:de6c608aee3c476a8fb357820941e069280 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+spao-at:E67_Birth a sh:NodeShape;
+  sh:targetClass crm:E67_Birth;
+  rdfs:label "Event: Birth"@en;
+  skos:definition "The birth event of a Person"@en;
+  sh:closed true;
+  sh:ignoredProperties _:de6c608aee3c476a8fb357820941e069281;
+  foaf:depiction spao-at:Diagram_Person;
+  shacl-play:background-color "83DDFF";
+  sh:property spao-at:E67_Birth_P7_took_place_at .
+
+_:de6c608aee3c476a8fb357820941e069281 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+spao-at:E82_Actor_Appellation a sh:NodeShape;
+  sh:targetClass crm:E82_Actor_Appellation;
+  rdfs:label "Appellation: Actor"@en;
+  skos:definition "The name of a Person or Group/LegalBody/Family"@en;
+  sh:closed true;
+  sh:ignoredProperties _:de6c608aee3c476a8fb357820941e069282;
+  foaf:depiction spao-at:Diagram_Person, spao-at:Diagram_Group_Legal_Body_Family;
+  shacl-play:background-color "FEF1BC";
+  sh:property spao-at:E82_Actor_Appellation_P2_has_type, spao-at:E82_Actor_Appellation_value .
+
+_:de6c608aee3c476a8fb357820941e069282 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+spao-at:E75_Conceptual_Object_Appellation a sh:NodeShape;
+  sh:targetClass crm:E75_Conceptual_Object_Appellation;
+  rdfs:label "Appellation: Fictional Character"@en;
+  skos:definition "The name of a fictional character"@en;
+  sh:closed true;
+  sh:ignoredProperties _:de6c608aee3c476a8fb357820941e069283;
+  foaf:depiction spao-at:Diagram_Conceptual_Object;
+  shacl-play:background-color "FEF1BC";
+  sh:property spao-at:E75_Conceptual_Object_Appellation_P2_has_type, spao-at:E75_Conceptual_Object_Appellation_value .
+
+_:de6c608aee3c476a8fb357820941e069283 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+spao-at:F51_Pursuit a sh:NodeShape;
+  sh:targetClass frbroo:F51_Pursuit;
+  rdfs:label "Pursuit"@en;
+  skos:definition "A period of continuous activity of a Group/LegalBody/Family. This links the Group/LegalBody/Family with an entry from the [Genre](http://vocab.performing-arts.ch/mn) controlled vocabulary"@en;
+  sh:closed true;
+  sh:ignoredProperties _:de6c608aee3c476a8fb357820941e069284;
+  shacl-play:background-color "83DDFF";
+  sh:property spao-at:F51_Pursuit_P14_carried_out_by, spao-at:F51_Pursuit_R59_had_typical_subject .
+
+_:de6c608aee3c476a8fb357820941e069284 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+spao-at:E42_Identifier a sh:NodeShape;
+  sh:targetClass crm:E42_Identifier;
+  rdfs:label "Identifier"@en;
+  sh:closed true;
+  sh:ignoredProperties _:de6c608aee3c476a8fb357820941e069285;
+  foaf:depiction spao-at:Diagram_Group_Legal_Body_Family;
+  shacl-play:background-color "FEF1BC";
+  sh:property spao-at:E42_Identifier_value .
+
+_:de6c608aee3c476a8fb357820941e069285 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+spao-at:ManagementActivity_Venue a sh:NodeShape;
+  rdfs:label "Management Activity (Venue)"@en;
+  sh:target spao-at:ManagementActivity_Venue-target;
+  skos:definition "A management activity that links a Group/LegalBody/Family with a Venue, indicating that this actor managed this venue."@en;
+  sh:closed true;
+  sh:ignoredProperties _:de6c608aee3c476a8fb357820941e069286;
+  foaf:depiction spao-at:Diagram_Group_Legal_Body_Family;
+  shacl-play:background-color "83DDFF";
+  sh:property spao-at:ManagementActivity_Venue_P2_has_type, spao-at:ManagementActivity_Venue_type,
+    spao-at:ManagementActivity_Venue_P16_used_specific_object .
+
+spao-at:ManagementActivity_Venue-target sh:select """PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+PREFIX frbroo: <http://iflastandards.info/ns/fr/frbr/frbroo/>
+SELECT $this
+WHERE {
+ $this a crm:E7_Activity .
+ $this crm:P2_has_type <http://vocab.performing-arts.ch/mujfv> .
+ $this crm:P16_used_specific_object ?venue .
+ ?venue a crm:E22_Man-Made_Object .
+}""" .
+
+_:de6c608aee3c476a8fb357820941e069286 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+spao-at:ManagementActivity_Institution a sh:NodeShape;
+  rdfs:label "Management Activity (Institution)"@en;
+  sh:target spao-at:ManagementActivity_Institution-target;
+  sh:closed true;
+  sh:ignoredProperties _:de6c608aee3c476a8fb357820941e069287;
+  foaf:depiction "spao-pf:Performative_Work";
+  shacl-play:background-color "83DDFF";
+  sh:property spao-at:ManagementActivity_Institution_P2_has_type, spao-at:ManagementActivity_Institution_P4_has_time-span,
+    spao-at:ManagementActivity_Institution_P16_used_specific_object .
+
+spao-at:ManagementActivity_Institution-target sh:select """PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+PREFIX frbroo: <http://iflastandards.info/ns/fr/frbr/frbroo/>
+PREFIX rico: <https://www.ica.org/standards/RiC/ontology#>
+SELECT $this
+WHERE {
+ $this a crm:E7_Activity .
+ $this crm:P2_has_type <http://vocab.performing-arts.ch/mujfv> .
+ $this crm:P16_used_specific_object ?institution .
+ ?institution a ?type .
+ VALUES ?type { crm:E74_Group crm:E40_Legal_Body rico:Family }
+}""" .
+
+_:de6c608aee3c476a8fb357820941e069287 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+spao-at:Man-Made_Object_Type a sh:NodeShape;
+  rdfs:label "Type of Man-Made Object"@en;
+  skos:definition "An object type, taken from the [object type](http://vocab.performing-arts.ch/dw) vocabulary"@en;
+  foaf:depiction spao-at:Diagram_Venue;
+  shacl-play:background-color "FAB665";
+  sh:property spao-at:Man-Made_Object_Type_inScheme .
+
+spao-at:Contact_Point_Type a sh:NodeShape;
+  rdfs:label "Type of Contact Point"@en;
+  skos:definition "A type of contact point, taken from the [contact point type](http://vocab.performing-arts.ch/ih) vocabulary"@en;
+  shacl-play:background-color "FAB666";
+  sh:property spao-at:Contact_Point_Type_inScheme .
+
+spao-at:Appellation_Type a sh:NodeShape;
+  rdfs:label "Type of Appellation"@en;
+  skos:definition "A type of appellation, taken from the [appellation type](http://vocab.performing-arts.ch/ya) vocabulary"@en;
+  shacl-play:background-color "FAB667";
+  sh:property spao-at:Appellation_Type_inScheme .
+
+spao-at:Note_Type a sh:NodeShape;
+  rdfs:label "Type of Note"@en;
+  skos:definition "A type of linguistic object, taken from the [linguistic object type](http://vocab.performing-arts.ch/eo) vocabulary"@en;
+  shacl-play:background-color "FAB668";
+  sh:property spao-at:Note_Type_inScheme .
+
+spao-at:Group_Type a sh:NodeShape;
+  rdfs:label "Type of Group"@en;
+  skos:definition "A type of Group/LegalBody/Family, taken from the [group type](http://vocab.performing-arts.ch/vr) vocabulary"@en;
+  foaf:depiction spao-at:Diagram_Group_Legal_Body_Family;
+  shacl-play:background-color "FAB669";
+  sh:property spao-at:Group_Type_inScheme .
+
+spao-at:Genre a sh:NodeShape;
+  rdfs:label "Type of Pursuit"@en;
+  skos:definition "An artistic genre, taken from the [Genre](http://vocab.performing-arts.ch/mn) vocabulary"@en;
+  shacl-play:background-color "FAB670";
+  sh:property spao-at:Genre_inScheme .
+
+spao-at:Gender a sh:NodeShape;
+  rdfs:label "Gender"@en;
+  skos:definition "The genre of a person. The values are crm:E74_Group in a special named graph."@en;
+  sh:pattern "http://data.performing-arts.ch/g/gender/.*";
+  skos:example <http://data.performing-arts.ch/g/gender/f>;
+  shacl-play:background-color "FAB671" .
+
+spao-at:Nationality a sh:NodeShape;
+  rdfs:label "Nationality"@en;
+  skos:definition "The nationalities of a person. The values are crm:E74_Group in a special named graph. This is really the *nationality* and not the country."@en;
+  sh:pattern "http://data.performing-arts.ch/g/nation/.*";
+  skos:example <http://data.performing-arts.ch/g/nation/ch>;
+  shacl-play:background-color "FAB672" .
+
+spao-at:Venue_hasBeginningDate sh:path rico:hasBeginningDate;
+  sh:name "beginning date (rico)"@en;
+  sh:description "Date de début d'exploitation"@fr;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class rico:Date .
+
+spao-at:Venue_hasEndDate sh:path rico:hasEndDate;
+  sh:name "end date (rico)"@en;
+  sh:description "Date de fin d'exploitation"@fr;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class rico:Date .
+
+spao-at:Venue_label sh:path rdfs:label;
+  sh:name "label"@en;
+  sh:description "Label of the venue"@en;
+  sh:minCount 1;
+  sh:nodeKind sh:Literal;
+  sh:or _:de6c608aee3c476a8fb357820941e069290;
+  dash:propertyRole dash:LabelRole .
+
+_:de6c608aee3c476a8fb357820941e069288 sh:datatype xsd:string .
+
+_:de6c608aee3c476a8fb357820941e069289 sh:datatype rdf:langString .
+
+_:de6c608aee3c476a8fb357820941e069290 a rdf:List;
+  rdf:first _:de6c608aee3c476a8fb357820941e069288;
+  rdf:rest _:de6c608aee3c476a8fb357820941e069291 .
+
+_:de6c608aee3c476a8fb357820941e069291 rdf:first _:de6c608aee3c476a8fb357820941e069289;
+  rdf:rest rdf:nil .
+
+spao-at:Venue_P102_has_title sh:path crm:P102_has_title;
+  sh:name "common title (P102)"@en;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E35_Title .
+
+spao-at:Venue_P131_is_identified_by sh:path crm:P131_is_identified_by;
+  sh:name "byline (P131)"@en;
+  sh:description "Note permettant de préciser la nature de l'objet"@fr;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E41_Appellation;
+  sh:node spao-at:Byline .
+
+spao-at:Venue_P156_occupies sh:path crm:P156_occupies;
+  sh:name "location (P156)"@en;
+  sh:description "localisation"@fr;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E53_Place;
+  sh:node spao-at:Place_undefined .
+
+spao-at:Venue_P2_has_type sh:path crm:P2_has_type;
+  sh:name "type (P2)"@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  sh:node spao-at:Man-Made_Object_Type;
+  sh:hasValue vocab:dwmkn;
+  sh:group _:de6c608aee3c476a8fb357820941e069292 .
+
+_:de6c608aee3c476a8fb357820941e069292 rdfs:label "" .
+
+spao-at:Venue_P3_has_note sh:path crm:P3_has_note;
+  sh:name "note (P3)"@en;
+  rdfs:seeAlso <https://github.com/sapa/performing-arts-ch-cleaning/issues/134>;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E62_String .
+
+spao-at:Venue_P46_is_composed_of sh:path crm:P46_is_composed_of;
+  sh:name "contains (P46)"@en;
+  sh:description "Parties constitutives de l'objet"@fr;
+  sh:nodeKind sh:IRI;
+  sh:node spao-at:Venue .
+
+spao-at:Venue_P76_has_contact_point sh:path crm:P76_has_contact_point;
+  sh:name "contact point (P76)"@en;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E51_Contact_Point .
+
+spao-at:Venue_sameAs sh:path owl:sameAs;
+  sh:name "same as"@en;
+  sh:nodeKind sh:IRI .
+
+spao-at:Venue_unreconciled_label sh:path rdfs:label;
+  sh:name "label"@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string;
+  dash:propertyRole dash:LabelRole .
+
+spao-at:Venue_unreconciled_P2_has_type sh:path crm:P2_has_type;
+  sh:name "type (P2)"@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  sh:node spao-at:Man-Made_Object_Type;
+  sh:hasValue vocab:dwmkn .
+
+spao-at:Place_undefined_P89_falls_within sh:path crm:P89_falls_within;
+  sh:name "falls within (P89)"@en;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E53_Place;
+  sh:node spao-at:Place_known .
+
+spao-at:Place_known_label sh:path rdfs:label;
+  sh:name "label"@en;
+  sh:nodeKind sh:Literal;
+  sh:or _:de6c608aee3c476a8fb357820941e069295;
+  dash:propertyRole dash:LabelRole .
+
+_:de6c608aee3c476a8fb357820941e069293 sh:datatype xsd:string .
+
+_:de6c608aee3c476a8fb357820941e069294 sh:datatype rdf:langString .
+
+_:de6c608aee3c476a8fb357820941e069295 a rdf:List;
+  rdf:first _:de6c608aee3c476a8fb357820941e069293;
+  rdf:rest _:de6c608aee3c476a8fb357820941e069296 .
+
+_:de6c608aee3c476a8fb357820941e069296 rdf:first _:de6c608aee3c476a8fb357820941e069294;
+  rdf:rest rdf:nil .
+
+spao-at:Place_known_P87_is_identified_by sh:path crm:P87_is_identified_by;
+  sh:name "is identified by (P87)"@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E48_Place_Name .
+
+spao-at:Place_known_P89_falls_within sh:path crm:P89_falls_within;
+  sh:name "falls within (P89)"@en;
+  sh:description "Note : it is normal that some Swiss canton are inside more than one other places. Hence there is not a maximum cardinality of 1."@en;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E53_Place;
+  sh:node spao-at:Place_known .
+
+spao-at:Place_known_sameAs sh:path owl:sameAs;
+  sh:name "same as"@en;
+  sh:nodeKind sh:IRI .
+
+spao-at:E39_Actor_unreconciled_label sh:path rdfs:label;
+  sh:name "label"@en;
+  sh:description "Label of the un-reconciled actor. This is the only information available on these nodes."@en;
+  skos:editorialNote "Voir si on ne pourrait pas harmoniser les datatypes"@en;
+  sh:minCount 1;
+  sh:nodeKind sh:Literal;
+  sh:or _:de6c608aee3c476a8fb357820941e069299;
+  dash:propertyRole dash:LabelRole .
+
+_:de6c608aee3c476a8fb357820941e069297 sh:datatype xsd:string .
+
+_:de6c608aee3c476a8fb357820941e069298 sh:datatype rdf:langString .
+
+_:de6c608aee3c476a8fb357820941e069299 a rdf:List;
+  rdf:first _:de6c608aee3c476a8fb357820941e069297;
+  rdf:rest _:de6c608aee3c476a8fb357820941e069300 .
+
+_:de6c608aee3c476a8fb357820941e069300 rdf:first _:de6c608aee3c476a8fb357820941e069298;
+  rdf:rest rdf:nil .
+
+spao-at:E39_Actor_special_label sh:path rdfs:label;
+  sh:name "label"@en;
+  sh:description "Label of the un-reconciled actor. This is the only information available on these nodes."@en;
+  skos:editorialNote "Voir si on ne pourrait pas harmoniser les datatypes"@en;
+  sh:minCount 1;
+  sh:nodeKind sh:Literal;
+  sh:or _:de6c608aee3c476a8fb357820941e069303;
+  dash:propertyRole dash:LabelRole .
+
+_:de6c608aee3c476a8fb357820941e069301 sh:datatype xsd:string .
+
+_:de6c608aee3c476a8fb357820941e069302 sh:datatype rdf:langString .
+
+_:de6c608aee3c476a8fb357820941e069303 a rdf:List;
+  rdf:first _:de6c608aee3c476a8fb357820941e069301;
+  rdf:rest _:de6c608aee3c476a8fb357820941e069304 .
+
+_:de6c608aee3c476a8fb357820941e069304 rdf:first _:de6c608aee3c476a8fb357820941e069302;
+  rdf:rest rdf:nil .
+
+spao-at:E21_Person_birthDate sh:path rico:birthDate;
+  sh:name "birth date (rico)"@en;
+  sh:description "Date of birth (this should theoretically be expressed on the birth event)"@en;
+  skos:editorialNote """Il y a un mélange de CRM et de RICO sur les autorités. C'est gênant. Par exemple en CRM la date devrait être porté par l'événement E67_Birth et non pas comme un attribut RICO. Je suggérerai de n'utiliser que le CRM pour la partie autorité.
+
+Après migration ResearchSpace"""@en;
+  sh:nodeKind sh:IRI;
+  sh:class rico:Date .
+
+spao-at:E21_Person_deathDate sh:path rico:deathDate;
+  sh:name "death date (rico)"@en;
+  sh:description "Date of death (this should theoretically be expressed on the death event)"@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class rico:Date .
+
+spao-at:E21_Person_hasBibliography sh:path spao:hasBibliography;
+  sh:name "bibliography (spao)"@en;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-at:E21_Person_history sh:path rico:history;
+  sh:name "history (rico)"@en;
+  rdfs:seeAlso <https://github.com/sapa/performing-arts-ch-cleaning/issues/133>;
+  sh:nodeKind sh:Literal;
+  sh:or _:de6c608aee3c476a8fb357820941e069307 .
+
+_:de6c608aee3c476a8fb357820941e069305 sh:datatype xsd:string .
+
+_:de6c608aee3c476a8fb357820941e069306 sh:datatype rdf:langString .
+
+_:de6c608aee3c476a8fb357820941e069307 a rdf:List;
+  rdf:first _:de6c608aee3c476a8fb357820941e069305;
+  rdf:rest _:de6c608aee3c476a8fb357820941e069308 .
+
+_:de6c608aee3c476a8fb357820941e069308 rdf:first _:de6c608aee3c476a8fb357820941e069306;
+  rdf:rest rdf:nil .
+
+spao-at:E21_Person_label sh:path rdfs:label;
+  sh:name "label"@en;
+  sh:description "Name of the person"@en;
+  rdfs:seeAlso <https://github.com/sapa/performing-arts-ch-cleaning/issues/131>;
+  skos:editorialNote "13/11/2025 : vu avec Baptiste : ce serait mieux de conserver 1 et 1 seul rdfs:label sur les Personnes, sans langue. Et de mettre toutes les translitérations comme des Appellations CRM. Mais après migration ResearchSpace"@en;
+  sh:minCount 1;
+  sh:nodeKind sh:Literal;
+  sh:or _:de6c608aee3c476a8fb357820941e069311;
+  dash:propertyRole dash:LabelRole .
+
+_:de6c608aee3c476a8fb357820941e069309 sh:datatype xsd:string .
+
+_:de6c608aee3c476a8fb357820941e069310 sh:datatype rdf:langString .
+
+_:de6c608aee3c476a8fb357820941e069311 a rdf:List;
+  rdf:first _:de6c608aee3c476a8fb357820941e069309;
+  rdf:rest _:de6c608aee3c476a8fb357820941e069312 .
+
+_:de6c608aee3c476a8fb357820941e069312 rdf:first _:de6c608aee3c476a8fb357820941e069310;
+  rdf:rest rdf:nil .
+
+spao-at:E21_Person_P100i_died_in sh:path crm:P100i_died_in;
+  sh:name "died in (P100i)"@en;
+  sh:description "Reference to a death event, which will indicate the place of death."@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E69_Death .
+
+spao-at:E21_Person_P107i_is_current_or_former_member_of sh:path crm:P107i_is_current_or_former_member_of;
+  sh:name "is current or former member of (P107i)"@en;
+  sh:description "This is a reference to either the genre or the nationality of the person."@en;
+  sh:nodeKind sh:IRI;
+  sh:or _:de6c608aee3c476a8fb357820941e069315 .
+
+_:de6c608aee3c476a8fb357820941e069313 sh:node spao-at:Gender .
+
+_:de6c608aee3c476a8fb357820941e069314 sh:node spao-at:Nationality .
+
+_:de6c608aee3c476a8fb357820941e069315 a rdf:List;
+  rdf:first _:de6c608aee3c476a8fb357820941e069313;
+  rdf:rest _:de6c608aee3c476a8fb357820941e069316 .
+
+_:de6c608aee3c476a8fb357820941e069316 rdf:first _:de6c608aee3c476a8fb357820941e069314;
+  rdf:rest rdf:nil .
+
+spao-at:E21_Person_P131_is_identified_by sh:path crm:P131_is_identified_by;
+  sh:name "is identified by (P131)"@en;
+  sh:minCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E82_Actor_Appellation .
+
+spao-at:E21_Person_P3_has_note sh:path crm:P3_has_note;
+  sh:name "note (P3)"@en;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E62_String .
+
+spao-at:E21_Person_P76_has_contact_point sh:path crm:P76_has_contact_point;
+  sh:name "contact point (P76)"@en;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E51_Contact_Point .
+
+spao-at:E21_Person_P98i_was_born sh:path crm:P98i_was_born;
+  sh:name "was born (P98i)"@en;
+  sh:description "Reference to a birth event, which will indicate a place of birth."@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E67_Birth .
+
+spao-at:E21_Person_replacedBy sh:path spao:replacedBy;
+  sh:name "replaced by (spao)"@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E21_Person .
+
+spao-at:E21_Person_sameAs sh:path owl:sameAs;
+  sh:name "same as"@en;
+  sh:nodeKind sh:IRI .
+
+spao-at:E21_Person_P14i_performed sh:path crm:P14i_performed;
+  sh:name "performed (P14i)"@en;
+  sh:description "This is a link a management activity of type [\"management\"](http://vocab.performing-arts.ch/mujfv), that indicates that this Person managed an Institution"@en;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E7_Activity;
+  sh:node spao-at:ManagementActivity_Institution .
+
+spao-at:Group_Legal_Body_Family_controlledBy sh:path rico:controlledBy;
+  sh:name "controlled by (rico)"@en;
+  sh:nodeKind sh:IRI;
+  sh:node spao-at:Group_Legal_Body_Family .
+
+spao-at:Group_Legal_Body_Family_hasBeginningDate sh:path rico:hasBeginningDate;
+  sh:name "beginning date (rico)"@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class rico:Date .
+
+spao-at:Group_Legal_Body_Family_hasBibliography sh:path spao:hasBibliography;
+  sh:name "bibliography (rico)"@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-at:Group_Legal_Body_Family_hasEndDate sh:path rico:hasEndDate;
+  sh:name "end date (rico)"@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class rico:Date .
+
+spao-at:Group_Legal_Body_Family_history sh:path rico:history;
+  sh:name "history (rico)"@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-at:Group_Legal_Body_Family_isPartOfRepertories sh:path spao:isPartOfRepertories;
+  sh:name "is part of repertories (spao)"@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:boolean .
+
+spao-at:Group_Legal_Body_Family_isSuccessorOf sh:path rico:isSuccessorOf;
+  sh:name "is successor of (rico)"@en;
+  rdfs:seeAlso <https://github.com/sapa/performing-arts-ch-cleaning/issues/136>;
+  sh:nodeKind sh:IRI;
+  sh:node spao-at:Group_Legal_Body_Family .
+
+spao-at:Group_Legal_Body_Family_label sh:path rdfs:label;
+  sh:name "label"@en;
+  sh:minCount 1;
+  sh:nodeKind sh:Literal;
+  sh:or _:de6c608aee3c476a8fb357820941e069319;
+  dash:propertyRole dash:LabelRole .
+
+_:de6c608aee3c476a8fb357820941e069317 sh:datatype xsd:string .
+
+_:de6c608aee3c476a8fb357820941e069318 sh:datatype rdf:langString .
+
+_:de6c608aee3c476a8fb357820941e069319 a rdf:List;
+  rdf:first _:de6c608aee3c476a8fb357820941e069317;
+  rdf:rest _:de6c608aee3c476a8fb357820941e069320 .
+
+_:de6c608aee3c476a8fb357820941e069320 rdf:first _:de6c608aee3c476a8fb357820941e069318;
+  rdf:rest rdf:nil .
+
+spao-at:Group_Legal_Body_Family_P107_has_current_or_former_member sh:path crm:P107_has_current_or_former_member;
+  sh:name "has current or former member (P107)"@en;
+  sh:nodeKind sh:IRI;
+  sh:or _:de6c608aee3c476a8fb357820941e069323 .
+
+_:de6c608aee3c476a8fb357820941e069321 sh:node spao-at:E39_Actor_unreconciled .
+
+_:de6c608aee3c476a8fb357820941e069322 sh:node spao-at:E21_Person .
+
+_:de6c608aee3c476a8fb357820941e069323 a rdf:List;
+  rdf:first _:de6c608aee3c476a8fb357820941e069321;
+  rdf:rest _:de6c608aee3c476a8fb357820941e069324 .
+
+_:de6c608aee3c476a8fb357820941e069324 rdf:first _:de6c608aee3c476a8fb357820941e069322;
+  rdf:rest rdf:nil .
+
+spao-at:Group_Legal_Body_Family_P107i_is_current_or_former_member_of sh:path crm:P107i_is_current_or_former_member_of;
+  sh:name "is current or former member of (P107i)"@en;
+  rdfs:seeAlso <https://github.com/sapa/performing-arts-ch-cleaning/issues/140>;
+  sh:nodeKind sh:IRI;
+  sh:node spao-at:Group_Legal_Body_Family .
+
+spao-at:Group_Legal_Body_Family_P131_is_identified_by sh:path crm:P131_is_identified_by;
+  sh:name "is identified by (P131)"@en;
+  rdfs:seeAlso <https://github.com/sapa/performing-arts-ch-cleaning/issues/137>;
+  skos:editorialNote """Note : P131_is_identified_by est une ancienne propriété qui n'existe plus dans le CRM actuelle.
+Elle serait à remplacer partout par P1_is_identified_by - sur tous les types d'entités. C'est à faire en même temps que le refactoring des Appellations. A tracer dans une issue Github je pense"""@en;
+  sh:nodeKind sh:IRI;
+  sh:or _:de6c608aee3c476a8fb357820941e069327 .
+
+_:de6c608aee3c476a8fb357820941e069325 sh:node spao-at:E82_Actor_Appellation .
+
+_:de6c608aee3c476a8fb357820941e069326 sh:node spao-at:Byline .
+
+_:de6c608aee3c476a8fb357820941e069327 a rdf:List;
+  rdf:first _:de6c608aee3c476a8fb357820941e069325;
+  rdf:rest _:de6c608aee3c476a8fb357820941e069328 .
+
+_:de6c608aee3c476a8fb357820941e069328 rdf:first _:de6c608aee3c476a8fb357820941e069326;
+  rdf:rest rdf:nil .
+
+spao-at:Group_Legal_Body_Family_P14i_performed sh:path crm:P14i_performed;
+  sh:name "performed (P14i)"@en;
+  sh:description "This is a link a management activity of type [\"management\"](http://vocab.performing-arts.ch/mujfv), that indicates that this Group/LegalBody/Family was responsible for the management of a certain Venue."@en;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E7_Activity;
+  sh:node spao-at:ManagementActivity_Venue .
+
+spao-at:Group_Legal_Body_Family_P1_is_identified_by sh:path crm:P1_is_identified_by;
+  sh:name "is identified by (P1)"@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E42_Identifier;
+  sh:node spao-at:E42_Identifier .
+
+spao-at:Group_Legal_Body_Family_P2_has_type sh:path crm:P2_has_type;
+  sh:name "type (P2)"@en;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  sh:node spao-at:Group_Type .
+
+spao-at:Group_Legal_Body_Family_P3_has_note sh:path crm:P3_has_note;
+  sh:name "note (P3)"@en;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E62_String .
+
+spao-at:Group_Legal_Body_Family_P74_has_current_or_former_residence sh:path crm:P74_has_current_or_former_residence;
+  sh:name "has current or former residence (P74)"@en;
+  sh:nodeKind sh:IRI;
+  sh:or _:de6c608aee3c476a8fb357820941e069331 .
+
+_:de6c608aee3c476a8fb357820941e069329 sh:node spao-at:Place_known .
+
+_:de6c608aee3c476a8fb357820941e069330 sh:node spao-at:Place_undefined .
+
+_:de6c608aee3c476a8fb357820941e069331 a rdf:List;
+  rdf:first _:de6c608aee3c476a8fb357820941e069329;
+  rdf:rest _:de6c608aee3c476a8fb357820941e069332 .
+
+_:de6c608aee3c476a8fb357820941e069332 rdf:first _:de6c608aee3c476a8fb357820941e069330;
+  rdf:rest rdf:nil .
+
+spao-at:Group_Legal_Body_Family_P76_has_contact_point sh:path crm:P76_has_contact_point;
+  sh:name "contact point (P76)"@en;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E51_Contact_Point .
+
+spao-at:Group_Legal_Body_Family_replacedBy sh:path spao:replacedBy;
+  sh:name "replaced by (spao)"@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:node spao-at:Group_Legal_Body_Family .
+
+spao-at:Group_Legal_Body_Family_sameAs sh:path owl:sameAs;
+  sh:name "same as"@en;
+  sh:nodeKind sh:IRI .
+
+spao-at:E28_Conceptual_Object_label sh:path rdfs:label;
+  sh:name "label"@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string;
+  dash:propertyRole dash:LabelRole .
+
+spao-at:E28_Conceptual_Object_P107i_is_current_or_former_member_of sh:path crm:P107i_is_current_or_former_member_of;
+  sh:name "is current or former member of (P107i)"@en;
+  sh:description "This is used to capture the genre of the character, and its nationality"@en;
+  sh:nodeKind sh:IRI;
+  sh:or _:de6c608aee3c476a8fb357820941e069335 .
+
+_:de6c608aee3c476a8fb357820941e069333 sh:node spao-at:Gender .
+
+_:de6c608aee3c476a8fb357820941e069334 sh:node spao-at:Nationality .
+
+_:de6c608aee3c476a8fb357820941e069335 a rdf:List;
+  rdf:first _:de6c608aee3c476a8fb357820941e069333;
+  rdf:rest _:de6c608aee3c476a8fb357820941e069336 .
+
+_:de6c608aee3c476a8fb357820941e069336 rdf:first _:de6c608aee3c476a8fb357820941e069334;
+  rdf:rest rdf:nil .
+
+spao-at:E28_Conceptual_Object_P131_is_identified_by sh:path crm:P131_is_identified_by;
+  sh:name "is identified by (P131)"@en;
+  sh:minCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E75_Conceptual_Object_Appellation .
+
+spao-at:E28_Conceptual_Object_P3_has_note sh:path crm:P3_has_note;
+  sh:name "note (P3)"@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E62_String .
+
+spao-at:E28_Conceptual_Object_sameAs sh:path owl:sameAs;
+  sh:name "same as"@en;
+  sh:nodeKind sh:IRI .
+
+spao-at:E48_Place_Name_value sh:path rdf:value;
+  sh:name "value"@en;
+  sh:minCount 1;
+  sh:nodeKind sh:Literal;
+  sh:or _:de6c608aee3c476a8fb357820941e069339;
+  dash:propertyRole dash:LabelRole .
+
+_:de6c608aee3c476a8fb357820941e069337 sh:datatype xsd:string .
+
+_:de6c608aee3c476a8fb357820941e069338 sh:datatype rdf:langString .
+
+_:de6c608aee3c476a8fb357820941e069339 a rdf:List;
+  rdf:first _:de6c608aee3c476a8fb357820941e069337;
+  rdf:rest _:de6c608aee3c476a8fb357820941e069340 .
+
+_:de6c608aee3c476a8fb357820941e069340 rdf:first _:de6c608aee3c476a8fb357820941e069338;
+  rdf:rest rdf:nil .
+
+spao-at:E51_Contact_Point_P2_has_type sh:path crm:P2_has_type;
+  sh:name "type (P2)"@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  sh:node spao-at:Contact_Point_Type;
+  sh:group _:de6c608aee3c476a8fb357820941e069341 .
+
+_:de6c608aee3c476a8fb357820941e069341 rdfs:label "" .
+
+spao-at:E51_Contact_Point_value sh:path rdf:value;
+  sh:name "value"@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  dash:propertyRole dash:LabelRole .
+
+spao-at:E41_Appellation_P2_has_type sh:path crm:P2_has_type;
+  sh:name "type (P2)"@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  sh:node spao-at:Appellation_Type;
+  sh:group _:de6c608aee3c476a8fb357820941e069342 .
+
+spao-at:E41_Appellation sh:property spao-at:E41_Appellation_P2_has_type, spao-at:E41_Appellation_value .
+
+_:de6c608aee3c476a8fb357820941e069342 rdfs:label "" .
+
+spao-at:E41_Appellation_value sh:path rdf:value;
+  sh:name "value"@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string;
+  dash:propertyRole dash:LabelRole .
+
+spao-at:E42_Identifier_value sh:path rdf:value;
+  sh:name "value"@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string;
+  dash:propertyRole dash:LabelRole .
+
+spao-at:E82_Actor_Appellation_P2_has_type sh:path crm:P2_has_type;
+  sh:name "type (P2)"@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  sh:node spao-at:Appellation_Type;
+  sh:group _:de6c608aee3c476a8fb357820941e069343 .
+
+_:de6c608aee3c476a8fb357820941e069343 rdfs:label "" .
+
+spao-at:E82_Actor_Appellation_value sh:path rdf:value;
+  sh:name "value"@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:or _:de6c608aee3c476a8fb357820941e069346;
+  dash:propertyRole dash:LabelRole .
+
+_:de6c608aee3c476a8fb357820941e069344 sh:datatype xsd:string .
+
+_:de6c608aee3c476a8fb357820941e069345 sh:datatype rdf:langString .
+
+_:de6c608aee3c476a8fb357820941e069346 a rdf:List;
+  rdf:first _:de6c608aee3c476a8fb357820941e069344;
+  rdf:rest _:de6c608aee3c476a8fb357820941e069347 .
+
+_:de6c608aee3c476a8fb357820941e069347 rdf:first _:de6c608aee3c476a8fb357820941e069345;
+  rdf:rest rdf:nil .
+
+spao-at:E75_Conceptual_Object_Appellation_P2_has_type sh:path crm:P2_has_type;
+  sh:name "type (P2)"@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  sh:node spao-at:Appellation_Type;
+  sh:group _:de6c608aee3c476a8fb357820941e069348 .
+
+_:de6c608aee3c476a8fb357820941e069348 rdfs:label "" .
+
+spao-at:E75_Conceptual_Object_Appellation_value sh:path rdf:value;
+  sh:name "value"@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string;
+  dash:propertyRole dash:LabelRole .
+
+spao-at:E62_String_P2_has_type sh:path crm:P2_has_type;
+  sh:name "type (P2)"@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  sh:node spao-at:Note_Type;
+  sh:group _:de6c608aee3c476a8fb357820941e069349 .
+
+_:de6c608aee3c476a8fb357820941e069349 rdfs:label "" .
+
+spao-at:E62_String_value sh:path rdf:value;
+  sh:name "value"@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:or _:de6c608aee3c476a8fb357820941e069352;
+  dash:propertyRole dash:LabelRole .
+
+_:de6c608aee3c476a8fb357820941e069350 sh:datatype xsd:string .
+
+_:de6c608aee3c476a8fb357820941e069351 sh:datatype rdf:langString .
+
+_:de6c608aee3c476a8fb357820941e069352 a rdf:List;
+  rdf:first _:de6c608aee3c476a8fb357820941e069350;
+  rdf:rest _:de6c608aee3c476a8fb357820941e069353 .
+
+_:de6c608aee3c476a8fb357820941e069353 rdf:first _:de6c608aee3c476a8fb357820941e069351;
+  rdf:rest rdf:nil .
+
+spao-at:Date_dateStandard sh:path rico:dateStandard;
+  sh:name "date standard"@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-at:Date_expressedDate sh:path rico:expressedDate;
+  sh:name "expressed date"@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string;
+  dash:propertyRole dash:LabelRole .
+
+spao-at:Date_normalizedDateValue sh:path rico:normalizedDateValue;
+  sh:name "normalized date value"@en;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-at:E69_Death_P7_took_place_at sh:path crm:P7_took_place_at;
+  sh:name "took place at"@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E53_Place;
+  sh:node spao-at:Place_known .
+
+spao-at:E67_Birth_P7_took_place_at sh:path crm:P7_took_place_at;
+  sh:name "took place at"@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E53_Place;
+  sh:node spao-at:Place_known .
+
+spao-at:F51_Pursuit_P14_carried_out_by sh:path crm:P14_carried_out_by;
+  sh:name "carried out by"@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:node spao-at:Group_Legal_Body_Family .
+
+spao-at:F51_Pursuit_R59_had_typical_subject sh:path frbroo:R59_had_typical_subject;
+  sh:name "had typical subject"@en;
+  sh:minCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  sh:node spao-at:Genre .
+
+spao-at:ManagementActivity_Venue_P2_has_type sh:path crm:P2_has_type;
+  sh:name "type (P2)"@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:hasValue vocab:mujfv;
+  sh:group _:de6c608aee3c476a8fb357820941e069354 .
+
+_:de6c608aee3c476a8fb357820941e069354 rdfs:label "" .
+
+spao-at:ManagementActivity_Venue_type sh:path rdf:type;
+  sh:name "type (rdf)"@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:hasValue crm:E7_Activity;
+  sh:group _:de6c608aee3c476a8fb357820941e069355 .
+
+_:de6c608aee3c476a8fb357820941e069355 rdfs:label "" .
+
+spao-at:ManagementActivity_Venue_P16_used_specific_object sh:path crm:P16_used_specific_object;
+  sh:name "managed venue (P16)"@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E22_Man-Made_Object;
+  sh:node spao-at:Venue;
+  sh:group _:de6c608aee3c476a8fb357820941e069356 .
+
+_:de6c608aee3c476a8fb357820941e069356 rdfs:label "" .
+
+spao-at:ManagementActivity_Institution_P2_has_type sh:path crm:P2_has_type;
+  sh:name "has type"@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:hasValue vocab:mujfv .
+
+spao-at:ManagementActivity_Institution_P4_has_time-span sh:path crm:P4_has_time-span;
+  sh:name "has time-span"@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E52_Time-Span .
+
+spao-at:ManagementActivity_Institution_P16_used_specific_object sh:path crm:P16_used_specific_object;
+  sh:name "managed institution (P16)"@en;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:IRI;
+  sh:node spao-at:Group_Legal_Body_Family;
+  sh:group _:de6c608aee3c476a8fb357820941e069357 .
+
+_:de6c608aee3c476a8fb357820941e069357 rdfs:label "" .
+
+spao-at:Man-Made_Object_Type_inScheme sh:path skos:inScheme;
+  sh:name "in scheme"@en;
+  sh:hasValue vocab:dw .
+
+spao-at:Contact_Point_Type_inScheme sh:path skos:inScheme;
+  sh:name "in scheme"@en;
+  sh:hasValue vocab:ih .
+
+spao-at:Appellation_Type_inScheme sh:path skos:inScheme;
+  sh:name "in scheme"@en;
+  sh:hasValue vocab:ya .
+
+spao-at:Note_Type_inScheme sh:path skos:inScheme;
+  sh:name "in scheme"@en;
+  sh:hasValue vocab:eo .
+
+spao-at:Group_Type_inScheme sh:path skos:inScheme;
+  sh:name "in scheme"@en;
+  sh:hasValue vocab:vr .
+
+spao-at:Genre_inScheme sh:path skos:inScheme;
+  sh:name "in scheme"@en;
+  sh:hasValue vocab:mn .
+
+spao-at:Diagram_Venue dct:title "Venue"@en;
+  sh:order 1 .
+
+spao-at:Diagram_Group_Legal_Body_Family dct:title "Group, Legal Bodies or Families"@en;
+  sh:order 2 .
+
+spao-at:Diagram_Person dct:title "Person"@en;
+  sh:order 3 .
+
+spao-at:Diagram_Place dct:title "Place"@en;
+  sh:order 4 .
+
+spao-at:Diagram_Conceptual_Object dct:title "Conceptual Object"@en;
+  sh:order 5 .

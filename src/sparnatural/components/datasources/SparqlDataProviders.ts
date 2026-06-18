@@ -1,6 +1,6 @@
 import { Term } from "@rdfjs/types/data-model";
-import { ListDataProviderIfc, RdfTermDatasourceItem, AutocompleteDataProviderIfc, TreeDataProviderIfc, RdfTermTreeDatasourceItem, ValuesListDataProviderIfc } from "./DataProviders";
-import { AutocompleteSparqlQueryBuilderIfc, ListSparqlQueryBuilderIfc, TreeSparqlQueryBuilderIfc, ValuesListSparqlQueryBuilderIfc } from "./SparqlBuilders";
+import { ListDataProviderIfc, RdfTermDatasourceItem, AutocompleteDataProviderIfc, TreeDataProviderIfc, RdfTermTreeDatasourceItem, ValuesListDataProviderIfc, SinglePredicateDataProviderIfc } from "./DataProviders";
+import { AutocompleteSparqlQueryBuilderIfc, ListSparqlQueryBuilderIfc, SinglePredicateSparqlQueryBuilderIfc, TreeSparqlQueryBuilderIfc, ValuesListSparqlQueryBuilderIfc } from "./SparqlBuilders";
 import { sameTerm } from "../../SparnaturalQueryIfc";
 import { SparqlHandlerIfc } from "rdf-shacl-commons";
 
@@ -161,6 +161,62 @@ export class SparqlValuesListDataProvider extends BaseSparqlListDataProvider imp
             errorCallback
         );
   }
+
+}
+
+
+// Fetches the value of a single predicate (typically the label) for a given
+// URI via SPARQL, reading the 'uri' and 'label' columns.
+export class SparqlSinglePredicateDataProvider implements SinglePredicateDataProviderIfc {
+
+    sparqlHandler:SparqlHandlerIfc;
+    queryBuilder:SinglePredicateSparqlQueryBuilderIfc;
+    lang: string;
+    defaultLang: string;
+
+    constructor(
+        sparqlHandler:SparqlHandlerIfc,
+        queryBuilder: SinglePredicateSparqlQueryBuilderIfc
+    ) {
+        this.sparqlHandler = sparqlHandler;
+        this.queryBuilder = queryBuilder;
+    }
+
+    init(lang: string, defaultLang: string): void {
+        this.lang = lang;
+        this.defaultLang = defaultLang;
+    }
+
+    getSinglePredicate(
+        uri:string,
+        predicate:string,
+        callback:(items:RdfTermDatasourceItem[]) => void,
+        errorCallback?:(payload:any) => void
+    ):void {
+        let sparql = this.queryBuilder.buildSparqlQuery(
+            uri,
+            predicate,
+            this.lang,
+            this.defaultLang
+        );
+
+        this.sparqlHandler.executeSparql(sparql,(data:{results:{bindings:any}}) => {
+            // read the 'uri' and 'label' columns
+            let result = new Array<RdfTermDatasourceItem>;
+            for (let index = 0; index < data.results.bindings.length; index++) {
+                const solution = data.results.bindings[index];
+                if(solution.uri && solution.label) {
+                    result[result.length] = {
+                        term: solution.uri,
+                        label: solution.label.value
+                    };
+                }
+            }
+            callback(result);
+        },
+        errorCallback
+        );
+    }
 
 }
 

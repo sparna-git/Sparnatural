@@ -5,7 +5,7 @@ import { SelectedVal } from "../../../../SelectedVal";
 import { AbstractWidget } from "../../../../widgets/AbstractWidget";
 import { AutocompleteConfiguration, AutoCompleteWidget } from "../../../../widgets/AutoCompleteWidget";
 import { BooleanConfiguration, BooleanWidget } from "../../../../widgets/BooleanWidget";
-import { ListSparqlTemplateQueryBuilder, AutocompleteSparqlTemplateQueryBuilder, TreeSparqlTemplateQueryBuilder, ValuesListSparqlTemplateQueryBuilder } from "../../../../datasources/SparqlBuilders";
+import { ListSparqlTemplateQueryBuilder, AutocompleteSparqlTemplateQueryBuilder, TreeSparqlTemplateQueryBuilder, ValuesListSparqlTemplateQueryBuilder, SinglePredicateSparqlQueryBuilder } from "../../../../datasources/SparqlBuilders";
 import { ListConfiguration, ListWidget } from "../../../../widgets/ListWidget";
 import MapWidget, { MapConfiguration } from "../../../../widgets/MapWidget";
 import { NoWidget } from "../../../../widgets/NoWidget";
@@ -15,7 +15,7 @@ import { TimeDatePickerWidget } from "../../../../widgets/timedatepickerwidget/T
 import { TreeConfiguration, TreeWidget } from "../../../../widgets/treewidget/TreeWidget";
 import { ListDataProviderIfc, SortListDataProvider, AutocompleteDataProviderIfc, TreeDataProviderIfc, SortTreeDataProvider, ValuesListDataProviderIfc, SortValuesListDataProvider } from "../../../../datasources/DataProviders";
 import { NoOpListDataProvider, NoOpAutocompleteProvider, NoOpTreeDataProvider } from "../../../../datasources/NoOpDataProviders";
-import { SparqlListDataProvider, SparqlAutocompleDataProvider, SparqlTreeDataProvider, SparqlValuesListDataProvider } from "../../../../datasources/SparqlDataProviders";
+import { SparqlListDataProvider, SparqlAutocompleDataProvider, SparqlTreeDataProvider, SparqlValuesListDataProvider, SparqlSinglePredicateDataProvider } from "../../../../datasources/SparqlDataProviders";
 import ISpecificationProperty from "../../../../../spec-providers/ISpecificationProperty";
 import { IDatasource } from "../../../../../spec-providers/IDatasource";
 import { Catalog, RDFS, SKOS, SparqlHandlerFactory, SparqlHandlerIfc } from "rdf-shacl-commons";
@@ -244,13 +244,19 @@ export class WidgetFactory {
               this.settings.typePredicate
             );
     
-            return new ListWidget(
+            let listWidget = new ListWidget(
               this.parentComponent,
               listConfig,
               startClassVal,
               objectPropVal,
               endClassVal
             );
+            let listResolver = this.#buildLabelResolver(endClassVal.type);
+            listWidget.setLabelResolver(
+              listResolver.dataProvider,
+              listResolver.predicate
+            );
+            return listWidget;
     
           case Config.AUTOCOMPLETE_PROPERTY:
     
@@ -325,13 +331,19 @@ export class WidgetFactory {
               this.settings.typePredicate
             );
     
-            return new AutoCompleteWidget(
+            let autocompleteWidget = new AutoCompleteWidget(
               this.parentComponent,
               autocompleteConfig,
               startClassVal,
               objectPropVal,
               endClassVal
             );
+            let autocompleteResolver = this.#buildLabelResolver(endClassVal.type);
+            autocompleteWidget.setLabelResolver(
+              autocompleteResolver.dataProvider,
+              autocompleteResolver.predicate
+            );
+            return autocompleteWidget;
     
             break;
           case Config.VIRTUOSO_SEARCH_PROPERTY:
@@ -473,27 +485,39 @@ export class WidgetFactory {
               this.settings.typePredicate
             );
           
-            return new TreeWidget(
+            let treeWidget = new TreeWidget(
               this.parentComponent,
               treeConfig,
               startClassVal,
               objectPropVal,
               endClassVal
             );
-    
+            let treeResolver = this.#buildLabelResolver(endClassVal.type);
+            treeWidget.setLabelResolver(
+              treeResolver.dataProvider,
+              treeResolver.predicate
+            );
+            return treeWidget;
+
           case Config.MAP_PROPERTY:
             let mapConfig:MapConfiguration = {
               ...MapWidget.defaultConfiguration,
               ...this.settings.customization?.map
             };
     
-            return new MapWidget(
+            let mapWidget = new MapWidget(
               mapConfig,
               this.parentComponent,
               startClassVal,
               objectPropVal,
               endClassVal
-            ).render();
+            );
+            let mapResolver = this.#buildLabelResolver(endClassVal.type);
+            mapWidget.setLabelResolver(
+              mapResolver.dataProvider,
+              mapResolver.predicate
+            );
+            return mapWidget.render();
           
           case Config.NUMBER_PROPERTY:
     
@@ -549,6 +573,41 @@ export class WidgetFactory {
 
           return sparql;
         }
+    }
+
+    // Builds the URI label resolver injected into URI widgets (list,
+    // autocomplete, map, tree) for on-demand label resolution.
+    #buildLabelResolver(endClassType: string): {
+        dataProvider: SparqlSinglePredicateDataProvider;
+        predicate: string;
+    } {
+        let entity = this.specProvider.getEntity(endClassType);
+
+        // Label predicate cascade (same as the list/autocomplete datasources):
+        // default label property -> skos:prefLabel if SKOS -> rdfs:label|skos:prefLabel.
+        let labelProperty = entity.getDefaultLabelProperty();
+        let predicate: string;
+        if (labelProperty) {
+            predicate = "<" + labelProperty + ">";
+        } else if (entity.couldBeSkosConcept()) {
+            predicate = "<" + SKOS.PREF_LABEL.value + ">";
+        } else {
+            predicate = "<" + RDFS.LABEL.value + ">|<" + SKOS.PREF_LABEL.value + ">";
+        }
+
+        let dataProvider = new SparqlSinglePredicateDataProvider(
+            this.sparqlHandlerFactory.buildSparqlHandler(this.settings.endpoints),
+            new SinglePredicateSparqlQueryBuilder(this.sparqlPostProcessor)
+        );
+        dataProvider.init(
+            this.settings.language,
+            this.settings.defaultLanguage
+        );
+
+        return {
+            dataProvider,
+            predicate,
+        };
     }
 
 }
