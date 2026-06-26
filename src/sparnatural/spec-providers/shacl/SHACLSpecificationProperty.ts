@@ -86,6 +86,15 @@ export class SHACLSpecificationProperty
   }
 
   getPropertyType(range: string): string | undefined {
+    if(
+      SpecialSHACLSpecificationEntityRegistry.getInstance().getRegistry().has(range)
+      &&
+      this.getRange().length > 1
+    ) {
+      // in that case for the widget to the one corresponding to the special type
+      return SpecialSHACLSpecificationEntityRegistry.getInstance().getRegistry().get(range)?.getDefaultWidgetUri();
+    }
+
     return (this.shape as PropertyShape)
       .getSearchWidgetForRange(factory.namedNode(range))
       .getResource().value;

@@ -8,7 +8,7 @@ import { DagIfc, Dag } from "../../dag/Dag";
 import { ISpecificationEntity } from "../ISpecificationEntity";
 import ISpecificationProperty from "../ISpecificationProperty";
 import { Term } from '@rdfjs/types';
-import { GEOSPARQL, Model, NodeShape, PropertyShape, RDF, RDFS, SH, XSD, DatatypeRegistry } from 'rdf-shacl-commons';
+import { GEOSPARQL, Model, NodeShape, PropertyShape, RDF, RDFS, SH, XSD, DatatypeRegistry, SPARNATURAL } from 'rdf-shacl-commons';
 
 const factory = new DataFactory();
 
@@ -262,12 +262,14 @@ export class SpecialSHACLSpecificationEntity implements ISHACLSpecificationEntit
     private icon:string;
     private label:string;
     private isRangeOfFunction:Function;
+    private defaultWidgetUri:string;
 
-    constructor(id:string, icon:string,label:string, isRangeOfFunction:Function) {
+    constructor(id:string, icon:string,label:string, isRangeOfFunction:Function, defaultWidgetUri:string) {
         this.id = id;
         this.icon = icon;
         this.label = label;
         this.isRangeOfFunction = isRangeOfFunction;
+        this.defaultWidgetUri = defaultWidgetUri;
     }
 
     getId(): string {
@@ -311,6 +313,8 @@ export class SpecialSHACLSpecificationEntity implements ISHACLSpecificationEntit
     getParents(): string[] { return []; }
     getChildren(): string[] { return []; }
     couldBeSkosConcept(): boolean {  return false; }
+
+    getDefaultWidgetUri(): string { return this.defaultWidgetUri }
 }
 
 export class SpecialSHACLSpecificationEntityRegistry {
@@ -361,7 +365,8 @@ export class SpecialSHACLSpecificationEntityRegistry {
                         &&
                         !graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, RDF.LANG_STRING) 
                     );
-                }
+                },
+                SPARNATURAL.AUTOCOMPLETE_PROPERTY.value
             )
         )
 
@@ -375,7 +380,8 @@ export class SpecialSHACLSpecificationEntityRegistry {
                     let graph:Model = new Model(n3store);
                     let dt = graph.readSingleProperty(factory.namedNode(shapeUri), SH.DATATYPE) as NamedNode;
                     return dt && DatatypeRegistry.asDatatype(dt).isDateDatatype();
-                }
+                },
+                SPARNATURAL.TIME_PROPERTY_DATE.value
             )
         )
 
@@ -388,7 +394,8 @@ export class SpecialSHACLSpecificationEntityRegistry {
                 function(n3store:RdfStore, shapeUri:any):boolean {
                     let graph:Model = new Model(n3store);
                     return graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, GEOSPARQL.WKT_LITERAL)
-                }
+                },
+                SPARNATURAL.MAP_PROPERTY.value
             )
         )
 
@@ -420,7 +427,8 @@ export class SpecialSHACLSpecificationEntityRegistry {
                             )
                         )
                     );
-                }
+                },
+                SPARNATURAL.SEARCH_PROPERTY.value
             )
         )
 
@@ -434,7 +442,8 @@ export class SpecialSHACLSpecificationEntityRegistry {
                     let graph:Model = new Model(n3store);
                     let dt = graph.readSingleProperty(factory.namedNode(shapeUri), SH.DATATYPE) as NamedNode;
                     return dt && DatatypeRegistry.asDatatype(dt).isNumberDatatype();
-                }
+                },
+                SPARNATURAL.NUMBER_PROPERTY.value
             )
         )
     }

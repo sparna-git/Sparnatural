@@ -1,0 +1,1926 @@
+@prefix dash:   <http://datashapes.org/dash#> .
+@prefix dct:    <http://purl.org/dc/terms/> .
+@prefix edm:    <http://www.europeana.eu/schemas/edm/> .
+@prefix foaf:   <http://xmlns.com/foaf/0.1/> .
+@prefix geo:    <http://www.opengis.net/ont/geosparql#> .
+@prefix ore:    <http://www.openarchives.org/ore/terms/> .
+@prefix owl:    <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <http://schema.org/> .
+@prefix sh:     <http://www.w3.org/ns/shacl#> .
+@prefix shape:  <https://shacl-play.sparna.fr/shapes/> .
+@prefix skos:   <http://www.w3.org/2004/02/skos/core#> .
+@prefix wgs84:  <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
+
+shape:WebResource_altLabel
+        sh:datatype     xsd:string ;
+        sh:description  "2058308 occurences and 1963808 distinct values"@en ;
+        sh:maxCount     1 ;
+        sh:minCount     1 ;
+        sh:name         "altLabel"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:path         skos:altLabel .
+
+shape:Collection_identifier_resource
+        sh:nodeKind  sh:IRI .
+
+shape:SpatialThing_long
+        sh:datatype     xsd:string ;
+        sh:description  "249 occurences and 219 distinct values"@en ;
+        sh:maxCount     1 ;
+        sh:minCount     1 ;
+        sh:name         "long"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:path         wgs84:long .
+
+shape:ProvidedCHO_identifier_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:Collection_date_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_temporal_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:Agent_familyName
+        sh:datatype     xsd:string ;
+        sh:description  "23246 occurences and 17474 distinct values"@en ;
+        sh:maxCount     1 ;
+        sh:name         "familyName"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:path         foaf:familyName .
+
+shape:ProvidedCHO_modified_resource
+        sh:class     edm:TimeSpan ;
+        sh:nodeKind  sh:BlankNode .
+
+shape:Collection_coverage
+        sh:description  "141 occurences and 109 distinct values"@en ;
+        sh:name         "coverage"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:Collection_coverage_literal shape:Collection_coverage_resource ) ;
+        sh:path         dct:coverage .
+
+shape:ProvidedCHO_available_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_contributor_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_contributor_literal_datatype_0 shape:ProvidedCHO_contributor_literal_datatype_1 ) .
+
+shape:ProvidedCHO_format_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_coverage_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:Place_long  sh:datatype  xsd:string ;
+        sh:description  "57683 occurences and 9395 distinct values"@en ;
+        sh:maxCount     1 ;
+        sh:name         "long"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:path         wgs84:long .
+
+shape:TimeSpan_prefLabel
+        sh:datatype     xsd:string ;
+        sh:description  "4274 occurences and 30 distinct values"@en ;
+        sh:maxCount     1 ;
+        sh:name         "prefLabel"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:path         skos:prefLabel .
+
+shape:Collection_isPartOf_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_rightsHolder_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:Collection_publisher_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_mediator_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:Collection_isFormatOf_resource
+        sh:nodeKind  sh:IRI .
+
+shape:Aggregation_rights
+        sh:description  "908709 occurences and 1 distinct values"@en ;
+        sh:hasValue     <https://creativecommons.org/licenses/by/4.0/> ;
+        sh:maxCount     1 ;
+        sh:minCount     1 ;
+        sh:name         "rights"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         edm:rights .
+
+shape:Place_prefLabel_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:Place_lat  sh:datatype  xsd:string ;
+        sh:description  "57683 occurences and 9189 distinct values"@en ;
+        sh:maxCount     1 ;
+        sh:name         "lat"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:path         wgs84:lat .
+
+shape:Collection_license_resource
+        sh:nodeKind  sh:IRI .
+
+shape:Collection_title
+        dash:propertyRole  dash:LabelRole ;
+        sh:description     "11191 occurences and 10960 distinct values"@en ;
+        sh:minCount        1 ;
+        sh:name            "title"@en ;
+        sh:nodeKind        sh:Literal ;
+        sh:or              ( shape:Collection_title_datatype_0 shape:Collection_title_datatype_1 ) ;
+        sh:path            dct:title .
+
+shape:ProvidedCHO_rights_resource
+        sh:class     skos:Concept ;
+        sh:nodeKind  sh:IRI .
+
+shape:ProvidedCHO_title_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_rightsHolder
+        sh:description  "131740 occurences and 1246 distinct values"@en ;
+        sh:name         "rightsHolder"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_rightsHolder_literal shape:ProvidedCHO_rightsHolder_resource ) ;
+        sh:path         dct:rightsHolder .
+
+shape:Collection_identifier_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:Concept  rdf:type  sh:NodeShape ;
+        rdfs:comment    "11120 instances"@en ;
+        rdfs:label      "Concept"@en ;
+        sh:property     shape:Concept_exactMatch , shape:Concept_prefLabel , shape:Concept_altLabel ;
+        sh:targetClass  skos:Concept .
+
+shape:ProvidedCHO_conformsTo_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_conformsTo_literal_datatype_0 shape:ProvidedCHO_conformsTo_literal_datatype_1 ) .
+
+shape:Collection_accessRights_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_date_literal_datatype_3
+        sh:datatype  xsd:gYearMonth .
+
+shape:WebResource_extent_datatype_0
+        sh:datatype  xsd:decimal .
+
+shape:ProvidedCHO_relation_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_isFormatOf_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_date
+        sh:description  "67320 occurences and 3149 distinct values"@en ;
+        sh:name         "date"@en ;
+        sh:nodeKind     sh:BlankNodeOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_date_literal shape:ProvidedCHO_date_resource ) ;
+        sh:path         dct:date .
+
+shape:ProvidedCHO_created_literal_datatype_4
+        sh:datatype  xsd:gYearMonth .
+
+shape:Collection_accrualPeriodicity_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_audience_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_audience_literal_datatype_0 shape:ProvidedCHO_audience_literal_datatype_1 ) .
+
+shape:Collection_spatial_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_rightsHolder_resource
+        sh:nodeKind  sh:IRI .
+
+shape:ProvidedCHO_language_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:TimeSpan_begin_datatype_1
+        sh:datatype  xsd:gYear .
+
+shape:ProvidedCHO_rights
+        sh:description  "259888 occurences and 629 distinct values"@en ;
+        sh:name         "rights"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_rights_literal shape:ProvidedCHO_rights_resource ) ;
+        sh:path         dct:rights .
+
+shape:Collection_isReferencedBy_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_title
+        dash:propertyRole  dash:LabelRole ;
+        sh:description     "917554 occurences and 797187 distinct values"@en ;
+        sh:minCount        1 ;
+        sh:name            "title"@en ;
+        sh:nodeKind        sh:Literal ;
+        sh:or              ( shape:ProvidedCHO_title_datatype_0 shape:ProvidedCHO_title_datatype_1 ) ;
+        sh:path            dct:title .
+
+shape:ProvidedCHO_subject_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_subject_literal_datatype_0 shape:ProvidedCHO_subject_literal_datatype_1 ) .
+
+shape:ProvidedCHO_hasVersion_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_hasVersion_literal_datatype_0 shape:ProvidedCHO_hasVersion_literal_datatype_1 ) .
+
+shape:ProvidedCHO_issued_literal_datatype_2
+        sh:datatype  xsd:gYear .
+
+shape:ProvidedCHO_language
+        sh:description  "262622 occurences and 423 distinct values"@en ;
+        sh:name         "language"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_language_literal shape:ProvidedCHO_language_resource ) ;
+        sh:path         dct:language .
+
+shape:ProvidedCHO_contributor
+        sh:description  "304439 occurences and 6254 distinct values"@en ;
+        sh:name         "contributor"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_contributor_literal shape:ProvidedCHO_contributor_resource ) ;
+        sh:path         dct:contributor .
+
+shape:ProvidedCHO_references_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_dateSubmitted_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:Collection_type_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:Collection_source_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:Collection_source_literal_datatype_0 shape:Collection_source_literal_datatype_1 ) .
+
+shape:Collection_creator_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_language_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_language_literal_datatype_0 shape:ProvidedCHO_language_literal_datatype_1 ) .
+
+shape:ProvidedCHO_medium_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_description_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_description_literal_datatype_0 shape:ProvidedCHO_description_literal_datatype_1 ) .
+
+shape:Collection_isReferencedBy_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:Collection_isReferencedBy_literal_datatype_0 shape:Collection_isReferencedBy_literal_datatype_1 ) .
+
+shape:Collection_audience_resource
+        sh:nodeKind  sh:IRI .
+
+shape:ProvidedCHO_format_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_format_literal_datatype_0 shape:ProvidedCHO_format_literal_datatype_1 ) .
+
+shape:ProvidedCHO_dateAccepted_datatype_1
+        sh:datatype  xsd:string .
+
+shape:Collection_source_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_type_resource
+        sh:class     skos:Concept ;
+        sh:nodeKind  sh:IRI .
+
+shape:ProvidedCHO_hasVersion_resource
+        sh:nodeKind  sh:IRI .
+
+shape:Collection_isPartOf_resource
+        sh:nodeKind  sh:IRI .
+
+shape:ProvidedCHO_identifier_resource
+        sh:nodeKind  sh:IRI .
+
+shape:ResourceMap_creator
+        dash:propertyRole  dash:LabelRole ;
+        sh:datatype        xsd:string ;
+        sh:description     "908709 occurences and 1 distinct values"@en ;
+        sh:hasValue        "NAKALA" ;
+        sh:maxCount        1 ;
+        sh:minCount        1 ;
+        sh:name            "creator"@en ;
+        sh:nodeKind        sh:Literal ;
+        sh:path            dct:creator .
+
+shape:SpatialThing_lat
+        sh:datatype     xsd:string ;
+        sh:description  "249 occurences and 205 distinct values"@en ;
+        sh:maxCount     1 ;
+        sh:minCount     1 ;
+        sh:name         "lat"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:path         wgs84:lat .
+
+shape:ProvidedCHO_instructionalMethod_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_temporal_literal_datatype_2
+        sh:datatype  xsd:gYear .
+
+shape:ProvidedCHO_format
+        sh:description  "313148 occurences and 18216 distinct values"@en ;
+        sh:name         "format"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_format_literal shape:ProvidedCHO_format_resource ) ;
+        sh:path         dct:format .
+
+shape:ProvidedCHO_rights_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_rights_literal_datatype_0 shape:ProvidedCHO_rights_literal_datatype_1 ) .
+
+shape:ProvidedCHO_available_datatype_2
+        sh:datatype  xsd:gYear .
+
+shape:ProvidedCHO_tableOfContents_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_bibliographicCitation_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:Aggregation_isDescribedBy
+        sh:class        ore:ResourceMap ;
+        sh:description  "908064 occurences and 908064 distinct values"@en ;
+        sh:maxCount     1 ;
+        sh:name         "isDescribedBy"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         ore:isDescribedBy .
+
+shape:ProvidedCHO_isVersionOf_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_isRequiredBy_resource
+        sh:nodeKind  sh:IRI .
+
+shape:ProvidedCHO_issued
+        sh:description  "49641 occurences and 4089 distinct values"@en ;
+        sh:name         "issued"@en ;
+        sh:nodeKind     sh:BlankNodeOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_issued_literal shape:ProvidedCHO_issued_resource ) ;
+        sh:path         dct:issued .
+
+shape:Collection_audience_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_subject_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_dateCopyrighted_datatype_1
+        sh:datatype  xsd:gYear .
+
+shape:ResourceMap_created
+        sh:datatype     xsd:dateTime ;
+        sh:description  "908064 occurences and 809980 distinct values"@en ;
+        sh:maxCount     1 ;
+        sh:name         "created"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:path         dct:created .
+
+shape:Collection_alternative_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_license_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_created_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_created_literal_datatype_0 shape:ProvidedCHO_created_literal_datatype_1 shape:ProvidedCHO_created_literal_datatype_2 shape:ProvidedCHO_created_literal_datatype_3 shape:ProvidedCHO_created_literal_datatype_4 shape:ProvidedCHO_created_literal_datatype_5 ) .
+
+shape:Collection_title_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:Collection_tableOfContents_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_isFormatOf_resource
+        sh:nodeKind  sh:IRI .
+
+shape:ProvidedCHO_isReferencedBy_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_publisher_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:Collection_created_datatype_1
+        sh:datatype  xsd:string .
+
+shape:Collection_license_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_source_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:Agent  rdf:type   sh:NodeShape ;
+        rdfs:comment    "23485 instances"@en ;
+        rdfs:label      "Agent"@en ;
+        sh:property     shape:Agent_sameAs , shape:Agent_name , shape:Agent_familyName , shape:Agent_givenName ;
+        sh:targetClass  edm:Agent .
+
+shape:ProvidedCHO_tableOfContents
+        sh:description  "23534 occurences and 7656 distinct values"@en ;
+        sh:name         "tableOfContents"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:or           ( shape:ProvidedCHO_tableOfContents_datatype_0 shape:ProvidedCHO_tableOfContents_datatype_1 ) ;
+        sh:path         dct:tableOfContents .
+
+shape:WebResource_extent
+        sh:description  "2058308 occurences and 1471892 distinct values"@en ;
+        sh:maxCount     1 ;
+        sh:minCount     1 ;
+        sh:name         "extent"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:or           ( shape:WebResource_extent_datatype_0 shape:WebResource_extent_datatype_1 ) ;
+        sh:path         dct:extent .
+
+shape:ProvidedCHO_relation
+        sh:description  "116396 occurences and 28360 distinct values"@en ;
+        sh:name         "relation"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_relation_literal shape:ProvidedCHO_relation_resource ) ;
+        sh:path         dct:relation .
+
+shape:ProvidedCHO_audience_resource
+        sh:nodeKind  sh:IRI .
+
+shape:ProvidedCHO_conformsTo_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:Collection_bibliographicCitation_datatype_1
+        sh:datatype  xsd:string .
+
+shape:Collection_bibliographicCitation
+        sh:description  "180 occurences and 180 distinct values"@en ;
+        sh:name         "bibliographicCitation"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:or           ( shape:Collection_bibliographicCitation_datatype_0 shape:Collection_bibliographicCitation_datatype_1 ) ;
+        sh:path         dct:bibliographicCitation .
+
+shape:Collection_provenance_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:Collection_provenance_literal_datatype_0 shape:Collection_provenance_literal_datatype_1 ) .
+
+shape:Agent_name  dash:propertyRole  dash:LabelRole ;
+        sh:datatype        xsd:string ;
+        sh:description     "23485 occurences and 23412 distinct values"@en ;
+        sh:maxCount        1 ;
+        sh:minCount        1 ;
+        sh:name            "name"@en ;
+        sh:nodeKind        sh:Literal ;
+        sh:path            foaf:name .
+
+shape:Collection_isAggregatedBy
+        sh:class        ore:Aggregation ;
+        sh:description  "10061 occurences and 10061 distinct values"@en ;
+        sh:maxCount     1 ;
+        sh:name         "isAggregatedBy"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         ore:isAggregatedBy .
+
+shape:Collection_extent_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_abstract_resource
+        sh:nodeKind  sh:IRI .
+
+shape:Collection_type_resource
+        sh:nodeKind  sh:IRI .
+
+shape:ProvidedCHO_isRequiredBy_literal
+        sh:datatype    rdf:langString ;
+        sh:languageIn  ( "fr" ) ;
+        sh:nodeKind    sh:Literal .
+
+shape:Concept_exactMatch
+        sh:description  "10595 occurences and 10593 distinct values"@en ;
+        sh:name         "exactMatch"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         skos:exactMatch .
+
+shape:Collection_medium_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_provenance_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_accessRights_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:Collection_rightsHolder_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:Collection_provenance_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_isGatheredInto
+        sh:class        edm:Collection ;
+        sh:description  "2814742 occurences and 10224 distinct values"@en ;
+        sh:minCount     1 ;
+        sh:name         "isGatheredInto"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         edm:isGatheredInto .
+
+shape:Collection_format_resource
+        sh:nodeKind  sh:IRI .
+
+shape:Collection_coverage_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_modified_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_isReplacedBy_literal
+        sh:datatype  xsd:string ;
+        sh:nodeKind  sh:Literal .
+
+shape:Collection_extent
+        sh:description  "252 occurences and 79 distinct values"@en ;
+        sh:maxCount     1 ;
+        sh:name         "extent"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:or           ( shape:Collection_extent_datatype_0 shape:Collection_extent_datatype_1 ) ;
+        sh:path         dct:extent .
+
+shape:ProvidedCHO_date_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_dateSubmitted_datatype_2
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_license_resource
+        sh:class     skos:Concept ;
+        sh:nodeKind  sh:IRI .
+
+shape:ProvidedCHO_mediator_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_mediator_literal_datatype_0 shape:ProvidedCHO_mediator_literal_datatype_1 ) .
+
+shape:ProvidedCHO_type
+        sh:description  "1325895 occurences and 1273 distinct values"@en ;
+        sh:minCount     1 ;
+        sh:name         "type"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_type_literal shape:ProvidedCHO_type_resource ) ;
+        sh:path         dct:type .
+
+shape:Collection_issued_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_isPartOf_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_hasFormat_resource
+        sh:nodeKind  sh:IRI .
+
+shape:ProvidedCHO_hasFormat_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_hasVersion_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_created_literal_datatype_1
+        sh:datatype  xsd:date .
+
+shape:ProvidedCHO_temporal_resource
+        sh:class     edm:TimeSpan ;
+        sh:nodeKind  sh:BlankNodeOrIRI .
+
+shape:ProvidedCHO_isReferencedBy
+        sh:description  "29789 occurences and 9229 distinct values"@en ;
+        sh:name         "isReferencedBy"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_isReferencedBy_literal shape:ProvidedCHO_isReferencedBy_resource ) ;
+        sh:path         dct:isReferencedBy .
+
+shape:WebResource_sha1
+        sh:datatype     xsd:string ;
+        sh:description  "2058308 occurences and 1977402 distinct values"@en ;
+        sh:maxCount     1 ;
+        sh:minCount     1 ;
+        sh:name         "sha1"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:path         foaf:sha1 .
+
+shape:WebResource_isAggregatedBy
+        sh:class        ore:Aggregation ;
+        sh:description  "2058308 occurences and 898003 distinct values"@en ;
+        sh:maxCount     1 ;
+        sh:minCount     1 ;
+        sh:name         "isAggregatedBy"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         ore:isAggregatedBy .
+
+shape:ProvidedCHO_modified
+        sh:description  "27752 occurences and 407 distinct values"@en ;
+        sh:name         "modified"@en ;
+        sh:nodeKind     sh:BlankNodeOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_modified_literal shape:ProvidedCHO_modified_resource ) ;
+        sh:path         dct:modified .
+
+shape:ProvidedCHO_conformsTo_resource
+        sh:nodeKind  sh:IRI .
+
+shape:ProvidedCHO_isReplacedBy_resource
+        sh:nodeKind  sh:IRI .
+
+shape:ProvidedCHO_type_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_description
+        sh:description  "1233412 occurences and 280393 distinct values"@en ;
+        sh:name         "description"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_description_literal shape:ProvidedCHO_description_resource ) ;
+        sh:path         dct:description .
+
+shape:Collection_date
+        sh:description  "1409 occurences and 447 distinct values"@en ;
+        sh:name         "date"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:or           ( shape:Collection_date_datatype_0 shape:Collection_date_datatype_1 ) ;
+        sh:path         dct:date .
+
+shape:Place_sameAs  sh:class  wgs84:SpatialThing ;
+        sh:description  "15581 occurences and 712 distinct values"@en ;
+        sh:maxCount     1 ;
+        sh:name         "sameAs"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         owl:sameAs .
+
+shape:ProvidedCHO_created_resource
+        sh:class     edm:TimeSpan ;
+        sh:nodeKind  sh:BlankNode .
+
+shape:Collection_rights_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:Collection_contributor_resource
+        sh:nodeKind  sh:IRI .
+
+shape:Collection_issued
+        sh:description  "113 occurences and 103 distinct values"@en ;
+        sh:name         "issued"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:or           ( shape:Collection_issued_datatype_0 shape:Collection_issued_datatype_1 ) ;
+        sh:path         dct:issued .
+
+shape:Collection_relation_resource
+        sh:nodeKind  sh:IRI .
+
+shape:Collection_language_datatype_1
+        sh:datatype  xsd:string .
+
+shape:TimeSpan_end_datatype_0
+        sh:datatype  xsd:date .
+
+shape:Collection_isPartOf
+        sh:description  "375 occurences and 75 distinct values"@en ;
+        sh:name         "isPartOf"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:Collection_isPartOf_literal shape:Collection_isPartOf_resource ) ;
+        sh:path         dct:isPartOf .
+
+shape:ProvidedCHO_extent_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:Collection_rights_resource
+        sh:nodeKind  sh:IRI .
+
+shape:Collection_relation_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_references_resource
+        sh:nodeKind  sh:IRI .
+
+shape:Collection_temporal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_relation_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_relation_literal_datatype_0 shape:ProvidedCHO_relation_literal_datatype_1 ) .
+
+shape:Collection_publisher_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:Collection_publisher_literal_datatype_0 shape:Collection_publisher_literal_datatype_1 ) .
+
+shape:Collection_modified_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_description_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_hasPart_resource
+        sh:nodeKind  sh:IRI .
+
+shape:ProvidedCHO_hasPart_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:Collection_relation
+        sh:description  "279 occurences and 134 distinct values"@en ;
+        sh:name         "relation"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:Collection_relation_literal shape:Collection_relation_resource ) ;
+        sh:path         dct:relation .
+
+shape:Collection_identifier
+        sh:description  "14167 occurences and 14165 distinct values"@en ;
+        sh:name         "identifier"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:Collection_identifier_literal shape:Collection_identifier_resource ) ;
+        sh:path         dct:identifier .
+
+shape:Collection_publisher_resource
+        sh:nodeKind  sh:IRI .
+
+shape:ProvidedCHO_format_resource
+        sh:nodeKind  sh:IRI .
+
+shape:ProvidedCHO_identifier_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:TimeSpan_begin  sh:description  "5744 occurences and 491 distinct values"@en ;
+        sh:maxCount     1 ;
+        sh:name         "begin"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:or           ( shape:TimeSpan_begin_datatype_0 shape:TimeSpan_begin_datatype_1 shape:TimeSpan_begin_datatype_2 ) ;
+        sh:path         edm:begin .
+
+shape:Collection_subject_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_instructionalMethod_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_instructionalMethod_literal_datatype_0 shape:ProvidedCHO_instructionalMethod_literal_datatype_1 ) .
+
+shape:Collection_spatial
+        sh:description  "521 occurences and 235 distinct values"@en ;
+        sh:name         "spatial"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:Collection_spatial_literal shape:Collection_spatial_resource ) ;
+        sh:path         dct:spatial .
+
+shape:ProvidedCHO_coverage_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_creator_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_creator_literal_datatype_0 shape:ProvidedCHO_creator_literal_datatype_1 ) .
+
+shape:ProvidedCHO_abstract_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_abstract_literal_datatype_0 shape:ProvidedCHO_abstract_literal_datatype_1 ) .
+
+shape:ProvidedCHO_identifier
+        sh:description  "1585162 occurences and 1448382 distinct values"@en ;
+        sh:minCount     1 ;
+        sh:name         "identifier"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_identifier_literal shape:ProvidedCHO_identifier_resource ) ;
+        sh:path         dct:identifier .
+
+shape:Collection_provenance_resource
+        sh:nodeKind  sh:IRI .
+
+shape:ProvidedCHO_rightsHolder_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:SpatialThing  rdf:type  sh:NodeShape ;
+        rdfs:comment    "249 instances"@en ;
+        rdfs:label      "SpatialThing"@en ;
+        sh:property     shape:SpatialThing_lat , shape:SpatialThing_prefLabel , shape:SpatialThing_asWKT , shape:SpatialThing_long , shape:SpatialThing_notation , shape:SpatialThing_sameAs ;
+        sh:targetClass  wgs84:SpatialThing .
+
+shape:TimeSpan  rdf:type  sh:NodeShape ;
+        rdfs:comment    "5779 instances"@en ;
+        rdfs:label      "TimeSpan"@en ;
+        sh:property     shape:TimeSpan_prefLabel , shape:TimeSpan_begin , shape:TimeSpan_end ;
+        sh:targetClass  edm:TimeSpan .
+
+shape:WebResource  rdf:type  sh:NodeShape ;
+        rdfs:comment    "2058308 instances"@en ;
+        rdfs:label      "WebResource"@en ;
+        sh:property     shape:WebResource_sha1 , shape:WebResource_primaryTopic , shape:WebResource_altLabel , shape:WebResource_type , shape:WebResource_isAggregatedBy , shape:WebResource_extent , shape:WebResource_available , shape:WebResource_description , shape:WebResource_format ;
+        sh:targetClass  edm:WebResource .
+
+shape:Collection_description_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:Collection_spatial_resource
+        sh:nodeKind  sh:IRI .
+
+shape:ProvidedCHO_rights_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:Collection_abstract_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_mediator_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:Collection_isVersionOf_resource
+        sh:nodeKind  sh:IRI .
+
+shape:ProvidedCHO_contributor_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_temporal
+        sh:description  "75107 occurences and 6745 distinct values"@en ;
+        sh:name         "temporal"@en ;
+        sh:or           ( shape:ProvidedCHO_temporal_literal shape:ProvidedCHO_temporal_resource ) ;
+        sh:path         dct:temporal .
+
+shape:ProvidedCHO_relation_resource
+        sh:nodeKind  sh:IRI .
+
+shape:ProvidedCHO_title_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_modified_literal_datatype_2
+        sh:datatype  xsd:string .
+
+shape:Collection_accessRights_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_publisher_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_publisher_literal_datatype_0 shape:ProvidedCHO_publisher_literal_datatype_1 ) .
+
+shape:ProvidedCHO_date_literal_datatype_2
+        sh:datatype  xsd:gYear .
+
+shape:ResourceMap  rdf:type  sh:NodeShape ;
+        rdfs:comment    "908709 instances"@en ;
+        rdfs:label      "ResourceMap"@en ;
+        sh:property     shape:ResourceMap_created , shape:ResourceMap_describes , shape:ResourceMap_version , shape:ResourceMap_modified , shape:ResourceMap_rights , shape:ResourceMap_creator ;
+        sh:targetClass  ore:ResourceMap .
+
+shape:ProvidedCHO_isVersionOf_resource
+        sh:nodeKind  sh:IRI .
+
+shape:Collection_contributor
+        sh:description  "530 occurences and 293 distinct values"@en ;
+        sh:name         "contributor"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:Collection_contributor_literal shape:Collection_contributor_resource ) ;
+        sh:path         dct:contributor .
+
+shape:ProvidedCHO_medium
+        sh:description  "239883 occurences and 3371 distinct values"@en ;
+        sh:name         "medium"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_medium_literal shape:ProvidedCHO_medium_resource ) ;
+        sh:path         dct:medium .
+
+shape:ProvidedCHO_source
+        sh:description  "221563 occurences and 51655 distinct values"@en ;
+        sh:name         "source"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_source_literal shape:ProvidedCHO_source_resource ) ;
+        sh:path         dct:source .
+
+shape:ProvidedCHO_audience_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_created_literal_datatype_3
+        sh:datatype  xsd:gYear .
+
+shape:Collection_contributor_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_references_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_references_literal_datatype_0 shape:ProvidedCHO_references_literal_datatype_1 ) .
+
+shape:ProvidedCHO_description_resource
+        sh:nodeKind  sh:IRI .
+
+shape:ProvidedCHO_language_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:TimeSpan_begin_datatype_0
+        sh:datatype  xsd:date .
+
+shape:Collection_coverage_resource
+        sh:nodeKind  sh:IRI .
+
+shape:Collection_format_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_abstract_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_instructionalMethod_resource
+        sh:nodeKind  sh:IRI .
+
+shape:Place_asWKT  sh:datatype  geo:wktLiteral ;
+        sh:description  "57683 occurences and 16192 distinct values"@en ;
+        sh:maxCount     1 ;
+        sh:name         "asWKT"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:path         geo:asWKT .
+
+shape:ProvidedCHO_alternative_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_issued_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_issued_literal_datatype_0 shape:ProvidedCHO_issued_literal_datatype_1 shape:ProvidedCHO_issued_literal_datatype_2 shape:ProvidedCHO_issued_literal_datatype_3 ) .
+
+shape:ProvidedCHO_creator_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_issued_literal_datatype_1
+        sh:datatype  xsd:date .
+
+shape:Collection_license_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:Collection_license_literal_datatype_0 shape:Collection_license_literal_datatype_1 ) .
+
+shape:Place  rdf:type   sh:NodeShape ;
+        rdfs:comment    "442556 instances"@en ;
+        rdfs:label      "Place"@en ;
+        sh:property     shape:Place_prefLabel , shape:Place_lat , shape:Place_long , shape:Place_asWKT , shape:Place_sameAs ;
+        sh:targetClass  edm:Place .
+
+shape:ProvidedCHO_publisher
+        sh:description  "741539 occurences and 2511 distinct values"@en ;
+        sh:name         "publisher"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_publisher_literal shape:ProvidedCHO_publisher_resource ) ;
+        sh:path         dct:publisher .
+
+shape:Collection_type_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:TimeSpan_end_datatype_2
+        sh:datatype  xsd:gYearMonth .
+
+shape:Collection_relation_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:Collection_relation_literal_datatype_0 shape:Collection_relation_literal_datatype_1 ) .
+
+shape:Agent_givenName
+        sh:datatype     xsd:string ;
+        sh:description  "23315 occurences and 9236 distinct values"@en ;
+        sh:maxCount     1 ;
+        sh:name         "givenName"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:path         foaf:givenName .
+
+shape:ResourceMap_describes
+        sh:class        ore:Aggregation ;
+        sh:description  "908709 occurences and 908709 distinct values"@en ;
+        sh:maxCount     1 ;
+        sh:minCount     1 ;
+        sh:name         "describes"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         ore:describes .
+
+shape:Concept_altLabel_datatype_1
+        sh:datatype  xsd:string .
+
+shape:Collection_publisher
+        sh:description  "744 occurences and 151 distinct values"@en ;
+        sh:name         "publisher"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:Collection_publisher_literal shape:Collection_publisher_resource ) ;
+        sh:path         dct:publisher .
+
+shape:Collection_hasPart_resource
+        sh:nodeKind  sh:IRI .
+
+shape:ProvidedCHO_dateAccepted_datatype_0
+        sh:datatype  xsd:date .
+
+shape:Collection_source_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:Collection_isFormatOf_literal
+        sh:datatype  xsd:string ;
+        sh:nodeKind  sh:Literal .
+
+shape:ProvidedCHO_creator_resource
+        sh:class     edm:Agent ;
+        sh:nodeKind  sh:IRI .
+
+shape:ProvidedCHO_hasFormat_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_hasFormat_literal_datatype_0 shape:ProvidedCHO_hasFormat_literal_datatype_1 ) .
+
+shape:WebResource_available
+        sh:datatype     xsd:dateTime ;
+        sh:description  "1989633 occurences and 3224 distinct values"@en ;
+        sh:maxCount     1 ;
+        sh:name         "available"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:path         dct:available .
+
+shape:ResourceMap_modified
+        sh:datatype     xsd:dateTime ;
+        sh:description  "907274 occurences and 161313 distinct values"@en ;
+        sh:maxCount     1 ;
+        sh:name         "modified"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:path         dct:modified .
+
+shape:ResourceMap_rights
+        sh:description  "908709 occurences and 1 distinct values"@en ;
+        sh:hasValue     <https://creativecommons.org/licenses/by/4.0/> ;
+        sh:maxCount     1 ;
+        sh:minCount     1 ;
+        sh:name         "rights"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         dct:rights .
+
+shape:ProvidedCHO_extent
+        sh:description  "64651 occurences and 6113 distinct values"@en ;
+        sh:name         "extent"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:or           ( shape:ProvidedCHO_extent_datatype_0 shape:ProvidedCHO_extent_datatype_1 ) ;
+        sh:path         dct:extent .
+
+shape:Concept_prefLabel
+        dash:propertyRole  dash:LabelRole ;
+        sh:datatype        rdf:langString ;
+        sh:description     "11120 occurences and 11006 distinct values"@en ;
+        sh:languageIn      ( "fr" ) ;
+        sh:maxCount        1 ;
+        sh:minCount        1 ;
+        sh:name            "prefLabel"@en ;
+        sh:nodeKind        sh:Literal ;
+        sh:path            skos:prefLabel .
+
+shape:Aggregation_hasView
+        sh:class        edm:WebResource ;
+        sh:description  "2058308 occurences and 2058308 distinct values"@en ;
+        sh:name         "hasView"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         edm:hasView .
+
+shape:Aggregation_provider
+        sh:class        edm:Agent ;
+        sh:description  "908709 occurences and 1109 distinct values"@en ;
+        sh:maxCount     1 ;
+        sh:minCount     1 ;
+        sh:name         "provider"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         edm:provider .
+
+shape:ProvidedCHO  rdf:type  sh:NodeShape ;
+        rdfs:comment    "898003 instances"@en ;
+        rdfs:label      "ProvidedCHO"@en ;
+        sh:property     shape:ProvidedCHO_subject , shape:ProvidedCHO_identifier , shape:ProvidedCHO_type , shape:ProvidedCHO_relation , shape:ProvidedCHO_hasType , shape:ProvidedCHO_tableOfContents , shape:ProvidedCHO_language , shape:ProvidedCHO_title , shape:ProvidedCHO_description , shape:ProvidedCHO_bibliographicCitation , shape:ProvidedCHO_contributor , shape:ProvidedCHO_isReferencedBy , shape:ProvidedCHO_spatial , shape:ProvidedCHO_date , shape:ProvidedCHO_created , shape:ProvidedCHO_isAggregatedBy , shape:ProvidedCHO_isGatheredInto , shape:ProvidedCHO_issued , shape:ProvidedCHO_creator , shape:ProvidedCHO_rightsHolder , shape:ProvidedCHO_medium , shape:ProvidedCHO_rights , shape:ProvidedCHO_references , shape:ProvidedCHO_format , shape:ProvidedCHO_publisher , shape:ProvidedCHO_modified , shape:ProvidedCHO_provenance , shape:ProvidedCHO_source , shape:ProvidedCHO_extent , shape:ProvidedCHO_isPartOf , shape:ProvidedCHO_license , shape:ProvidedCHO_coverage , shape:ProvidedCHO_temporal , shape:ProvidedCHO_abstract , shape:ProvidedCHO_alternative , shape:ProvidedCHO_hasFormat , shape:ProvidedCHO_available ;
+        sh:targetClass  edm:ProvidedCHO .
+
+shape:Collection_provenance
+        sh:description  "235 occurences and 71 distinct values"@en ;
+        sh:name         "provenance"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:Collection_provenance_literal shape:Collection_provenance_resource ) ;
+        sh:path         dct:provenance .
+
+shape:Collection_date_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_temporal_literal_datatype_1
+        sh:datatype  xsd:dateTime .
+
+shape:ProvidedCHO_available_datatype_1
+        sh:datatype  xsd:date .
+
+shape:ProvidedCHO_tableOfContents_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_format_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_alternative
+        sh:description  "21753 occurences and 12537 distinct values"@en ;
+        sh:name         "alternative"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:or           ( shape:ProvidedCHO_alternative_datatype_0 shape:ProvidedCHO_alternative_datatype_1 ) ;
+        sh:path         dct:alternative .
+
+shape:Collection_isPartOf_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_coverage_resource
+        sh:nodeKind  sh:IRI .
+
+shape:ProvidedCHO_dateCopyrighted_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_license_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_provenance
+        sh:description  "169799 occurences and 1779 distinct values"@en ;
+        sh:name         "provenance"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:or           ( shape:ProvidedCHO_provenance_datatype_0 shape:ProvidedCHO_provenance_datatype_1 ) ;
+        sh:path         dct:provenance .
+
+shape:ProvidedCHO_source_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_source_literal_datatype_0 shape:ProvidedCHO_source_literal_datatype_1 ) .
+
+shape:Collection_publisher_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:SpatialThing_sameAs
+        sh:description  "498 occurences and 498 distinct values"@en ;
+        sh:minCount     1 ;
+        sh:name         "sameAs"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         owl:sameAs .
+
+shape:Collection_isVersionOf_literal
+        sh:datatype  xsd:string ;
+        sh:nodeKind  sh:Literal .
+
+shape:ProvidedCHO_license_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_license_literal_datatype_0 shape:ProvidedCHO_license_literal_datatype_1 ) .
+
+shape:Collection  rdf:type  sh:NodeShape ;
+        rdfs:comment    "10706 instances"@en ;
+        rdfs:label      "Collection"@en ;
+        sh:property     shape:Collection_coverage , shape:Collection_created , shape:Collection_abstract , shape:Collection_isAggregatedBy , shape:Collection_description , shape:Collection_subject , shape:Collection_provenance , shape:Collection_source , shape:Collection_title , shape:Collection_date , shape:Collection_issued , shape:Collection_creator , shape:Collection_rightsHolder , shape:Collection_publisher , shape:Collection_spatial , shape:Collection_relation , shape:Collection_extent , shape:Collection_hasPart , shape:Collection_identifier , shape:Collection_contributor , shape:Collection_type , shape:Collection_isPartOf , shape:Collection_bibliographicCitation , shape:Collection_license ;
+        sh:targetClass  edm:Collection .
+
+shape:Place_prefLabel_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_publisher_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:Aggregation_dataProvider
+        sh:class        edm:Agent ;
+        sh:description  "908709 occurences and 1152 distinct values"@en ;
+        sh:maxCount     1 ;
+        sh:minCount     1 ;
+        sh:name         "dataProvider"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         edm:dataProvider .
+
+shape:Collection_source
+        sh:description  "1367 occurences and 1218 distinct values"@en ;
+        sh:name         "source"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:Collection_source_literal shape:Collection_source_resource ) ;
+        sh:path         dct:source .
+
+shape:Collection_created_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ResourceMap_version
+        sh:datatype     xsd:string ;
+        sh:description  "898003 occurences and 114 distinct values"@en ;
+        sh:maxCount     1 ;
+        sh:name         "version"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:path         <http://purl.org/pav/version> .
+
+shape:ProvidedCHO_subject
+        sh:description  "2865808 occurences and 57945 distinct values"@en ;
+        sh:name         "subject"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_subject_literal shape:ProvidedCHO_subject_resource ) ;
+        sh:path         dct:subject .
+
+shape:Collection_identifier_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_source_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:Collection_format_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:Collection_format_literal_datatype_0 shape:Collection_format_literal_datatype_1 ) .
+
+shape:ProvidedCHO_date_literal_datatype_4
+        sh:datatype  xsd:string .
+
+shape:WebResource_extent_datatype_1
+        sh:datatype  xsd:integer .
+
+shape:ProvidedCHO_bibliographicCitation
+        sh:description  "77189 occurences and 42540 distinct values"@en ;
+        sh:name         "bibliographicCitation"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:or           ( shape:ProvidedCHO_bibliographicCitation_datatype_0 shape:ProvidedCHO_bibliographicCitation_datatype_1 ) ;
+        sh:path         dct:bibliographicCitation .
+
+shape:ProvidedCHO_relation_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:Collection_bibliographicCitation_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_isFormatOf_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_medium_resource
+        sh:nodeKind  sh:IRI .
+
+shape:ProvidedCHO_created_literal_datatype_5
+        sh:datatype  xsd:string .
+
+shape:Collection_accrualPeriodicity_datatype_1
+        sh:datatype  xsd:string .
+
+shape:Collection_spatial_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:TimeSpan_begin_datatype_2
+        sh:datatype  xsd:gYearMonth .
+
+shape:Collection_isReferencedBy_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_provenance_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_isReferencedBy_resource
+        sh:nodeKind  sh:IRI .
+
+shape:Collection_subject
+        sh:description  "9830 occurences and 7095 distinct values"@en ;
+        sh:name         "subject"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:Collection_subject_literal shape:Collection_subject_resource ) ;
+        sh:path         dct:subject .
+
+shape:ProvidedCHO_creator
+        sh:description  "1255830 occurences and 33461 distinct values"@en ;
+        sh:minCount     1 ;
+        sh:name         "creator"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_creator_literal shape:ProvidedCHO_creator_resource ) ;
+        sh:path         dct:creator .
+
+shape:Collection_rights_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:Collection_rights_literal_datatype_0 shape:Collection_rights_literal_datatype_1 ) .
+
+shape:ProvidedCHO_isPartOf_resource
+        sh:nodeKind  sh:IRI .
+
+shape:Agent_sameAs  sh:description  "1414 occurences and 1399 distinct values"@en ;
+        sh:maxCount     1 ;
+        sh:name         "sameAs"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         owl:sameAs .
+
+shape:ProvidedCHO_issued_literal_datatype_3
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_references_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_dateSubmitted_datatype_1
+        sh:datatype  xsd:gYear .
+
+shape:ProvidedCHO_date_resource
+        sh:class     edm:TimeSpan ;
+        sh:nodeKind  sh:BlankNode .
+
+shape:Collection_subject_resource
+        sh:nodeKind  sh:IRI .
+
+shape:ProvidedCHO_created
+        sh:description  "968817 occurences and 49495 distinct values"@en ;
+        sh:minCount     1 ;
+        sh:name         "created"@en ;
+        sh:nodeKind     sh:BlankNodeOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_created_literal shape:ProvidedCHO_created_resource ) ;
+        sh:path         dct:created .
+
+shape:ProvidedCHO_available
+        sh:description  "39965 occurences and 969 distinct values"@en ;
+        sh:name         "available"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:or           ( shape:ProvidedCHO_available_datatype_0 shape:ProvidedCHO_available_datatype_1 shape:ProvidedCHO_available_datatype_2 shape:ProvidedCHO_available_datatype_3 ) ;
+        sh:path         dct:available .
+
+shape:ProvidedCHO_publisher_resource
+        sh:nodeKind  sh:IRI .
+
+shape:Collection_description
+        sh:description  "2246 occurences and 2183 distinct values"@en ;
+        sh:name         "description"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:Collection_description_literal shape:Collection_description_resource ) ;
+        sh:path         dct:description .
+
+shape:Collection_creator_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_medium_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_isPartOf_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_hasFormat_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_hasVersion_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_created_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:Collection_creator_resource
+        sh:nodeKind  sh:IRI .
+
+shape:Collection_creator
+        sh:description  "1222 occurences and 320 distinct values"@en ;
+        sh:name         "creator"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:Collection_creator_literal shape:Collection_creator_resource ) ;
+        sh:path         dct:creator .
+
+shape:Collection_creator_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:Collection_creator_literal_datatype_0 shape:Collection_creator_literal_datatype_1 ) .
+
+shape:ProvidedCHO_modified_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_modified_literal_datatype_0 shape:ProvidedCHO_modified_literal_datatype_1 shape:ProvidedCHO_modified_literal_datatype_2 ) .
+
+shape:ProvidedCHO_isPartOf_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_isPartOf_literal_datatype_0 shape:ProvidedCHO_isPartOf_literal_datatype_1 ) .
+
+shape:ProvidedCHO_isAggregatedBy
+        sh:class        ore:Aggregation ;
+        sh:description  "898003 occurences and 898003 distinct values"@en ;
+        sh:maxCount     1 ;
+        sh:minCount     1 ;
+        sh:name         "isAggregatedBy"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         ore:isAggregatedBy .
+
+shape:ProvidedCHO_coverage_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_coverage_literal_datatype_0 shape:ProvidedCHO_coverage_literal_datatype_1 ) .
+
+shape:Collection_rights_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:Collection_created
+        sh:description  "531 occurences and 103 distinct values"@en ;
+        sh:maxCount     1 ;
+        sh:name         "created"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:or           ( shape:Collection_created_datatype_0 shape:Collection_created_datatype_1 ) ;
+        sh:path         dct:created .
+
+shape:Collection_language_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_instructionalMethod_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:Aggregation_aggregatedCHO
+        sh:class        edm:ProvidedCHO ;
+        sh:description  "898003 occurences and 898003 distinct values"@en ;
+        sh:maxCount     1 ;
+        sh:name         "aggregatedCHO"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         edm:aggregatedCHO .
+
+shape:ProvidedCHO_temporal_literal_datatype_3
+        sh:datatype  xsd:string .
+
+shape:Concept_altLabel
+        sh:description  "1608 occurences and 1587 distinct values"@en ;
+        sh:name         "altLabel"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:or           ( shape:Concept_altLabel_datatype_0 shape:Concept_altLabel_datatype_1 ) ;
+        sh:path         skos:altLabel .
+
+shape:ProvidedCHO_identifier_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_identifier_literal_datatype_0 shape:ProvidedCHO_identifier_literal_datatype_1 ) .
+
+shape:ProvidedCHO_available_datatype_3
+        sh:datatype  xsd:string .
+
+shape:Collection_temporal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_bibliographicCitation_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_isVersionOf_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:Collection_hasVersion_literal
+        sh:datatype  xsd:string ;
+        sh:nodeKind  sh:Literal .
+
+shape:Collection_modified_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_subject_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_dateCopyrighted_datatype_2
+        sh:datatype  xsd:string .
+
+shape:Collection_audience_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_isPartOf
+        sh:description  "51202 occurences and 10165 distinct values"@en ;
+        sh:name         "isPartOf"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_isPartOf_literal shape:ProvidedCHO_isPartOf_resource ) ;
+        sh:path         dct:isPartOf .
+
+shape:Collection_alternative_datatype_1
+        sh:datatype  xsd:string .
+
+shape:  rdf:type      owl:Ontology ;
+        dct:abstract  "Generated by SHACL Play!.\n56343382 triples in the dataset..\nRemoved rarely used property shapes, below threshold of 0.1%. 82 property shapes filtered out."@en ;
+        dct:created   "2026-06-01T14:31:22.018Z"^^xsd:dateTime .
+
+shape:ProvidedCHO_abstract
+        sh:description  "37506 occurences and 8199 distinct values"@en ;
+        sh:name         "abstract"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_abstract_literal shape:ProvidedCHO_abstract_resource ) ;
+        sh:path         dct:abstract .
+
+shape:ProvidedCHO_hasType
+        sh:class        skos:Concept ;
+        sh:description  "898004 occurences and 29 distinct values"@en ;
+        sh:minCount     1 ;
+        sh:name         "hasType"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         edm:hasType .
+
+shape:Collection_title_datatype_1
+        sh:datatype  xsd:string .
+
+shape:SpatialThing_prefLabel
+        dash:propertyRole  dash:LabelRole ;
+        sh:datatype        rdf:langString ;
+        sh:description     "747 occurences and 746 distinct values"@en ;
+        sh:languageIn      ( "en" "es" "fr" ) ;
+        sh:minCount        1 ;
+        sh:name            "prefLabel"@en ;
+        sh:nodeKind        sh:Literal ;
+        sh:path            skos:prefLabel .
+
+shape:Collection_tableOfContents_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_isVersionOf_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_isVersionOf_literal_datatype_0 shape:ProvidedCHO_isVersionOf_literal_datatype_1 ) .
+
+shape:ProvidedCHO_date_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_date_literal_datatype_0 shape:ProvidedCHO_date_literal_datatype_1 shape:ProvidedCHO_date_literal_datatype_2 shape:ProvidedCHO_date_literal_datatype_3 shape:ProvidedCHO_date_literal_datatype_4 ) .
+
+shape:ProvidedCHO_isReferencedBy_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_hasFormat
+        sh:description  "16741 occurences and 1125 distinct values"@en ;
+        sh:name         "hasFormat"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_hasFormat_literal shape:ProvidedCHO_hasFormat_resource ) ;
+        sh:path         dct:hasFormat .
+
+shape:Collection_subject_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_references
+        sh:description  "28826 occurences and 1327 distinct values"@en ;
+        sh:name         "references"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_references_literal shape:ProvidedCHO_references_resource ) ;
+        sh:path         dct:references .
+
+shape:Collection_hasPart
+        sh:description  "120 occurences and 120 distinct values"@en ;
+        sh:name         "hasPart"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:Collection_hasPart_literal shape:Collection_hasPart_resource ) ;
+        sh:path         dct:hasPart .
+
+shape:Collection_license_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:Collection_contributor_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:Collection_contributor_literal_datatype_0 shape:Collection_contributor_literal_datatype_1 ) .
+
+shape:Place_prefLabel
+        sh:description  "415057 occurences and 19691 distinct values"@en ;
+        sh:maxCount     1 ;
+        sh:name         "prefLabel"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:or           ( shape:Place_prefLabel_datatype_0 shape:Place_prefLabel_datatype_1 ) ;
+        sh:path         skos:prefLabel .
+
+shape:Collection_source_resource
+        sh:nodeKind  sh:IRI .
+
+shape:Collection_type_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:Collection_type_literal_datatype_0 shape:Collection_type_literal_datatype_1 ) .
+
+shape:Collection_audience_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:Collection_audience_literal_datatype_0 shape:Collection_audience_literal_datatype_1 ) .
+
+shape:ProvidedCHO_conformsTo_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:TimeSpan_end  sh:description  "5772 occurences and 466 distinct values"@en ;
+        sh:maxCount     1 ;
+        sh:name         "end"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:or           ( shape:TimeSpan_end_datatype_0 shape:TimeSpan_end_datatype_1 shape:TimeSpan_end_datatype_2 ) ;
+        sh:path         edm:end .
+
+shape:WebResource_primaryTopic
+        sh:description  "2058308 occurences and 2058308 distinct values"@en ;
+        sh:maxCount     1 ;
+        sh:minCount     1 ;
+        sh:name         "primaryTopic"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         foaf:primaryTopic .
+
+shape:WebResource_format
+        sh:class        skos:Concept ;
+        sh:description  "2058308 occurences and 208 distinct values"@en ;
+        sh:maxCount     1 ;
+        sh:minCount     1 ;
+        sh:name         "format"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         dct:format .
+
+shape:ProvidedCHO_rights_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:Collection_description_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:Collection_extent_datatype_1
+        sh:datatype  xsd:string .
+
+shape:Collection_abstract_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_coverage
+        sh:description  "1227210 occurences and 22666 distinct values"@en ;
+        sh:name         "coverage"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_coverage_literal shape:ProvidedCHO_coverage_resource ) ;
+        sh:path         dct:coverage .
+
+shape:ProvidedCHO_isReferencedBy_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_isReferencedBy_literal_datatype_0 shape:ProvidedCHO_isReferencedBy_literal_datatype_1 ) .
+
+shape:Collection_spatial_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:Collection_spatial_literal_datatype_0 shape:Collection_spatial_literal_datatype_1 ) .
+
+shape:Aggregation_aggregates
+        sh:class        edm:Collection ;
+        sh:description  "10706 occurences and 10706 distinct values"@en ;
+        sh:maxCount     1 ;
+        sh:name         "aggregates"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         ore:aggregates .
+
+shape:WebResource_description
+        sh:datatype     xsd:string ;
+        sh:description  "137228 occurences and 105367 distinct values"@en ;
+        sh:maxCount     1 ;
+        sh:name         "description"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:path         dct:description .
+
+shape:Collection_medium_datatype_1
+        sh:datatype  xsd:string .
+
+shape:SpatialThing_notation
+        sh:datatype     xsd:string ;
+        sh:description  "747 occurences and 747 distinct values"@en ;
+        sh:minCount     1 ;
+        sh:name         "notation"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:path         skos:notation .
+
+shape:ProvidedCHO_contributor_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_accessRights_datatype_1
+        sh:datatype  xsd:string .
+
+shape:Collection_rightsHolder_datatype_1
+        sh:datatype  xsd:string .
+
+shape:Aggregation  rdf:type  sh:NodeShape ;
+        rdfs:comment    "908709 instances"@en ;
+        rdfs:label      "Aggregation"@en ;
+        sh:property     shape:Aggregation_hasView , shape:Aggregation_dataProvider , shape:Aggregation_rights , shape:Aggregation_provider , shape:Aggregation_isDescribedBy , shape:Aggregation_aggregates , shape:Aggregation_aggregatedCHO , shape:Aggregation_isShownAt ;
+        sh:targetClass  ore:Aggregation .
+
+shape:Collection_provenance_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:Collection_identifier_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:Collection_identifier_literal_datatype_0 shape:Collection_identifier_literal_datatype_1 ) .
+
+shape:Collection_hasPart_literal
+        sh:datatype  xsd:string ;
+        sh:nodeKind  sh:Literal .
+
+shape:Collection_description_resource
+        sh:nodeKind  sh:IRI .
+
+shape:ProvidedCHO_isFormatOf_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_isFormatOf_literal_datatype_0 shape:ProvidedCHO_isFormatOf_literal_datatype_1 ) .
+
+shape:Collection_coverage_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_temporal_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_temporal_literal_datatype_0 shape:ProvidedCHO_temporal_literal_datatype_1 shape:ProvidedCHO_temporal_literal_datatype_2 shape:ProvidedCHO_temporal_literal_datatype_3 ) .
+
+shape:ProvidedCHO_modified_literal_datatype_1
+        sh:datatype  xsd:date .
+
+shape:Collection_isReferencedBy_resource
+        sh:nodeKind  sh:IRI .
+
+shape:ProvidedCHO_rightsHolder_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_rightsHolder_literal_datatype_0 shape:ProvidedCHO_rightsHolder_literal_datatype_1 ) .
+
+shape:ProvidedCHO_issued_resource
+        sh:class     edm:TimeSpan ;
+        sh:nodeKind  sh:BlankNode .
+
+shape:ProvidedCHO_date_literal_datatype_1
+        sh:datatype  xsd:date .
+
+shape:ProvidedCHO_language_resource
+        sh:class     skos:Concept ;
+        sh:nodeKind  sh:IRI .
+
+shape:ProvidedCHO_license
+        sh:description  "980734 occurences and 151 distinct values"@en ;
+        sh:minCount     1 ;
+        sh:name         "license"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_license_literal shape:ProvidedCHO_license_resource ) ;
+        sh:path         dct:license .
+
+shape:Collection_issued_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_audience_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_created_literal_datatype_2
+        sh:datatype  xsd:dateTime .
+
+shape:Collection_contributor_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:Collection_isPartOf_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:Collection_isPartOf_literal_datatype_0 shape:Collection_isPartOf_literal_datatype_1 ) .
+
+shape:Collection_format_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_abstract_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_alternative_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:Collection_coverage_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:Collection_coverage_literal_datatype_0 shape:Collection_coverage_literal_datatype_1 ) .
+
+shape:ProvidedCHO_medium_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_medium_literal_datatype_0 shape:ProvidedCHO_medium_literal_datatype_1 ) .
+
+shape:ProvidedCHO_type_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_creator_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_issued_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:Collection_rightsHolder
+        sh:description  "158 occurences and 21 distinct values"@en ;
+        sh:name         "rightsHolder"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:or           ( shape:Collection_rightsHolder_datatype_0 shape:Collection_rightsHolder_datatype_1 ) ;
+        sh:path         dct:rightsHolder .
+
+shape:Collection_license
+        sh:description  "171 occurences and 25 distinct values"@en ;
+        sh:maxCount     1 ;
+        sh:name         "license"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:Collection_license_literal shape:Collection_license_resource ) ;
+        sh:path         dct:license .
+
+shape:SpatialThing_asWKT
+        sh:datatype     geo:wktLiteral ;
+        sh:description  "249 occurences and 249 distinct values"@en ;
+        sh:maxCount     1 ;
+        sh:minCount     1 ;
+        sh:name         "asWKT"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:path         geo:asWKT .
+
+shape:ProvidedCHO_source_resource
+        sh:nodeKind  sh:IRI .
+
+shape:WebResource_type
+        sh:datatype     xsd:string ;
+        sh:description  "2058308 occurences and 116 distinct values"@en ;
+        sh:maxCount     1 ;
+        sh:minCount     1 ;
+        sh:name         "type"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:path         dct:type .
+
+shape:TimeSpan_end_datatype_1
+        sh:datatype  xsd:gYear .
+
+shape:Aggregation_isShownAt
+        sh:description  "908709 occurences and 908709 distinct values"@en ;
+        sh:maxCount     1 ;
+        sh:minCount     1 ;
+        sh:name         "isShownAt"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         edm:isShownAt .
+
+shape:Collection_description_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:Collection_description_literal_datatype_0 shape:Collection_description_literal_datatype_1 ) .
+
+shape:Collection_abstract
+        sh:description  "1159 occurences and 1150 distinct values"@en ;
+        sh:name         "abstract"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:or           ( shape:Collection_abstract_datatype_0 shape:Collection_abstract_datatype_1 ) ;
+        sh:path         dct:abstract .
+
+shape:ProvidedCHO_extent_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_spatial
+        sh:class        edm:Place ;
+        sh:description  "442556 occurences and 442556 distinct values"@en ;
+        sh:name         "spatial"@en ;
+        sh:nodeKind     sh:BlankNode ;
+        sh:path         dct:spatial .
+
+shape:Collection_relation_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:Concept_altLabel_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_type_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_type_literal_datatype_0 shape:ProvidedCHO_type_literal_datatype_1 ) .
+
+shape:ProvidedCHO_mediator_resource
+        sh:nodeKind  sh:IRI .
+
+shape:ProvidedCHO_subject_resource
+        sh:class     skos:Concept ;
+        sh:nodeKind  sh:IRI .
+
+shape:ProvidedCHO_contributor_resource
+        sh:nodeKind  sh:IRI .
+
+shape:ProvidedCHO_description_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:Collection_type
+        sh:description  "168 occurences and 21 distinct values"@en ;
+        sh:name         "type"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:Collection_type_literal shape:Collection_type_resource ) ;
+        sh:path         dct:type .
+
+shape:Collection_hasVersion_resource
+        sh:nodeKind  sh:IRI .
+
+shape:ProvidedCHO_hasPart_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:Collection_subject_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:Collection_subject_literal_datatype_0 shape:Collection_subject_literal_datatype_1 ) .
+
+shape:ProvidedCHO_hasPart_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_hasPart_literal_datatype_0 shape:ProvidedCHO_hasPart_literal_datatype_1 ) .
+
+[ rdf:first shape:ProvidedCHO_isReplacedBy_literal ; rdf:rest ( shape:ProvidedCHO_isReplacedBy_resource ) ] .
+
+[ rdf:first shape:ProvidedCHO_dateAccepted_datatype_0 ; rdf:rest ( shape:ProvidedCHO_dateAccepted_datatype_1 ) ] .
+
+[ rdf:first "en" ; rdf:rest () ] .
+
+[ rdf:first shape:Collection_rights_literal ; rdf:rest ( shape:Collection_rights_resource ) ] .
+
+[ rdf:first shape:ProvidedCHO_isRequiredBy_literal ; rdf:rest ( shape:ProvidedCHO_isRequiredBy_resource ) ] .
+
+[ rdf:first shape:Collection_hasVersion_literal ; rdf:rest ( shape:Collection_hasVersion_resource ) ] .
+
+[ rdf:first shape:Collection_language_datatype_0 ; rdf:rest ( shape:Collection_language_datatype_1 ) ] .
+
+[ rdf:first shape:ProvidedCHO_isVersionOf_literal ; rdf:rest ( shape:ProvidedCHO_isVersionOf_resource ) ] .
+
+[ rdf:first "en" ; rdf:rest () ] .
+
+[ rdf:first "en" ; rdf:rest () ] .
+
+[ rdf:first shape:Collection_isFormatOf_literal ; rdf:rest ( shape:Collection_isFormatOf_resource ) ] .
+
+[ rdf:first shape:Collection_modified_datatype_0 ; rdf:rest ( shape:Collection_modified_datatype_1 ) ] .
+
+[ rdf:first shape:ProvidedCHO_dateSubmitted_datatype_0 ; rdf:rest ( shape:ProvidedCHO_dateSubmitted_datatype_1 shape:ProvidedCHO_dateSubmitted_datatype_2 ) ] .
+
+[ rdf:first shape:ProvidedCHO_mediator_literal ; rdf:rest ( shape:ProvidedCHO_mediator_resource ) ] .
+
+[ rdf:first shape:Collection_accrualPeriodicity_datatype_0 ; rdf:rest ( shape:Collection_accrualPeriodicity_datatype_1 ) ] .
+
+[ rdf:first shape:Collection_medium_datatype_0 ; rdf:rest ( shape:Collection_medium_datatype_1 ) ] .
+
+[ rdf:first shape:ProvidedCHO_conformsTo_literal ; rdf:rest ( shape:ProvidedCHO_conformsTo_resource ) ] .
+
+[ rdf:first shape:ProvidedCHO_hasPart_literal ; rdf:rest ( shape:ProvidedCHO_hasPart_resource ) ] .
+
+[ rdf:first shape:Collection_isVersionOf_literal ; rdf:rest ( shape:Collection_isVersionOf_resource ) ] .
+
+[ rdf:first shape:Collection_temporal_datatype_0 ; rdf:rest ( shape:Collection_temporal_datatype_1 ) ] .
+
+[ rdf:first shape:ProvidedCHO_hasVersion_literal ; rdf:rest ( shape:ProvidedCHO_hasVersion_resource ) ] .
+
+[ rdf:first shape:Collection_alternative_datatype_0 ; rdf:rest ( shape:Collection_alternative_datatype_1 ) ] .
+
+[ rdf:first shape:Collection_tableOfContents_datatype_0 ; rdf:rest ( shape:Collection_tableOfContents_datatype_1 ) ] .
+
+[ rdf:first shape:Collection_format_literal ; rdf:rest ( shape:Collection_format_resource ) ] .
+
+[ rdf:first shape:Collection_accessRights_datatype_0 ; rdf:rest ( shape:Collection_accessRights_datatype_1 ) ] .
+
+[ rdf:first "fr" ; rdf:rest () ] .
+
+[ rdf:first shape:Collection_isReferencedBy_literal ; rdf:rest ( shape:Collection_isReferencedBy_resource ) ] .
+
+[ rdf:first shape:ProvidedCHO_isFormatOf_literal ; rdf:rest ( shape:ProvidedCHO_isFormatOf_resource ) ] .
+
+[ rdf:first shape:ProvidedCHO_instructionalMethod_literal ; rdf:rest ( shape:ProvidedCHO_instructionalMethod_resource ) ] .
+
+[ rdf:first shape:Collection_audience_literal ; rdf:rest ( shape:Collection_audience_resource ) ] .
+
+[ rdf:first shape:ProvidedCHO_dateCopyrighted_datatype_0 ; rdf:rest ( shape:ProvidedCHO_dateCopyrighted_datatype_1 shape:ProvidedCHO_dateCopyrighted_datatype_2 ) ] .
+
+[ rdf:first shape:ProvidedCHO_accessRights_datatype_0 ; rdf:rest ( shape:ProvidedCHO_accessRights_datatype_1 ) ] .
+
+[ rdf:first shape:ProvidedCHO_audience_literal ; rdf:rest ( shape:ProvidedCHO_audience_resource ) ] .

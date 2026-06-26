@@ -1,0 +1,143 @@
+@prefix shape:  <https://shacl-play.sparna.fr/shapes/> .
+@prefix schema: <http://schema.org/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix dce: <http://purl.org/dc/elements/1.1/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix skosthes: <http://purl.org/iso25964/skos-thes#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sd: <http://www.w3.org/ns/sparql-service-description#> .
+@prefix qb: <http://purl.org/linked-data/cube#> .
+@prefix terms: <http://purl.org/dc/terms/> .
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix euvoc: <http://publications.europa.eu/ontology/euvoc#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix cc: <http://creativecommons.org/ns#> .
+@prefix ore: <http://www.openarchives.org/ore/terms/> .
+@prefix adms: <http://www.w3.org/ns/adms#> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix this: <http://sparnatural.eu/demos/demo-edm/sparnatural-config.ttl/> .
+@prefix edm: <http://www.europeana.eu/schemas/edm/> .
+@prefix core: <http://data.sparna.fr/ontologies/sparnatural-config-core#> .
+@prefix datasources: <http://data.sparna.fr/ontologies/sparnatural-config-datasources#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix skosxl: <http://www.w3.org/2008/05/skos-xl#> .
+@prefix volipi: <http://data.sparna.fr/ontologies/volipi#> .
+
+
+edm:Agent a owl:Class;
+  rdfs:subClassOf core:SparnaturalClass;
+  core:faIcon "fa-regular fa-newspaper";
+  rdfs:label "Personne"@fr;
+  core:defaultLabelProperty dce:title .
+
+ore:Aggregation a owl:Class;
+  rdfs:subClassOf core:SparnaturalClass;
+  rdfs:label "Dépôt"@fr;
+  core:defaultLabelProperty dce:title .
+
+edm:Collection a owl:Class;
+  rdfs:subClassOf core:SparnaturalClass;
+  rdfs:label "Collection"@fr;
+  core:defaultLabelProperty dce:title .
+
+edm:Place a owl:Class;
+  rdfs:subClassOf core:SparnaturalClass;
+  rdfs:label "Lieu"@fr;
+  core:defaultLabelProperty dce:title .
+
+edm:ProvidedCHO a owl:Class;
+  rdfs:subClassOf core:SparnaturalClass;
+  rdfs:label "Métadonnées"@fr;
+  core:defaultLabelProperty dce:title .
+
+edm:TimeSpan a owl:Class;
+  rdfs:subClassOf core:SparnaturalClass;
+  rdfs:label "Période"@fr;
+  core:defaultLabelProperty dce:title .
+
+edm:WebResource a owl:Class;
+  rdfs:subClassOf core:SparnaturalClass;
+  rdfs:label "Fichier"@fr;
+  core:defaultLabelProperty dce:title .
+
+skos:Concept a owl:Class;
+  rdfs:subClassOf core:SparnaturalClass;
+  rdfs:label "Concept"@fr;
+  core:defaultLabelProperty skos:prefLabel .
+
+ore:ResourceMap a owl:Class;
+  rdfs:subClassOf core:SparnaturalClass;
+  core:enableOptional "false"^^xsd:boolean.
+  
+ore:Label a owl:Class ;
+  rdfs:subClassOf core:SparnaturalClass ;
+  rdfs:label "Label"@fr ;
+  core:defaultLabelProperty dce:title .
+  
+ore:ChangeSet a owl:Class ;
+  rdfs:subClassOf core:SparnaturalClass ;
+  rdfs:label "ChangeSet"@fr ;
+  core:defaultLabelProperty dce:title .
+  
+
+shape:Agent  rdf:type   sh:NodeShape ;
+  volipi:iconName "fa-solid fa-user";
+  sh:targetClass  edm:Agent .
+
+shape:Aggregation  rdf:type   sh:NodeShape ;
+  volipi:iconName "fa-regular fa-folder";
+  sh:order 3 ;
+  sh:targetClass  ore:Aggregation .
+
+shape:Collection  rdf:type   sh:NodeShape ;
+  volipi:iconName "fa-solid fa-folder-tree";
+  sh:targetClass  edm:Collection .
+
+shape:ProvidedCHO  rdf:type   sh:NodeShape ;
+  volipi:iconName "fa-regular fa-table-list";
+  sh:order 1 ;
+  sh:targetClass  edm:ProvidedCHO .
+
+shape:WebResource  rdf:type   sh:NodeShape ;
+  volipi:iconName "fa-solid fa-file";
+  sh:order 2 ;
+  sh:targetClass  edm:WebResource .
+
+
+shape:Place  rdf:type   sh:NodeShape ;
+  volipi:iconName "fa-solid fa-location-dot";
+  sh:targetClass  edm:Place .
+  
+  # Éléments désactivés (ne s'affichent pas)  
+  
+  shape:ResourceMap a sh:NodeShape ;
+  sh:targetClass ore:ResourceMap ;
+  sh:deactivated "true"^^xsd:boolean .
+
+shape:Label a sh:NodeShape ;
+sh:targetClass ore:Label ;
+sh:deactivated "true"^^xsd:boolean .
+
+shape:ChangeSet a sh:NodeShape ;
+sh:targetClass ore:ChangeSet ;
+sh:deactivated "true"^^xsd:boolean .
+
+shape:TimeSpan a sh:NodeShape ;
+sh:targetClass edm:TimeSpan ;
+sh:deactivated "true"^^xsd:boolean .
+
+shape:Place a sh:NodeShape ;
+sh:targetClass edm:Place ;
+sh:deactivated "true"^^xsd:boolean .
+
+shape:Concept  rdf:type   sh:NodeShape ;
+# volipi:iconName "fa-solid fa-star-of-life";
+sh:targetClass  skos:Concept ;
+sh:deactivated "true"^^xsd:boolean .
+
+shape:SpatialThing a sh:NodeShape ;
+sh:deactivated "true"^^xsd:boolean .
