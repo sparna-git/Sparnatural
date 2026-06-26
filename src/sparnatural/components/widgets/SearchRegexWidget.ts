@@ -74,14 +74,17 @@ export class SearchRegexWidget extends AbstractWidget {
 
   #addValueBtnClicked = () => {
     this.searchInput.trigger("change");
-    let searchWidgetValue:LabelledCriteria<SearchCriteria> = {
-      label: this.searchInput.val().toString(),
-      criteria: {
-        search: this.searchInput.val().toString()
-      }      
-    };
+    let searchWidgetValue: LabelledCriteria<SearchCriteria> =
+      this.buildValueFromCriteria({
+        search: (this.searchInput.val() ?? "").toString(),
+      });
     this.triggerRenderWidgetVal(searchWidgetValue);
   };
+
+  // The label of a search criteria is simply the searched string itself.
+  getValueLabel(criteria: SearchCriteria): string {
+    return criteria.search;
+  }
 
   parseInput(input: LabelledCriteria<SearchCriteria>): LabelledCriteria<SearchCriteria> {
     return input

@@ -52,36 +52,41 @@ export class BooleanWidget extends AbstractWidget {
     this.html.append(trueSpan).append(orSpan).append(falseSpan);
 
     trueSpan[0].addEventListener("click", (e) => {
-      let widgetValue: LabelledCriteria<BooleanCriteria> = {
-        label: this.configuration.existNotExist
-          ? I18n.labels.exists
-          : I18n.labels.true,
-        criteria: {
-          boolean: true,
-        },
-      };
-
-      this.triggerRenderWidgetVal(widgetValue);
+      this.triggerRenderWidgetVal(
+        this.buildValueFromCriteria({ boolean: true }),
+      );
     });
 
     falseSpan[0].addEventListener("click", (e) => {
-      let widgetValue: LabelledCriteria<BooleanCriteria> = {
-        label: this.configuration.existNotExist
-          ? I18n.labels.notExists
-          : I18n.labels.false,
-        criteria: {
-          boolean: false,
-        },
-      };
-
-      this.triggerRenderWidgetVal(widgetValue);
+      this.triggerRenderWidgetVal(
+        this.buildValueFromCriteria({ boolean: false }),
+      );
     });
     return this;
+  }
+
+  // Label depends on the boolean value and whether the widget is in
+  // exists/not-exists mode (DOM-free, reads the criteria only).
+  getValueLabel(criteria: BooleanCriteria): string {
+    if (criteria.boolean) {
+      return this.configuration.existNotExist
+        ? I18n.labels.exists
+        : I18n.labels.true;
+    }
+    return this.configuration.existNotExist
+      ? I18n.labels.notExists
+      : I18n.labels.false;
   }
 
   parseInput(
     input: LabelledCriteria<BooleanCriteria>,
   ): LabelledCriteria<BooleanCriteria> {
     return input;
+  }
+
+  // Parses "true"/"false" (case-insensitive ; "1"/"0" also accepted).
+  parseRawValue(raw: string): BooleanCriteria {
+    let v = (raw ?? "").trim().toLowerCase();
+    return { boolean: v === "true" || v === "1" };
   }
 }
