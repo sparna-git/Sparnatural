@@ -235,9 +235,9 @@ export class RdfTermValueBuilder
       !this.endClassVarSelected
       &&
       !(
-        this.specProvider.getEntity(this.endClassVal.type) instanceof SHACLSpecificationEntity
+        this.specProvider.getEntity(this.endClassVal.rdfType) instanceof SHACLSpecificationEntity
         &&
-        (this.specProvider.getEntity(this.endClassVal.type) as SHACLSpecificationEntity).hasShTarget()
+        (this.specProvider.getEntity(this.endClassVal.rdfType) as SHACLSpecificationEntity).hasShTarget()
       )
       &&
       !this.criteriaHasChildren
@@ -253,7 +253,7 @@ export class BooleanValueBuilder
     let widgetValues = this.values as BooleanCriteria[];
 
     let isLiteral = 
-      this.specProvider.getEntity(this.endClassVal.type).isLiteralEntity();
+      this.specProvider.getEntity(this.endClassVal.rdfType).isLiteralEntity();
 
     if(!isLiteral) {
       // not a literal, we turn the criteria into FILTER EXISTS or FILTER NOT EXISTS
@@ -262,7 +262,7 @@ export class BooleanValueBuilder
         triples: [
           {
             subject: factory.variable(this.startClassVal.value),
-            predicate: factory.namedNode(this.propertyVal.type),
+            predicate: factory.namedNode(this.propertyVal.value),
             object: factory.variable(this.endClassVal.value),
           },
         ],
@@ -330,7 +330,7 @@ export class BooleanValueBuilder
    * @returns true if the range is not a literal, indicating we will generate a FILTER NOT EXISTS
    */
   isBlockingEnd(): boolean {
-      let isLiteral = this.specProvider.getEntity(this.endClassVal.type).isLiteralEntity();
+      let isLiteral = this.specProvider.getEntity(this.endClassVal.rdfType).isLiteralEntity();
       return !isLiteral;
   }
 }
@@ -376,11 +376,12 @@ export class SearchRegexValueBuilder
   implements ValueBuilderIfc
 {
   build(): Pattern[] {
+
     let widgetType = this.specProvider
       .getProperty(this.propertyVal.value)
-      .getPropertyType(this.endClassVal.type);
+      .getPropertyType(this.endClassVal.rdfType);
     
-     let widgetValues = this.values as SearchCriteria[];
+    let widgetValues = this.values as SearchCriteria[];
 
     switch (widgetType) {
       case Config.STRING_EQUALS_PROPERTY: {
@@ -452,6 +453,9 @@ export class SearchRegexValueBuilder
       case Config.JENA_SEARCH_PROPERTY: {
         throw new Error("Not implemented yet");
       }
+      default: {
+        throw new Error(`WidgetType ${widgetType} not recognized`);
+      }
     }
   }
 }
@@ -516,8 +520,8 @@ export class DateTimePickerValueBuilder extends BaseValueBuilder implements Valu
    * @returns true if the property has been configured with a begin and an end date property
    */
   isBlockingObjectProp() {
-      let beginDateProp = this.specProvider.getProperty(this.propertyVal.type).getBeginDateProperty();
-      let endDateProp = this.specProvider.getProperty(this.propertyVal.type).getEndDateProperty();
+      let beginDateProp = this.specProvider.getProperty(this.propertyVal.value).getBeginDateProperty();
+      let endDateProp = this.specProvider.getProperty(this.propertyVal.value).getEndDateProperty();
 
       return (
         this.values?.length == 1
