@@ -23,6 +23,8 @@ export enum Config {
     "SearchProperty",
   STRING_EQUALS_PROPERTY = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
     "StringEqualsProperty",
+  TEMPLATE_LIST_PROPERTY = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
+    "TemplateListProperty",
   TIME_PROPERTY_DATE = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
     "TimeProperty-Date",
   TIME_PROPERTY_PERIOD = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +

@@ -46,6 +46,9 @@ volipi:color rdf:type owl:AnnotationProperty .
 ###  http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty
 <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> rdf:type owl:ObjectProperty .
 
+###  http://data.sparna.fr/ontologies/sparnatural-config-core#TemplateListProperty
+<http://data.sparna.fr/ontologies/sparnatural-config-core#TemplateListProperty> rdf:type owl:ObjectProperty .
+
 
 ###  http://data.sparna.fr/ontologies/sparnatural-config-core#NonSelectableProperty
 <http://data.sparna.fr/ontologies/sparnatural-config-core#NonSelectableProperty> rdf:type owl:ObjectProperty .

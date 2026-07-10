@@ -7,6 +7,7 @@ import { AutocompleteConfiguration, AutoCompleteWidget } from "../../../../widge
 import { BooleanConfiguration, BooleanWidget } from "../../../../widgets/BooleanWidget";
 import { ListSparqlTemplateQueryBuilder, AutocompleteSparqlTemplateQueryBuilder, TreeSparqlTemplateQueryBuilder, ValuesListSparqlTemplateQueryBuilder, SinglePredicateSparqlQueryBuilder } from "../../../../datasources/SparqlBuilders";
 import { ListConfiguration, ListWidget } from "../../../../widgets/ListWidget";
+import { TemplateListConfiguration, TemplateListWidget } from "../../../../widgets/TemplateListWidget";
 import MapWidget, { MapConfiguration } from "../../../../widgets/MapWidget";
 import { NoWidget } from "../../../../widgets/NoWidget";
 import { NumberConfiguration, NumberWidget } from "../../../../widgets/NumberWidget";
@@ -38,7 +39,8 @@ export class WidgetFactorySettings {
     
     customization? : {
       autocomplete?: Partial<AutocompleteConfiguration>,
-      list?: Partial<ListConfiguration>,   
+      list?: Partial<ListConfiguration>,
+      templateList?: Partial<TemplateListConfiguration>,   
       tree?: Partial<TreeConfiguration>,
       number?: Partial<NumberConfiguration>,
       map?: Partial<MapConfiguration>,
@@ -119,6 +121,7 @@ export class WidgetFactory {
         switch (widgetType) {
           case Config.LITERAL_LIST_PROPERTY:
           case Config.LIST_PROPERTY:
+          case Config.TEMPLATE_LIST_PROPERTY:
     
             // determine custom datasource
             var datasource:IDatasource = property.getDatasource();
@@ -244,19 +247,51 @@ export class WidgetFactory {
               this.settings.typePredicate
             );
     
-            let listWidget = new ListWidget(
-              this.parentComponent,
-              listConfig,
-              startClassVal,
-              objectPropVal,
-              endClassVal
-            );
+            // Determine which widget to create based on widgetType
+            let finalWidget;
+            if (widgetType === Config.TEMPLATE_LIST_PROPERTY) {
+              // For TemplateListWidget, use templateList customization if available
+              let templateListConfig:TemplateListConfiguration = {
+                ...TemplateListWidget.defaultConfiguration,
+                ...{
+                  dataProvider: listDataProvider,
+                  values:this.specProvider.getProperty(objectPropVal.type).getValues(),
+                },
+                ...this.settings.customization?.templateList,
+                ...this.settings.customization?.list  // Also apply list customization
+              };
+              
+              // init data provider
+              templateListConfig.dataProvider.init(
+                this.settings.language,
+                this.settings.defaultLanguage,
+                this.settings.typePredicate
+              );
+              
+              finalWidget = new TemplateListWidget(
+                this.parentComponent,
+                templateListConfig,
+                startClassVal,
+                objectPropVal,
+                endClassVal
+              );
+            } else {
+              // For ListWidget or LiteralListWidget
+              finalWidget = new ListWidget(
+                this.parentComponent,
+                listConfig,
+                startClassVal,
+                objectPropVal,
+                endClassVal
+              );
+            }
+            
             let listResolver = this.#buildLabelResolver(endClassVal.type);
-            listWidget.setLabelResolver(
+            finalWidget.setLabelResolver(
               listResolver.dataProvider,
               listResolver.predicate
             );
-            return listWidget;
+            return finalWidget;
     
           case Config.AUTOCOMPLETE_PROPERTY:
     

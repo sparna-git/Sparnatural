@@ -38,19 +38,36 @@ export abstract class BaseSparqlListDataProvider {
                 // this is to avoid corner-cases with GraphDB queries returning only count=0 in aggregation queries.
                 // we need at least 2 bindings anyway
                 if(Object.keys(solution).length > 1) {
+                    // Collect all extra bindings (columns other than uri, value, label, group, itemLabel)
+                    const extraBindings = new Map<string, any>();
+                    const knownKeys = ['uri', 'value', 'label', 'group', 'itemLabel'];
+                    
+                    for (const key of Object.keys(solution)) {
+                        if (!knownKeys.includes(key)) {
+                            extraBindings.set(key, solution[key]);
+                        }
+                    }
+                    
                     if(solution.uri) {
                         // if we find a "uri" column...
                         // read uri key & label key
-                        result[result.length] = {term:solution.uri, label:solution.label.value, group:solution.group?.value, itemLabel:solution.itemLabel?.value};
+                        result[result.length] = {term:solution.uri, label:solution.label.value, group:solution.group?.value, itemLabel:solution.itemLabel?.value, extraBindings: extraBindings.size > 0 ? extraBindings : undefined};
                     } else if(solution.value) {
                         // if we find a "value" column...
                         // read value key & label key
-                        result[result.length] = {term:solution.value, label:solution.label.value, group:solution.group?.value, itemLabel:solution.itemLabel?.value};
+                        result[result.length] = {term:solution.value, label:solution.label.value, group:solution.group?.value, itemLabel:solution.itemLabel?.value, extraBindings: extraBindings.size > 0 ? extraBindings : undefined};
                     } else {
                         // try to determine the payload column by taking the column other than label
                         let columnName = this.getRdfTermColumn(solution);
                         if(columnName) {
-                            result[result.length] ={term:solution[columnName], label:solution.label.value, group:solution.group?.value, itemLabel:solution.itemLabel?.value};
+                            // Rebuild extraBindings without the columnName
+                            const filteredExtraBindings = new Map<string, any>();
+                            for (const [key, val] of extraBindings) {
+                                if (key !== columnName) {
+                                    filteredExtraBindings.set(key, val);
+                                }
+                            }
+                            result[result.length] ={term:solution[columnName], label:solution.label.value, group:solution.group?.value, itemLabel:solution.itemLabel?.value, extraBindings: filteredExtraBindings.size > 0 ? filteredExtraBindings : undefined};
                         } else {
                             throw Error("Could not determine which column to read from the result set")
                         }
@@ -291,16 +308,34 @@ export class SparqlAutocompleDataProvider
           let result = new Array<RdfTermDatasourceItem>;
           for (let index = 0; index < data.results.bindings.length; index++) {
               const solution = data.results.bindings[index];
+              
+              // Collect all extra bindings (columns other than uri, value, label, group)
+              const extraBindings = new Map<string, any>();
+              const knownKeys = ['uri', 'value', 'label', 'group'];
+              
+              for (const key of Object.keys(solution)) {
+                  if (!knownKeys.includes(key)) {
+                      extraBindings.set(key, solution[key]);
+                  }
+              }
+              
               if(solution.uri) {
                   // read uri key & label key
-                  result[result.length] ={term:solution.uri, label:solution.label.value, group:solution.group?.value};
+                  result[result.length] ={term:solution.uri, label:solution.label.value, group:solution.group?.value, extraBindings: extraBindings.size > 0 ? extraBindings : undefined};
               } else if(solution.value) {
-                  result[result.length] ={term:solution.value, label:solution.label.value, group:solution.group?.value};
+                  result[result.length] ={term:solution.value, label:solution.label.value, group:solution.group?.value, extraBindings: extraBindings.size > 0 ? extraBindings : undefined};
               } else {
                   // try to determine the payload column by taking the column other than label
                   let columnName = this.getRdfTermColumn(solution);
                   if(columnName) {
-                      result[result.length] ={term:solution[columnName], label:solution.label.value};
+                      // Rebuild extraBindings without the columnName
+                      const filteredExtraBindings = new Map<string, any>();
+                      for (const [key, val] of extraBindings) {
+                          if (key !== columnName) {
+                              filteredExtraBindings.set(key, val);
+                          }
+                      }
+                      result[result.length] ={term:solution[columnName], label:solution.label.value, extraBindings: filteredExtraBindings.size > 0 ? filteredExtraBindings : undefined};
                   } else {
                       throw Error("Could not determine which column to read from the result set")
                   }
@@ -474,7 +509,20 @@ export function mergeDatasourceResults(items:RdfTermDatasourceItem[]):RdfTermDat
                 term: sameTerms[0].term,
                 label : sameTerms[0].label,
                 itemLabel: sameTerms[0].itemLabel,
-                group: sameTerms.map(i => i.group).join(" + ")
+                group: sameTerms.map(i => i.group).join(" + "),
+                // Merge extraBindings from all sameTerms
+                extraBindings: sameTerms.reduce((acc: Map<string, any> | undefined, curr) => {
+                    if (curr.extraBindings) {
+                        if (!acc) acc = new Map();
+                        curr.extraBindings.forEach((value, key) => {
+                            if (!acc.has(key)) {
+                                acc.set(key, value);
+                            }
+                        });
+                        return acc;
+                    }
+                    return acc;
+                }, undefined)
             }
             result.push(newTerm);
         }
