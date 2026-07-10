@@ -1,29 +1,32 @@
 import { SelectedVal } from "../SelectedVal";
-import { ListWidget, ListConfiguration } from "./ListWidget";
 import { DataFactory } from 'rdf-data-factory';
 import "select2";
-import "select2/dist/css/select2.css";
 import { I18n } from "../../settings/I18n";
-import { Term } from "@rdfjs/types/data-model";
 import { HTMLComponent } from "../HtmlComponent";
 import { ListDataProviderIfc, RdfTermDatasourceItem, ValuesListDataProviderIfc } from "../datasources/DataProviders";
 import { NoOpListDataProvider } from "../datasources/NoOpDataProviders";
+import { RdfTermCriteria, LabelledCriteria } from "../../SparnaturalQueryIfc";
+import { AbstractWidget, ValueRepetition } from "./AbstractWidget";
 import { mergeDatasourceResults } from "../datasources/SparqlDataProviders";
-import { RDFTerm, RdfTermCriteria, LabelledCriteria } from "../../SparnaturalQueryIfc";
+import { ListWidget } from "./ListWidget";
+import { Term } from "@rdfjs/types/data-model";
 
 const factory = new DataFactory();
 
-export interface TemplateListConfiguration extends ListConfiguration {
-  // Can add template-specific configuration here if needed
+export interface TemplateListConfiguration {
+  dataProvider: ListDataProviderIfc | ValuesListDataProviderIfc,
+  values?: Term[]
 }
 
-export class TemplateListWidget extends ListWidget {
+export class TemplateListWidget extends AbstractWidget {
 
   // The default implementation of TemplateListConfiguration
   static defaultConfiguration: TemplateListConfiguration = {
     dataProvider: new NoOpListDataProvider(),
     values: undefined
   }
+
+  selectHtml: JQuery<HTMLElement>;
 
   configuration: TemplateListConfiguration;
 
@@ -35,11 +38,13 @@ export class TemplateListWidget extends ListWidget {
     endClassVal: SelectedVal
   ) {
     super(
+      "template-list-widget",
       parentComponent,
-      config,
+      null,
       startClassVal,
       objectPropVal,
-      endClassVal
+      endClassVal,
+      ValueRepetition.MULTIPLE
     );
 
     this.configuration = config;
@@ -60,6 +65,7 @@ export class TemplateListWidget extends ListWidget {
       ${I18n.labels.ListWidgetNoItem}
     </div>`);
 
+    
     let callback = (items:RdfTermDatasourceItem[]) => {
 
       if (items.length > 0) {
@@ -76,6 +82,7 @@ export class TemplateListWidget extends ListWidget {
         const templateElement = document.getElementById(templateId);
         const useTemplate = templateElement !== null;
 
+        console.log(`TemplateListWidget: useTemplate=${useTemplate} for id ${templateId}`);
         if(groups.length == 1 && groups[0] == undefined) {
           // no groups were defined at all
           items.forEach(item => {
@@ -92,7 +99,7 @@ export class TemplateListWidget extends ListWidget {
             } else {
               // Fall back to ListWidget behavior
               this.selectHtml.append(
-                $(`<option value='" + JSON.stringify(item.term) + "' data-itemLabel='"+itemLabel+"'>" + item.label + "</option>")
+                $("<option value='" + JSON.stringify(item.term) + "' data-itemLabel='"+itemLabel+"'>" + item.label + "</option>")
               );
             }
           });
@@ -132,7 +139,8 @@ export class TemplateListWidget extends ListWidget {
 
         // If we have a template, use it for rendering
         if (useTemplate) {
-          select2Config.templateResult = (item: any) => {
+          select2Config.templateResult = (item: any): JQuery<HTMLElement> => {
+            console.log("templateResult called for item: ", item);
             if (item.loading) {
               return item.text;
             }
@@ -140,12 +148,13 @@ export class TemplateListWidget extends ListWidget {
             // Find the corresponding item from our items array
             const foundItem = items.find(i => JSON.stringify(i.term) === item.id);
             if (foundItem) {
-              return $(this.#renderTemplate(templateElement, foundItem));
+              console.log(this.#renderTemplate(templateElement, foundItem), "rendered template for item: ", foundItem);
+              return $(this.#renderTemplate(templateElement, foundItem)) as JQuery<HTMLElement> ;
             }
-            return $(item.text);
+            return item.text;
           };
           
-          select2Config.templateSelection = (item: any) => {
+          select2Config.templateSelection = (item: any): JQuery<HTMLElement>  => {
             if (item.id === '') {
               return I18n.labels.ListWidgetSelectValue;
             }
@@ -154,13 +163,13 @@ export class TemplateListWidget extends ListWidget {
             const foundItem = items.find(i => JSON.stringify(i.term) === item.id);
             if (foundItem) {
               let itemLabel = foundItem.itemLabel ? foundItem.itemLabel : foundItem.label;
-              return $(`<span>${itemLabel}</span>`);
+              return $(`<span>${itemLabel}</span>`) as JQuery<HTMLElement>;
             }
-            return $(item.text);
+            return item.text;
           };
         }
 
-        this.selectHtml = this.selectHtml.select2(select2Config);
+        this.selectHtml.select2(select2Config);
 
         // set a listener for when a value is selected
         this.selectHtml.on("select2:close", (e: any) => {
@@ -173,7 +182,7 @@ export class TemplateListWidget extends ListWidget {
             return;
 
           let itemLabel = option[0].getAttribute("data-itemLabel");
-          let listWidgetValue: LabelledCriteria<RdfTermCriteria> = this.buildValue(option[0].value, itemLabel);
+          let listWidgetValue: LabelledCriteria<RdfTermCriteria> = ListWidget.buildValue(option[0].value, itemLabel);
           this.triggerRenderWidgetVal(listWidgetValue);
         });
 
@@ -221,7 +230,7 @@ export class TemplateListWidget extends ListWidget {
    * @returns The rendered HTML string
    */
   #renderTemplate(templateElement: HTMLElement, item: RdfTermDatasourceItem): string {
-    const templateContent = templateElement.textContent || templateElement.innerHTML;
+    const templateContent = templateElement.outerHTML;
     
     // Create a data object that includes all properties from the item
     const data: any = {
@@ -241,14 +250,7 @@ export class TemplateListWidget extends ListWidget {
     for (const [key, value] of Object.entries(data)) {
       const placeholder = `${key}`;
       // Handle both ${data.key} and ${key} patterns
-      result = result.replace(new RegExp(`\\$\\{data\\.${placeholder}\\}`, 'g'), this.#formatTermValue(value));
       result = result.replace(new RegExp(`\\$\\{${placeholder}\\}`, 'g'), this.#formatTermValue(value));
-    }
-    
-    // Also support ${data['key']} syntax
-    for (const [key, value] of Object.entries(data)) {
-      result = result.replace(new RegExp(`\\$\\{data\\['${key}'\\]\\}`, 'g'), this.#formatTermValue(value));
-      result = result.replace(new RegExp(`\\$\\{data\\["${key}"\\]\\}`, 'g'), this.#formatTermValue(value));
     }
     
     return result;
@@ -286,5 +288,7 @@ export class TemplateListWidget extends ListWidget {
     // For any other type, convert to string
     return String(value);
   }
+
+  parseInput(input:LabelledCriteria<RdfTermCriteria>): LabelledCriteria<RdfTermCriteria> { return input }
 
 }

@@ -128,7 +128,7 @@ export class ListWidget extends AbstractWidget {
             return;
 
           let itemLabel = option[0].getAttribute("data-itemLabel");
-          let listWidgetValue: LabelledCriteria<RdfTermCriteria> = this.buildValue(option[0].value, itemLabel);
+          let listWidgetValue: LabelledCriteria<RdfTermCriteria> = ListWidget.buildValue(option[0].value, itemLabel);
           this.triggerRenderWidgetVal(listWidgetValue);
         });
 
@@ -171,7 +171,7 @@ export class ListWidget extends AbstractWidget {
 
   // separate the creation of the value from the widget code itself
   // so that it can be overriden by LiteralListWidget
-  buildValue(termString:string,label:string): LabelledCriteria<RdfTermCriteria> {
+  public static buildValue(termString:string,label:string): LabelledCriteria<RdfTermCriteria> {
     let term = (JSON.parse(termString) as RDFTerm);
     return {
       label: label,
