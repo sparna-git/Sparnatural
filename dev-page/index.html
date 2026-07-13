@@ -135,9 +135,11 @@
                     debug="true"
             ></spar-natural>
 
-            <span id="https://data.mydomain.com/ontologies/sparnatural-config/Museum_country-template">
-              the <b>${label}</b> (<u>${count}</u>) !
-            </span>
+            <script id="https://data.mydomain.com/ontologies/sparnatural-config/Museum_country-template" type="text/x-handlebars-template">
+              <div>
+                <b>{{bindings.itemLabel.value}}</b> (<u>{{bindings.count.value}}</u>) !
+              </div>
+            </script>
 
             <!--       
         <spar-natural

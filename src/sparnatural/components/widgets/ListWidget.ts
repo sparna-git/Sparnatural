@@ -2,6 +2,7 @@ import { SelectedVal } from "../SelectedVal";
 import { AbstractWidget, ValueRepetition } from "./AbstractWidget";
 import { DataFactory } from 'rdf-data-factory';
 import "select2";
+// This is necessary otherwise select2 is not styled correctly
 import "select2/dist/css/select2.css";
 import { I18n } from "../../settings/I18n";
 import { Term } from "@rdfjs/types/data-model";
@@ -10,6 +11,7 @@ import { ListDataProviderIfc, RdfTermDatasourceItem, ValuesListDataProviderIfc }
 import { NoOpListDataProvider } from "../datasources/NoOpDataProviders";
 import { mergeDatasourceResults } from "../datasources/SparqlDataProviders";
 import { RDFTerm, RdfTermCriteria, LabelledCriteria } from "../../SparnaturalQueryIfc";
+import Handlebars from "handlebars";
 
 const factory = new DataFactory();
 
@@ -27,6 +29,8 @@ export class ListWidget extends AbstractWidget {
   }
 
   configuration: ListConfiguration;
+  templateElement: HTMLElement | null;
+  #compiledTemplate: HandlebarsTemplateDelegate | null = null;
 
   selectHtml: JQuery<HTMLElement>;
 
@@ -51,6 +55,24 @@ export class ListWidget extends AbstractWidget {
     this.startClassVal = startClassVal;
     this.objectPropVal = objectPropVal;
     this.endClassVal = endClassVal;
+
+    this.templateElement = this.#findTemplateElement();
+    if(this.templateElement) {
+      this.#compiledTemplate = Handlebars.compile(this.templateElement.innerHTML);
+    }
+  }
+
+  #findTemplateElement(): HTMLElement | null {
+    var templateId = this.objectPropVal.type + "-template";
+    var templateElement = document.getElementById(templateId);
+    if(templateElement === null) {
+      // try with the endClassVal.type as a fallback
+      templateId = this.endClassVal.type + "-template";
+      templateElement = document.getElementById(templateId);
+    }
+
+
+    return templateElement;
   }
 
   render() {
@@ -107,15 +129,31 @@ export class ListWidget extends AbstractWidget {
           })
         }
 
-
-        this.selectHtml = this.selectHtml.select2({
+        // Configure select2 with template support
+        const select2Config: any = {
           // use the minimumResultsForSearch parameter to avoid using a search box when only a few items are present
           minimumResultsForSearch: 20,
-          // pass a JQUery object so that HTML markup is preserved
-          // TODO : this does not work ATM
-          // templateResult: function formatLabel(label:any) {return $(label)},
           width: "style"
-        });
+        };
+
+        // If we have a template, use it for rendering
+        if (this.templateElement) {
+          select2Config.templateResult = (item: any): JQuery<HTMLElement> => {
+            console.log("templateResult called for item: ", item);
+            if (item.loading) {
+              return item.text;
+            }
+            
+            // Find the corresponding item from our items array
+            const foundItem = items.find(i => JSON.stringify(i.term) === item.id);
+            if (foundItem) {
+              return $(this.#render(foundItem)) as JQuery<HTMLElement> ;
+            }
+            return item.text;
+          };
+        }
+
+        this.selectHtml.select2(select2Config);
 
         // set a listener for when a value is selected
         this.selectHtml.on("select2:close", (e: any) => {
@@ -130,7 +168,7 @@ export class ListWidget extends AbstractWidget {
           let itemLabel = option[0].getAttribute("data-itemLabel");
           let listWidgetValue: LabelledCriteria<RdfTermCriteria> = ListWidget.buildValue(option[0].value, itemLabel);
           this.triggerRenderWidgetVal(listWidgetValue);
-        });
+        });        
 
       } else {
         this.html.append(noItemsHtml);
@@ -167,6 +205,29 @@ export class ListWidget extends AbstractWidget {
 
 
     return this;
+  }
+
+  #render(item: RdfTermDatasourceItem): string {
+    console.log("Rendering item: ", item);
+      // Use the compiled template to generate HTML
+      if (this.#compiledTemplate) {
+        return this.#compiledTemplate(item);
+      } else {
+        throw new Error("No compiled template available for rendering.");
+      }
+  }
+
+  /**
+   * Converts extraBindings Map to a plain object
+   */
+  #extraBindingsToObject(extraBindings: Map<string, any> | undefined): any {
+    if (!extraBindings) return {};
+    
+    const result: any = {};
+    extraBindings.forEach((value, key) => {
+      result[key] = value;
+    });
+    return result;
   }
 
   // separate the creation of the value from the widget code itself

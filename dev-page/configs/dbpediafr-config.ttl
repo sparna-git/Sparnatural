@@ -210,7 +210,7 @@ this:Museum_country sh:path dbpedia:country;
   sh:description "Specifies the country where the museum is located."@en, "Spécifie le pays où se trouve le musée."@fr;
   sh:nodeKind sh:IRI;
   sh:class dbpedia:Country;
-  dash:searchWidget core:TemplateListProperty;
+  dash:searchWidget core:ListProperty;
   datasources:datasource datasources:list_rdfslabel_count;
   core:enableOptional "true"^^xsd:boolean;
   core:enableNegation "true"^^xsd:boolean .
