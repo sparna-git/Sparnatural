@@ -283,8 +283,42 @@ export default class MapWidget extends AbstractWidget {
         coordinates: parsedCoords,
         coordType: theValue.coordType
       }
-      
+
     };
+  }
+
+  // Parses a raw URL value into a MapCriteria.
+  // Format: "lat,lng;lat,lng;..." ; 2 points => Rectangle (opposite corners),
+  // 3+ points => Polygon.
+  parseRawValue(raw: string): MapCriteria {
+    let points = raw.split(";").map((p) => {
+      let [lat, lng] = p.split(",").map((n) => parseFloat(n.trim()));
+      if (isNaN(lat) || isNaN(lng)) throw Error(`Invalid map coordinate: "${p}"`);
+      return new LatLng(lat, lng);
+    });
+
+    if (points.length < 2) throw Error(`Need at least 2 points, got: "${raw}"`);
+
+    if (points.length === 2) {
+      // two opposite corners -> the 4 corners of a rectangle
+      let [a, b] = points;
+      let ring = [
+        new LatLng(a.lat, a.lng),
+        new LatLng(a.lat, b.lng),
+        new LatLng(b.lat, b.lng),
+        new LatLng(b.lat, a.lng),
+      ];
+      return { coordType: "Rectangle", coordinates: [ring] };
+    }
+
+    return { coordType: "Polygon", coordinates: [points] };
+  }
+
+  // Label from the criteria only (no rendered map), used for prefilling.
+  getValueLabel(criteria: MapCriteria): string {
+    let c = criteria as MapCriteria;
+    let n = c.coordinates?.[0]?.length ?? 0;
+    return `${c.coordType} (${n} points)`;
   }
 
   #changeButton() {
