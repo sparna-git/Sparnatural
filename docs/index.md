@@ -103,4 +103,5 @@ Historically, Sparnatural also supported configuration specified in OWL :
 
 - [HTML page and Javascript integration](sparnatural-form/form-integration.md) - The reference page to understand how the `<sparnatural-form` web component can be integrated in your webpage
 - [Form configuration JSON reference page](sparnatural-form/form-configuration.md) - The documentation of the JSON form configuration data
+- [Pre-filling the form](sparnatural-form/form-prefill.md) - How to pre-fill the form from URL parameters (including multi-value fields) and how to offer a dropdown of predefined example queries
 

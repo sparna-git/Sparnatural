@@ -520,8 +520,11 @@ export class DateTimePickerValueBuilder extends BaseValueBuilder implements Valu
    * @returns true if the property has been configured with a begin and an end date property
    */
   isBlockingObjectProp() {
-      let beginDateProp = this.specProvider.getProperty(this.propertyVal.value).getBeginDateProperty();
-      let endDateProp = this.specProvider.getProperty(this.propertyVal.value).getEndDateProperty();
+      let specProperty = this.specProvider.getProperty(this.propertyVal.value);
+      if (!specProperty) return false;
+
+      let beginDateProp = specProperty.getBeginDateProperty();
+      let endDateProp = specProperty.getEndDateProperty();
 
       return (
         this.values?.length == 1
