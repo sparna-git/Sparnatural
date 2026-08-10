@@ -314,6 +314,12 @@ export default class MapWidget extends AbstractWidget {
     return { coordType: "Polygon", coordinates: [points] };
   }
 
+  // A raw map value is a geometry, never a URI : prefill always goes through
+  // parseRawValue, even though the factory injects a label resolver here.
+  protected holdsUriValues(): boolean {
+    return false;
+  }
+
   // Label from the criteria only (no rendered map), used for prefilling.
   getValueLabel(criteria: MapCriteria): string {
     let c = criteria as MapCriteria;

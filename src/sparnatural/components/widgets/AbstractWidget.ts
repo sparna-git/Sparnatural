@@ -74,9 +74,47 @@ export abstract class AbstractWidget extends HTMLComponent {
   }
 
   // Parses a raw string (e.g. URL param) into this widget's criteria. Base is
-  // free-text search ; URI widgets use resolveLabel() instead.
+  // free-text search ; URI widgets go through resolveLabel() instead.
   parseRawValue(raw: string): Criteria {
     return { search: raw };
+  }
+
+  // True if this widget's values are URIs to be resolved against the endpoint.
+  // Based on the resolver injected by the WidgetFactory, not on the value shape.
+  protected holdsUriValues(): boolean {
+    return !!this.labelResolver?.predicate;
+  }
+
+  // Builds { label, criteria } from a raw string (e.g. a URL param). Async
+  // because URI widgets resolve their label via SPARQL : callers never have to
+  // know whether this widget holds URIs or literals.
+  buildValueFromRawValue(
+    raw: string,
+    callback: (value: LabelledCriteria<Criteria>) => void,
+    errorCallback?: (payload: any) => void
+  ): void {
+    if (this.holdsUriValues()) {
+      this.resolveLabel(
+        raw,
+        // Nothing resolved : fall back to the URI as its own label.
+        (value) =>
+          callback(
+            value ?? {
+              label: raw,
+              criteria: { rdfTerm: { type: "uri", value: raw } },
+            }
+          ),
+        errorCallback
+      );
+      return;
+    }
+
+    try {
+      callback(this.buildValueFromCriteria(this.parseRawValue(raw)));
+    } catch (e) {
+      if (!errorCallback) throw e;
+      errorCallback(e);
+    }
   }
 
   // Splits a "min|max" range on the pipe (empty when a bound is missing).
