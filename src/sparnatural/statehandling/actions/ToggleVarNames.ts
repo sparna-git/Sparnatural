@@ -6,12 +6,13 @@ export default function toggleVarNames(sparnatural:SparnaturalComponent,showVarN
     (grpWrapper: GroupWrapper) => {
       let startGrp = grpWrapper.criteriaGroup.startClassGroup;
       let endGrp = grpWrapper.criteriaGroup.endClassGroup;
+      // same as UpdateVarList : an incomplete criteria has no inputSelector on the endClassGroup
       if(showVarNames){
-        startGrp.inputSelector.showVarName()
-        endGrp.inputSelector.showVarName()
+        startGrp.inputSelector?.showVarName()
+        endGrp.inputSelector?.showVarName()
       } else {
-        startGrp.inputSelector.showTypeName()
-        endGrp.inputSelector.showTypeName()
+        startGrp.inputSelector?.showTypeName()
+        endGrp.inputSelector?.showTypeName()
       }
     }
   );
