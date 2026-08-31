@@ -339,7 +339,8 @@ this:Person_bornIn sh:path _:a3498c4a778c4f829e250049f6184b3d5356;
   sh:nodeKind sh:IRI;
   sh:class dbpedia:Country;
   dash:searchWidget core:ListProperty;
-  datasources:datasource datasources:list_rdfslabel_alpha_with_count;
+  # datasources:datasource datasources:list_rdfslabel_alpha_with_count;
+  datasources:datasource this:list_rdfslabel_count_thumbnail;
   core:enableOptional "true"^^xsd:boolean;
   core:enableNegation "true"^^xsd:boolean .
 
@@ -434,7 +435,7 @@ this:Person_movement sh:path dbpedia:movement;
   sh:nodeKind sh:IRI;
   sh:node this:Movement;
   dash:searchWidget core:ListProperty;
-  datasources:datasource datasources:list_rdfslabel_count;
+  datasources:datasource this:list_rdfslabel_count_definition;
   core:enableOptional "true"^^xsd:boolean;
   core:enableNegation "true"^^xsd:boolean .
 
@@ -556,3 +557,29 @@ WHERE {
 ORDER BY UCASE(?label)
 LIMIT 50""";
   rdfs:comment "A query that will search in labels using contains function, first in the user language but will default to French."@en .
+
+
+this:list_rdfslabel_count_thumbnail a datasources:SparqlDatasource;
+  datasources:queryString """SELECT ?uri ?count (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label) (STR(?theLabel) AS ?itemLabel) ?thumbnail 
+  WHERE { 
+    { 
+      SELECT ?uri ?count ?theLabel ?thumbnail
+      WHERE {
+       { 
+        SELECT DISTINCT ?uri (COUNT(?domain) AS ?count) 
+        WHERE { 
+          ?domain $type $domain .
+          ?domain $property ?uri .
+          FILTER(isIRI(?uri)) 
+        }
+        GROUP BY ?uri
+       } 
+       ?uri $labelPath ?theLabel .
+       OPTIONAL { ?uri <http://dbpedia.org/ontology/thumbnail> ?thumbnail }
+       FILTER(lang(?theLabel) = "" || lang(?theLabel) = $lang) 
+      } 
+      ORDER BY DESC(?count) ?theLabel
+      LIMIT 500 
+    } 
+} 
+ORDER BY DESC(?count) ?label""" .
