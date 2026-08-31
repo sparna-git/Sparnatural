@@ -1,0 +1,108 @@
+@prefix schema: <http://schema.org/> .
+@prefix volipi: <http://data.sparna.fr/ontologies/volipi#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix wdt: <http://www.wikidata.org/prop/direct/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix skosthes: <http://purl.org/iso25964/skos-thes#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix geo: <http://www.opengis.net/ont/geosparql#> .
+@prefix qb: <http://purl.org/linked-data/cube#> .
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix euvoc: <http://publications.europa.eu/ontology/euvoc#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix adms: <http://www.w3.org/ns/adms#> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix xls2rdf: <https://xls2rdf.sparna.fr/vocabulary#> .
+@prefix this: <https://data.mydomain.com/ontologies/sparnatural-config/> .
+@prefix dbpedia: <http://dbpedia.org/ontology/> .
+@prefix odb: <http://example.com/ontology/odb#> .
+@prefix core: <http://data.sparna.fr/ontologies/sparnatural-config-core#> .
+@prefix dbp: <http://dbpedia.org/property/> .
+@prefix datasources: <http://data.sparna.fr/ontologies/sparnatural-config-datasources#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix sparql: <http://www.w3.org/ns/sparql-service-description#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix skosxl: <http://www.w3.org/2008/05/skos-xl#> .
+@prefix rico: <https://www.ica.org/standards/RiC/ontology#> .
+
+<https://data.mydomain.com/ontologies/sparnatural-config> a owl:Ontology .
+
+this:Place a sh:NodeShape;
+  sh:targetClass rico:Place;
+  sh:nodeKind sh:IRI;
+  rdfs:label "Place"@en, "Lieu"@fr;
+  sh:property this:Place_type_list, this:Place_type_list_sans_definition, this:Place_type_autocomplete, this:Place_type_tree .
+
+this:PlaceType a sh:NodeShape;
+  sh:targetClass rico:PlaceType;
+  sh:nodeKind sh:IRI;
+  rdfs:label "Place Type"@en, "Type de Lieu"@fr ;
+  sh:property this:PlaceType_prefLabel.
+
+this:PlaceType_prefLabel sh:path skos:prefLabel;
+  sh:name "pref label"@en, "libellé préférentiel"@fr;
+  sh:nodeKind sh:Literal ;
+  sh:datatype rdf:langString .
+
+
+this:Place_type_list sh:path rico:hasOrHadPlaceType;
+  sh:name "place type (list)"@en, "type de lieu (liste)"@fr;
+  sh:nodeKind sh:IRI;
+  sh:node this:PlaceType;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource this:list_placetype_definition .
+
+this:Place_type_list_sans_definition sh:path rico:hasOrHadPlaceType;
+  sh:name "place type (list, no definition)"@en, "type de lieu (liste, sans definition)"@fr;
+  sh:nodeKind sh:IRI;
+  sh:node this:PlaceType;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource datasources:list_skospreflabel_count .
+
+this:Place_type_autocomplete sh:path rico:hasOrHadPlaceType;
+  sh:name "place type (autocomplete)"@en, "type de lieu (autocomplete)"@fr;
+  sh:nodeKind sh:IRI;
+  sh:node this:PlaceType;
+  dash:searchWidget core:AutocompleteProperty;
+  datasources:datasource this:search_placetype_definition .
+
+this:Place_type_tree sh:path rico:hasOrHadPlaceType;
+  sh:name "place type (tree)"@en, "type de lieu (arbre)"@fr;
+  sh:nodeKind sh:IRI;
+  sh:node this:PlaceType;
+  dash:searchWidget core:TreeProperty;
+  datasources:treeRootsDatasource this:tree_root_placetype;
+  datasources:treeChildrenDatasource this:tree_children_placetype .
+
+
+# Les quatre datasources ci-dessous lisent skos:definition en plus du libelle,
+# pour que la definition s'affiche sous le libelle dans les trois widgets.
+
+this:list_placetype_definition a datasources:SparqlDatasource;
+  datasources:queryTemplate datasources:query_list_label_count_with_description;
+  datasources:labelProperty skos:prefLabel;
+  datasources:descriptionProperty skos:definition;
+  datasources:noSort "true"^^xsd:boolean .
+
+this:search_placetype_definition a datasources:SparqlDatasource;
+  datasources:queryTemplate datasources:query_search_label_contains_with_description;
+  datasources:labelProperty skos:prefLabel;
+  datasources:descriptionProperty skos:definition .
+
+this:tree_root_placetype a datasources:SparqlDatasource;
+  datasources:queryTemplate datasources:query_tree_root_noparent_with_description;
+  datasources:labelPath "<http://www.w3.org/2004/02/skos/core#prefLabel>";
+  datasources:childrenPath "<http://www.w3.org/2004/02/skos/core#narrower>|^<http://www.w3.org/2004/02/skos/core#broader>";
+  datasources:descriptionPath "<http://www.w3.org/2004/02/skos/core#definition>" .
+
+this:tree_children_placetype a datasources:SparqlDatasource;
+  datasources:queryTemplate datasources:query_tree_children_with_description;
+  datasources:labelPath "<http://www.w3.org/2004/02/skos/core#prefLabel>";
+  datasources:childrenPath "<http://www.w3.org/2004/02/skos/core#narrower>|^<http://www.w3.org/2004/02/skos/core#broader>";
+  datasources:descriptionPath "<http://www.w3.org/2004/02/skos/core#definition>" .

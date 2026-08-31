@@ -9,6 +9,7 @@ import { AutocompleteDataProviderIfc, RdfTermDatasourceItem } from '../datasourc
 import { NoOpAutocompleteProvider } from '../datasources/NoOpDataProviders';
 import { mergeDatasourceResults } from '../datasources/SparqlDataProviders';
 import { LabelledCriteria, RDFTerm, RdfTermCriteria } from '../../SparnaturalQueryIfc';
+import { ItemTemplate } from './ItemTemplate';
 
 const factory = new DataFactory();
 
@@ -27,6 +28,7 @@ export class AutoCompleteWidget extends AbstractWidget {
   }
   
   protected configuration: AutocompleteConfiguration;
+  itemTemplate: ItemTemplate;
 
   constructor(
     parentComponent: HTMLComponent,
@@ -45,6 +47,7 @@ export class AutoCompleteWidget extends AbstractWidget {
       ValueRepetition.MULTIPLE
     );
     this.configuration = configuration;
+    this.itemTemplate = new ItemTemplate(objectPropVal, endClassValue);
   }
 
   render() {
@@ -62,7 +65,10 @@ export class AutoCompleteWidget extends AbstractWidget {
     // see https://learn.jquery.com/using-jquery-core/faq/how-do-i-pull-a-native-dom-element-from-a-jquery-object/
     const queryInput:HTMLElement = inputHtml[0];
 
-    const awesomplete = new Awesomplete(queryInput, {
+    // items of the current suggestion list, keyed by their serialized RDF term
+    const itemsByValue = new Map<string, RdfTermDatasourceItem>();
+
+    let awesompleteOptions: Awesomplete.Options = {
       filter: () => { // We will provide a list that is already filtered ...
         return true;
       },
@@ -70,37 +76,47 @@ export class AutoCompleteWidget extends AbstractWidget {
       minChars: 3,
       maxItems: this.configuration.maxItems,
       list: []
-    });
+    };
+
+    // if we have a template, use it for rendering, keeping the markup expected by Awesomplete
+    if (this.itemTemplate.exists) {
+      awesompleteOptions.item = (suggestion: any, input: string, index: number): HTMLElement => {
+        let li = document.createElement("li");
+        li.setAttribute("role", "option");
+        li.setAttribute("aria-selected", "false");
+        li.setAttribute("tabindex", "-1");
+        li.id = awesomplete.ul.id + "_item_" + index;
+
+        const item = itemsByValue.get(suggestion.value);
+        li.innerHTML = item?this.itemTemplate.render(item):suggestion.label;
+        return li;
+      };
+    }
+
+    let awesomplete = new Awesomplete(queryInput, awesompleteOptions);
 
 
     // the callback called when proposals have been fetched, to populate the suggestion list
     let callback = (items:RdfTermDatasourceItem[]) => {
-      
+
       // find distinct values of the 'group' binding
       const groups = [...new Set(items.map(item => item.group))];
+      const hasGroups = !(groups.length == 1 && groups[0] == undefined);
 
+      // when groups are used the same term can come from several datasets : merge them
+      let displayedItems = hasGroups?mergeDatasourceResults(items):items;
+
+      itemsByValue.clear();
       let list = new Array<{label:String, value:String}>();
-      if(groups.length == 1 && groups[0] == undefined) {
-        // no groups defined at all
-
-        items.forEach(item => {
-          // Awesomplete list will contain the label as 'label', and the RDFTerm JSON serialization as 'value'
-          list.push({
-            label: item.label,
-            value: JSON.stringify(item.term)
-          });
+      displayedItems.forEach(item => {
+        // Awesomplete list will contain the label as 'label', and the RDFTerm JSON serialization as 'value'
+        let value = JSON.stringify(item.term);
+        itemsByValue.set(value, item);
+        list.push({
+          label: (item.group)?"<span title='"+item.group+"'>"+item.label+"</span>":item.label,
+          value: value
         });
-      } else {
-        // we have some groups, merge
-        let mergedResult = mergeDatasourceResults(items);
-        
-        mergedResult.forEach(item => {
-          list.push({
-            label: (item.group)?"<span title='"+item.group+"'>"+item.label+"</span>":item.label,
-            value: JSON.stringify(item.term)
-          });
-        });
-      }
+      });
 
       // toggle spinner
       if(list.length == 0) {

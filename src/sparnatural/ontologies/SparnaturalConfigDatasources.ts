@@ -252,6 +252,23 @@ LIMIT 500
 );
 
 QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
+  SPARNATURAL_CONFIG_DATASOURCES + "query_list_label_alpha_with_description",
+  `
+SELECT DISTINCT ?uri ?label ?description
+WHERE {
+    ?domain $type $domain .
+    ?domain $property ?uri .
+    ?uri $labelPath ?label .
+    FILTER(lang(?label) = "" || lang(?label) = $lang)
+    FILTER(isIRI(?uri))
+    OPTIONAL { ?uri $descriptionPath ?description . FILTER(lang(?description) = '' || lang(?description) = $lang) }
+}
+ORDER BY UCASE(STR(?label))
+LIMIT 500
+`
+);
+
+QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   SPARNATURAL_CONFIG_DATASOURCES + "query_list_label_count",
   `
 SELECT ?uri ?count (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label) (STR(?theLabel) AS ?itemLabel)
@@ -274,6 +291,36 @@ WHERE {
   ORDER BY DESC(?count) UCASE(?theLabel)
   LIMIT 500
   }
+}
+ORDER BY DESC(?count) UCASE(STR(?label))
+`
+);
+
+QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
+  SPARNATURAL_CONFIG_DATASOURCES + "query_list_label_count_with_description",
+  `
+SELECT ?uri ?count ?description (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label) (STR(?theLabel) AS ?itemLabel)
+WHERE {
+  {
+  SELECT ?uri ?count ?theLabel
+  WHERE {
+  {
+    SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
+    WHERE {
+      ?domain $type $domain .
+      ?domain $property ?uri .
+      FILTER(isIRI(?uri))
+    }
+    GROUP BY ?uri
+  }
+  ?uri $labelPath ?theLabel .
+  FILTER(lang(?theLabel) = "" || lang(?theLabel) = $lang)
+  }
+  ORDER BY DESC(?count) UCASE(?theLabel)
+  LIMIT 500
+  }
+  # read outside of the sub-select, so that the description does not multiply the rows before the LIMIT
+  OPTIONAL { ?uri $descriptionPath ?description . FILTER(lang(?description) = '' || lang(?description) = $lang) }
 }
 ORDER BY DESC(?count) UCASE(STR(?label))
 `
@@ -439,6 +486,26 @@ LIMIT 15
 );
 
 QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
+  SPARNATURAL_CONFIG_DATASOURCES + "query_search_label_contains_with_description",
+  `
+SELECT DISTINCT ?uri ?label ?description
+WHERE {
+  ?domain $type $domain .
+  ?domain $property ?uri .
+  ?uri $type $range .
+  ?uri $labelPath ?label .
+  FILTER(isIRI(?uri))
+  FILTER(lang(?label) = '' || lang(?label) = $lang)
+  FILTER(CONTAINS(LCASE(STR(?label)), LCASE("$key")))
+  BIND( IF( STRSTARTS(LCASE(STR(?label)), LCASE("$key")),0,9 ) AS ?starts )
+  OPTIONAL { ?uri $descriptionPath ?description . FILTER(lang(?description) = '' || lang(?description) = $lang) }
+}
+ORDER BY ?starts UCASE(STR(?label))
+LIMIT 15
+`
+);
+
+QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   SPARNATURAL_CONFIG_DATASOURCES + "query_search_label_bifcontains",
   `
 PREFIX bif: <http://www.openlinksw.com/schemas/bif#>
@@ -452,6 +519,26 @@ SELECT DISTINCT ?uri ?label
   FILTER(lang(?label) = '' || lang(?label) = $lang )
   ?label bif:contains "'$key'" . 
 } 
+ORDER BY UCASE(STR(?label))
+LIMIT 15
+`
+);
+
+QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
+  SPARNATURAL_CONFIG_DATASOURCES + "query_search_label_bifcontains_with_description",
+  `
+PREFIX bif: <http://www.openlinksw.com/schemas/bif#>
+SELECT DISTINCT ?uri ?label ?description
+ WHERE {
+  ?domain $type $domain .
+  ?domain $property ?uri .
+  ?uri $type $range .
+  ?uri $labelPath ?label .
+  FILTER(isIRI(?uri))
+  FILTER(lang(?label) = '' || lang(?label) = $lang )
+  ?label bif:contains "'$key'" .
+  OPTIONAL { ?uri $descriptionPath ?description . FILTER(lang(?description) = '' || lang(?description) = $lang) }
+}
 ORDER BY UCASE(STR(?label))
 LIMIT 15
 `
@@ -526,6 +613,26 @@ ORDER BY UCASE(STR(?label))
 `
 );
 
+QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
+  SPARNATURAL_CONFIG_DATASOURCES + "query_tree_children_with_description",
+  `
+# Selects the children of a node, with a description read by the item template
+SELECT DISTINCT ?uri ?label ?hasChildren ?description
+WHERE {
+  $node $childrenPath ?uri .
+  ?uri $labelPath ?label .
+  FILTER(isIRI(?uri))
+  FILTER(lang(?label) = '' || lang(?label) = $lang)
+  OPTIONAL {
+    ?uri $childrenPath ?children .
+  }
+  BIND(IF(bound(?children),true,false) AS ?hasChildren)
+  OPTIONAL { ?uri $descriptionPath ?description . FILTER(lang(?description) = '' || lang(?description) = $lang) }
+}
+ORDER BY UCASE(STR(?label))
+`
+);
+
 
 
 QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
@@ -580,6 +687,28 @@ WHERE {
     ?uri $childrenPath ?children .
   }
   BIND(IF(bound(?children),true,false) AS ?hasChildren)
+}
+ORDER BY UCASE(STR(?label))
+`
+);
+
+QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
+  SPARNATURAL_CONFIG_DATASOURCES + "query_tree_root_noparent_with_description",
+  `
+SELECT DISTINCT ?uri ?label ?description ?hasChildren
+WHERE {
+  ?uri $type $range .
+  FILTER NOT EXISTS {
+    ?parent $childrenPath ?uri .
+  }
+  ?uri $labelPath ?label .
+  FILTER(isIRI(?uri))
+  FILTER(lang(?label) = '' || lang(?label) = $lang)
+  OPTIONAL {
+    ?uri $childrenPath ?children .
+  }
+  BIND(IF(bound(?children),true,false) AS ?hasChildren)
+  OPTIONAL { ?uri $descriptionPath ?description . FILTER(lang(?description) = '' || lang(?description) = $lang) }
 }
 ORDER BY UCASE(STR(?label))
 `
@@ -1154,6 +1283,8 @@ export const Datasources = Object.freeze({
     SPARNATURAL_CONFIG_DATASOURCES + "treeChildrenDatasource",
   LABEL_PATH: SPARNATURAL_CONFIG_DATASOURCES + "labelPath",
   LABEL_PROPERTY: SPARNATURAL_CONFIG_DATASOURCES + "labelProperty",
+  DESCRIPTION_PATH: SPARNATURAL_CONFIG_DATASOURCES + "descriptionPath",
+  DESCRIPTION_PROPERTY: SPARNATURAL_CONFIG_DATASOURCES + "descriptionProperty",
   CHILDREN_PATH: SPARNATURAL_CONFIG_DATASOURCES + "childrenPath",
   CHILDREN_PROPERTY: SPARNATURAL_CONFIG_DATASOURCES + "childrenProperty",
   QUERY_STRING: SPARNATURAL_CONFIG_DATASOURCES + "queryString",
@@ -1170,6 +1301,14 @@ export const Datasources = Object.freeze({
     SPARNATURAL_CONFIG_DATASOURCES + "query_list_label_alpha",
   QUERY_LIST_LABEL_COUNT:
     SPARNATURAL_CONFIG_DATASOURCES + "query_list_label_count",
+  QUERY_LIST_LABEL_ALPHA_WITH_DESCRIPTION:
+    SPARNATURAL_CONFIG_DATASOURCES + "query_list_label_alpha_with_description",
+  QUERY_LIST_LABEL_COUNT_WITH_DESCRIPTION:
+    SPARNATURAL_CONFIG_DATASOURCES + "query_list_label_count_with_description",
+  QUERY_SEARCH_LABEL_CONTAINS_WITH_DESCRIPTION:
+    SPARNATURAL_CONFIG_DATASOURCES + "query_search_label_contains_with_description",
+  QUERY_SEARCH_LABEL_BIFCONTAINS_WITH_DESCRIPTION:
+    SPARNATURAL_CONFIG_DATASOURCES + "query_search_label_bifcontains_with_description",
   QUERY_LIST_LABEL_WITH_RANGE_ALPHA:
     SPARNATURAL_CONFIG_DATASOURCES + "query_list_label_with_range_alpha",
   QUERY_LIST_LABEL_WITH_RANGE_COUNT:
@@ -1191,6 +1330,10 @@ export const Datasources = Object.freeze({
   QUERY_SEARCH_URI_CONTAINS:
     SPARNATURAL_CONFIG_DATASOURCES + "query_search_URI_contains",
   QUERY_TREE_CHILDREN: SPARNATURAL_CONFIG_DATASOURCES + "query_tree_children",
+  QUERY_TREE_CHILDREN_WITH_DESCRIPTION:
+    SPARNATURAL_CONFIG_DATASOURCES + "query_tree_children_with_description",
+  QUERY_TREE_ROOT_NOPARENT_WITH_DESCRIPTION:
+    SPARNATURAL_CONFIG_DATASOURCES + "query_tree_root_noparent_with_description",
   QUERY_TREE_CHILDREN_WITH_COUNT:
     SPARNATURAL_CONFIG_DATASOURCES + "query_tree_children_with_count",
   QUERY_TREE_ROOT_NOPARENT:

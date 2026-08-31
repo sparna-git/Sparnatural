@@ -148,7 +148,7 @@ this:Artwork_author sh:path dbpedia:author;
   sh:nodeKind sh:IRI;
   sh:class dbpedia:Person;
   dash:searchWidget core:AutocompleteProperty;
-  datasources:datasource datasources:search_rdfslabel_bifcontains;
+  datasources:datasource this:search_person_with_description;
   core:enableOptional "true"^^xsd:boolean;
   core:enableNegation "true"^^xsd:boolean .
 
@@ -211,7 +211,7 @@ this:Museum_country sh:path dbpedia:country;
   sh:nodeKind sh:IRI;
   sh:class dbpedia:Country;
   dash:searchWidget core:ListProperty;
-  datasources:datasource datasources:list_rdfslabel_count;
+  datasources:datasource this:list_country_with_description;
   core:enableOptional "true"^^xsd:boolean;
   core:enableNegation "true"^^xsd:boolean .
 
@@ -406,7 +406,7 @@ this:Person_classifiedIn sh:path dcterms:subject;
   core:enableOptional "true"^^xsd:boolean;
   core:enableNegation "true"^^xsd:boolean;
   datasources:treeRootsDatasource this:tree_root_frenchPainters;
-  datasources:treeChildrenDatasource datasources:tree_children_skosnarrower .
+  datasources:treeChildrenDatasource this:tree_children_categories .
 
 this:Person_created sh:path _:a3498c4a778c4f829e250049f6184b3d5360;
   sh:name "created"@en, "a créé"@fr;
@@ -497,15 +497,47 @@ this:MuseumWikidata_situe_a sh:path wdt:P625;
   core:enableNegation "true"^^xsd:boolean;
   core:sparqlService <https://www.wikidata.org> .
 
+# same as datasources:list_rdfslabel_count, but also reads a description
+this:list_country_with_description a datasources:SparqlDatasource;
+  datasources:queryTemplate datasources:query_list_label_count_with_description;
+  datasources:labelProperty rdfs:label;
+  datasources:descriptionPath "<http://www.w3.org/2000/01/rdf-schema#comment>|<http://dbpedia.org/ontology/description>";
+  datasources:noSort "true"^^xsd:boolean .
+
+# same as datasources:search_rdfslabel_bifcontains, but also reads a description
+this:search_person_with_description a datasources:SparqlDatasource;
+  datasources:queryTemplate datasources:query_search_label_bifcontains_with_description;
+  datasources:labelProperty rdfs:label;
+  datasources:descriptionPath "<http://www.w3.org/2000/01/rdf-schema#comment>|<http://dbpedia.org/ontology/description>" .
+
 this:tree_root_frenchPainters a datasources:SparqlTreeRootDatasource;
   datasources:queryString """PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
-SELECT ?uri ?label ?hasChildren
+SELECT ?uri ?label ?hasChildren ?description
 WHERE {
- VALUES ?uri {<http://fr.dbpedia.org/resource/Catégorie:Peintre_français>}
+ VALUES ?uri {
+   <http://fr.dbpedia.org/resource/Catégorie:Peintre_français>
+   <http://dbpedia.org/resource/Category:French_painters>
+ }
  ?uri skos:prefLabel ?label .
- FILTER(lang(?label) = '' || lang(?label) = $lang)
+ FILTER(lang(?label) = '' || lang(?label) = $lang || lang(?label) = 'en')
  BIND(true AS ?hasChildren)
+ OPTIONAL { ?uri (<http://www.w3.org/2000/01/rdf-schema#comment>|<http://dbpedia.org/ontology/description>) ?description . FILTER(lang(?description) = $lang) }
 }""" .
+
+# children of a DBpedia category : inverse skos:broader, and labels are en only
+this:tree_children_categories a datasources:SparqlDatasource;
+  datasources:queryString """PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+SELECT DISTINCT ?uri ?label ?hasChildren ?description
+WHERE {
+  ?uri skos:broader $node .
+  ?uri skos:prefLabel ?label .
+  FILTER(isIRI(?uri))
+  FILTER(lang(?label) = '' || lang(?label) = $lang || lang(?label) = 'en')
+  OPTIONAL { ?child skos:broader ?uri . }
+  BIND(IF(bound(?child),true,false) AS ?hasChildren)
+  OPTIONAL { ?uri (<http://www.w3.org/2000/01/rdf-schema#comment>|<http://dbpedia.org/ontology/description>) ?description . FILTER(lang(?description) = $lang) }
+}
+ORDER BY UCASE(STR(?label))""" .
 
 <https://www.wikidata.org> a sparql:Service;
   sparql:endpoint <https://query.wikidata.org/> .

@@ -11,7 +11,7 @@ import { ListDataProviderIfc, RdfTermDatasourceItem, ValuesListDataProviderIfc }
 import { NoOpListDataProvider } from "../datasources/NoOpDataProviders";
 import { mergeDatasourceResults } from "../datasources/SparqlDataProviders";
 import { RDFTerm, RdfTermCriteria, LabelledCriteria } from "../../SparnaturalQueryIfc";
-import Handlebars from "handlebars";
+import { ItemTemplate } from "./ItemTemplate";
 
 const factory = new DataFactory();
 
@@ -29,8 +29,7 @@ export class ListWidget extends AbstractWidget {
   }
 
   configuration: ListConfiguration;
-  templateElement: HTMLElement | null;
-  #compiledTemplate: HandlebarsTemplateDelegate | null = null;
+  itemTemplate: ItemTemplate;
 
   selectHtml: JQuery<HTMLElement>;
 
@@ -56,23 +55,7 @@ export class ListWidget extends AbstractWidget {
     this.objectPropVal = objectPropVal;
     this.endClassVal = endClassVal;
 
-    this.templateElement = this.#findTemplateElement();
-    if(this.templateElement) {
-      this.#compiledTemplate = Handlebars.compile(this.templateElement.innerHTML);
-    }
-  }
-
-  #findTemplateElement(): HTMLElement | null {
-    var templateId = this.objectPropVal.type + "-template";
-    var templateElement = document.getElementById(templateId);
-    if(templateElement === null) {
-      // try with the endClassVal.type as a fallback
-      templateId = this.endClassVal.type + "-template";
-      templateElement = document.getElementById(templateId);
-    }
-
-
-    return templateElement;
+    this.itemTemplate = new ItemTemplate(objectPropVal, endClassVal);
   }
 
   render() {
@@ -100,10 +83,14 @@ export class ListWidget extends AbstractWidget {
 
         // find distinct values of the 'group' binding
         const groups = [...new Set(items.map(item => item.group))];
+        const hasGroups = !(groups.length == 1 && groups[0] == undefined);
 
-        if(groups.length == 1 && groups[0] == undefined) {
+        // when groups are used the same term can come from several datasets : merge them
+        let displayedItems = hasGroups?mergeDatasourceResults(items):items;
+
+        if(!hasGroups) {
           // no groups were defined at all
-          items.forEach(item => {
+          displayedItems.forEach(item => {
             // select item label : either displayed label, or itemLabel if provided
             let itemLabel = item.itemLabel?item.itemLabel:item.label;
             this.selectHtml.append(
@@ -113,12 +100,11 @@ export class ListWidget extends AbstractWidget {
         } else {
           // we found some groups, organise the list content with optgroup
 
-          let mergedResult = mergeDatasourceResults(items);
-          const groupsAfterMerge = [...new Set(mergedResult.map(item => item.group))];
+          const groupsAfterMerge = [...new Set(displayedItems.map(item => item.group))];
 
           groupsAfterMerge.forEach(group => {
             let html = "<optgroup label=\""+group+"\">";
-            mergedResult.filter(item => (item.group == group)).forEach(item => {
+            displayedItems.filter(item => (item.group == group)).forEach(item => {
               // select item label : either displayed label, or itemLabel if provided
               let itemLabel = item.itemLabel?item.itemLabel:item.label;
               
@@ -137,19 +123,18 @@ export class ListWidget extends AbstractWidget {
         };
 
         // If we have a template, use it for rendering
-        if (this.templateElement) {
-          select2Config.templateResult = (item: any): JQuery<HTMLElement> => {
-            console.log("templateResult called for item: ", item);
-            if (item.loading) {
-              return item.text;
+        if (this.itemTemplate.exists) {
+          select2Config.templateResult = (result: any): JQuery<HTMLElement> => {
+            if (result.loading) {
+              return result.text;
             }
-            
-            // Find the corresponding item from our items array
-            const foundItem = items.find(i => JSON.stringify(i.term) === item.id);
-            if (foundItem) {
-              return $(this.#render(foundItem)) as JQuery<HTMLElement> ;
+
+            // the option value is the serialized RDF term of the item it was built from
+            const item = displayedItems.find(i => JSON.stringify(i.term) === result.id);
+            if (item) {
+              return $(this.itemTemplate.render(item)) as JQuery<HTMLElement>;
             }
-            return item.text;
+            return result.text;
           };
         }
 
@@ -205,29 +190,6 @@ export class ListWidget extends AbstractWidget {
 
 
     return this;
-  }
-
-  #render(item: RdfTermDatasourceItem): string {
-    console.log("Rendering item: ", item);
-      // Use the compiled template to generate HTML
-      if (this.#compiledTemplate) {
-        return this.#compiledTemplate(item);
-      } else {
-        throw new Error("No compiled template available for rendering.");
-      }
-  }
-
-  /**
-   * Converts extraBindings Map to a plain object
-   */
-  #extraBindingsToObject(extraBindings: Map<string, any> | undefined): any {
-    if (!extraBindings) return {};
-    
-    const result: any = {};
-    extraBindings.forEach((value, key) => {
-      result[key] = value;
-    });
-    return result;
   }
 
   // separate the creation of the value from the widget code itself
