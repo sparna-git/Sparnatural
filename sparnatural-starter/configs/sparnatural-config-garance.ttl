@@ -37,7 +37,7 @@ this:Place a sh:NodeShape;
   sh:targetClass rico:Place;
   sh:nodeKind sh:IRI;
   rdfs:label "Place"@en, "Lieu"@fr;
-  sh:property this:Place_type_list, this:Place_type_list_sans_definition, this:Place_type_autocomplete, this:Place_type_tree .
+  sh:property this:Place_type_list, this:Place_type_autocomplete, this:Place_type_tree .
 
 this:PlaceType a sh:NodeShape;
   sh:targetClass rico:PlaceType;
@@ -57,13 +57,6 @@ this:Place_type_list sh:path rico:hasOrHadPlaceType;
   sh:node this:PlaceType;
   dash:searchWidget core:ListProperty;
   datasources:datasource this:list_placetype_definition .
-
-this:Place_type_list_sans_definition sh:path rico:hasOrHadPlaceType;
-  sh:name "place type (list, no definition)"@en, "type de lieu (liste, sans definition)"@fr;
-  sh:nodeKind sh:IRI;
-  sh:node this:PlaceType;
-  dash:searchWidget core:ListProperty;
-  datasources:datasource datasources:list_skospreflabel_count .
 
 this:Place_type_autocomplete sh:path rico:hasOrHadPlaceType;
   sh:name "place type (autocomplete)"@en, "type de lieu (autocomplete)"@fr;
