@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
   delete Yasr.plugins["table"];
 
   const yasr = new Yasr(document.getElementById("yasr"), {
-    pluginOrder: ["TableX", "Grid", "Map", "StatsPlugin", "response"],
+    pluginOrder: ["TableX", "Grid", "StatsPlugin", "response"],
     defaultPlugin: "TableX",
   });
 
