@@ -56,7 +56,10 @@ document.addEventListener("DOMContentLoaded", () => {
   // =============================================================================
   Yasr.registerPlugin("TableX", SparnaturalYasguiPlugins.TableX);
   Yasr.registerPlugin("Grid", SparnaturalYasguiPlugins.GridPlugin);
-  Yasr.registerPlugin("Map", SparnaturalYasguiPlugins.MapPlugin);
+  // Plugin carte desactive : YASR interroge chaque plugin enregistre avec
+  // canHandleResults, et celui-ci plante quand la config n'a aucune propriete
+  // geographique. Decommenter pour une config qui expose des coordonnees.
+  // Yasr.registerPlugin("Map", SparnaturalYasguiPlugins.MapPlugin);
   Yasr.registerPlugin("StatsPlugin", SparnaturalYasguiPlugins.StatsPlugin);
   delete Yasr.plugins["table"];
 
