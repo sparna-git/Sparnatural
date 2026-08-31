@@ -78,10 +78,35 @@ this:Place_type_tree sh:path rico:hasOrHadPlaceType;
 # pour que la definition s'affiche sous le libelle dans les trois widgets.
 
 this:list_placetype_definition a datasources:SparqlDatasource;
-  datasources:queryTemplate datasources:query_list_label_count_with_description;
-  datasources:labelProperty skos:prefLabel;
-  datasources:descriptionProperty skos:definition;
-  datasources:noSort "true"^^xsd:boolean .
+  datasources:noSort "true"^^xsd:boolean ;
+  datasources:queryString """
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+SELECT ?uri ?count ?description (CONCAT(STR(?theLabel), " (", STR(?count), ")") AS ?label) (STR(?theLabel) AS ?itemLabel) WHERE {
+  {
+    SELECT ?uri ?count ?theLabel WHERE {
+      {
+        SELECT DISTINCT ?uri (COUNT(?domain) AS ?count) WHERE {
+          ?domain rdf:type $domain;
+            $property ?uri.
+          FILTER(ISIRI(?uri))
+        }
+        GROUP BY ?uri
+      }
+      ?uri skos:prefLabel ?theLabel.
+      FILTER(((LANG(?theLabel)) = "") || ((LANG(?theLabel)) = $lang))
+    }
+    ORDER BY DESC (?count) (UCASE(?theLabel))
+    LIMIT 500
+  }
+  OPTIONAL {
+    ?uri skos:definition ?description.
+    FILTER(((LANG(?description)) = "") || ((LANG(?description)) = $lang))
+  }
+}
+ORDER BY DESC (?count) (UCASE(STR(?label)))
+  """;
+.
 
 this:search_placetype_definition a datasources:SparqlDatasource;
   datasources:queryTemplate datasources:query_search_label_contains_with_description;
