@@ -24,7 +24,6 @@ _For examples of how Sparnatural works and can be configured, have a look at the
 
 - **[Hello Sparnatural](hello-sparnatural/Hello-Sparnatural.md)** : start here to integrate Sparnatural in your own website, from the tutorial page.
 
-
 ### 3. Configuring Sparnatural
 
 #### 3.1 SHACL configuration
@@ -34,15 +33,9 @@ Sparnatural is configured by a configuration file expressed in SHACL. The config
 - **[How-to configure in SHACL](how-to-configure-shacl/How-to-configure-Sparnatural-shacl.html)** : a detailled documentation for configuring Sparnatural in a spreadsheet. Start here to learn the different configuration options of Sparnatural.
 - [Reference page of SHACL configuration](SHACL-based-configuration.md) : the list of all SHACL constructs Sparnatural understands
 - [Datasources configuration](datasources-configuration.md) : a reference page of all included datasources and how-to write your own datasource
+- [Templates configuration](templates-configuration.md) : how to provide custom templates for lists, autocomplete and trees, in order to display e.g. additional definitions associated with the values, or any other kind of extra information from the knowledge graph
 
-#### 3.2 deprecated OWL configuration
-
-Historically, Sparnatural also supported configuration specified in OWL :
-
-- [How-to configure in OWL](how-to-configure-owl/How-to-configure-Sparnatural.md) : a detailled documentation for configuring Sparnatural in an OWL spreadsheet (that is converted into a OWL configuration file). This is deprecated and now replaced by the SHACL configuration guide.
-- [Configure in OWL using Protégé](OWL-based-configuration.md) : a reference page of all useful OWL axioms and annotations to configure Sparnatural with OWL
-
-#### 3.3 Advanced configuration
+#### 3.1 Advanced configuration
 
 - [Querying date ranges](Querying-date-ranges.md) - How to generate SPARQL queries that can match on resources with a begin date and a end date 
 - [Federated query support](Federated-querying.md) - How to enable federated querying using SERVICE keyword in your configuration
@@ -84,6 +77,13 @@ Historically, Sparnatural also supported configuration specified in OWL :
 
 - [Configure in JSON(-LD)](archives/JSON-based-configuration.md)
 - [Configure datasources in JSON](archives/JSON-based-configuration-datasources.md)
+
+**deprecated OWL configuration**
+
+Historically, Sparnatural also supported configuration specified in OWL :
+
+- [How-to configure in OWL](how-to-configure-owl/How-to-configure-Sparnatural.md) : a detailled documentation for configuring Sparnatural in an OWL spreadsheet (that is converted into a OWL configuration file). This is deprecated and now replaced by the SHACL configuration guide.
+- [Configure in OWL using Protégé](OWL-based-configuration.md) : a reference page of all useful OWL axioms and annotations to configure Sparnatural with OWL
 
 **deprecated v7 Javascript integration page**
 
