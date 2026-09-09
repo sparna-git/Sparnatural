@@ -565,14 +565,6 @@ export class WidgetFactory {
               sparql = sparql.replace(reLabelPath, theLabelPath);
           }
 
-          if (datasource.descriptionPath != null || datasource.descriptionProperty) {
-              var theDescriptionPath = datasource.descriptionPath
-              ? datasource.descriptionPath
-              : "<" + datasource.descriptionProperty + ">";
-              var reDescriptionPath = new RegExp("\\$descriptionPath", "g");
-              sparql = sparql.replace(reDescriptionPath, theDescriptionPath);
-          }
-
           if (datasource.childrenPath != null || datasource.childrenProperty) {
               var theChildrenPath = datasource.childrenPath
               ? datasource.childrenPath

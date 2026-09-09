@@ -10,6 +10,7 @@ import { TreeDataProviderIfc, RdfTermTreeDatasourceItem } from "../../datasource
 import { NoOpTreeDataProvider } from "../../datasources/NoOpDataProviders";
 import { LabelledCriteria, RdfTermCriteria } from "../../../SparnaturalQueryIfc";
 import { ItemTemplate } from "../ItemTemplate";
+import { keepLinksClickable, uriLinkHtmlNoAnchor } from "../ItemLink";
 
 import { getSettings } from "../../../settings/defaultSettings";
 
@@ -135,6 +136,8 @@ export class TreeWidget extends AbstractWidget {
               // jstree inserts the node text as HTML, so a template can be rendered as-is
               if(self.itemTemplate.exists) {
                 text = self.itemTemplate.render(items[i]);
+              } else {
+                text = text + uriLinkHtmlNoAnchor(items[i].term);
               }
 
               var aNode: {
@@ -210,7 +213,11 @@ export class TreeWidget extends AbstractWidget {
     };
 
     // this.jsTree = $("#ecgrw-" + id_inputs + "-display").jstree(options);
-    this.jsTree = this.displayLayer.find("#ecgrw-"+this.IdCriteriaGroupe+"-display").jstree(options);
+    let treeElement = this.displayLayer.find("#ecgrw-"+this.IdCriteriaGroupe+"-display");
+    // capture phase : jstree selects on a click handler it delegates on this same
+    // container, our handler has to run before it to stop the event on a link
+    keepLinksClickable(treeElement[0], true);
+    this.jsTree = treeElement.jstree(options);
 
     this.button.on("click", { arg1: this }, this.onClickDisplay);
     //disable/enable on max selction
@@ -311,6 +318,9 @@ export class TreeWidget extends AbstractWidget {
 
   onClickCancel = function (e: any) {
     let this_:TreeWidget = e.data.arg1;
+    // the button is labelled "clear selection" : unchecking fires changed.jstree,
+    // which re-enables the nodes disabled under a checked one and clears the greying
+    this_.jsTree.jstree(true).deselect_all();
     this_.displayLayer.hide();
   };
 

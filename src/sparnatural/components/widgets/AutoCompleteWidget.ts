@@ -10,6 +10,7 @@ import { NoOpAutocompleteProvider } from '../datasources/NoOpDataProviders';
 import { mergeDatasourceResults } from '../datasources/SparqlDataProviders';
 import { LabelledCriteria, RDFTerm, RdfTermCriteria } from '../../SparnaturalQueryIfc';
 import { ItemTemplate } from './ItemTemplate';
+import { keepLinksClickable, uriLinkHtml } from './ItemLink';
 
 const factory = new DataFactory();
 
@@ -78,20 +79,26 @@ export class AutoCompleteWidget extends AbstractWidget {
       list: []
     };
 
-    // if we have a template, use it for rendering, keeping the markup expected by Awesomplete
-    if (this.itemTemplate.exists) {
-      awesompleteOptions.item = (suggestion: any, input: string, index: number): HTMLElement => {
-        let li = document.createElement("li");
-        li.setAttribute("role", "option");
-        li.setAttribute("aria-selected", "false");
-        li.setAttribute("tabindex", "-1");
-        li.id = awesomplete.ul.id + "_item_" + index;
+    // we always render the proposal ourselves, keeping the markup expected by Awesomplete
+    awesompleteOptions.item = (suggestion: any, input: string, index: number): HTMLElement => {
+      let li = document.createElement("li");
+      li.setAttribute("role", "option");
+      li.setAttribute("aria-selected", "false");
+      li.setAttribute("tabindex", "-1");
+      li.id = awesomplete.ul.id + "_item_" + index;
 
-        const item = itemsByValue.get(suggestion.value);
-        li.innerHTML = item?this.itemTemplate.render(item):suggestion.label;
-        return li;
-      };
-    }
+      const item = itemsByValue.get(suggestion.value);
+      if (!item) {
+        li.innerHTML = suggestion.label;
+      } else if (this.itemTemplate.exists) {
+        li.appendChild(this.itemTemplate.renderElement(item));
+      } else {
+        // awesomplete highlights the typed text in the default rendering we replace
+        li.innerHTML = highlightMatch(suggestion.label, input) + uriLinkHtml(item.term);
+        keepLinksClickable(li);
+      }
+      return li;
+    };
 
     let awesomplete = new Awesomplete(queryInput, awesompleteOptions);
 
@@ -186,5 +193,13 @@ export class AutoCompleteWidget extends AbstractWidget {
 
   parseInput(input: LabelledCriteria<RdfTermCriteria>): LabelledCriteria<RdfTermCriteria> {return input;}
 
+}
+
+// same <mark> wrapping as Awesomplete._ITEM, so replacing its rendering keeps it
+function highlightMatch(label: string, input: string): string {
+  let typed = input.trim();
+  if (typed === "") return label;
+  let escaped = typed.replace(/[-\\^$*+?.()|[\]{}]/g, "\\$&");
+  return label.replace(new RegExp(escaped, "gi"), "<mark>$&</mark>");
 }
 

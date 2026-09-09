@@ -109,18 +109,62 @@ ORDER BY DESC (?count) (UCASE(STR(?label)))
 .
 
 this:search_placetype_definition a datasources:SparqlDatasource;
-  datasources:queryTemplate datasources:query_search_label_contains_with_description;
-  datasources:labelProperty skos:prefLabel;
-  datasources:descriptionProperty skos:definition .
+  datasources:queryString """
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+SELECT DISTINCT ?uri ?label ?description WHERE {
+  ?domain $type $domain;
+    $property ?uri.
+  ?uri $type $range;
+    skos:prefLabel ?label.
+  FILTER(ISIRI(?uri))
+  FILTER(((LANG(?label)) = "") || ((LANG(?label)) = $lang))
+  FILTER(CONTAINS(LCASE(STR(?label)), LCASE("$key")))
+  BIND(IF(STRSTARTS(LCASE(STR(?label)), LCASE("$key")), 0, 9) AS ?starts)
+  OPTIONAL {
+    ?uri skos:definition ?description.
+    FILTER(((LANG(?description)) = "") || ((LANG(?description)) = $lang))
+  }
+}
+ORDER BY ?starts (UCASE(STR(?label)))
+LIMIT 15
+  """;
+.
 
 this:tree_root_placetype a datasources:SparqlDatasource;
-  datasources:queryTemplate datasources:query_tree_root_noparent_with_description;
-  datasources:labelPath "<http://www.w3.org/2004/02/skos/core#prefLabel>";
-  datasources:childrenPath "<http://www.w3.org/2004/02/skos/core#narrower>|^<http://www.w3.org/2004/02/skos/core#broader>";
-  datasources:descriptionPath "<http://www.w3.org/2004/02/skos/core#definition>" .
+  datasources:queryString """
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+SELECT DISTINCT ?uri ?label ?description ?hasChildren WHERE {
+  ?uri $type $range;
+    skos:prefLabel ?label.
+  FILTER NOT EXISTS { ?parent skos:narrower|^skos:broader ?uri. }
+  FILTER(ISIRI(?uri))
+  FILTER(((LANG(?label)) = "") || ((LANG(?label)) = $lang))
+  OPTIONAL { ?uri skos:narrower|^skos:broader ?children. }
+  BIND(IF(BOUND(?children), true, false) AS ?hasChildren)
+  OPTIONAL {
+    ?uri skos:definition ?description.
+    FILTER(((LANG(?description)) = "") || ((LANG(?description)) = $lang))
+  }
+}
+ORDER BY (UCASE(STR(?label)))
+  """;
+.
 
 this:tree_children_placetype a datasources:SparqlDatasource;
-  datasources:queryTemplate datasources:query_tree_children_with_description;
-  datasources:labelPath "<http://www.w3.org/2004/02/skos/core#prefLabel>";
-  datasources:childrenPath "<http://www.w3.org/2004/02/skos/core#narrower>|^<http://www.w3.org/2004/02/skos/core#broader>";
-  datasources:descriptionPath "<http://www.w3.org/2004/02/skos/core#definition>" .
+  datasources:queryString """
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+SELECT DISTINCT ?uri ?label ?description ?hasChildren WHERE {
+  $node skos:narrower|^skos:broader ?uri.
+  ?uri skos:prefLabel ?label.
+  FILTER(ISIRI(?uri))
+  FILTER(((LANG(?label)) = "") || ((LANG(?label)) = $lang))
+  OPTIONAL { ?uri skos:narrower|^skos:broader ?children. }
+  BIND(IF(BOUND(?children), true, false) AS ?hasChildren)
+  OPTIONAL {
+    ?uri skos:definition ?description.
+    FILTER(((LANG(?description)) = "") || ((LANG(?description)) = $lang))
+  }
+}
+ORDER BY (UCASE(STR(?label)))
+  """;
+.

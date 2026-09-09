@@ -1,6 +1,7 @@
 import Handlebars from "handlebars";
 import { SelectedVal } from "../SelectedVal";
 import { RdfTermDatasourceItem } from "../datasources/DataProviders";
+import { keepLinksClickable } from "./ItemLink";
 
 // Optional Handlebars template to customize how datasource items are displayed in a widget.
 // Read from an HTML element whose ID is the URI of the NodeShape targetted by the property,
@@ -23,6 +24,15 @@ export class ItemTemplate {
   render(item: RdfTermDatasourceItem): string {
     if (!this.#compiled) throw new Error("No template available for rendering");
     return `<div class="item-template">${this.#compiled(item)}</div>`;
+  }
+
+  // same rendering as a DOM element, with the links it contains made clickable
+  renderElement(item: RdfTermDatasourceItem): HTMLElement {
+    let holder = document.createElement("div");
+    holder.innerHTML = this.render(item);
+    let element = holder.firstElementChild as HTMLElement;
+    keepLinksClickable(element);
+    return element;
   }
 }
 

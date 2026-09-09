@@ -125,6 +125,16 @@
               prefixes="rdfs:http://www.w3.org/2000/01/rdf-schema#"
             />-->
 
+            <!-- <spar-natural
+              src="configs/dbpediafr-config.ttl"
+              endpoint="https://fr.dbpedia.org/sparql"
+              prefixes="skos:http://www.w3.org/2004/02/skos/core# dct:http://purl.org/dc/terms/"
+              lang="fr"
+              defaultLang="fr"
+              distinct="true"
+              debug="true"
+              limit="1000"
+            >-->
             <spar-natural
               src="configs/sparnatural-config-garance.ttl"
               endpoint="https://sparql.archives-nationales.culture.gouv.fr/garance/sparql"
@@ -142,9 +152,23 @@
                 type="text/x-handlebars-template"
               >
                 <div>
-                  <b>{{#if itemLabel}}{{itemLabel}}{{else}}{{label}}{{/if}}</b>{{#if bindings.count}}
-                  <span class="item-count">({{bindings.count.value}})</span>{{/if}}
-                  {{#if bindings.description}}<br /><small>{{bindings.description.value}}</small>{{/if}}
+                  <b>{{#if
+                      itemLabel
+                    }}{{itemLabel}}{{else}}{{label}}{{/if}}</b>{{#if
+                    bindings.count
+                  }}
+                    <span
+                      class="item-count"
+                    >({{bindings.count.value}})</span>{{/if}}
+                  <a
+                    class="item-link"
+                    href="{{term.value}}"
+                    target="_blank"
+                    rel="noopener"
+                    title="{{term.value}}"
+                  ></a>
+                  {{#if bindings.description}}<br /><small
+                    >{{bindings.description.value}}</small>{{/if}}
                 </div>
               </script>
 
@@ -154,7 +178,13 @@
               >
                 <div>
                   <b>{{label}}</b>
-                  {{#if bindings.description}}<br /><small>{{bindings.description.value}}</small>{{/if}}
+                  <span
+                    class="item-link"
+                    data-href="{{term.value}}"
+                    title="{{term.value}}"
+                  ></span>
+                  {{#if bindings.description}}<br /><small
+                    >{{bindings.description.value}}</small>{{/if}}
                 </div>
               </script>
 
@@ -164,7 +194,15 @@
               >
                 <div>
                   <b>{{label}}</b>
-                  {{#if bindings.description}}<br /><small>{{bindings.description.value}}</small>{{/if}}
+                  <a
+                    class="item-link"
+                    href="{{term.value}}"
+                    target="_blank"
+                    rel="noopener"
+                    title="{{term.value}}"
+                  ></a>
+                  {{#if bindings.description}}<br /><small
+                    >{{bindings.description.value}}</small>{{/if}}
                 </div>
               </script>
 
@@ -176,6 +214,13 @@
                 <div>
                   <b>{{bindings.itemLabel.value}}</b>
                   (<u>{{bindings.count.value}}</u>)
+                  <a
+                    class="item-link"
+                    href="{{term.value}}"
+                    target="_blank"
+                    rel="noopener"
+                    title="{{term.value}}"
+                  ></a>
                   {{#if bindings.description}}<br /><small
                     >{{bindings.description.value}}</small>{{/if}}
                 </div>
@@ -188,7 +233,13 @@
               >
                 <div>
                   <b>{{label}}</b>
-
+                  <a
+                    class="item-link"
+                    href="{{term.value}}"
+                    target="_blank"
+                    rel="noopener"
+                    title="{{term.value}}"
+                  ></a>
                   {{#if bindings.description}}<br /><small
                     >{{bindings.description.value}}</small>{{/if}}
                 </div>
@@ -201,6 +252,11 @@
               >
                 <div>
                   <b>{{label}}</b>
+                  <span
+                    class="item-link"
+                    data-href="{{term.value}}"
+                    title="{{term.value}}"
+                  ></span>
                   {{#if bindings.description}}<br /><small
                     >{{bindings.description.value}}</small>
                   {{else}}<br /><small>{{term.value}}</small>{{/if}}
@@ -218,40 +274,12 @@
               }
               .item-template small {
                 display: -webkit-box;
-                -webkit-line-clamp: 2;
-                line-clamp: 2;
+                -webkit-line-clamp: 4;
+                line-clamp: 4;
                 -webkit-box-orient: vertical;
                 overflow: hidden;
                 color: #666;
                 line-height: 1.3;
-              }
-
-              /* Dans l'arbre : case a cocher et icone gardent leur taille a gauche,
-                 le texte prend la largeur restante. Le min-width:0 est indispensable,
-                 sans lui le bloc refuse de se retrecir et la description deborde. */
-              /* le panneau de l'arbre fait 275px par defaut, trop etroit des que
-                 les noeuds portent une description. Le selecteur doit reprendre les
-                 trois classes du theme, sinon il perd en specificite. */
-              .tree-widget .treeLayer .treeDisplay {
-                min-width: 560px;
-              }
-
-              .jstree-anchor:has(.item-template) {
-                /* inline-flex, pas flex : sinon l'ancre devient un bloc et pousse
-                   la fleche de depliage sur sa propre ligne */
-                display: inline-flex;
-                vertical-align: top;
-                align-items: flex-start;
-                white-space: normal;
-                height: auto;
-                line-height: 1.3;
-              }
-              .jstree-anchor:has(.item-template) > .jstree-icon {
-                flex: none;
-              }
-              .jstree-anchor .item-template {
-                flex: 1;
-                min-width: 0;
               }
 
               /* Awesomplete s'elargit au contenu et refuse le retour a la ligne */
@@ -261,7 +289,6 @@
               .awesomplete > ul > li {
                 white-space: normal;
               }
-
             </style>
 
             <!--       

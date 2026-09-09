@@ -108,24 +108,6 @@ export class DatasourceReading {
         datasource.labelProperty = labelProperties[0];
       }
 
-      // descriptionPath
-      var descriptionPaths = graph.readProperty(
-        factory.namedNode(datasourceUri),
-        factory.namedNode(Datasources.DESCRIPTION_PATH)
-      ).map(n=>n.value);
-      if (descriptionPaths.length > 0) {
-        datasource.descriptionPath = descriptionPaths[0];
-      }
-
-      // descriptionProperty
-      var descriptionProperties = graph.readProperty(
-        factory.namedNode(datasourceUri),
-        factory.namedNode(Datasources.DESCRIPTION_PROPERTY)
-      ).map(n=>n.value);
-      if (descriptionProperties.length > 0) {
-        datasource.descriptionProperty = descriptionProperties[0];
-      }
-
       // childrenPath
       var childrenPaths = graph.readProperty(
         factory.namedNode(datasourceUri),

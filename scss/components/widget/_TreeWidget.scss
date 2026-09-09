@@ -66,6 +66,69 @@
             &.jstree-default .jstree-checkbox-disabled {
                 opacity: 0.5;
             }
+
+            // 275px devient trop etroit des que les noeuds portent un template
+            &:has(.item-template) {
+                min-width: 560px;
+            }
+
+            &.jstree-default {
+                // jstree met son ul racine en inline-block pour que les bandes
+                // wholerow couvrent toute la largeur scrollable. En shrink-to-fit
+                // une definition longue fait exploser sa largeur intrinseque et le
+                // texte deborde a droite. Le highlight etant repasse sur l'ancre
+                // juste en dessous, l'inline-block n'a plus de raison d'etre.
+                > .jstree-wholerow-ul {
+                    display: block;
+                }
+
+                .jstree-anchor:has(.item-template) {
+                    // inline-flex et non flex : en block l'ancre pousserait la
+                    // fleche de depliage sur sa propre ligne
+                    display: inline-flex;
+                    align-items: flex-start;
+                    vertical-align: top;
+                    white-space: normal;
+                    // le theme impose height:24px, le template fait plusieurs lignes
+                    height: auto;
+                    // la fleche de depliage occupe 24px sur la meme ligne, mais le
+                    // shrink-to-fit de l'ancre les ignore et prend toute la largeur
+                    // du li : sans ce plafond la ligne deborde de 24px a droite.
+                    // max-width et non min-width : un pourcentage en max-width est
+                    // ignore dans le calcul de largeur intrinseque, il ne regonfle
+                    // donc pas l'ul et le texte continue de se replier.
+                    box-sizing: border-box;
+                    max-width: calc(100% - 24px);
+                    line-height: 1.3;
+                    padding-top: 2px;
+                    padding-bottom: 2px;
+
+                    // case a cocher et icone gardent leur taille, le texte prend le reste
+                    > .jstree-icon {
+                        flex: none;
+                    }
+                    .item-template {
+                        flex: 1;
+                        // sans lui le bloc refuse de se retrecir et deborde du panneau
+                        min-width: 0;
+                        max-width: 100%;
+                        white-space: normal;
+                        overflow-wrap: anywhere;
+                    }
+                }
+
+                // Le plugin wholerow peint le highlight dans un bloc absolu de 24px
+                // de haut et neutralise celui de l'ancre : sur un noeud multiligne
+                // seule la premiere ligne serait surlignee. On le rend a l'ancre.
+                .jstree-wholerow-hovered {
+                    background: transparent;
+                }
+                > .jstree-wholerow-ul .jstree-hovered {
+                    background: #e7f4f9;
+                    border-radius: 2px;
+                    box-shadow: inset 0 0 1px #ccc;
+                }
+            }
         }
         .treeActions {
             border-top: 2px solid #ddd;

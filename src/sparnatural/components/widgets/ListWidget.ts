@@ -12,6 +12,7 @@ import { NoOpListDataProvider } from "../datasources/NoOpDataProviders";
 import { mergeDatasourceResults } from "../datasources/SparqlDataProviders";
 import { RDFTerm, RdfTermCriteria, LabelledCriteria } from "../../SparnaturalQueryIfc";
 import { ItemTemplate } from "./ItemTemplate";
+import { keepLinksClickable, uriLinkHtml } from "./ItemLink";
 
 const factory = new DataFactory();
 
@@ -122,21 +123,20 @@ export class ListWidget extends AbstractWidget {
           width: "style"
         };
 
-        // If we have a template, use it for rendering
-        if (this.itemTemplate.exists) {
-          select2Config.templateResult = (result: any): JQuery<HTMLElement> => {
-            if (result.loading) {
-              return result.text;
-            }
-
-            // the option value is the serialized RDF term of the item it was built from
-            const item = displayedItems.find(i => JSON.stringify(i.term) === result.id);
-            if (item) {
-              return $(this.itemTemplate.render(item)) as JQuery<HTMLElement>;
-            }
+        // we always render the item ourselves : a template if there is one, the label
+        // plus the URI link otherwise
+        select2Config.templateResult = (result: any): JQuery<HTMLElement> => {
+          if (result.loading) {
             return result.text;
-          };
-        }
+          }
+
+          // the option value is the serialized RDF term of the item it was built from
+          const item = displayedItems.find(i => JSON.stringify(i.term) === result.id);
+          if (item) {
+            return $(this.#renderItem(item)) as JQuery<HTMLElement>;
+          }
+          return result.text;
+        };
 
         this.selectHtml.select2(select2Config);
 
@@ -190,6 +190,17 @@ export class ListWidget extends AbstractWidget {
 
 
     return this;
+  }
+
+  // the template when there is one, otherwise the plain label plus the URI link
+  #renderItem(item: RdfTermDatasourceItem): HTMLElement {
+    if (this.itemTemplate.exists) return this.itemTemplate.renderElement(item);
+
+    let element = document.createElement("span");
+    element.className = "item-template";
+    element.innerHTML = item.label + uriLinkHtml(item.term);
+    keepLinksClickable(element);
+    return element;
   }
 
   // separate the creation of the value from the widget code itself

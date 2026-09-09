@@ -500,16 +500,59 @@ this:MuseumWikidata_situe_a sh:path wdt:P625;
 
 # same as datasources:list_rdfslabel_count, but also reads a description
 this:list_country_with_description a datasources:SparqlDatasource;
-  datasources:queryTemplate datasources:query_list_label_count_with_description;
-  datasources:labelProperty rdfs:label;
-  datasources:descriptionPath "<http://www.w3.org/2000/01/rdf-schema#comment>|<http://dbpedia.org/ontology/description>";
-  datasources:noSort "true"^^xsd:boolean .
+  datasources:noSort "true"^^xsd:boolean ;
+  datasources:queryString """
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dbo: <http://dbpedia.org/ontology/>
+SELECT ?uri ?count ?description (CONCAT(STR(?theLabel), " (", STR(?count), ")") AS ?label) (STR(?theLabel) AS ?itemLabel) WHERE {
+  {
+    SELECT ?uri ?count ?theLabel WHERE {
+      {
+        SELECT DISTINCT ?uri (COUNT(?domain) AS ?count) WHERE {
+          ?domain $type $domain;
+            $property ?uri.
+          FILTER(ISIRI(?uri))
+        }
+        GROUP BY ?uri
+      }
+      ?uri rdfs:label ?theLabel.
+      FILTER(((LANG(?theLabel)) = "") || ((LANG(?theLabel)) = $lang))
+    }
+    ORDER BY DESC (?count) (UCASE(?theLabel))
+    LIMIT 500
+  }
+  OPTIONAL {
+    ?uri rdfs:comment|dbo:description ?description.
+    FILTER(((LANG(?description)) = "") || ((LANG(?description)) = $lang))
+  }
+}
+ORDER BY DESC (?count) (UCASE(STR(?label)))
+  """;
+.
 
 # same as datasources:search_rdfslabel_bifcontains, but also reads a description
 this:search_person_with_description a datasources:SparqlDatasource;
-  datasources:queryTemplate datasources:query_search_label_bifcontains_with_description;
-  datasources:labelProperty rdfs:label;
-  datasources:descriptionPath "<http://www.w3.org/2000/01/rdf-schema#comment>|<http://dbpedia.org/ontology/description>" .
+  datasources:queryString """
+PREFIX bif: <http://www.openlinksw.com/schemas/bif#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dbo: <http://dbpedia.org/ontology/>
+SELECT DISTINCT ?uri ?label ?description WHERE {
+  ?domain $type $domain;
+    $property ?uri.
+  ?uri $type $range;
+    rdfs:label ?label.
+  FILTER(ISIRI(?uri))
+  FILTER(((LANG(?label)) = "") || ((LANG(?label)) = $lang))
+  ?label bif:contains "'$key'".
+  OPTIONAL {
+    ?uri rdfs:comment|dbo:description ?description.
+    FILTER(((LANG(?description)) = "") || ((LANG(?description)) = $lang))
+  }
+}
+ORDER BY (UCASE(STR(?label)))
+LIMIT 15
+  """;
+.
 
 this:tree_root_frenchPainters a datasources:SparqlTreeRootDatasource;
   datasources:queryString """PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
