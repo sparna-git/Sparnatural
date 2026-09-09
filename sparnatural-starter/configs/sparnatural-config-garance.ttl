@@ -37,7 +37,7 @@ this:Place a sh:NodeShape;
   sh:targetClass rico:Place;
   sh:nodeKind sh:IRI;
   rdfs:label "Place"@en, "Lieu"@fr;
-  sh:property this:Place_type_list, this:Place_type_autocomplete, this:Place_type_tree .
+  sh:property this:Place_type_list, this:Place_type_autocomplete, this:Place_type_tree, this:Place_type_list_default, this:Place_type_autocomplete_default .
 
 this:PlaceType a sh:NodeShape;
   sh:targetClass rico:PlaceType;
@@ -50,6 +50,20 @@ this:PlaceType_prefLabel sh:path skos:prefLabel;
   sh:nodeKind sh:Literal ;
   sh:datatype rdf:langString .
 
+
+this:Place_type_list_default sh:path rico:hasOrHadPlaceType;
+  sh:name "place type (default list)"@en, "type de lieu (liste par défaut)"@fr;
+  sh:nodeKind sh:IRI;
+  sh:node this:PlaceType;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource <http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_skospreflabel_alpha> .
+
+this:Place_type_autocomplete_default sh:path rico:hasOrHadPlaceType;
+  sh:name "place type (default autocomplete)"@en, "type de lieu (autocomplete par défaut)"@fr;
+  sh:nodeKind sh:IRI;
+  sh:node this:PlaceType;
+  dash:searchWidget core:AutocompleteProperty;
+  datasources:datasource <http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_skospreflabel_contains> .
 
 this:Place_type_list sh:path rico:hasOrHadPlaceType;
   sh:name "place type (list)"@en, "type de lieu (liste)"@fr;
