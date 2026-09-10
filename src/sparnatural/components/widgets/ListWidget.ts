@@ -197,7 +197,6 @@ export class ListWidget extends AbstractWidget {
     if (this.itemTemplate.exists) return this.itemTemplate.renderElement(item);
 
     let element = document.createElement("span");
-    element.className = "item-template";
     element.innerHTML = item.label + uriLinkHtml(item.term);
     keepLinksClickable(element);
     return element;

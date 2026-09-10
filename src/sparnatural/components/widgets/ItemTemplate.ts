@@ -20,17 +20,22 @@ export class ItemTemplate {
     return this.#compiled !== null;
   }
 
-  // wrapped in a single element so that multi-node templates are not truncated by the caller
+  // rendered as-is : the template provides its own root element, so the page keeps
+  // the class it styles next to its own CSS rules
   render(item: RdfTermDatasourceItem): string {
     if (!this.#compiled) throw new Error("No template available for rendering");
-    return `<div class="item-template">${this.#compiled(item)}</div>`;
+    return this.#compiled(item);
   }
 
   // same rendering as a DOM element, with the links it contains made clickable
   renderElement(item: RdfTermDatasourceItem): HTMLElement {
     let holder = document.createElement("div");
     holder.innerHTML = this.render(item);
-    let element = holder.firstElementChild as HTMLElement;
+    // a template with no element at all, or several, would lose content : fall back
+    // on the holder, which then plays the root the template did not provide
+    let element = (holder.children.length === 1
+      ? holder.firstElementChild
+      : holder) as HTMLElement;
     keepLinksClickable(element);
     return element;
   }
