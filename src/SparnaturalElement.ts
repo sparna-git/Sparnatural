@@ -50,8 +50,11 @@ export class SparnaturalElement extends HTMLElement {
   display() {
     // render sparnatural
     this.sparnatural = new SparnaturalComponent();
+    // item templates can be declared inside the element, keep them across the empty()
+    let itemTemplates = $(this).children("script[type='text/x-handlebars-template']").detach();
     // empty the content in case we re-display after an attribute change
     $(this).empty();
+    $(this).append(itemTemplates);
     $(this).append(this.sparnatural.html);
     // parse all attributes in the HTML element
     this._attributes = new SparnaturalAttributes(this);

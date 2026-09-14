@@ -2,6 +2,7 @@ import { SelectedVal } from "../SelectedVal";
 import { AbstractWidget, ValueRepetition } from "./AbstractWidget";
 import { DataFactory } from 'rdf-data-factory';
 import "select2";
+// This is necessary otherwise select2 is not styled correctly
 import "select2/dist/css/select2.css";
 import { I18n } from "../../settings/I18n";
 import { Term } from "@rdfjs/types/data-model";
@@ -10,6 +11,8 @@ import { ListDataProviderIfc, RdfTermDatasourceItem, ValuesListDataProviderIfc }
 import { NoOpListDataProvider } from "../datasources/NoOpDataProviders";
 import { mergeDatasourceResults } from "../datasources/SparqlDataProviders";
 import { RDFTerm, RdfTermCriteria, LabelledCriteria } from "../../SparnaturalQueryIfc";
+import { ItemTemplate } from "./ItemTemplate";
+import { keepLinksClickable, uriLinkHtml } from "./ItemLink";
 
 const factory = new DataFactory();
 
@@ -27,6 +30,7 @@ export class ListWidget extends AbstractWidget {
   }
 
   configuration: ListConfiguration;
+  itemTemplate: ItemTemplate;
 
   selectHtml: JQuery<HTMLElement>;
 
@@ -51,6 +55,8 @@ export class ListWidget extends AbstractWidget {
     this.startClassVal = startClassVal;
     this.objectPropVal = objectPropVal;
     this.endClassVal = endClassVal;
+
+    this.itemTemplate = new ItemTemplate(objectPropVal, endClassVal);
   }
 
   render() {
@@ -78,10 +84,14 @@ export class ListWidget extends AbstractWidget {
 
         // find distinct values of the 'group' binding
         const groups = [...new Set(items.map(item => item.group))];
+        const hasGroups = !(groups.length == 1 && groups[0] == undefined);
 
-        if(groups.length == 1 && groups[0] == undefined) {
+        // when groups are used the same term can come from several datasets : merge them
+        let displayedItems = hasGroups?mergeDatasourceResults(items):items;
+
+        if(!hasGroups) {
           // no groups were defined at all
-          items.forEach(item => {
+          displayedItems.forEach(item => {
             // select item label : either displayed label, or itemLabel if provided
             let itemLabel = item.itemLabel?item.itemLabel:item.label;
             this.selectHtml.append(
@@ -91,12 +101,11 @@ export class ListWidget extends AbstractWidget {
         } else {
           // we found some groups, organise the list content with optgroup
 
-          let mergedResult = mergeDatasourceResults(items);
-          const groupsAfterMerge = [...new Set(mergedResult.map(item => item.group))];
+          const groupsAfterMerge = [...new Set(displayedItems.map(item => item.group))];
 
           groupsAfterMerge.forEach(group => {
             let html = "<optgroup label=\""+group+"\">";
-            mergedResult.filter(item => (item.group == group)).forEach(item => {
+            displayedItems.filter(item => (item.group == group)).forEach(item => {
               // select item label : either displayed label, or itemLabel if provided
               let itemLabel = item.itemLabel?item.itemLabel:item.label;
               
@@ -107,15 +116,29 @@ export class ListWidget extends AbstractWidget {
           })
         }
 
-
-        this.selectHtml = this.selectHtml.select2({
+        // Configure select2 with template support
+        const select2Config: any = {
           // use the minimumResultsForSearch parameter to avoid using a search box when only a few items are present
           minimumResultsForSearch: 20,
-          // pass a JQUery object so that HTML markup is preserved
-          // TODO : this does not work ATM
-          // templateResult: function formatLabel(label:any) {return $(label)},
           width: "style"
-        });
+        };
+
+        // we always render the item ourselves : a template if there is one, the label
+        // plus the URI link otherwise
+        select2Config.templateResult = (result: any): JQuery<HTMLElement> => {
+          if (result.loading) {
+            return result.text;
+          }
+
+          // the option value is the serialized RDF term of the item it was built from
+          const item = displayedItems.find(i => JSON.stringify(i.term) === result.id);
+          if (item) {
+            return $(this.#renderItem(item)) as JQuery<HTMLElement>;
+          }
+          return result.text;
+        };
+
+        this.selectHtml.select2(select2Config);
 
         // set a listener for when a value is selected
         this.selectHtml.on("select2:close", (e: any) => {
@@ -128,9 +151,9 @@ export class ListWidget extends AbstractWidget {
             return;
 
           let itemLabel = option[0].getAttribute("data-itemLabel");
-          let listWidgetValue: LabelledCriteria<RdfTermCriteria> = this.buildValue(option[0].value, itemLabel);
+          let listWidgetValue: LabelledCriteria<RdfTermCriteria> = ListWidget.buildValue(option[0].value, itemLabel);
           this.triggerRenderWidgetVal(listWidgetValue);
-        });
+        });        
 
       } else {
         this.html.append(noItemsHtml);
@@ -169,9 +192,19 @@ export class ListWidget extends AbstractWidget {
     return this;
   }
 
+  // the template when there is one, otherwise the plain label plus the URI link
+  #renderItem(item: RdfTermDatasourceItem): HTMLElement {
+    if (this.itemTemplate.exists) return this.itemTemplate.renderElement(item);
+
+    let element = document.createElement("span");
+    element.innerHTML = item.label + uriLinkHtml(item.term);
+    keepLinksClickable(element);
+    return element;
+  }
+
   // separate the creation of the value from the widget code itself
   // so that it can be overriden by LiteralListWidget
-  buildValue(termString:string,label:string): LabelledCriteria<RdfTermCriteria> {
+  public static buildValue(termString:string,label:string): LabelledCriteria<RdfTermCriteria> {
     let term = (JSON.parse(termString) as RDFTerm);
     return {
       label: label,

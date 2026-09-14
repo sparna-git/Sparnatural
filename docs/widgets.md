@@ -82,6 +82,88 @@ SELECT DISTINCT ?Museum_1 ?Country_2 WHERE {
 -----
 
 
+
+-----
+
+
+## Template List widget
+
+### Appearance
+
+|  Example  | Description |
+| -------- | ----------- |
+| ![Template List Widget Screenshot](https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/widgets/template-list-widget.png) | Template list widget showing customized item rendering |
+
+
+### Description
+
+The Template List widget extends the List widget by allowing customization of how each item is displayed in the dropdown list. It uses the select2 templating mechanism to render items based on a custom template that can access all data from the SPARQL result set, including additional bindings beyond just the URI and label.
+
+This widget is useful when you want to display rich information about each item directly in the dropdown, such as showing multiple fields (e.g., first name, last name, count, etc.) in a customized format.
+
+### Configuration
+
+In your SHACL configuration, add a `dash:searchWidget` annotation with the value [`config-core:TemplateListProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#TemplateListProperty).
+
+### Template Definition
+
+The template is defined in an HTML element on the page with a specific ID. The ID should be the URI of the property (the PropertyShape) followed by `-template`.
+
+For example, if your property has the URI `https://data.example.fr/def/myModel#P123`, you would define the template as:
+
+```html
+<!-- your Sparnatural component -->
+<spar-natural src="..." lang="fr" />
+
+<!-- a hidden div containing the template -->
+<div style="display:none;" id="https://data.example.fr/def/myModel#P123-template">
+   <b>${data.firstName}</b> <u>${data.lastName}</u> (${data.count})
+</div>
+```
+
+### Template Variables
+
+The template has access to all data from the `RdfTermDatasourceItem` object, including:
+
+- `data.term` - The RDF term (URI or literal)
+- `data.label` - The display label
+- `data.group` - The optional group for optgroup
+- `data.itemLabel` - The pure label without additional information
+- `data.<variableName>` - Any additional bindings from the SPARQL query (e.g., `data.count`, `data.firstName`, etc.)
+
+### SPARQL Query Example
+
+To use the Template List widget effectively, your SPARQL query should return additional columns beyond the standard `uri` and `label`. For example:
+
+```sparql
+PREFIX ex: <https://data.example.fr/def/myModel#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?uri ?label ?firstName ?lastName ?count WHERE {
+  ?uri a ex:Person .
+  ?uri rdfs:label ?label .
+  ?uri ex:firstName ?firstName .
+  ?uri ex:lastName ?lastName .
+  ?uri ex:publicationCount ?count .
+}
+ORDER BY ?label
+```
+
+In this example, the template can access `${data.firstName}`, `${data.lastName}`, and `${data.count}` in addition to the standard fields.
+
+### Fallback Behavior
+
+If a template element with the expected ID is not found on the page, the Template List widget will automatically fall back to the standard List widget behavior, displaying only the label.
+
+### Datasources
+
+The Template List widget uses the same datasources as the List widget. The datasource should return all the columns that you want to access in your template. See [List widget datasources](#datasources) for more information.
+
+### SPARQL generation
+
+The SPARQL query generation logic is identical to the List widget.
+
+
 ## Autocomplete widget
 
 ### Appearance

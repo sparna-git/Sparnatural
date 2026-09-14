@@ -1,8 +1,18 @@
 import { Term } from "@rdfjs/types/data-model";
 import { ListDataProviderIfc, RdfTermDatasourceItem, AutocompleteDataProviderIfc, TreeDataProviderIfc, RdfTermTreeDatasourceItem, ValuesListDataProviderIfc, SinglePredicateDataProviderIfc } from "./DataProviders";
 import { AutocompleteSparqlQueryBuilderIfc, ListSparqlQueryBuilderIfc, SinglePredicateSparqlQueryBuilderIfc, TreeSparqlQueryBuilderIfc, ValuesListSparqlQueryBuilderIfc } from "./SparqlBuilders";
-import { sameTerm } from "../../SparnaturalQueryIfc";
+import { RDFTerm, sameTerm } from "../../SparnaturalQueryIfc";
 import { SparqlHandlerIfc } from "rdf-shacl-commons";
+
+/**
+ * An endpoint answering an error can still return a parseable payload, without any
+ * result set. Report it through the errorCallback rather than failing on data.results.
+ */
+function hasResultSet(data:any, errorCallback?:(payload:any) => void):boolean {
+    if(data?.results?.bindings) return true;
+    if(errorCallback) errorCallback(data);
+    return false;
+}
 
 export abstract class BaseSparqlListDataProvider {
     
@@ -31,6 +41,8 @@ export abstract class BaseSparqlListDataProvider {
 
         // 2. execute it
         this.sparqlHandler.executeSparql(sparqlQuery,(data:{results:{bindings:any}}) => {
+            if(!hasResultSet(data, errorCallback)) return;
+
             // 3. parse the results
             let result = new Array<RdfTermDatasourceItem>;
             for (let index = 0; index < data.results.bindings.length; index++) {
@@ -38,19 +50,20 @@ export abstract class BaseSparqlListDataProvider {
                 // this is to avoid corner-cases with GraphDB queries returning only count=0 in aggregation queries.
                 // we need at least 2 bindings anyway
                 if(Object.keys(solution).length > 1) {
+                    
                     if(solution.uri) {
                         // if we find a "uri" column...
                         // read uri key & label key
-                        result[result.length] = {term:solution.uri, label:solution.label.value, group:solution.group?.value, itemLabel:solution.itemLabel?.value};
+                        result[result.length] = {term:solution.uri, label:solution.label.value, group:solution.group?.value, itemLabel:solution.itemLabel?.value, bindings: solution };
                     } else if(solution.value) {
                         // if we find a "value" column...
                         // read value key & label key
-                        result[result.length] = {term:solution.value, label:solution.label.value, group:solution.group?.value, itemLabel:solution.itemLabel?.value};
+                        result[result.length] = {term:solution.value, label:solution.label.value, group:solution.group?.value, itemLabel:solution.itemLabel?.value, bindings: solution };
                     } else {
                         // try to determine the payload column by taking the column other than label
                         let columnName = this.getRdfTermColumn(solution);
                         if(columnName) {
-                            result[result.length] ={term:solution[columnName], label:solution.label.value, group:solution.group?.value, itemLabel:solution.itemLabel?.value};
+                            result[result.length] ={term:solution[columnName], label:solution.label.value, group:solution.group?.value, itemLabel:solution.itemLabel?.value, bindings: solution };
                         } else {
                             throw Error("Could not determine which column to read from the result set")
                         }
@@ -201,6 +214,8 @@ export class SparqlSinglePredicateDataProvider implements SinglePredicateDataPro
         );
 
         this.sparqlHandler.executeSparql(sparql,(data:{results:{bindings:any}}) => {
+            if(!hasResultSet(data, errorCallback)) return;
+
             // read the 'uri' and 'label' columns
             let result = new Array<RdfTermDatasourceItem>;
             for (let index = 0; index < data.results.bindings.length; index++) {
@@ -287,20 +302,23 @@ export class SparqlAutocompleDataProvider
 
       // 2. execute it
       this.sparqlHandler.executeSparql(sparql,(data:{results:{bindings:any}}) => {
+          if(!hasResultSet(data, errorCallback)) return;
+
           // 3. parse the results
           let result = new Array<RdfTermDatasourceItem>;
           for (let index = 0; index < data.results.bindings.length; index++) {
               const solution = data.results.bindings[index];
+              
               if(solution.uri) {
                   // read uri key & label key
-                  result[result.length] ={term:solution.uri, label:solution.label.value, group:solution.group?.value};
+                  result[result.length] ={term:solution.uri, label:solution.label.value, group:solution.group?.value, bindings: solution };
               } else if(solution.value) {
-                  result[result.length] ={term:solution.value, label:solution.label.value, group:solution.group?.value};
+                  result[result.length] ={term:solution.value, label:solution.label.value, group:solution.group?.value, bindings: solution };
               } else {
                   // try to determine the payload column by taking the column other than label
                   let columnName = this.getRdfTermColumn(solution);
                   if(columnName) {
-                      result[result.length] ={term:solution[columnName], label:solution.label.value};
+                      result[result.length] ={term:solution[columnName], label:solution.label.value, bindings: solution};
                   } else {
                       throw Error("Could not determine which column to read from the result set")
                   }
@@ -393,7 +411,7 @@ export class SparqlTreeDataProvider implements TreeDataProviderIfc {
         // 2. execute it
         this.sparqlHandler.executeSparql(
             sparql,
-            this.#getParser(callback),
+            this.#getParser(callback, errorCallback),
             errorCallback
         );
     }
@@ -421,16 +439,19 @@ export class SparqlTreeDataProvider implements TreeDataProviderIfc {
     // 2. execute it
     this.sparqlHandler.executeSparql(
         sparql,
-        this.#getParser(callback),
+        this.#getParser(callback, errorCallback),
         errorCallback
     );
 
   }
 
   #getParser(
-      callback:(items:RdfTermTreeDatasourceItem[]) => void
+      callback:(items:RdfTermTreeDatasourceItem[]) => void,
+      errorCallback?:(payload:any) => void
   ):(data: any) => void {
       return (data) => {
+        if(!hasResultSet(data, errorCallback)) return;
+
         // 3. parse the results
         let result = new Array<RdfTermTreeDatasourceItem>;
         for (let index = 0; index < data.results.bindings.length; index++) {
@@ -440,6 +461,7 @@ export class SparqlTreeDataProvider implements TreeDataProviderIfc {
                 term:solution.uri,
                 label:solution.label.value,
                 itemLabel:solution.itemLabel?.value,
+                bindings: solution,
                 // make sure to parse the value as a boolean so that it is not a string
                 // we also test on "1" because Virtuoso returns this as a result instead of a true boolean
                 hasChildren:solution.hasChildren?((solution.hasChildren.value === "true" || solution.hasChildren.value == 1)?true:false):true,
@@ -474,7 +496,9 @@ export function mergeDatasourceResults(items:RdfTermDatasourceItem[]):RdfTermDat
                 term: sameTerms[0].term,
                 label : sameTerms[0].label,
                 itemLabel: sameTerms[0].itemLabel,
-                group: sameTerms.map(i => i.group).join(" + ")
+                group: sameTerms.map(i => i.group).join(" + "),
+                // TODO : merge bindings of all identical terms
+                bindings: sameTerms[0].bindings ? {...sameTerms[0].bindings} : undefined
             }
             result.push(newTerm);
         }

@@ -9,6 +9,8 @@ import "jstree/dist/themes/default/style.min.css";
 import { TreeDataProviderIfc, RdfTermTreeDatasourceItem } from "../../datasources/DataProviders";
 import { NoOpTreeDataProvider } from "../../datasources/NoOpDataProviders";
 import { LabelledCriteria, RdfTermCriteria } from "../../../SparnaturalQueryIfc";
+import { ItemTemplate } from "../ItemTemplate";
+import { keepLinksClickable, uriLinkHtmlNoAnchor } from "../ItemLink";
 
 import { getSettings } from "../../../settings/defaultSettings";
 
@@ -41,6 +43,7 @@ export class TreeWidget extends AbstractWidget {
   objectPropVal: SelectedVal;
   endClassVal: SelectedVal;
   displayLayer: JQuery<HTMLElement>
+  itemTemplate: ItemTemplate;
 
   constructor(
     parentComponent: HTMLComponent,
@@ -64,6 +67,8 @@ export class TreeWidget extends AbstractWidget {
     this.startClassVal = startClassVal;
     this.endClassVal = endClassVal;
     this.objectPropVal = objectPropVal;
+
+    this.itemTemplate = new ItemTemplate(objectPropVal, endClassVal);
   }
 
   render() {
@@ -123,21 +128,30 @@ export class TreeWidget extends AbstractWidget {
             var result = [];
 
             for (var i = 0; i < items.length; i++) {
-              var text = items[i].label;
               // shorten the label if too long to avoid tree goind far right
+              var text = items[i].label;
               if(text.length > 90) {
                 text = text.substring(0,90)+" (...)";
+              }
+              // jstree inserts the node text as HTML, so a template can be rendered as-is
+              if(self.itemTemplate.exists) {
+                text = self.itemTemplate.render(items[i]);
+              } else {
+                text = text + uriLinkHtmlNoAnchor(items[i].term);
               }
 
               var aNode: {
                 id: string;
                 text: string;
+                itemLabel: string;
                 children?: boolean;
                 state?: { disabled: boolean };
                 parent?: any;
               } = {
                 id: items[i].term.value,
                 text: text,
+                // plain label, kept aside : 'text' can hold the rendered template
+                itemLabel: items[i].itemLabel?items[i].itemLabel:items[i].label,
               };
               if (items[i].hasChildren) {
                 aNode.children = true;
@@ -199,7 +213,11 @@ export class TreeWidget extends AbstractWidget {
     };
 
     // this.jsTree = $("#ecgrw-" + id_inputs + "-display").jstree(options);
-    this.jsTree = this.displayLayer.find("#ecgrw-"+this.IdCriteriaGroupe+"-display").jstree(options);
+    let treeElement = this.displayLayer.find("#ecgrw-"+this.IdCriteriaGroupe+"-display");
+    // capture phase : jstree selects on a click handler it delegates on this same
+    // container, our handler has to run before it to stop the event on a link
+    keepLinksClickable(treeElement[0], true);
+    this.jsTree = treeElement.jstree(options);
 
     this.button.on("click", { arg1: this }, this.onClickDisplay);
     //disable/enable on max selction
@@ -300,6 +318,9 @@ export class TreeWidget extends AbstractWidget {
 
   onClickCancel = function (e: any) {
     let this_:TreeWidget = e.data.arg1;
+    // the button is labelled "clear selection" : unchecking fires changed.jstree,
+    // which re-enables the nodes disabled under a checked one and clears the greying
+    this_.jsTree.jstree(true).deselect_all();
     this_.displayLayer.hide();
   };
 
@@ -324,8 +345,7 @@ export class TreeWidget extends AbstractWidget {
     var values = [];
     for (var node in checked) {
       const val:LabelledCriteria<RdfTermCriteria> = {
-        // TODO : find a way to retrieve the itemLabel
-        label: checked[node].original.text,
+        label: checked[node].original.itemLabel?checked[node].original.itemLabel:checked[node].original.text,
         criteria: {
           rdfTerm: {
             type: "uri",

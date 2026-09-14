@@ -56,12 +56,12 @@ document.addEventListener("DOMContentLoaded", () => {
   // =============================================================================
   Yasr.registerPlugin("TableX", SparnaturalYasguiPlugins.TableX);
   Yasr.registerPlugin("Grid", SparnaturalYasguiPlugins.GridPlugin);
-  Yasr.registerPlugin("Map", SparnaturalYasguiPlugins.MapPlugin);
+  // Yasr.registerPlugin("Map", SparnaturalYasguiPlugins.MapPlugin);
   Yasr.registerPlugin("StatsPlugin", SparnaturalYasguiPlugins.StatsPlugin);
   delete Yasr.plugins["table"];
 
   const yasr = new Yasr(document.getElementById("yasr"), {
-    pluginOrder: ["TableX", "Grid", "Map", "StatsPlugin", "response"],
+    pluginOrder: ["TableX", "Grid", "StatsPlugin", "response"],
     defaultPlugin: "TableX",
   });
 

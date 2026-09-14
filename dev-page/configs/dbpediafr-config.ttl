@@ -148,7 +148,7 @@ this:Artwork_author sh:path dbpedia:author;
   sh:nodeKind sh:IRI;
   sh:class dbpedia:Person;
   dash:searchWidget core:AutocompleteProperty;
-  datasources:datasource datasources:search_rdfslabel_bifcontains;
+  datasources:datasource this:search_person_with_description;
   core:enableOptional "true"^^xsd:boolean;
   core:enableNegation "true"^^xsd:boolean .
 
@@ -211,7 +211,7 @@ this:Museum_country sh:path dbpedia:country;
   sh:nodeKind sh:IRI;
   sh:class dbpedia:Country;
   dash:searchWidget core:ListProperty;
-  datasources:datasource datasources:list_rdfslabel_count;
+  datasources:datasource this:list_country_with_description;
   core:enableOptional "true"^^xsd:boolean;
   core:enableNegation "true"^^xsd:boolean .
 
@@ -339,7 +339,8 @@ this:Person_bornIn sh:path _:a3498c4a778c4f829e250049f6184b3d5356;
   sh:nodeKind sh:IRI;
   sh:class dbpedia:Country;
   dash:searchWidget core:ListProperty;
-  datasources:datasource datasources:list_rdfslabel_alpha_with_count;
+  # datasources:datasource datasources:list_rdfslabel_alpha_with_count;
+  datasources:datasource this:list_rdfslabel_count_thumbnail;
   core:enableOptional "true"^^xsd:boolean;
   core:enableNegation "true"^^xsd:boolean .
 
@@ -406,7 +407,7 @@ this:Person_classifiedIn sh:path dcterms:subject;
   core:enableOptional "true"^^xsd:boolean;
   core:enableNegation "true"^^xsd:boolean;
   datasources:treeRootsDatasource this:tree_root_frenchPainters;
-  datasources:treeChildrenDatasource datasources:tree_children_skosnarrower .
+  datasources:treeChildrenDatasource this:tree_children_categories .
 
 this:Person_created sh:path _:a3498c4a778c4f829e250049f6184b3d5360;
   sh:name "created"@en, "a créé"@fr;
@@ -434,7 +435,7 @@ this:Person_movement sh:path dbpedia:movement;
   sh:nodeKind sh:IRI;
   sh:node this:Movement;
   dash:searchWidget core:ListProperty;
-  datasources:datasource datasources:list_rdfslabel_count;
+  datasources:datasource this:list_rdfslabel_count_definition;
   core:enableOptional "true"^^xsd:boolean;
   core:enableNegation "true"^^xsd:boolean .
 
@@ -497,15 +498,90 @@ this:MuseumWikidata_situe_a sh:path wdt:P625;
   core:enableNegation "true"^^xsd:boolean;
   core:sparqlService <https://www.wikidata.org> .
 
+# same as datasources:list_rdfslabel_count, but also reads a description
+this:list_country_with_description a datasources:SparqlDatasource;
+  datasources:noSort "true"^^xsd:boolean ;
+  datasources:queryString """
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dbo: <http://dbpedia.org/ontology/>
+SELECT ?uri ?count ?description (CONCAT(STR(?theLabel), " (", STR(?count), ")") AS ?label) (STR(?theLabel) AS ?itemLabel) WHERE {
+  {
+    SELECT ?uri ?count ?theLabel WHERE {
+      {
+        SELECT DISTINCT ?uri (COUNT(?domain) AS ?count) WHERE {
+          ?domain $type $domain;
+            $property ?uri.
+          FILTER(ISIRI(?uri))
+        }
+        GROUP BY ?uri
+      }
+      ?uri rdfs:label ?theLabel.
+      FILTER(((LANG(?theLabel)) = "") || ((LANG(?theLabel)) = $lang))
+    }
+    ORDER BY DESC (?count) (UCASE(?theLabel))
+    LIMIT 500
+  }
+  OPTIONAL {
+    ?uri rdfs:comment|dbo:description ?description.
+    FILTER(((LANG(?description)) = "") || ((LANG(?description)) = $lang))
+  }
+}
+ORDER BY DESC (?count) (UCASE(STR(?label)))
+  """;
+.
+
+# same as datasources:search_rdfslabel_bifcontains, but also reads a description
+this:search_person_with_description a datasources:SparqlDatasource;
+  datasources:queryString """
+PREFIX bif: <http://www.openlinksw.com/schemas/bif#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dbo: <http://dbpedia.org/ontology/>
+SELECT DISTINCT ?uri ?label ?description WHERE {
+  ?domain $type $domain;
+    $property ?uri.
+  ?uri $type $range;
+    rdfs:label ?label.
+  FILTER(ISIRI(?uri))
+  FILTER(((LANG(?label)) = "") || ((LANG(?label)) = $lang))
+  ?label bif:contains "'$key'".
+  OPTIONAL {
+    ?uri rdfs:comment|dbo:description ?description.
+    FILTER(((LANG(?description)) = "") || ((LANG(?description)) = $lang))
+  }
+}
+ORDER BY (UCASE(STR(?label)))
+LIMIT 15
+  """;
+.
+
 this:tree_root_frenchPainters a datasources:SparqlTreeRootDatasource;
   datasources:queryString """PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
-SELECT ?uri ?label ?hasChildren
+SELECT ?uri ?label ?hasChildren ?description
 WHERE {
- VALUES ?uri {<http://fr.dbpedia.org/resource/Catégorie:Peintre_français>}
+ VALUES ?uri {
+   <http://fr.dbpedia.org/resource/Catégorie:Peintre_français>
+   <http://dbpedia.org/resource/Category:French_painters>
+ }
  ?uri skos:prefLabel ?label .
- FILTER(lang(?label) = '' || lang(?label) = $lang)
+ FILTER(lang(?label) = '' || lang(?label) = $lang || lang(?label) = 'en')
  BIND(true AS ?hasChildren)
+ OPTIONAL { ?uri (<http://www.w3.org/2000/01/rdf-schema#comment>|<http://dbpedia.org/ontology/description>) ?description . FILTER(lang(?description) = $lang) }
 }""" .
+
+# children of a DBpedia category : inverse skos:broader, and labels are en only
+this:tree_children_categories a datasources:SparqlDatasource;
+  datasources:queryString """PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+SELECT DISTINCT ?uri ?label ?hasChildren ?description
+WHERE {
+  ?uri skos:broader $node .
+  ?uri skos:prefLabel ?label .
+  FILTER(isIRI(?uri))
+  FILTER(lang(?label) = '' || lang(?label) = $lang || lang(?label) = 'en')
+  OPTIONAL { ?child skos:broader ?uri . }
+  BIND(IF(bound(?child),true,false) AS ?hasChildren)
+  OPTIONAL { ?uri (<http://www.w3.org/2000/01/rdf-schema#comment>|<http://dbpedia.org/ontology/description>) ?description . FILTER(lang(?description) = $lang) }
+}
+ORDER BY UCASE(STR(?label))""" .
 
 <https://www.wikidata.org> a sparql:Service;
   sparql:endpoint <https://query.wikidata.org/> .
@@ -524,3 +600,29 @@ WHERE {
 ORDER BY UCASE(?label)
 LIMIT 50""";
   rdfs:comment "A query that will search in labels using contains function, first in the user language but will default to French."@en .
+
+
+this:list_rdfslabel_count_thumbnail a datasources:SparqlDatasource;
+  datasources:queryString """SELECT ?uri ?count (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label) (STR(?theLabel) AS ?itemLabel) ?thumbnail 
+  WHERE { 
+    { 
+      SELECT ?uri ?count ?theLabel ?thumbnail
+      WHERE {
+       { 
+        SELECT DISTINCT ?uri (COUNT(?domain) AS ?count) 
+        WHERE { 
+          ?domain $type $domain .
+          ?domain $property ?uri .
+          FILTER(isIRI(?uri)) 
+        }
+        GROUP BY ?uri
+       } 
+       ?uri $labelPath ?theLabel .
+       OPTIONAL { ?uri <http://dbpedia.org/ontology/thumbnail> ?thumbnail }
+       FILTER(lang(?theLabel) = "" || lang(?theLabel) = $lang) 
+      } 
+      ORDER BY DESC(?count) ?theLabel
+      LIMIT 500 
+    } 
+} 
+ORDER BY DESC(?count) ?label""" .

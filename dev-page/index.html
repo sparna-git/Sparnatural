@@ -125,15 +125,171 @@
               prefixes="rdfs:http://www.w3.org/2000/01/rdf-schema#"
             />-->
 
+            <!-- <spar-natural
+              src="configs/dbpediafr-config.ttl"
+              endpoint="https://fr.dbpedia.org/sparql"
+              prefixes="skos:http://www.w3.org/2004/02/skos/core# dct:http://purl.org/dc/terms/"
+              lang="fr"
+              defaultLang="fr"
+              distinct="true"
+              debug="true"
+              limit="1000"
+            >-->
             <spar-natural
-                    src="configs/nakala/nakala-shacl-filtered.ttl configs/nakala/nakala-statistics.ttl configs/nakala/edm.owl.rdf configs/nakala/ore-terms.rdf configs/nakala/dcterms_2012-06-14.n3 configs/nakala/nakala-labels.ttl""
-                    endpoint="https://nakala.fr/sparql"
-                    prefixes="skos:http://www.w3.org/2004/02/skos/core# dct:http://purl.org/dc/terms/"
-                    lang="fr"
-                    defaultLang="fr"
-                    distinct="true"
-                    debug="true"
-            ></spar-natural>-->
+              src="configs/sparnatural-config-garance.ttl"
+              endpoint="https://sparql.archives-nationales.culture.gouv.fr/garance/sparql"
+              prefixes="skos:http://www.w3.org/2004/02/skos/core# dct:http://purl.org/dc/terms/"
+              lang="fr"
+              defaultLang="fr"
+              distinct="true"
+              debug="true"
+              limit="1000"
+            >
+              <!-- templates poses sur les PropertyShape : la liste et l'autocomplete
+                   affichent la definition, l'arbre garde son rendu d'origine -->
+              <script
+                id="https://data.mydomain.com/ontologies/sparnatural-config/Place_type_list"
+                type="text/x-handlebars-template"
+              >
+                <div class="item-template">
+                  <b>{{#if
+                      itemLabel
+                    }}{{itemLabel}}{{else}}{{label}}{{/if}}</b>{{#if
+                    bindings.count
+                  }}
+                    <span
+                      class="item-count"
+                    >({{bindings.count.value}})</span>{{/if}}
+                  <a
+                    class="item-link"
+                    href="{{term.value}}"
+                    target="_blank"
+                    rel="noopener"
+                    title="{{term.value}}"
+                  ></a>
+                  {{#if bindings.description}}<br /><small
+                    >{{bindings.description.value}}</small>{{/if}}
+                </div>
+              </script>
+
+              <script
+                id="https://data.mydomain.com/ontologies/sparnatural-config/Place_type_tree"
+                type="text/x-handlebars-template"
+              >
+                <div class="item-template">
+                  <b>{{label}}</b>
+                  <span
+                    class="item-link"
+                    data-href="{{term.value}}"
+                    title="{{term.value}}"
+                  ></span>
+                  {{#if bindings.description}}<br /><small
+                    >{{bindings.description.value}}</small>{{/if}}
+                </div>
+              </script>
+
+              <script
+                id="https://data.mydomain.com/ontologies/sparnatural-config/Place_type_autocomplete"
+                type="text/x-handlebars-template"
+              >
+                <div class="item-template">
+                  <b>{{label}}</b>
+                  <a
+                    class="item-link"
+                    href="{{term.value}}"
+                    target="_blank"
+                    rel="noopener"
+                    title="{{term.value}}"
+                  ></a>
+                  {{#if bindings.description}}<br /><small
+                    >{{bindings.description.value}}</small>{{/if}}
+                </div>
+              </script>
+
+              <!-- template of the Museum_country PropertyShape, rendered in a list widget -->
+              <script
+                id="https://data.mydomain.com/ontologies/sparnatural-config/Museum_country"
+                type="text/x-handlebars-template"
+              >
+                <div class="item-template">
+                  <b>{{bindings.itemLabel.value}}</b>
+                  (<u>{{bindings.count.value}}</u>)
+                  <a
+                    class="item-link"
+                    href="{{term.value}}"
+                    target="_blank"
+                    rel="noopener"
+                    title="{{term.value}}"
+                  ></a>
+                  {{#if bindings.description}}<br /><small
+                    >{{bindings.description.value}}</small>{{/if}}
+                </div>
+              </script>
+
+              <!-- same mechanism in an autocomplete widget : Oeuvre > auteur > Personne -->
+              <script
+                id="https://data.mydomain.com/ontologies/sparnatural-config/Artwork_author"
+                type="text/x-handlebars-template"
+              >
+                <div class="item-template">
+                  <b>{{label}}</b>
+                  <a
+                    class="item-link"
+                    href="{{term.value}}"
+                    target="_blank"
+                    rel="noopener"
+                    title="{{term.value}}"
+                  ></a>
+                  {{#if bindings.description}}<br /><small
+                    >{{bindings.description.value}}</small>{{/if}}
+                </div>
+              </script>
+
+              <!-- same mechanism in a tree widget : Personne > categorie > Categorie -->
+              <script
+                id="https://data.mydomain.com/ontologies/sparnatural-config/Category"
+                type="text/x-handlebars-template"
+              >
+                <div class="item-template">
+                  <b>{{label}}</b>
+                  <span
+                    class="item-link"
+                    data-href="{{term.value}}"
+                    title="{{term.value}}"
+                  ></span>
+                  {{#if bindings.description}}<br /><small
+                    >{{bindings.description.value}}</small>
+                  {{else}}<br /><small>{{term.value}}</small>{{/if}}
+                </div>
+              </script>
+            </spar-natural>
+
+            <style>
+              /* La description doit revenir a la ligne dans la largeur disponible,
+                 et non etendre la liste ou deborder du panneau. */
+              .item-template {
+                max-width: 100%;
+                white-space: normal;
+                overflow-wrap: anywhere;
+              }
+              .item-template small {
+                display: -webkit-box;
+                -webkit-line-clamp: 4;
+                line-clamp: 4;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                color: #666;
+                line-height: 1.3;
+              }
+
+              /* Awesomplete s'elargit au contenu et refuse le retour a la ligne */
+              .awesomplete > ul {
+                max-width: 34em;
+              }
+              .awesomplete > ul > li {
+                white-space: normal;
+              }
+            </style>
 
             <!--       
         <spar-natural
@@ -163,8 +319,10 @@
             <div class="col-md-12">
               <span style="font-size: 90%">
                 Les requêtes sont envoyées à
-                <a id="endpoint" href="https://smt.esante.gouv.fr/api/sparql"
-                  >https://smt.esante.gouv.fr/api/sparql</a
+                <a
+                  id="endpoint"
+                  href="https://sparql.archives-nationales.culture.gouv.fr/garance/sparql"
+                  >https://sparql.archives-nationales.culture.gouv.fr/garance/sparql</a
                 >
               </span>
             </div>

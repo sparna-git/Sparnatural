@@ -13,6 +13,9 @@ export interface RdfTermDatasourceItem {
     group?:string;
     // pure label of the value, e.g. "France" for "France (38)" 
     itemLabel?:string;
+    // raw from the SPARQL result set, keyed by variable name
+    bindings?:{[key:string]:RDFTerm};
+    
 }
 
 /**

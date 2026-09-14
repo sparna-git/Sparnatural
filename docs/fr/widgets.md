@@ -78,6 +78,64 @@ SELECT DISTINCT ?Museum_1 ?Country_2 WHERE {
 -----
 
 
+
+
+-----
+
+
+## Widget de liste avec template
+
+### Apparence
+
+|  Exemple  | Description |
+| -------- | ----------- |
+| ![Capture d ecran](https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/widgets/template-list-widget.png) | Widget de liste avec template |
+
+
+### Description
+
+Le widget de liste avec template etend le widget de liste en permettant de personnaliser l affichage.
+
+### Configuration
+
+Dans votre configuration SHACL, ajoutez une annotation dash:searchWidget avec la valeur [config-core:TemplateListProperty](http://data.sparna.fr/ontologies/sparnatural-config-core#TemplateListProperty).
+
+### Definition du Template
+
+Le template est defini dans un element HTML avec ID = URI de la propriete + "-template".
+
+Exemple:
+
+```html
+<div style="display:none;" id="https://data.example.fr/def/myModel#P123-template">
+   <b>${data.firstName}</b> <u>${data.lastName}</u> (${data.count})
+</div>
+```
+
+### Variables du Template
+
+- data.term - Le terme RDF
+- data.label - Le libelle
+- data.group - Le groupe
+- data.itemLabel - Le libelle pur
+- data.<variable> - Autres bindings SPARQL
+
+### Exemple de Requete SPARQL
+
+```sparql
+SELECT ?uri ?label ?firstName ?lastName ?count WHERE {
+  ?uri a ex:Person .
+  ?uri rdfs:label ?label .
+  ?uri ex:firstName ?firstName .
+  ?uri ex:lastName ?lastName .
+  ?uri ex:publicationCount ?count .
+}
+```
+
+### Comportement de Secours
+
+Si le template n est pas trouve, le widget utilise le comportement standard de ListWidget.
+
 ## Widget d'autocomplétion
 
 ### Apparence

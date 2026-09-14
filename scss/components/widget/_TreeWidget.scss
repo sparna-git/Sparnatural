@@ -66,6 +66,54 @@
             &.jstree-default .jstree-checkbox-disabled {
                 opacity: 0.5;
             }
+
+            // Un template occupe plusieurs lignes, alors que jstree impose 24px de
+            // hauteur et interdit le retour a la ligne.
+            &:has(.item-template) {
+                // 275px par defaut, trop etroit des qu'il y a une description
+                min-width: 560px;
+            }
+            .jstree-anchor:has(.item-template) {
+                display: inline-flex;
+                align-items: flex-start;
+                white-space: normal;
+                height: auto;
+                line-height: 1.3;
+                padding-block: 2px;
+                // 24px = la fleche de depliage, qui partage la ligne avec l'ancre
+                max-width: calc(100% - 24px);
+
+                > .jstree-icon {
+                    flex: none;
+                }
+                .item-template {
+                    flex: 1;
+                    min-width: 0;
+                }
+            }
+
+            &.jstree-default {
+                // jstree met son ul racine en inline-block pour que les bandes
+                // wholerow couvrent toute la largeur scrollable. En shrink-to-fit
+                // une definition longue fait exploser sa largeur intrinseque et le
+                // texte deborde a droite. Le highlight etant repasse sur l'ancre
+                // juste en dessous, l'inline-block n'a plus de raison d'etre.
+                > .jstree-wholerow-ul {
+                    display: block;
+                }
+
+                // Le plugin wholerow peint le highlight dans un bloc absolu de 24px
+                // de haut et neutralise celui de l'ancre : sur un noeud multiligne
+                // seule la premiere ligne serait surlignee. On le rend a l'ancre.
+                .jstree-wholerow-hovered {
+                    background: transparent;
+                }
+                > .jstree-wholerow-ul .jstree-hovered {
+                    background: #e7f4f9;
+                    border-radius: 2px;
+                    box-shadow: inset 0 0 1px #ccc;
+                }
+            }
         }
         .treeActions {
             border-top: 2px solid #ddd;

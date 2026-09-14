@@ -136,6 +136,7 @@
     "sortablejs": "^1.14.0",
     "sparqljs": "^3.7.1",
     "streamify-string": "^1.0.1",
-    "tippy.js": "^6.3.5"
+    "tippy.js": "^6.3.5",
+    "handlebars": "^4.7.9"
   }
 }

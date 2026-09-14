@@ -38,7 +38,7 @@ export class WidgetFactorySettings {
     
     customization? : {
       autocomplete?: Partial<AutocompleteConfiguration>,
-      list?: Partial<ListConfiguration>,   
+      list?: Partial<ListConfiguration>,
       tree?: Partial<TreeConfiguration>,
       number?: Partial<NumberConfiguration>,
       map?: Partial<MapConfiguration>,
@@ -244,19 +244,21 @@ export class WidgetFactory {
               this.settings.typePredicate
             );
     
-            let listWidget = new ListWidget(
-              this.parentComponent,
-              listConfig,
-              startClassVal,
-              objectPropVal,
-              endClassVal
-            );
+            // Determine which widget to create based on widgetType
+            let finalWidget = new ListWidget(
+                this.parentComponent,
+                listConfig,
+                startClassVal,
+                objectPropVal,
+                endClassVal
+              );
+            
             let listResolver = this.#buildLabelResolver(endClassVal.type);
-            listWidget.setLabelResolver(
+            finalWidget.setLabelResolver(
               listResolver.dataProvider,
               listResolver.predicate
             );
-            return listWidget;
+            return finalWidget;
     
           case Config.AUTOCOMPLETE_PROPERTY:
     
