@@ -1,4 +1,3 @@
-
 # Sparnatural documentation portal
 
 _This documentation page provides a single entry point for the documentation of Sparnatural as well as all related components, such as the query results display plugins, the query history component, and sparnatural-form._
@@ -10,11 +9,9 @@ _This documentation page provides a single entry point for the documentation of 
 - [Sparnatural history](#sparnatural-history)
 - [Sparnatural form](#sparnatural-form)
 
-
 ## Sparnatural
 
 _For examples of how Sparnatural works and can be configured, have a look at the [**demos folder**](https://github.com/sparna-git/sparnatural.eu/tree/main/demos) of [sparnatural.eu](http://sparnatural.eu) website._
-
 
 ### 1. Features
 
@@ -37,12 +34,18 @@ Sparnatural is configured by a configuration file expressed in SHACL. The config
 
 #### 3.1 Advanced configuration
 
-- [Querying date ranges](Querying-date-ranges.md) - How to generate SPARQL queries that can match on resources with a begin date and a end date 
+Historically, Sparnatural also supported configuration specified in OWL :
+
+- [How-to configure in OWL](how-to-configure-owl/How-to-configure-Sparnatural.md) : a detailled documentation for configuring Sparnatural in an OWL spreadsheet (that is converted into a OWL configuration file). This is deprecated and now replaced by the SHACL configuration guide.
+- [Configure in OWL using Protégé](OWL-based-configuration.md) : a reference page of all useful OWL axioms and annotations to configure Sparnatural with OWL
+
+#### 3.3 Advanced configuration
+
+- [Querying date ranges](Querying-date-ranges.md) - How to generate SPARQL queries that can match on resources with a begin date and a end date
 - [Federated query support](Federated-querying.md) - How to enable federated querying using SERVICE keyword in your configuration
 - [Query specific named graphs](Querying-named-graphs.md) - How to build an endpoint URL to be restricted to one or more named graphs
 - [Querying multiple endpoints](Querying-multiple-endpoints.md) - How to configure Sparnatural so that it can query multiple endpoints at the same time in a transparent way
-- [Integration with GraphDB Lucene Connector](Integration-with-GraphDB-Lucene-Connector.md) - Special configuration to interact with a GraphDB Lucene index 
-
+- [Integration with GraphDB Lucene Connector](Integration-with-GraphDB-Lucene-Connector.md) - Special configuration to interact with a GraphDB Lucene index
 
 ### 4. Integrating Sparnatural in HTML / React
 
@@ -69,7 +72,7 @@ Sparnatural is configured by a configuration file expressed in SHACL. The config
 - Check out [the bibliography section of the website](https://sparnatural.eu#bibliography) where you can find presentation material on Sparnatural
 - Check out [the YouTube channel](https://www.youtube.com/playlist?list=PL3kB_eBB1Pc3FBOtevNtRkSw4YmWar4q5) for videos of Sparnatural
 - Don't hesitate to [ask questions on the Github issue tracker](https://github.com/sparna-git/Sparnatural/issues)
-- [Sparna](http://sparna.fr) can provide some support on setting up Sparnatural, so get in touch at thomas /dot/ francart /at/ sparna /dot/ fr 
+- [Sparna](http://sparna.fr) can provide some support on setting up Sparnatural, so get in touch at thomas /dot/ francart /at/ sparna /dot/ fr
 
 ### 8. Archives
 
@@ -85,10 +88,13 @@ Historically, Sparnatural also supported configuration specified in OWL :
 - [How-to configure in OWL](how-to-configure-owl/How-to-configure-Sparnatural.md) : a detailled documentation for configuring Sparnatural in an OWL spreadsheet (that is converted into a OWL configuration file). This is deprecated and now replaced by the SHACL configuration guide.
 - [Configure in OWL using Protégé](OWL-based-configuration.md) : a reference page of all useful OWL axioms and annotations to configure Sparnatural with OWL
 
+**query JSON format up to v12**
+
+- [Query JSON format v12](archives/Query-JSON-format-v12.md)
+
 **deprecated v7 Javascript integration page**
 
-- [Javascript integration v7 (old)](Javascript-integration-v7.md) - Reference page for Javascript integration and parameters for the old version 7
-
+- [Javascript integration v7 (old)](archives/Javascript-integration-v7.md) - Reference page for Javascript integration and parameters for the old version 7
 
 ## Sparnatural results display plugins
 
@@ -103,4 +109,6 @@ Historically, Sparnatural also supported configuration specified in OWL :
 
 - [HTML page and Javascript integration](sparnatural-form/form-integration.md) - The reference page to understand how the `<sparnatural-form` web component can be integrated in your webpage
 - [Form configuration JSON reference page](sparnatural-form/form-configuration.md) - The documentation of the JSON form configuration data
-
+- [Sparnatural-form JSON query reference page](sparnatural-form/form-query.md) - The small JSON structure used to pre-fill the form fields, shared by the predefined queries file, the `query` URL parameter and `loadQuery()`
+- [Predefined queries dropdown](sparnatural-form/form-predefined-queries.md) - The `<sparnatural-form-queries>` web component and its parameters, to offer the user a dropdown of ready-made example queries
+- [Prefilling with URL parameters or a JSON query](sparnatural-form/form-prefill.md) - How to pre-fill the form from the page URL, with the syntax of every parameter, and how to auto-submit the search

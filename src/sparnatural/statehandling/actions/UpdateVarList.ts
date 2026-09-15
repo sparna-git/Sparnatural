@@ -14,8 +14,10 @@ export function updateVarList(actionStore: ActionStore) {
     (grpWrapper: GroupWrapper) => {
       let startGrp = grpWrapper.criteriaGroup.startClassGroup;
       let endGrp = grpWrapper.criteriaGroup.endClassGroup;
-      if(startGrp.inputSelector.getSelectViewVariableBtn().selected && startGrp.getVarName()) varNames.add(startGrp.getVarName());
-      if(endGrp.inputSelector.getSelectViewVariableBtn().selected && endGrp.getVarName()) varNames.add(endGrp.getVarName());      
+      // inputSelector of the endClassGroup exists only once the start class is selected,
+      // so a criteria still being edited (or the empty line recreated after a reset) has none
+      if(startGrp.inputSelector?.getSelectViewVariableBtn()?.selected && startGrp.getVarName()) varNames.add(startGrp.getVarName());
+      if(endGrp.inputSelector?.getSelectViewVariableBtn()?.selected && endGrp.getVarName()) varNames.add(endGrp.getVarName());
     }
   );
   updateDraggables(actionStore, varNames);

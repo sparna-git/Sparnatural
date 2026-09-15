@@ -1,4 +1,4 @@
-_[Home](index.html) > Sparnatural form > form configuration_
+_[Home](../index.html) > Sparnatural form > form configuration_
 
 # Sparnatural form configuration structure
 
@@ -149,7 +149,7 @@ Inside `bindings`, a single binding is an association between an underlying vari
 }
 ```
 
-- `variable` : the name of the variable in the underlying Sparnatural query in which the selected value will be injected. See the [Sparnatural query structure documentation](https://docs.sparnatural.eu/Query-JSON-format.html). This is typically the name of a variable in the `o` position of the query, at any level in the query structure.
+- `variable` : the name of the variable in the underlying Sparnatural query in which the selected value will be injected. This is typically the name of a variable in the `o` position of the query, at any level in the query structure. See the [v12 Sparnatural query structure](../archives/Query-JSON-format-v12.md), which is the format of the file passed in the `query` attribute of the form.
 - `name` : a map of language codes to labels. This is the title that will be used for this field
 - `help` (optional) : a map of language codes to tooltips. If provided, an "i" icon will be displayed with this tooltip, next to the field title.
 
