@@ -150,6 +150,12 @@ class CriteriaGroup extends HTMLComponent {
       }
     });
 
+    // gets called by the widget when its datasource comes back empty or not
+    this.html[0].addEventListener("datasourceHasValues", (e: CustomEvent) => {
+      e.stopImmediatePropagation();
+      this.#setDeadEnd(!e.detail?.hasValues);
+    });
+
     // gets called by the widget.
     this.html[0].addEventListener("selectAll", (e: CustomEvent) => {
       e.stopImmediatePropagation();
@@ -200,6 +206,15 @@ class CriteriaGroup extends HTMLComponent {
       }
     });
   };
+
+  /**
+   * A dead end is a line whose datasource returned no value at all : whatever the user
+   * picks, the query will have no result. The "Any" option and the AND / WHERE controls
+   * are disabled, since they would only lead further into an empty branch.
+   */
+  #setDeadEnd(isDeadEnd: boolean) {
+    this.html[0].classList.toggle("dead-end", isDeadEnd);
+  }
 
   #isSelectedVal(payload: any): payload is SelectedVal {
     return "type" in payload && "variable" in payload;

@@ -70,7 +70,9 @@ export interface ListSparqlQueryBuilderIfc  {
         range:string,
         language: any,
         defaultLanguage: any,
-        typePath: string
+        typePath: string,
+        // graph pattern of the query being edited, injected in the $query placeholder
+        queryPattern?: string
     ):string;
 
 }
@@ -106,26 +108,30 @@ export class ListSparqlTemplateQueryBuilder implements ListSparqlQueryBuilderIfc
     buildSparqlQuery(
         domain: string,
         property: string,
-        range: string,        
+        range: string,
         language: any,
         defaultLanguage: any,
-        typePath: string
-    ): string {
-        var reDomain = new RegExp("\\$domain", "g");
+        typePath: string,
+        // graph pattern of the query being edited, injected in the $query placeholder
+        queryPattern?: string
+    ): string {        var reDomain = new RegExp("\\$domain", "g");
         var reProperty = new RegExp("\\$property", "g");
         var reRange = new RegExp("\\$range", "g");
         var reLang = new RegExp("\\$lang", "g");
         var reDefaultLang = new RegExp("\\$defaultLang", "g");
         var reType = new RegExp("\\$type", "g");
-    
+
         var sparql = this.queryString
           .replace(reDomain, "<" + domain + ">")
           .replace(reProperty, "<" + property + ">")
           .replace(reRange, "<" + range + ">")
-          .replace(reLang, "'" + language + "'")
-          .replace(reDefaultLang, "'" + defaultLanguage + "'")
+          .replace(reLang, "'" + language + "'")          .replace(reDefaultLang, "'" + defaultLanguage + "'")
           .replace(reType, typePath);
-          
+
+        // replace through a function so that a $ inside the pattern is not reinterpreted ;
+        // an absent pattern simply empties the placeholder
+        sparql = sparql.replace(/\$query/g, () => queryPattern ? queryPattern : "");
+
         sparql = this.sparqlPostProcessor.semanticPostProcess(sparql);
 
         return sparql;
@@ -202,7 +208,9 @@ export interface AutocompleteSparqlQueryBuilderIfc  {
         key:string,
         language: any,
         defaultLang : any,
-        typePath: string
+        typePath: string,
+        // graph pattern of the query being edited, injected in the $query placeholder
+        queryPattern?: string
     ):string;
 
 }
@@ -225,12 +233,13 @@ export class AutocompleteSparqlTemplateQueryBuilder implements AutocompleteSparq
         domain: string,
         property: string,
         range: string,
-        key:string,        
+        key:string,
         language: any,
         defaultLanguage : any,
-        typePath: string
-    ): string {
-        var reDomain = new RegExp("\\$domain", "g");
+        typePath: string,
+        // graph pattern of the query being edited, injected in the $query placeholder
+        queryPattern?: string
+    ): string {        var reDomain = new RegExp("\\$domain", "g");
         var reProperty = new RegExp("\\$property", "g");
         var reRange = new RegExp("\\$range", "g");
         var reKey = new RegExp("\\$key", "g");
@@ -241,12 +250,14 @@ export class AutocompleteSparqlTemplateQueryBuilder implements AutocompleteSparq
         var sparql = this.queryString
           .replace(reDomain, "<" + domain + ">")
           .replace(reProperty, "<" + property + ">")
-          .replace(reRange, "<" + range + ">")
-          .replace(reKey, "" + key + "")
+          .replace(reRange, "<" + range + ">")          .replace(reKey, "" + key + "")
           .replace(reLang, "'" + language + "'")
           .replace(reDefaultLang, "'" + defaultLanguage + "'")
           .replace(reType, typePath);
-          
+
+        // replace through a function so that a $ inside the pattern is not reinterpreted
+        sparql = sparql.replace(/\$query/g, () => queryPattern ? queryPattern : "");
+
         sparql = this.sparqlPostProcessor.semanticPostProcess(sparql);
 
         return sparql;

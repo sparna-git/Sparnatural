@@ -25,6 +25,7 @@
   "ButtonAdd": "Add",
   "ListWidgetSelectValue": "Select a value...",
   "ListWidgetNoItem": "... Oups, no value found !",
+  "ListWidgetDeadEnd": "No value here leads to a result with your other criteria.",
   "StartClassTemporaryLabel": "Search for resources",
   "ObjectPropertyTemporaryLabel": "related to",
   "labelOptionOptional": "Optional",

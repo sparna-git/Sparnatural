@@ -30,6 +30,15 @@ export class ListWidget extends AbstractWidget {
 
   selectHtml: JQuery<HTMLElement>;
 
+  // registered once on the root component, see #listenToQueryChanges
+  private queryChangeListener: () => void;
+
+  // incremented on every load, so that a late answer from a previous one is dropped
+  private loadCounter = 0;
+
+  // pending reload, so that several queryUpdated in a row trigger a single query
+  private reloadTimer: ReturnType<typeof setTimeout>;
+
   constructor(
     parentComponent: HTMLComponent,
     config: ListConfiguration,
@@ -55,20 +64,90 @@ export class ListWidget extends AbstractWidget {
 
   render() {
     super.render();
-    this.selectHtml = $(`<select style="width:100%; min-width:200px;"></select>`);    
+    this.#listenToQueryChanges();
+    this.#loadValues();
+    return this;
+  }
+
+  /**
+   * Reloads the list whenever the query changes, so that it keeps proposing only values
+   * consistent with the filters set on the other lines.
+   *
+   * A widget is only displayed while its line has no value yet, so a reload never
+   * discards a choice already made by the user.
+   */
+  #listenToQueryChanges() {
+    // render() may be called several times on the same widget, register only once
+    if (this.queryChangeListener) return;
+
+    // kept so that the listener can remove itself from the very same element
+    const root = this.getRootComponent().html[0];
+
+    this.queryChangeListener = () => {
+      // the widget is taken off the page as soon as its line gets a value : there is
+      // nothing left to reload, and nothing left to listen for
+      if (!this.html[0]?.isConnected) {
+        clearTimeout(this.reloadTimer);
+        root.removeEventListener("queryUpdated", this.queryChangeListener);
+        this.queryChangeListener = null;
+        return;
+      }
+
+      // queryUpdated fires several times for a single user action, only keep the last
+      clearTimeout(this.reloadTimer);
+      this.reloadTimer = setTimeout(() => this.#loadValues(), 150);
+    };
+
+    root.addEventListener("queryUpdated", this.queryChangeListener);
+  }
+
+  /**
+   * Asks the datasource for the values, and fills the list with what comes back.
+   */
+  #loadValues() {
+    // clear what a previous load left behind, keeping the spinner in place
+    if (this.selectHtml) {
+      try {
+        (this.selectHtml as any).select2("destroy");
+      } catch (e) {
+        // select2 was never initialised on it, nothing to undo
+      }
+      this.selectHtml.remove();
+    }
+    this.html.find(".no-items").remove();
+
+    // identifies this load, see the guard at the top of the callbacks below
+    const loadId = ++this.loadCounter;
+
+    this.selectHtml = $(`<select style="width:100%; min-width:200px;"></select>`);
     this.html.append(this.selectHtml);
 
+    // an empty list is not a mishap here : it means the criteria set on the other lines
+    // leave no possible value, which is worth telling the user
     let noItemsHtml =
-      $(`<div class="no-items" style="display: none; font-style:italic;">
-      ${I18n.labels.ListWidgetNoItem}
+      $(`<div class="no-items" style="font-style:italic;">
+      ${I18n.labels.ListWidgetDeadEnd}
     </div>`);
 
     let errorHtml =
-      $(`<div class="no-items" style="display: none; font-style:italic;">
+      $(`<div class="no-items" style="font-style:italic;">
       ${I18n.labels.ListWidgetNoItem}
     </div>`);
 
     let callback = (items:RdfTermDatasourceItem[]) => {
+
+      // a newer load was started in the meantime, this answer is obsolete : appending it
+      // would duplicate the entries of the list
+      if (loadId !== this.loadCounter) return;
+
+      // tell the line whether this datasource returned anything : an empty list means
+      // no value can lead to a result, so the line is a dead end
+      this.html[0].dispatchEvent(
+        new CustomEvent("datasourceHasValues", {
+          bubbles: true,
+          detail: { hasValues: items.length > 0 },
+        })
+      );
 
       if (items.length > 0) {
 
@@ -133,6 +212,8 @@ export class ListWidget extends AbstractWidget {
         });
 
       } else {
+        // there is nothing to choose from, an empty dropdown would only be misleading
+        this.selectHtml.remove();
         this.html.append(noItemsHtml);
       }  
 
@@ -142,6 +223,7 @@ export class ListWidget extends AbstractWidget {
 
     // TODO : this is not working for now
     let errorCallback = (payload:any) => {
+      if (loadId !== this.loadCounter) return;
       this.html.append(errorHtml);
     }
 
@@ -164,9 +246,6 @@ export class ListWidget extends AbstractWidget {
         errorCallback
       );
     }
-
-
-    return this;
   }
 
   // separate the creation of the value from the widget code itself

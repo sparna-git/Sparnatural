@@ -9,6 +9,7 @@ import { updateVarList } from "./actions/UpdateVarList";
 import { selectViewVar } from "./actions/SelectViewVar";
 import GroupWrapper from "../components/builder-section/groupwrapper/GroupWrapper";
 import { QueryGenerator } from "./actions/GenerateQuery";
+import { SparnaturalQuery } from "../SparnaturalQueryIfc-v13";
 import { Model } from "rdf-shacl-commons";
 import { DraggableComponent } from "../components/variables-section/variableorder/DraggableComponent";
 
@@ -33,6 +34,10 @@ class ActionStore {
   // this is set when a query is loaded
   quiet = false;
 
+  // The query as it currently stands on screen, kept up to date by the "queryUpdated"
+  // listener below. Null until a query has been generated.
+  currentQuery: SparnaturalQuery = null;
+
   constructor(
     sparnatural: SparnaturalComponent,
     specProvider: ISparnaturalSpecification
@@ -44,6 +49,15 @@ class ActionStore {
 
   // register the event listeners to listen for event from the components
   #addCustomEventListners() {
+
+    // keep the generated query at hand, for components that need to read it
+    this.sparnatural.html[0].addEventListener(
+      "queryUpdated",
+      (event: CustomEvent) => {
+        this.currentQuery = event.detail.queryJson;
+      }
+    );
+
     this.sparnatural.html[0].addEventListener(
       "generateQuery",
       (event: CustomEvent) => {

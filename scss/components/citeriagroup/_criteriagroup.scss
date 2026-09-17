@@ -240,3 +240,31 @@ li.groupe.completed {
 		margin-bottom: base.$margin-component;
 	}
 }
+
+/* Dead end : the datasource of this line returned no value at all, so no choice made
+   here can lead to a result. The "Any" option and the AND control are disabled, they
+   would only lead further into an empty branch. */
+.CriteriaGroup.dead-end {
+
+	.selectAll,
+	.ActionAnd > a {
+		color: #b5b5b5;
+		cursor: not-allowed;
+		pointer-events: none;
+	}
+
+	.selectAll .underline {
+		text-decoration: none;
+		cursor: not-allowed;
+	}
+
+	.or {
+		color: #b5b5b5;
+	}
+
+	/* searching a sub criteria would only dig deeper into the empty branch, so the
+	   whole proposal is hidden rather than shown as an unusable button */
+	.ActionWhere {
+		display: none;
+	}
+}
