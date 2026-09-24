@@ -1,33 +1,38 @@
-import { DataFactory } from 'rdf-data-factory';
+import { DataFactory } from "rdf-data-factory";
 import { SelectedVal } from "../SelectedVal";
 import { AbstractWidget, ValueRepetition } from "./AbstractWidget";
 
-import Awesomplete from 'awesomplete';
-import { I18n } from '../../settings/I18n';
-import { HTMLComponent } from '../HtmlComponent';
-import { AutocompleteDataProviderIfc, RdfTermDatasourceItem } from '../datasources/DataProviders';
-import { NoOpAutocompleteProvider } from '../datasources/NoOpDataProviders';
-import { mergeDatasourceResults } from '../datasources/SparqlDataProviders';
-import { LabelledCriteria, RDFTerm, RdfTermCriteria } from '../../SparnaturalQueryIfc';
-import { ItemTemplate } from './ItemTemplate';
-import { keepLinksClickable, uriLinkHtml } from './ItemLink';
+import Awesomplete from "awesomplete";
+import { I18n } from "../../settings/I18n";
+import { HTMLComponent } from "../HtmlComponent";
+import {
+  AutocompleteDataProviderIfc,
+  RdfTermDatasourceItem,
+} from "../datasources/DataProviders";
+import { NoOpAutocompleteProvider } from "../datasources/NoOpDataProviders";
+import { mergeDatasourceResults } from "../datasources/SparqlDataProviders";
+import {
+  LabelledCriteria,
+  RDFTerm,
+  RdfTermCriteria,
+} from "../../SparnaturalQueryIfc";
+import { ItemTemplate } from "./ItemTemplate";
+import { keepLinksClickable, uriLinkHtml } from "./ItemLink";
 
 const factory = new DataFactory();
 
-
 export interface AutocompleteConfiguration {
-  dataProvider: AutocompleteDataProviderIfc,
-  maxItems: number
+  dataProvider: AutocompleteDataProviderIfc;
+  maxItems: number;
 }
 
 export class AutoCompleteWidget extends AbstractWidget {
-  
   // The default implementation of AutocompleteConfiguration
   static defaultConfiguration: AutocompleteConfiguration = {
     dataProvider: new NoOpAutocompleteProvider(),
-    maxItems:15
-  }
-  
+    maxItems: 15,
+  };
+
   protected configuration: AutocompleteConfiguration;
   itemTemplate: ItemTemplate;
 
@@ -36,7 +41,7 @@ export class AutoCompleteWidget extends AbstractWidget {
     configuration: AutocompleteConfiguration,
     startClassValue: SelectedVal,
     objectPropVal: SelectedVal,
-    endClassValue: SelectedVal
+    endClassValue: SelectedVal,
   ) {
     super(
       "autocomplete-widget",
@@ -45,7 +50,7 @@ export class AutoCompleteWidget extends AbstractWidget {
       startClassValue,
       objectPropVal,
       endClassValue,
-      ValueRepetition.MULTIPLE
+      ValueRepetition.MULTIPLE,
     );
     this.configuration = configuration;
     this.itemTemplate = new ItemTemplate(objectPropVal, endClassValue);
@@ -64,23 +69,28 @@ export class AutoCompleteWidget extends AbstractWidget {
 
     // $( "#foo" )[ 0 ] is pulling the DOM element from the JQuery object
     // see https://learn.jquery.com/using-jquery-core/faq/how-do-i-pull-a-native-dom-element-from-a-jquery-object/
-    const queryInput:HTMLElement = inputHtml[0];
+    const queryInput: HTMLElement = inputHtml[0];
 
     // items of the current suggestion list, keyed by their serialized RDF term
     const itemsByValue = new Map<string, RdfTermDatasourceItem>();
 
     let awesompleteOptions: Awesomplete.Options = {
-      filter: () => { // We will provide a list that is already filtered ...
+      filter: () => {
+        // We will provide a list that is already filtered ...
         return true;
       },
-      sort: false,    // ... and sorted.
+      sort: false, // ... and sorted.
       minChars: 3,
       maxItems: this.configuration.maxItems,
-      list: []
+      list: [],
     };
 
     // we always render the proposal ourselves, keeping the markup expected by Awesomplete
-    awesompleteOptions.item = (suggestion: any, input: string, index: number): HTMLElement => {
+    awesompleteOptions.item = (
+      suggestion: any,
+      input: string,
+      index: number,
+    ): HTMLElement => {
       let li = document.createElement("li");
       li.setAttribute("role", "option");
       li.setAttribute("aria-selected", "false");
@@ -91,10 +101,18 @@ export class AutoCompleteWidget extends AbstractWidget {
       if (!item) {
         li.innerHTML = suggestion.label;
       } else if (this.itemTemplate.exists) {
-        li.appendChild(this.itemTemplate.renderElement(item));
+        const highlightedItem = {
+          ...item,
+          label: highlightMatch(item.label, input),
+          itemLabel: item.itemLabel
+            ? highlightMatch(item.itemLabel, input)
+            : item.itemLabel,
+        };
+        li.appendChild(this.itemTemplate.renderElement(highlightedItem));
       } else {
         // awesomplete highlights the typed text in the default rendering we replace
-        li.innerHTML = highlightMatch(suggestion.label, input) + uriLinkHtml(item.term);
+        li.innerHTML =
+          highlightMatch(suggestion.label, input) + uriLinkHtml(item.term);
         keepLinksClickable(li);
       }
       return li;
@@ -102,97 +120,102 @@ export class AutoCompleteWidget extends AbstractWidget {
 
     let awesomplete = new Awesomplete(queryInput, awesompleteOptions);
 
-
     // the callback called when proposals have been fetched, to populate the suggestion list
-    let callback = (items:RdfTermDatasourceItem[]) => {
-
+    let callback = (items: RdfTermDatasourceItem[]) => {
       // find distinct values of the 'group' binding
-      const groups = [...new Set(items.map(item => item.group))];
+      const groups = [...new Set(items.map((item) => item.group))];
       const hasGroups = !(groups.length == 1 && groups[0] == undefined);
 
       // when groups are used the same term can come from several datasets : merge them
-      let displayedItems = hasGroups?mergeDatasourceResults(items):items;
+      let displayedItems = hasGroups ? mergeDatasourceResults(items) : items;
 
       itemsByValue.clear();
-      let list = new Array<{label:String, value:String}>();
-      displayedItems.forEach(item => {
+      let list = new Array<{ label: String; value: String }>();
+      displayedItems.forEach((item) => {
         // Awesomplete list will contain the label as 'label', and the RDFTerm JSON serialization as 'value'
         let value = JSON.stringify(item.term);
         itemsByValue.set(value, item);
         list.push({
-          label: (item.group)?"<span title='"+item.group+"'>"+item.label+"</span>":item.label,
-          value: value
+          label: item.group
+            ? "<span title='" + item.group + "'>" + item.label + "</span>"
+            : item.label,
+          value: value,
         });
       });
 
       // toggle spinner
-      if(list.length == 0) {
+      if (list.length == 0) {
         this.toggleSpinner(I18n.labels.AutocompleteSpinner_NoResults);
       } else {
-        this.toggleSpinner('')
+        this.toggleSpinner("");
       }
 
       // build final list
       awesomplete.list = list;
       awesomplete.evaluate();
-    }
+    };
 
-    let errorCallback = (payload:any) => {
+    let errorCallback = (payload: any) => {
       this.toggleSpinner(I18n.labels.AutocompleteSpinner_NoResults);
-    }
+    };
 
     // when user selects a value from the autocompletion list...
-    queryInput.addEventListener("awesomplete-selectcomplete", (event:Event) => {
-      // fetch the autocomplete event payload, which is the JSON serialization of the RDFTerm
-      let awesompleteEvent:{label:string, value:string} = (event as unknown as {text:{label:string, value:string}}).text;
+    queryInput.addEventListener(
+      "awesomplete-selectcomplete",
+      (event: Event) => {
+        // fetch the autocomplete event payload, which is the JSON serialization of the RDFTerm
+        let awesompleteEvent: { label: string; value: string } = (
+          event as unknown as { text: { label: string; value: string } }
+        ).text;
 
-      let autocompleteValue: LabelledCriteria<RdfTermCriteria> = {
+        let autocompleteValue: LabelledCriteria<RdfTermCriteria> = {
           label: awesompleteEvent.label,
           criteria: {
             // parse back the RDFTerm as an object
-            rdfTerm: (JSON.parse(awesompleteEvent.value) as RDFTerm),
-          }          
-      };
+            rdfTerm: JSON.parse(awesompleteEvent.value) as RDFTerm,
+          },
+        };
 
-      // set the value on the criteria
-      inputHtml.val(autocompleteValue.label);
-      this.triggerRenderWidgetVal(autocompleteValue);
-    });
+        // set the value on the criteria
+        inputHtml.val(autocompleteValue.label);
+        this.triggerRenderWidgetVal(autocompleteValue);
+      },
+    );
 
     // add the behavior on the input HTML element to fetch the autocompletion value
     var autocompleteTimer = 0;
-    queryInput.addEventListener("input", (event:Event) => {
+    queryInput.addEventListener("input", (event: Event) => {
       const phrase = (event.target as HTMLInputElement)?.value;
       // Process inputText as you want, e.g. make an API request.
 
-      if(phrase.length >= 3) {
-
+      if (phrase.length >= 3) {
         // cancel the previously-set timer
         if (autocompleteTimer) {
           window.clearTimeout(autocompleteTimer);
         }
 
         autocompleteTimer = window.setTimeout(() => {
-          this.toggleSpinner(I18n.labels.AutocompleteSpinner_Searching)
+          this.toggleSpinner(I18n.labels.AutocompleteSpinner_Searching);
           this.configuration.dataProvider.getAutocompleteSuggestions(
             this.startClassVal.type,
             this.objectPropVal.type,
             this.endClassVal.type,
             phrase,
             callback,
-            errorCallback
-          );          
-          }, 
-          350
-        );
+            errorCallback,
+          );
+        }, 350);
       }
     });
 
     return this;
   }
 
-  parseInput(input: LabelledCriteria<RdfTermCriteria>): LabelledCriteria<RdfTermCriteria> {return input;}
-
+  parseInput(
+    input: LabelledCriteria<RdfTermCriteria>,
+  ): LabelledCriteria<RdfTermCriteria> {
+    return input;
+  }
 }
 
 // same <mark> wrapping as Awesomplete._ITEM, so replacing its rendering keeps it
@@ -202,4 +225,3 @@ function highlightMatch(label: string, input: string): string {
   let escaped = typed.replace(/[-\\^$*+?.()|[\]{}]/g, "\\$&");
   return label.replace(new RegExp(escaped, "gi"), "<mark>$&</mark>");
 }
-

@@ -147,7 +147,7 @@
             >
               <!-- template par defaut  -->
               <script id="default-template" type="text/x-handlebars-template">
-                <div class="item-template">{{label}}</div>
+                <div class="item-template">{{{label}}}</div>
               </script>
 
               <!-- templates custom  -->
@@ -156,7 +156,9 @@
                 type="text/x-handlebars-template"
               >
                 <div class="item-template">
-                  <b>{{#if itemLabel}}{{itemLabel}}{{else}}{{label}}{{/if}}</b>
+                  <b>{{#if
+                      itemLabel
+                    }}{{{itemLabel}}}{{else}}{{{label}}}{{/if}}</b>
                   {{#if bindings.count}}<span
                       class="item-count"
                     >({{bindings.count.value}})</span>{{/if}}
@@ -196,7 +198,7 @@
                 type="text/x-handlebars-template"
               >
                 <div class="item-template">
-                  <b>{{label}}</b>
+                  <b>{{{label}}}</b>
                   <a
                     class="item-link"
                     href="{{term.value}}"
@@ -215,7 +217,7 @@
                 type="text/x-handlebars-template"
               >
                 <div class="item-template">
-                  <b>{{label}}</b>
+                  <b>{{{label}}}</b>
                   <span
                     class="item-link"
                     data-href="{{term.value}}"
