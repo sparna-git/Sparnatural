@@ -37,7 +37,7 @@ this:Place a sh:NodeShape;
   sh:targetClass rico:Place;
   sh:nodeKind sh:IRI;
   rdfs:label "Place"@en, "Lieu"@fr;
-  sh:property this:Place_type_list, this:Place_type_autocomplete, this:Place_type_tree .
+  sh:property this:Place_type_list, this:Place_type_autocomplete, this:Place_type_tree, this:Place_type_list_default, this:Place_type_autocomplete_default, this:Place_type_tree_default .
 
 this:PlaceType a sh:NodeShape;
   sh:targetClass rico:PlaceType;
@@ -45,11 +45,33 @@ this:PlaceType a sh:NodeShape;
   rdfs:label "Place Type"@en, "Type de Lieu"@fr ;
   sh:property this:PlaceType_prefLabel.
 
+# meme classe cible, mais un shape a part : c'est lui que visent les trois proprietes
+# "par defaut", pour echapper au template pose sur this:PlaceType
+this:PlaceTypeDefault a sh:NodeShape;
+  sh:targetClass rico:PlaceType;
+  sh:nodeKind sh:IRI;
+  rdfs:label "Place Type (default)"@en, "Type de Lieu (par défaut)"@fr ;
+  sh:property this:PlaceType_prefLabel.
+
 this:PlaceType_prefLabel sh:path skos:prefLabel;
   sh:name "pref label"@en, "libellé préférentiel"@fr;
   sh:nodeKind sh:Literal ;
   sh:datatype rdf:langString .
 
+
+this:Place_type_list_default sh:path rico:hasOrHadPlaceType;
+  sh:name "place type (default list)"@en, "type de lieu (liste par défaut)"@fr;
+  sh:nodeKind sh:IRI;
+  sh:node this:PlaceTypeDefault;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource <http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_skospreflabel_alpha> .
+
+this:Place_type_autocomplete_default sh:path rico:hasOrHadPlaceType;
+  sh:name "place type (default autocomplete)"@en, "type de lieu (autocomplete par défaut)"@fr;
+  sh:nodeKind sh:IRI;
+  sh:node this:PlaceTypeDefault;
+  dash:searchWidget core:AutocompleteProperty;
+  datasources:datasource <http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_skospreflabel_contains> .
 
 this:Place_type_list sh:path rico:hasOrHadPlaceType;
   sh:name "place type (list)"@en, "type de lieu (liste)"@fr;
@@ -73,7 +95,13 @@ this:Place_type_tree sh:path rico:hasOrHadPlaceType;
   datasources:treeRootsDatasource this:tree_root_placetype;
   datasources:treeChildrenDatasource this:tree_children_placetype .
 
-
+this:Place_type_tree_default sh:path rico:hasOrHadPlaceType;
+  sh:name "place type (default tree)"@en, "type de lieu (arbre par défaut)"@fr;
+  sh:nodeKind sh:IRI;
+  sh:node this:PlaceTypeDefault;
+  dash:searchWidget core:TreeProperty;
+  datasources:treeRootsDatasource this:tree_root_placetype;
+  datasources:treeChildrenDatasource <http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_children_skosnarrower> .
 
 # Les quatre datasources ci-dessous lisent skos:definition en plus du libelle,
 # pour que la definition s'affiche sous le libelle dans les trois widgets.

@@ -37,7 +37,7 @@ this:Place a sh:NodeShape;
   sh:targetClass rico:Place;
   sh:nodeKind sh:IRI;
   rdfs:label "Place"@en, "Lieu"@fr;
-  sh:property this:Place_type_list, this:Place_type_autocomplete, this:Place_type_tree, this:Place_type_list_default, this:Place_type_autocomplete_default, this:Place_type_tree_default .
+  sh:property this:Place_prefLabel, this:Place_type_list, this:Place_type_autocomplete, this:Place_type_tree, this:Place_type_list_default, this:Place_type_autocomplete_default, this:Place_type_tree_default, this:isOrWasContainedBy_autocomplete_default .
 
 this:PlaceType a sh:NodeShape;
   sh:targetClass rico:PlaceType;
@@ -45,21 +45,35 @@ this:PlaceType a sh:NodeShape;
   rdfs:label "Place Type"@en, "Type de Lieu"@fr ;
   sh:property this:PlaceType_prefLabel.
 
+this:Place_prefLabel sh:path skos:prefLabel;
+  sh:name "pref label"@en, "libellé préférentiel"@fr;
+  sh:nodeKind sh:Literal ;
+  dash:propertyRole dash:LabelRole ;
+  sh:datatype rdf:langString .
+
 this:PlaceType_prefLabel sh:path skos:prefLabel;
   sh:name "pref label"@en, "libellé préférentiel"@fr;
   sh:nodeKind sh:Literal ;
   sh:datatype rdf:langString .
 
 
+this:isOrWasContainedBy_autocomplete_default sh:path rico:isOrWasContainedBy;
+  sh:name "était contenu dans (default autocomplete)"@fr, "is or was contained by (default autocomplete)"@fr;
+  sh:nodeKind sh:IRI;
+  sh:node this:Place;
+  dash:searchWidget core:AutocompleteProperty;
+.
+
+
 this:Place_type_list_default sh:path rico:hasOrHadPlaceType;
-  sh:name "place type (default list)"@en, "type de lieu (liste par défaut)"@fr;
+  sh:name "place type (list - class template)"@en, "type de lieu (liste - class template)"@fr;
   sh:nodeKind sh:IRI;
   sh:node this:PlaceType;
   dash:searchWidget core:ListProperty;
   datasources:datasource <http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_skospreflabel_alpha> .
 
 this:Place_type_autocomplete_default sh:path rico:hasOrHadPlaceType;
-  sh:name "place type (default autocomplete)"@en, "type de lieu (autocomplete par défaut)"@fr;
+  sh:name "place type (autocomplete - class template)"@en, "type de lieu (autocomplete - class template)"@fr;
   sh:nodeKind sh:IRI;
   sh:node this:PlaceType;
   dash:searchWidget core:AutocompleteProperty;
@@ -88,7 +102,7 @@ this:Place_type_tree sh:path rico:hasOrHadPlaceType;
   datasources:treeChildrenDatasource this:tree_children_placetype .
 
 this:Place_type_tree_default sh:path rico:hasOrHadPlaceType;
-  sh:name "place type (default tree)"@en, "type de lieu (arbre par défaut)"@fr;
+  sh:name "place type (tree - class template)"@en, "type de lieu (arbre - class template)"@fr;
   sh:nodeKind sh:IRI;
   sh:node this:PlaceType;
   dash:searchWidget core:TreeProperty;
