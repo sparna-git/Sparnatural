@@ -145,62 +145,26 @@
               debug="true"
               limit="1000"
             >
-              <!-- templates poses sur les PropertyShape : la liste et l'autocomplete
-                   affichent la definition, l'arbre garde son rendu d'origine -->
-              <script
-                id="https://data.mydomain.com/ontologies/sparnatural-config/Place_type_list"
-                type="text/x-handlebars-template"
-              >
-                <div class="item-template">
-                  <b>{{#if
-                      itemLabel
-                    }}{{itemLabel}}{{else}}{{label}}{{/if}}</b>{{#if
-                    bindings.count
-                  }}
-                    <span
-                      class="item-count"
-                    >({{bindings.count.value}})</span>{{/if}}
-                  <a
-                    class="item-link"
-                    href="{{term.value}}"
-                    target="_blank"
-                    rel="noopener"
-                    title="{{term.value}}"
-                  ></a>
-                  {{#if bindings.description}}<br /><small
-                    >{{bindings.description.value}}</small>{{/if}}
-                </div>
+              <!-- template par defaut  -->
+              <script id="default-template" type="text/x-handlebars-template">
+                <div class="item-template">{{label}}</div>
               </script>
 
+              <!-- templates custom  -->
               <script
-                id="https://data.mydomain.com/ontologies/sparnatural-config/Place_type_tree"
+                id="https://data.mydomain.com/ontologies/sparnatural-config/PlaceType"
                 type="text/x-handlebars-template"
               >
                 <div class="item-template">
-                  <b>{{label}}</b>
+                  <b>{{#if itemLabel}}{{itemLabel}}{{else}}{{label}}{{/if}}</b>
+                  {{#if bindings.count}}<span
+                      class="item-count"
+                    >({{bindings.count.value}})</span>{{/if}}
                   <span
                     class="item-link"
                     data-href="{{term.value}}"
                     title="{{term.value}}"
                   ></span>
-                  {{#if bindings.description}}<br /><small
-                    >{{bindings.description.value}}</small>{{/if}}
-                </div>
-              </script>
-
-              <script
-                id="https://data.mydomain.com/ontologies/sparnatural-config/Place_type_autocomplete"
-                type="text/x-handlebars-template"
-              >
-                <div class="item-template">
-                  <b>{{label}}</b>
-                  <a
-                    class="item-link"
-                    href="{{term.value}}"
-                    target="_blank"
-                    rel="noopener"
-                    title="{{term.value}}"
-                  ></a>
                   {{#if bindings.description}}<br /><small
                     >{{bindings.description.value}}</small>{{/if}}
                 </div>

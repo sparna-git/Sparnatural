@@ -45,6 +45,14 @@ this:PlaceType a sh:NodeShape;
   rdfs:label "Place Type"@en, "Type de Lieu"@fr ;
   sh:property this:PlaceType_prefLabel.
 
+# meme classe cible, mais un shape a part : c'est lui que visent les trois proprietes
+# "par defaut", pour echapper au template pose sur this:PlaceType
+this:PlaceTypeDefault a sh:NodeShape;
+  sh:targetClass rico:PlaceType;
+  sh:nodeKind sh:IRI;
+  rdfs:label "Place Type (default)"@en, "Type de Lieu (par défaut)"@fr ;
+  sh:property this:PlaceType_prefLabel.
+
 this:PlaceType_prefLabel sh:path skos:prefLabel;
   sh:name "pref label"@en, "libellé préférentiel"@fr;
   sh:nodeKind sh:Literal ;
@@ -54,14 +62,14 @@ this:PlaceType_prefLabel sh:path skos:prefLabel;
 this:Place_type_list_default sh:path rico:hasOrHadPlaceType;
   sh:name "place type (default list)"@en, "type de lieu (liste par défaut)"@fr;
   sh:nodeKind sh:IRI;
-  sh:node this:PlaceType;
+  sh:node this:PlaceTypeDefault;
   dash:searchWidget core:ListProperty;
   datasources:datasource <http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_skospreflabel_alpha> .
 
 this:Place_type_autocomplete_default sh:path rico:hasOrHadPlaceType;
   sh:name "place type (default autocomplete)"@en, "type de lieu (autocomplete par défaut)"@fr;
   sh:nodeKind sh:IRI;
-  sh:node this:PlaceType;
+  sh:node this:PlaceTypeDefault;
   dash:searchWidget core:AutocompleteProperty;
   datasources:datasource <http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_skospreflabel_contains> .
 
@@ -90,7 +98,7 @@ this:Place_type_tree sh:path rico:hasOrHadPlaceType;
 this:Place_type_tree_default sh:path rico:hasOrHadPlaceType;
   sh:name "place type (default tree)"@en, "type de lieu (arbre par défaut)"@fr;
   sh:nodeKind sh:IRI;
-  sh:node this:PlaceType;
+  sh:node this:PlaceTypeDefault;
   dash:searchWidget core:TreeProperty;
   datasources:treeRootsDatasource this:tree_root_placetype;
   datasources:treeChildrenDatasource <http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_children_skosnarrower> .
