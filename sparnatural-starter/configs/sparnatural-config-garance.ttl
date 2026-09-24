@@ -66,14 +66,14 @@ this:isOrWasContainedBy_autocomplete_default sh:path rico:isOrWasContainedBy;
 
 
 this:Place_type_list_default sh:path rico:hasOrHadPlaceType;
-  sh:name "place type (placeType template)"@en, "type de lieu (template placeType)"@fr;
+  sh:name "place type (list - class template)"@en, "type de lieu (liste - class template)"@fr;
   sh:nodeKind sh:IRI;
   sh:node this:PlaceType;
   dash:searchWidget core:ListProperty;
   datasources:datasource <http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_skospreflabel_alpha> .
 
 this:Place_type_autocomplete_default sh:path rico:hasOrHadPlaceType;
-  sh:name "place type (placeType template)"@en, "type de lieu (placeType template)"@fr;
+  sh:name "place type (autocomplete - class template)"@en, "type de lieu (autocomplete - class template)"@fr;
   sh:nodeKind sh:IRI;
   sh:node this:PlaceType;
   dash:searchWidget core:AutocompleteProperty;
@@ -102,7 +102,7 @@ this:Place_type_tree sh:path rico:hasOrHadPlaceType;
   datasources:treeChildrenDatasource this:tree_children_placetype .
 
 this:Place_type_tree_default sh:path rico:hasOrHadPlaceType;
-  sh:name "place type (placeType template)"@en, "type de lieu (placeType template)"@fr;
+  sh:name "place type (tree - class template)"@en, "type de lieu (arbre - class template)"@fr;
   sh:nodeKind sh:IRI;
   sh:node this:PlaceType;
   dash:searchWidget core:TreeProperty;
