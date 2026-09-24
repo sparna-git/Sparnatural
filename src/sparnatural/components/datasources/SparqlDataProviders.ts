@@ -4,6 +4,15 @@ import { AutocompleteSparqlQueryBuilderIfc, ListSparqlQueryBuilderIfc, SinglePre
 import { sameTerm } from "../../SparnaturalQueryIfc";
 import { SparqlHandlerIfc } from "rdf-shacl-commons";
 
+/**
+ * What a widget hands its datasource : the graph pattern of the query being edited, and
+ * the variable of that query the pattern hangs on.
+ */
+export interface QueryPattern {
+    pattern: string;
+    subjectVariable: string;
+}
+
 export abstract class BaseSparqlListDataProvider {
     
     sparqlHandler:SparqlHandlerIfc;
@@ -92,12 +101,12 @@ export class SparqlListDataProvider extends BaseSparqlListDataProvider implement
     queryBuilder:ListSparqlQueryBuilderIfc;
 
     // How to get the graph pattern of the query being edited, from the WidgetFactory.
-    queryPatternProvider?:() => string;
+    queryPatternProvider?:() => QueryPattern;
 
     constructor(
         sparqlHandler:SparqlHandlerIfc,
         queryBuilder: ListSparqlQueryBuilderIfc,
-        queryPatternProvider?:() => string
+        queryPatternProvider?:() => QueryPattern
     ) {
         super(sparqlHandler);
         this.queryBuilder = queryBuilder;
@@ -123,11 +132,12 @@ export class SparqlListDataProvider extends BaseSparqlListDataProvider implement
             this.lang,
             this.defaultLang,
             this.typePredicate,
-            queryPattern
+            queryPattern?.pattern,
+            queryPattern?.subjectVariable
         );
 
         // TEMPORARY : the list query, only when a pattern was actually injected
-        if (queryPattern) console.log(sparql);
+        if (queryPattern?.pattern) console.log("sujet : " + queryPattern.subjectVariable + "\n" + sparql);
 
         // 2. execute it
         super.doExecuteWithCallback(
@@ -248,12 +258,12 @@ export class SparqlAutocompleDataProvider
     sparqlHandler:SparqlHandlerIfc;
 
     // How to get the graph pattern of the query being edited, from the WidgetFactory.
-    queryPatternProvider?:() => string;
+    queryPatternProvider?:() => QueryPattern;
 
     constructor(
         sparqlHandler: SparqlHandlerIfc,
         queryBuilder: AutocompleteSparqlQueryBuilderIfc,
-        queryPatternProvider?:() => string
+        queryPatternProvider?:() => QueryPattern
     ) {
         this.queryBuilder = queryBuilder;
         this.sparqlHandler = sparqlHandler;
@@ -303,11 +313,12 @@ export class SparqlAutocompleDataProvider
           this.lang,
           this.defaultLang,
           this.typePredicate,
-          queryPattern
+          queryPattern?.pattern,
+          queryPattern?.subjectVariable
       );
 
       // TEMPORARY : the autocomplete query, only when a pattern was actually injected
-      if (queryPattern) console.log(sparql);
+      if (queryPattern?.pattern) console.log("sujet : " + queryPattern.subjectVariable + "\n" + sparql);
 
       // 2. execute it
       this.sparqlHandler.executeSparql(sparql,(data:{results:{bindings:any}}) => {

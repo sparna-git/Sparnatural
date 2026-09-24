@@ -7,6 +7,30 @@ import { Term } from "@rdfjs/types/data-model";
  */
 
 /**
+ * Fills the $query placeholder with the pattern of the query being edited. The template
+ * subject, written $this or ?this, first takes the name of the variable the pattern hangs
+ * on, so that both halves join. Without a pattern, $this stays a plain SPARQL variable.
+ */
+function injectQueryPattern(
+    sparql: string,
+    queryPattern?: string,
+    subjectVariable?: string
+): string {
+    // a template without $this could not be joined to the pattern : injecting would only
+    // make the endpoint combine two unrelated halves
+    const joinable = !!queryPattern && !!subjectVariable && /[?$]this\b/.test(sparql);
+
+    if (joinable) {
+        // renamed before the pattern is pasted, so that a variable of the query that would
+        // itself be called this is left alone
+        sparql = sparql.replace(/[?$]this\b/g, () => "?" + subjectVariable);
+    }
+
+    // through a function so that a $ inside the pattern is not reinterpreted
+    return sparql.replace(/\$query/g, () => (joinable ? queryPattern : ""));
+}
+
+/**
  * Interface for building SPARQL queries to retrieve labels (or other values) for a given URI in a specific predicate.
  */
 export interface SinglePredicateSparqlQueryBuilderIfc  {
@@ -72,7 +96,9 @@ export interface ListSparqlQueryBuilderIfc  {
         defaultLanguage: any,
         typePath: string,
         // graph pattern of the query being edited, injected in the $query placeholder
-        queryPattern?: string
+        queryPattern?: string,
+        // variable of the query the pattern hangs on, given to the template subject
+        subjectVariable?: string
     ):string;
 
 }
@@ -113,8 +139,11 @@ export class ListSparqlTemplateQueryBuilder implements ListSparqlQueryBuilderIfc
         defaultLanguage: any,
         typePath: string,
         // graph pattern of the query being edited, injected in the $query placeholder
-        queryPattern?: string
-    ): string {        var reDomain = new RegExp("\\$domain", "g");
+        queryPattern?: string,
+        // variable of the query the pattern hangs on, given to the template subject
+        subjectVariable?: string
+    ): string {
+        var reDomain = new RegExp("\\$domain", "g");
         var reProperty = new RegExp("\\$property", "g");
         var reRange = new RegExp("\\$range", "g");
         var reLang = new RegExp("\\$lang", "g");
@@ -125,12 +154,11 @@ export class ListSparqlTemplateQueryBuilder implements ListSparqlQueryBuilderIfc
           .replace(reDomain, "<" + domain + ">")
           .replace(reProperty, "<" + property + ">")
           .replace(reRange, "<" + range + ">")
-          .replace(reLang, "'" + language + "'")          .replace(reDefaultLang, "'" + defaultLanguage + "'")
+          .replace(reLang, "'" + language + "'")
+          .replace(reDefaultLang, "'" + defaultLanguage + "'")
           .replace(reType, typePath);
 
-        // replace through a function so that a $ inside the pattern is not reinterpreted ;
-        // an absent pattern simply empties the placeholder
-        sparql = sparql.replace(/\$query/g, () => queryPattern ? queryPattern : "");
+        sparql = injectQueryPattern(sparql, queryPattern, subjectVariable);
 
         sparql = this.sparqlPostProcessor.semanticPostProcess(sparql);
 
@@ -210,7 +238,9 @@ export interface AutocompleteSparqlQueryBuilderIfc  {
         defaultLang : any,
         typePath: string,
         // graph pattern of the query being edited, injected in the $query placeholder
-        queryPattern?: string
+        queryPattern?: string,
+        // variable of the query the pattern hangs on, given to the template subject
+        subjectVariable?: string
     ):string;
 
 }
@@ -238,25 +268,28 @@ export class AutocompleteSparqlTemplateQueryBuilder implements AutocompleteSparq
         defaultLanguage : any,
         typePath: string,
         // graph pattern of the query being edited, injected in the $query placeholder
-        queryPattern?: string
-    ): string {        var reDomain = new RegExp("\\$domain", "g");
+        queryPattern?: string,
+        // variable of the query the pattern hangs on, given to the template subject
+        subjectVariable?: string
+    ): string {
+        var reDomain = new RegExp("\\$domain", "g");
         var reProperty = new RegExp("\\$property", "g");
         var reRange = new RegExp("\\$range", "g");
         var reKey = new RegExp("\\$key", "g");
         var reLang = new RegExp("\\$lang", "g");
         var reDefaultLang = new RegExp("\\$defaultLang", "g");
         var reType = new RegExp("\\$type", "g");
-    
+
         var sparql = this.queryString
           .replace(reDomain, "<" + domain + ">")
           .replace(reProperty, "<" + property + ">")
-          .replace(reRange, "<" + range + ">")          .replace(reKey, "" + key + "")
+          .replace(reRange, "<" + range + ">")
+          .replace(reKey, "" + key + "")
           .replace(reLang, "'" + language + "'")
           .replace(reDefaultLang, "'" + defaultLanguage + "'")
           .replace(reType, typePath);
 
-        // replace through a function so that a $ inside the pattern is not reinterpreted
-        sparql = sparql.replace(/\$query/g, () => queryPattern ? queryPattern : "");
+        sparql = injectQueryPattern(sparql, queryPattern, subjectVariable);
 
         sparql = this.sparqlPostProcessor.semanticPostProcess(sparql);
 

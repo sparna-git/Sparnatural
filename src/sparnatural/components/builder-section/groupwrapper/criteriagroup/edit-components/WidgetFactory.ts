@@ -15,7 +15,7 @@ import { TimeDatePickerWidget } from "../../../../widgets/timedatepickerwidget/T
 import { TreeConfiguration, TreeWidget } from "../../../../widgets/treewidget/TreeWidget";
 import { ListDataProviderIfc, SortListDataProvider, AutocompleteDataProviderIfc, TreeDataProviderIfc, SortTreeDataProvider, ValuesListDataProviderIfc, SortValuesListDataProvider } from "../../../../datasources/DataProviders";
 import { NoOpListDataProvider, NoOpAutocompleteProvider, NoOpTreeDataProvider } from "../../../../datasources/NoOpDataProviders";
-import { SparqlListDataProvider, SparqlAutocompleDataProvider, SparqlTreeDataProvider, SparqlValuesListDataProvider, SparqlSinglePredicateDataProvider } from "../../../../datasources/SparqlDataProviders";
+import { SparqlListDataProvider, SparqlAutocompleDataProvider, SparqlTreeDataProvider, SparqlValuesListDataProvider, SparqlSinglePredicateDataProvider, QueryPattern } from "../../../../datasources/SparqlDataProviders";
 import ISpecificationProperty from "../../../../../spec-providers/ISpecificationProperty";
 import { IDatasource } from "../../../../../spec-providers/IDatasource";
 import { Catalog, RDFS, SKOS, SparqlHandlerFactory, SparqlHandlerIfc } from "rdf-shacl-commons";
@@ -58,7 +58,7 @@ export class WidgetFactory {
 
     // How to get the graph pattern of the query being edited. Never called here, only
     // forwarded to the data providers, which evaluate it when they build their query.
-    queryPatternProvider?:() => string;
+    queryPatternProvider?:() => QueryPattern;
 
     private sparqlHandlerFactory:SparqlHandlerFactory;
     private sparqlPostProcessor:{ semanticPostProcess: (sparql:string)=>string };
@@ -68,8 +68,8 @@ export class WidgetFactory {
         specProvider: any,
         settings: WidgetFactorySettings,
         catalog:Catalog,
-        // how to get the graph pattern of the query being edited, as SPARQL text
-        queryPatternProvider?:() => string,
+        // how to get the graph pattern of the query being edited, and its subject variable
+        queryPatternProvider?:() => QueryPattern,
     ) {
         this.parentComponent = parentComponent;
         this.specProvider = specProvider;

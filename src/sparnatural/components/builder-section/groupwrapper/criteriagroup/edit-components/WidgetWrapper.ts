@@ -11,6 +11,7 @@ import CriteriaGroup from "../CriteriaGroup";
 import EditComponents from "./EditComponents";
 import { WidgetFactory } from "./WidgetFactory";
 import { QueryPatternBuilder } from "../../../../../generators/sparql/QueryPatternBuilder";
+import { QueryPattern } from "../../../../datasources/SparqlDataProviders";
 
 
 /**
@@ -186,20 +187,23 @@ class WidgetWrapper extends HTMLComponent {
   }
 
   /**
-   * Returns the graph pattern of the query being edited, as SPARQL text, ready to be
-   * injected in the $query placeholder of a datasource template.
+   * Returns the graph pattern of the query being edited, ready to be injected in the
+   * $query placeholder of a datasource template, with the variable it hangs on.
    *
    * @returns null when there is nothing to inject
    */
-  #getQueryPattern(): string {
+  #getQueryPattern(): QueryPattern {
     const sparnatural = this.getRootComponent() as SparnaturalComponent;
     const query = sparnatural.actionStore?.currentQuery;
     if (!query) return null;
 
     // Both variables come from this widget, which has always known its own line :
     // startClassVal is its subject, endClassVal its object.
-    return new QueryPatternBuilder(this.specProvider, this.settings)
+    const pattern = new QueryPatternBuilder(this.specProvider, this.settings)
               .build(query, this.startClassVal.variable, this.endClassVal.variable);
+    if (!pattern) return null;
+
+    return { pattern: pattern, subjectVariable: this.startClassVal.variable };
   }
 
   getWidgetType() {

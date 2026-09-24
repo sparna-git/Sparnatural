@@ -4,14 +4,10 @@ import { ISparnaturalSpecification } from "../../spec-providers/ISparnaturalSpec
 import {
   PredicateObjectPair,
   SparnaturalQuery,
-  TermTypedVariable,
 } from "../../SparnaturalQueryIfc-v13";
 import { JsonV13SparqlTranslator } from "./fromjsonv13/JsonV13SparqlTranslator";
 
 const factory = new DataFactory();
-
-// Subject variable name used by every datasource query template.
-const TEMPLATE_SUBJECT_VARIABLE = "domain";
 
 // Builds the graph pattern of the query being edited, injected in the $query placeholder
 // of a datasource query so that a widget only proposes values leading to a result.
@@ -25,8 +21,9 @@ export class QueryPatternBuilder {
     this.settings = settings;
   }
 
-  // Drops the line being edited, which the template writes itself, then renames its subject
-  // to the variable the template uses so that both halves join. Null if nothing to inject.
+  // Drops the line being edited, which the template writes itself. The pattern keeps the
+  // variable names of the query : it is the template that takes the name of the subject.
+  // Null if nothing to inject.
   build(
     originalQuery: SparnaturalQuery,
     subjectVariable: string,
@@ -44,10 +41,6 @@ export class QueryPatternBuilder {
 
     // nothing left to constrain the values with
     if (pairs.length === 0) return null;
-
-    // move away any variable already using the template name, then rename
-    this.#renameVariable(query, TEMPLATE_SUBJECT_VARIABLE, TEMPLATE_SUBJECT_VARIABLE + "_1");
-    this.#renameVariable(query, subjectVariable, TEMPLATE_SUBJECT_VARIABLE);
 
     // no selected variables : this also switches off the default label patterns, whose
     // language filter would wrongly discard unlabelled resources
@@ -67,7 +60,7 @@ export class QueryPatternBuilder {
     const text = new Generator().stringify({
       type: "query",
       queryType: "SELECT",
-      variables: [factory.variable(TEMPLATE_SUBJECT_VARIABLE)],
+      variables: [factory.variable(subjectVariable)],
       where: selectQuery.where,
       prefixes: {},
     });
@@ -110,28 +103,6 @@ export class QueryPatternBuilder {
     }
 
     return true;
-  }
-
-  // Variables only appear as the query subject and as the object of each pair, predicates
-  // are always IRIs.
-  #renameVariable(query: SparnaturalQuery, from: string, to: string) {
-    if (from === to) return;
-
-    const renameTerm = (term?: TermTypedVariable) => {
-      if (term && term.subType === "variable" && term.value === from) {
-        term.value = to;
-      }
-    };
-
-    const walk = (pairs?: PredicateObjectPair[]) => {
-      pairs?.forEach((pair) => {
-        renameTerm(pair.object?.variable);
-        walk(pair.object?.predicateObjectPairs);
-      });
-    };
-
-    renameTerm(query.where?.subject);
-    walk(query.where?.predicateObjectPairs);
   }
 
 }
