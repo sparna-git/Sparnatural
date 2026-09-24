@@ -74,9 +74,9 @@ ORDER BY DESC (?count) (UCASE(STR(?label)))
 
 ### Step 2 : write your templates
 
-Sparnatural relies on [handlebars](https://handlebarsjs.com/) for writing templates. To write your templates, in line with handlebars recommendations, put them in inner `<script type="text/x-handlebars-template">` elements inside the `<spar-natural>` element, **with an id equal to the property shape in the config**. The widget will look for such a template, based on the property shape id, and use it if it finds one. Otherwise it will apply its default behavior.
+Sparnatural relies on [handlebars](https://handlebarsjs.com/) for writing templates. To write your templates, in line with handlebars recommendations, put them in inner `<script type="text/x-handlebars-template">` elements inside the `<spar-natural>` element, **with an id equal to the property shape URI from the config, or equal to the range Node Shape from the config**. The widget will look for such a template, based on the property shape id, and use it if it finds one. Otherwise it will apply its default behavior.
 
-The same template could be applicable for a list widget, an autocomplete widget, or a tree widget.
+The same template can be applicable for a list widget, an autocomplete widget, or a tree widget.
 
 Here is an example for providing a template corresponding to the above property shape (note how the id of the `<script>` element matches the URI of the property shape):
 
@@ -227,6 +227,23 @@ Here is a full set of CSS classes to provide clickable URI in lists, autocomplet
           }
         </style>
 ```
+
+### The default template
+
+In order to overwrite the default template used by Sparnatural, use a template with the id `default-template`:
+
+```html
+        <spar-natural
+
+        >
+          <!-- default template -->
+          <script id="default-template" type="text/x-handlebars-template">
+            <span>{{{label}}}</span>
+          </script>
+        <spar-natural>
+```
+
+This can be useful if you don't want Sparnatural to propose a navigation link to the URI from the lists / autocomplete or trees.
 
 
 ## Template examples
