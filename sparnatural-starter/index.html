@@ -121,9 +121,11 @@
           limit="1000"
         >
           <!-- template par defaut-->
+          <!--
           <script id="default-template" type="text/x-handlebars-template">
             <div class="custom-item-template">{{label}}</div>
           </script>
+          -->
 
           <!-- templates custom  -->
           <script
@@ -140,6 +142,20 @@
                 data-href="{{term.value}}"
                 title="{{term.value}}"
               ></span>
+              {{#if bindings.description}}<br /><small
+                >{{bindings.description.value}}</small>{{/if}}
+            </div>
+          </script>
+
+          <script
+            id="https://data.mydomain.com/ontologies/sparnatural-config/Place_type_list"
+            type="text/x-handlebars-template"
+          >
+            <div class="custom-item-template">
+              <b>{{#if itemLabel}}{{itemLabel}}{{else}}{{label}}{{/if}}</b>
+              {{#if bindings.count}}<span
+                  class="custom-item-count"
+                >[{{bindings.count.value}}]</span>{{/if}}
               {{#if bindings.description}}<br /><small
                 >{{bindings.description.value}}</small>{{/if}}
             </div>

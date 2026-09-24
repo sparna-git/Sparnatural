@@ -47,10 +47,10 @@ function findTemplateElement(
   objectPropVal: SelectedVal,
   endClassVal: SelectedVal,
 ): HTMLElement | null {
-  // the NodeShape template comes first, then the PropertyShape one, then the page default
+  // the PropertyShape template comes first, then the PropertyShape one, then the page default
   for (let id of [
-    endClassVal?.type,
     objectPropVal?.type,
+    endClassVal?.type,
     DEFAULT_TEMPLATE_ID,
   ]) {
     let element = id ? document.getElementById(id) : null;
