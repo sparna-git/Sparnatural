@@ -25,6 +25,8 @@ import { Parser } from "@traqula/parser-sparql-1-1";
 // all nodes are built with an auto-generated source location, so that the generator prints them in full
 const F = new AstFactory();
 
+const XSD_STRING = "http://www.w3.org/2001/XMLSchema#string";
+
 /**
  * Same as SparqlFactory, but building a Traqula AST instead of a SparqlJs one
  */
@@ -45,7 +47,8 @@ export default class SparqlFactoryV13 {
    * @returns A literal, with a language, a datatype, or none of them
    */
   static buildLiteral(value: string, langOrDatatype?: string | TermIriFull): TermLiteral {
-    if (langOrDatatype === undefined) {
+    // in RDF 1.1, a literal typed with xsd:string is the same as a plain literal, which is shorter to print
+    if (langOrDatatype === undefined || (typeof langOrDatatype !== "string" && langOrDatatype.value === XSD_STRING)) {
       return F.termLiteral(F.gen(), value);
     } else if (typeof langOrDatatype === "string") {
       return F.termLiteral(F.gen(), value, langOrDatatype);
