@@ -6,20 +6,28 @@ import {
   PredicateObjectPair,
   TermTypedVariable,
 } from "../../../SparnaturalQueryIfc-v13";
-import { VariableExpression, VariableTerm } from "../../../SparnaturalQueryIfc";
-import { Pattern, VariableTerm as SparqlVariableTerm } from "sparqljs";
-import { VariableExpression as SparqlVariableExpression } from "sparqljs";
+import {
+  AstFactory,
+  Ordering,
+  Pattern,
+  PatternBind as SparqlPatternBind,
+  QuerySelect,
+  SolutionModifierGroup,
+  SolutionModifierOrder,
+  TermVariable as SparqlTermVariable,
+} from "@traqula/rules-sparql-1-1";
 import { ISparnaturalSpecification } from "../../../spec-providers/ISparnaturalSpecification";
-import { Grouping, Ordering, SelectQuery, Variable } from "sparqljs";
-import SparqlFactory from "../SparqlFactory";
-import { DataFactory } from "rdf-data-factory";
+import SparqlFactoryV13 from "./SparqlFactoryV13";
 import ISpecificationProperty from "../../../spec-providers/ISpecificationProperty";
 import QueryWhereTranslatorV13 from "./QueryWhereTranslatorV13";
 import { Model } from "rdf-shacl-commons";
 import { ISpecificationEntity } from "../../../spec-providers/ISpecificationEntity";
 import { SparnaturalQueryTraversal, SparnaturalQueryUtils } from "./SparnaturalQueryUtils";
 
-const factory = new DataFactory();
+const F = new AstFactory();
+
+// a variable in the SELECT clause : either a simple variable, or an aggregation (... AS ?var)
+type Variable = SparqlTermVariable | SparqlPatternBind;
 
 export class JsonV13SparqlTranslator {
 
@@ -28,7 +36,7 @@ export class JsonV13SparqlTranslator {
   jsonQuery: SparnaturalQuery;
   settings: any;
 
-  defaultLabelVars: Variable[] = [];
+  defaultLabelVars: SparqlTermVariable[] = [];
 
   constructor(
     // the Sparnatural configuration
@@ -44,42 +52,37 @@ export class JsonV13SparqlTranslator {
    * @param jsonQuery the sparnaturalV13 JSON query
    * @returns a SPARQL query translated from the Sparnatural JSON query structure
    */
-  generateQuery(jsonQuery: SparnaturalQuery): SelectQuery {
+  generateQuery(jsonQuery: SparnaturalQuery): QuerySelect {
     // make a deep copy of the query since we will expand it during SPARQL
     // Warning : everything below should now operate on this.jsonQuery, and not on jsonQuery
     this.jsonQuery = (JSON.parse(JSON.stringify(jsonQuery)));
 
     SparnaturalQueryUtils.addKeyInfoSelection(this.jsonQuery, this.specProvider);
 
-    const sparqlJsQuery: SelectQuery = {
-      queryType: "SELECT",
-      distinct: this.jsonQuery.distinct,
-      type: "query",
-      variables: this.#varsToRDFJS(this.jsonQuery.variables),
-      where: this.#createWhereClause(),
-      prefixes: this.prefixes,
-      order: this.#orderFromSolutionModifiers(this.jsonQuery),
-      // sets a limit if provided, otherwise leave to undefined
-      limit:
-        this.jsonQuery.solutionModifiers?.limitOffset?.limit && this.jsonQuery.solutionModifiers?.limitOffset?.limit > 0
-          ? this.jsonQuery.solutionModifiers.limitOffset.limit
-          : undefined,
-    };
+    // sets a limit if provided, otherwise leave to undefined
+    const limit =
+      this.jsonQuery.solutionModifiers?.limitOffset?.limit && this.jsonQuery.solutionModifiers?.limitOffset?.limit > 0
+        ? this.jsonQuery.solutionModifiers.limitOffset.limit
+        : undefined;
 
-    // if the RdfJsQuery contains empty 'where' array, then the generator crashes.
-    // create query with no triples
-    if (sparqlJsQuery.where?.length === 0) {
-      sparqlJsQuery.where = [
-        {
-          type: "bgp",
-          triples: [],
-        },
-      ];
-    }
+    const traqulaQuery: QuerySelect = F.querySelect({
+      context: Object.entries(this.prefixes).map(([prefix, iri]) =>
+        F.contextDefinitionPrefix(F.gen(), prefix, SparqlFactoryV13.buildNamedNode(iri))
+      ),
+      // Traqula only sets distinct when it is true
+      ...(this.jsonQuery.distinct ? { distinct: true } : {}),
+      variables: this.#varsToRDFJS(this.jsonQuery.variables),
+      where: SparqlFactoryV13.buildGroupPattern(this.#createWhereClause()),
+      solutionModifiers: {
+        order: this.#orderFromSolutionModifiers(this.jsonQuery),
+        limitOffset: limit ? F.solutionModifierLimitOffset(limit, undefined, F.gen()) : undefined,
+      },
+      datasets: F.datasetClauses([], F.gen()),
+    }, F.gen());
 
     if (this.defaultLabelVars.length > 0) {
       this.defaultLabelVars.forEach((v) => {
-        let varName = (v as VariableTerm).value;
+        let varName = v.value;
 
         // TODO : special - we present insertion of deffault label var if it was already used in an aggregation
         // this shouldn't happen if the extrac variables were inserted as a pre-process in the query before converting to SPARQL
@@ -91,40 +94,39 @@ export class JsonV13SparqlTranslator {
           }
         }
         if(doInsert) {
-          this.#insertExtraVariableInSelect(sparqlJsQuery, v);
+          this.#insertExtraVariableInSelect(traqulaQuery, v);
         }
       });
     }
 
-    if (!sparqlJsQuery.order) delete sparqlJsQuery.order;
-    if (!sparqlJsQuery.limit) delete sparqlJsQuery.limit;
+    if (!traqulaQuery.solutionModifiers.order) delete traqulaQuery.solutionModifiers.order;
+    if (!traqulaQuery.solutionModifiers.limitOffset) delete traqulaQuery.solutionModifiers.limitOffset;
 
     // set a GROUP BY based on aggregation expression in the variables
     // add this after defaultLabel var have been inserted, and re-read them from the query
-    sparqlJsQuery.group = this.#addGroupBy(
-      sparqlJsQuery.variables as Variable[],
+    const group = this.#addGroupBy(
+      traqulaQuery.variables as Variable[],
     );
+    if (group) traqulaQuery.solutionModifiers.group = group;
 
-    return sparqlJsQuery;
+    return traqulaQuery;
   }
 
   /**
    * @param variables The list variables of the SELECT query
    * @returns GROUP BY clause if needed, of all non-aggregated variables, or undefined if not needed
    */
-  #addGroupBy(variables: Variable[]): Grouping[] | undefined {
+  #addGroupBy(variables: Variable[]): SolutionModifierGroup | undefined {
     if (this.#needsGrouping(variables)) {
-      let g: Grouping[] = [];
+      let g: SparqlTermVariable[] = [];
 
       variables.forEach((v) => {
-        if (!(v as SparqlVariableExpression).expression) {
-          g.push({
-            expression: v as SparqlVariableTerm,
-          });
+        if (!(v as SparqlPatternBind).expression) {
+          g.push(v as SparqlTermVariable);
         }
       });
 
-      return g;
+      return F.solutionModifierGroup(g, F.gen());
     } else {
       // no aggregation, or only one column, grouping is undefined
       return undefined;
@@ -132,15 +134,15 @@ export class JsonV13SparqlTranslator {
   }
 
   #needsGrouping(variables: Variable[]): boolean {
-    return variables.find((v) => (v as VariableExpression).expression) &&
+    return variables.find((v) => (v as SparqlPatternBind).expression) &&
       variables.length > 1
       ? true
       : false;
   }
 
   /**
-   * Generates the WHERE clause of the SparqlJs query from the original JSON structure
-   * @returns an array of SparqlJs Pattern representing the complete content of the WHERE clause
+   * Generates the WHERE clause of the Traqula query from the original JSON structure
+   * @returns an array of Traqula Pattern representing the complete content of the WHERE clause
    */
   #createWhereClause(): Pattern[] {
     const whereBuilder = new QueryWhereTranslatorV13(this);
@@ -150,11 +152,11 @@ export class JsonV13SparqlTranslator {
   }
 
   /**
-   * Converts SparnaturalQuery variables to SparqlJs Variable or Aggregate expressions
+   * Converts SparnaturalQuery variables to Traqula Variable or Aggregate expressions
    * @param variables The list of variables from SparnaturalQuery
-   * @returns The list of variables as SparqlJs Variable or Aggregate expressions
+   * @returns The list of variables as Traqula Variable or Aggregate expressions
    */
-  #varsToRDFJS(variables: Array<TermVariable | PatternBind>): Variable[] {
+  #varsToRDFJS(variables: Array<TermVariable | PatternBind>): QuerySelect["variables"] {
 
     const where = this.jsonQuery.where;
     let varName:string;
@@ -171,10 +173,10 @@ export class JsonV13SparqlTranslator {
         const actualVar = concatOnLabel ? varName + "_label" : varName;
 
         return [
-          SparqlFactory.buildAggregateFunctionExpression(
+          SparqlFactoryV13.buildAggregateFunctionExpression(
             v.expression.aggregation,
-            factory.variable(actualVar),
-            factory.variable(v.variable.value),
+            SparqlFactoryV13.buildVariable(actualVar),
+            SparqlFactoryV13.buildVariable(v.variable.value),
           ),
         ];
       }
@@ -199,7 +201,7 @@ export class JsonV13SparqlTranslator {
         let specProperty: ISpecificationProperty | undefined = findVarProperty(where.predicateObjectPairs, varName);
 
         if (!specProperty) {
-          return [factory.variable(varName)];
+          return [SparqlFactoryV13.buildVariable(varName)];
         }
 
         if (
@@ -210,24 +212,29 @@ export class JsonV13SparqlTranslator {
           const result: Variable[] = [];
 
           if (specProperty.getBeginDateProperty()) {
-            result.push(factory.variable(`${varName}_begin`));
+            result.push(SparqlFactoryV13.buildVariable(`${varName}_begin`));
           }
           if (specProperty.getEndDateProperty()) {
-            result.push(factory.variable(`${varName}_end`));
+            result.push(SparqlFactoryV13.buildVariable(`${varName}_end`));
           }
           if (specProperty.getExactDateProperty()) {
-            result.push(factory.variable(`${varName}_exact`));
+            result.push(SparqlFactoryV13.buildVariable(`${varName}_exact`));
           }
 
           return result;
         }
 
-        return [factory.variable(varName)];
+        return [SparqlFactoryV13.buildVariable(varName)];
       }
     });
 
     const finalResult: Variable[] = [];
     variablesArray.forEach((arr) => finalResult.push(...arr));
+
+    // an empty SELECT clause is not valid SPARQL, select everything instead
+    if (finalResult.length === 0) {
+      return [F.wildcard(F.gen())];
+    }
 
     return finalResult;
   }
@@ -238,29 +245,28 @@ export class JsonV13SparqlTranslator {
    * @returns ORDER BY clause if needed, or undefined if not needed
    */
 
-  #orderFromSolutionModifiers(query: SparnaturalQuery): Ordering[] | undefined {
+  #orderFromSolutionModifiers(query: SparnaturalQuery): SolutionModifierOrder | undefined {
     const order = query.solutionModifiers?.order;
     if (!order || order.orderDefs.length === 0) return undefined;
 
-    return order.orderDefs.map((o) => ({
-      expression: factory.variable(o.expression.value),
-      descending: o.descending,
-    }));
+    return F.solutionModifierOrder(
+      order.orderDefs.map((o): Ordering => ({
+        expression: SparqlFactoryV13.buildVariable(o.expression.value),
+        descending: o.descending === true,
+        loc: F.gen(),
+      })),
+      F.gen()
+    );
   }
 
   /**
    * Inserts the provided variable, having the name "xxx_yyyy", after the variable named "xxx"
-   * @param sparqlQuery The SparqlJs query
+   * @param sparqlQuery The Traqula query
    * @param extraVar The new variable, ending in xxx_yyyy, typically default label var xxx_label, to insert
    */
-  #insertExtraVariableInSelect(sparqlQuery: SelectQuery, extraVar: Variable) {
+  #insertExtraVariableInSelect(sparqlQuery: QuerySelect, extraVar: SparqlTermVariable) {
     // reconstruct the original var name by removing "_label" suffix
-    var varName;
-    if((extraVar as any)["expression"]) {
-      varName = (extraVar as VariableExpression).expression.expression.value;
-    } else {
-      varName = (extraVar as VariableTerm).value;
-    }
+    var varName = extraVar.value;
 
     if(varName.includes("_")) {
       let originalVar = varName.split("_")[0];
@@ -269,10 +275,10 @@ export class JsonV13SparqlTranslator {
       for (var i = 0; i < sparqlQuery.variables.length; i++) {
         // find variable with the original name
         if (
-          (sparqlQuery.variables[i] as SparqlVariableTerm).value == originalVar
+          (sparqlQuery.variables[i] as SparqlTermVariable).value == originalVar
         ) {
           // insert the default label var after this one
-          sparqlQuery.variables.splice(i + 1, 0, extraVar);
+          (sparqlQuery.variables as Variable[]).splice(i + 1, 0, extraVar);
           found = true;
           // don't forget, otherwise infinite loop
           break;

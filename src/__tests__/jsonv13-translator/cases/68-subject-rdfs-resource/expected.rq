@@ -1,0 +1,4 @@
+SELECT DISTINCT ?Resource_1 ?Person_1 WHERE {
+  ?Resource_1 <http://example.com/Resource_seeAlso> ?Person_1.
+  ?Person_1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.com/Person>.
+}

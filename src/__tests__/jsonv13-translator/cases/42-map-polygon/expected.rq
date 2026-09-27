@@ -1,0 +1,5 @@
+SELECT DISTINCT ?Person_1 ?Location_1 WHERE {
+  ?Person_1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.com/Person>.
+  ?Person_1 <http://example.com/Person_location> ?Location_1.
+  FILTER(<http://www.opengis.net/def/function/geosparql/sfWithin>(?Location_1, "Polygon((2.1 48.1, 2.6 48.1, 2.6 48.9, 2.1 48.9, 2.1 48.1))"^^<http://www.opengis.net/ont/geosparql#wktLiteral>))
+}

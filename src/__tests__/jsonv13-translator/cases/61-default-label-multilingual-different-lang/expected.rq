@@ -1,0 +1,14 @@
+SELECT DISTINCT ?Person_1 ?Organization_1 ?Organization_1_label WHERE {
+  ?Person_1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.com/Person>.
+  ?Person_1 <http://example.com/Person_memberOf> ?Organization_1.
+  ?Organization_1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.com/Organization>.
+  OPTIONAL {
+    ?Organization_1 <http://example.com/Organization_name> ?Organization_1_label_lang.
+    FILTER((LANG(?Organization_1_label_lang)) = "fr")
+  }
+  OPTIONAL {
+    ?Organization_1 <http://example.com/Organization_name> ?Organization_1_label_defaultLang.
+    FILTER((LANG(?Organization_1_label_defaultLang)) = "en")
+  }
+  BIND(COALESCE(?Organization_1_label_lang, ?Organization_1_label_defaultLang) AS ?Organization_1_label)
+}

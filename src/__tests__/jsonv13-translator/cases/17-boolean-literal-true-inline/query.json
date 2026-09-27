@@ -1,0 +1,56 @@
+{
+  "type": "query",
+  "subType": "SELECT",
+  "variables": [
+    {
+      "type": "term",
+      "subType": "variable",
+      "value": "Person_1"
+    }
+  ],
+  "solutionModifiers": {},
+  "distinct": true,
+  "where": {
+    "type": "pattern",
+    "subType": "bgpSameSubject",
+    "subject": {
+      "type": "term",
+      "subType": "variable",
+      "value": "Person_1",
+      "rdfType": "http://example.com/Person"
+    },
+    "predicateObjectPairs": [
+      {
+        "type": "predicateObjectPair",
+        "predicate": {
+          "type": "term",
+          "subType": "namedNode",
+          "value": "http://example.com/Person_isAlive"
+        },
+        "object": {
+          "type": "objectCriteria",
+          "variable": {
+            "type": "term",
+            "subType": "variable",
+            "value": "Other_1",
+            "rdfType": "http://special/ZZ_Other"
+          },
+          "values": [
+            {
+              "Other_1": {
+                "type": "term",
+                "subType": "literal",
+                "value": "true",
+                "langOrIri": {
+                  "type": "term",
+                  "subType": "namedNode",
+                  "value": "http://www.w3.org/2001/XMLSchema#boolean"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

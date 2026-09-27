@@ -1,0 +1,5 @@
+SELECT DISTINCT ?Person_1 ?Date_1_begin ?Date_1_end WHERE {
+  ?Person_1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.com/Person>.
+  OPTIONAL { ?Person_1 <http://example.com/beginDate> ?Date_1_begin. }
+  OPTIONAL { ?Person_1 <http://example.com/endDate> ?Date_1_end. }
+}

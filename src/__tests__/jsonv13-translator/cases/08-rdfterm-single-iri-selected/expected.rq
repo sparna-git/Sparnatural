@@ -1,0 +1,7 @@
+SELECT DISTINCT ?Person_1 ?Person_2 WHERE {
+  ?Person_1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.com/Person>.
+  ?Person_1 <http://example.com/Person_knows> ?Person_2.
+  VALUES ?Person_2 {
+    <http://example.com/person/alice>
+  }
+}

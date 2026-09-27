@@ -1,0 +1,12 @@
+SELECT DISTINCT ?Person_1 WHERE {
+  ?Person_1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.com/Person>.
+  {
+    ?Person_1 <http://example.com/activeExact> ?Date_1_exact.
+    FILTER(?Date_1_exact >= "-0200-01-01T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>)
+  }
+  UNION
+  {
+    ?Person_1 <http://example.com/activeEnd> ?Date_1_end.
+    FILTER(?Date_1_end >= "-0200-01-01T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>)
+  }
+}

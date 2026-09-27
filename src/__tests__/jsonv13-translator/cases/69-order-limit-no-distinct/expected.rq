@@ -1,0 +1,7 @@
+SELECT ?Person_1 ?Number_1 ?Text_1 WHERE {
+  ?Person_1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.com/Person>.
+  ?Person_1 <http://example.com/Person_age> ?Number_1.
+  ?Person_1 <http://example.com/Person_nickname> ?Text_1.
+}
+ORDER BY DESC (?Number_1) (?Text_1)
+LIMIT 50

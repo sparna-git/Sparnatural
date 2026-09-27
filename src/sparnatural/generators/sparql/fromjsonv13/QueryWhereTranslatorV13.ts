@@ -1,12 +1,9 @@
-import { DataFactory } from "rdf-data-factory";
-import { Pattern, Variable } from "sparqljs";
+import { Pattern, TermVariable } from "@traqula/rules-sparql-1-1";
 import {
   PredicateObjectPair,
 } from "../../../SparnaturalQueryIfc-v13";
 import BranchTranslatorV13 from "./BranchTranslatorV13";
 import { JsonV13SparqlTranslator } from "./JsonV13SparqlTranslator";
-
-const factory = new DataFactory();
 
 export default class QueryWhereTranslatorV13 {
   // variables set in constructor
@@ -17,7 +14,7 @@ export default class QueryWhereTranslatorV13 {
   #executedAfterPtrns: Pattern[] = [];
 
   // default vars gathered from children
-  #defaultLabelVars: Variable[] = [];
+  #defaultLabelVars: TermVariable[] = [];
 
   constructor(
     translator: JsonV13SparqlTranslator,

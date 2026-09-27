@@ -1,0 +1,17 @@
+SELECT DISTINCT ?Organization_1 ?Person_1 ?Country_1 ?Organization_1_label ?Country_1_label WHERE {
+  ?Organization_1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.com/Organization>.
+  OPTIONAL {
+    ?Organization_1 <http://example.com/Organization_name> ?Organization_1_label.
+    FILTER((LANG(?Organization_1_label)) = "en")
+  }
+  ?Organization_1 <http://example.com/Organization_member> ?Person_1.
+  ?Person_1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.com/Person>.
+  SERVICE <https://query.wikidata.org/sparql> {
+    ?Organization_1 <http://example.com/Organization_country> ?Country_1.
+    ?Country_1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.com/Country>.
+    OPTIONAL { ?Country_1 <http://example.com/Country_label> ?Country_1_label. }
+  }
+  ?Organization_1 <http://example.com/Organization_name> ?Text_1.
+  FILTER((LANG(?Text_1)) = "en")
+  FILTER(REGEX(STR(?Text_1), "museum", "i"))
+}

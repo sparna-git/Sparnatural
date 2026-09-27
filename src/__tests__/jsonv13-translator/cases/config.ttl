@@ -1,0 +1,390 @@
+@prefix ex: <http://example.com/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix core: <http://data.sparna.fr/ontologies/sparnatural-config-core#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix geo: <http://www.opengis.net/ont/geosparql#> .
+@prefix sd: <http://www.w3.org/ns/sparql-service-description#> .
+
+# ---------------------------------------------------------------
+# Person : no default label (no LabelRole, no foaf:name/rdfs:label/... path)
+# ---------------------------------------------------------------
+ex:Person a sh:NodeShape ;
+  sh:targetClass foaf:Person ;
+  sh:property
+    ex:Person_knows,
+    ex:Person_country,
+    ex:Person_topic,
+    ex:Person_memberOf,
+    ex:Person_nickname,
+    ex:Person_age,
+    ex:Person_birthDate,
+    ex:Person_birthYear,
+    ex:Person_isAlive,
+    ex:Person_hasChild,
+    ex:Person_bio,
+    ex:Person_email,
+    ex:Person_fulltext,
+    ex:Person_vfulltext,
+    ex:Person_location,
+    ex:Person_livedIn,
+    ex:Person_active,
+    ex:Person_beginOnly,
+    ex:Person_related,
+    ex:Person_wikidata,
+    ex:Person_wikidataAfter,
+    ex:Person_title,
+    ex:Person_place,
+    ex:Person_thing,
+    ex:Person_resource,
+    ex:Person_owlThing,
+    ex:Person_owns,
+    ex:Person_jena,
+    ex:Person_code,
+    ex:Person_alias ;
+.
+
+ex:Person_knows
+  sh:path foaf:knows ;
+  sh:class foaf:Person ;
+  dash:searchWidget core:AutocompleteProperty ;
+.
+
+ex:Person_country
+  sh:path ex:country ;
+  sh:class ex:CountryClass ;
+  dash:searchWidget core:ListProperty ;
+.
+
+ex:Person_topic
+  sh:path foaf:topic_interest ;
+  sh:class skos:Concept ;
+  dash:searchWidget core:TreeProperty ;
+.
+
+ex:Person_memberOf
+  sh:path ex:memberOf ;
+  sh:class ex:OrganizationClass ;
+  dash:searchWidget core:AutocompleteProperty ;
+.
+
+ex:Person_nickname
+  sh:path ex:nickname ;
+  sh:datatype xsd:string ;
+  dash:searchWidget core:LiteralListProperty ;
+.
+
+ex:Person_age
+  sh:path ex:age ;
+  sh:datatype xsd:integer ;
+  dash:searchWidget core:NumberProperty ;
+.
+
+ex:Person_birthDate
+  sh:path ex:birthDate ;
+  sh:datatype xsd:date ;
+  dash:searchWidget core:TimeProperty-Date ;
+.
+
+ex:Person_birthYear
+  sh:path ex:birthYear ;
+  sh:datatype xsd:dateTime ;
+  dash:searchWidget core:TimeProperty-Year ;
+.
+
+ex:Person_isAlive
+  sh:path ex:isAlive ;
+  sh:datatype xsd:boolean ;
+  dash:searchWidget core:BooleanProperty ;
+.
+
+ex:Person_hasChild
+  sh:path ex:hasChild ;
+  sh:class foaf:Person ;
+  dash:searchWidget core:BooleanProperty ;
+.
+
+ex:Person_bio
+  sh:path ex:bio ;
+  sh:datatype xsd:string ;
+  dash:searchWidget core:SearchProperty ;
+.
+
+ex:Person_email
+  sh:path ex:email ;
+  sh:datatype xsd:string ;
+  dash:searchWidget core:StringEqualsProperty ;
+.
+
+ex:Person_fulltext
+  sh:path ex:fulltext ;
+  sh:datatype xsd:string ;
+  dash:searchWidget core:GraphDBSearchProperty ;
+.
+
+ex:Person_vfulltext
+  sh:path ex:vfulltext ;
+  sh:datatype xsd:string ;
+  dash:searchWidget core:VirtuosoSearchProperty ;
+.
+
+ex:Person_location
+  sh:path ex:location ;
+  sh:datatype geo:wktLiteral ;
+  dash:searchWidget core:MapProperty ;
+.
+
+# begin / end dates
+ex:Person_livedIn
+  sh:path ex:livedIn ;
+  sh:datatype xsd:dateTime ;
+  dash:searchWidget core:TimeProperty-Year ;
+  core:beginDateProperty ex:beginDate ;
+  core:endDateProperty ex:endDate ;
+.
+
+# begin / end / exact dates
+ex:Person_active
+  sh:path ex:active ;
+  sh:datatype xsd:dateTime ;
+  dash:searchWidget core:TimeProperty-Year ;
+  core:beginDateProperty ex:activeBegin ;
+  core:endDateProperty ex:activeEnd ;
+  core:exactDateProperty ex:activeExact ;
+.
+
+# begin date only (no end date)
+ex:Person_beginOnly
+  sh:path ex:beginOnly ;
+  sh:datatype xsd:dateTime ;
+  dash:searchWidget core:TimeProperty-Year ;
+  core:beginDateProperty ex:boBegin ;
+.
+
+ex:Person_related
+  sh:path ex:related ;
+  sh:class foaf:Person ;
+  dash:searchWidget core:NonSelectableProperty ;
+.
+
+# SERVICE
+ex:Person_wikidata
+  sh:path owl:sameAs ;
+  sh:class ex:WdItemClass ;
+  dash:searchWidget core:AutocompleteProperty ;
+  core:sparqlService ex:WikidataService ;
+.
+
+# SERVICE, executed after
+ex:Person_wikidataAfter
+  sh:path ex:wdLink ;
+  sh:class ex:WdItemClass ;
+  dash:searchWidget core:AutocompleteProperty ;
+  core:sparqlService ex:WikidataService ;
+  core:executedAfter true ;
+.
+
+ex:WikidataService a sd:Service ;
+  sd:endpoint <https://query.wikidata.org/sparql> ;
+.
+
+# multilingual property
+ex:Person_title
+  sh:path ex:title ;
+  sh:datatype rdf:langString ;
+  dash:searchWidget core:SearchProperty ;
+.
+
+# to an entity with a SPARQL sh:target
+ex:Person_place
+  sh:path ex:place ;
+  sh:class ex:PlaceClass ;
+  dash:searchWidget core:ListProperty ;
+.
+
+# to an entity without type criteria
+ex:Person_thing
+  sh:path ex:thing ;
+  sh:node ex:UntypedThing ;
+  dash:searchWidget core:AutocompleteProperty ;
+.
+
+# to rdfs:Resource
+ex:Person_resource
+  sh:path ex:resource ;
+  sh:node rdfs:Resource ;
+  dash:searchWidget core:AutocompleteProperty ;
+.
+
+# to owl:Thing
+ex:Person_owlThing
+  sh:path ex:owlThing ;
+  sh:node owl:Thing ;
+  dash:searchWidget core:AutocompleteProperty ;
+.
+
+# sh:or : either a Book (IRI, list widget) or a literal title (search)
+ex:Person_owns
+  sh:path ex:owns ;
+  sh:or (
+    [ sh:class ex:BookClass ; dash:searchWidget core:ListProperty ]
+    [ sh:datatype xsd:string ]
+  ) ;
+.
+
+# a widget not supported by the SPARQL value builder
+ex:Person_jena
+  sh:path ex:jena ;
+  sh:datatype xsd:string ;
+  dash:searchWidget core:JenaSearchProperty ;
+.
+
+# key info properties (used with "with": [dash:KeyInfoRole])
+ex:Person_code
+  sh:path ex:code ;
+  sh:datatype xsd:string ;
+  sh:minCount 1 ;
+  sh:maxCount 1 ;
+  dash:propertyRole dash:KeyInfoRole ;
+.
+
+ex:Person_alias
+  sh:path ex:alias ;
+  sh:datatype xsd:string ;
+  dash:propertyRole dash:KeyInfoRole ;
+.
+
+# ---------------------------------------------------------------
+# Country : default label by heuristic (rdfs:label path), NOT multilingual
+# ---------------------------------------------------------------
+ex:Country a sh:NodeShape ;
+  sh:targetClass ex:CountryClass ;
+  sh:property ex:Country_label, ex:Country_continent ;
+.
+
+ex:Country_label
+  sh:path rdfs:label ;
+  sh:datatype xsd:string ;
+  dash:searchWidget core:SearchProperty ;
+.
+
+ex:Country_continent
+  sh:path ex:continent ;
+  sh:class ex:ContinentClass ;
+  dash:searchWidget core:ListProperty ;
+.
+
+# Continent : explicit LabelRole, non multilingual, enableOptional false
+ex:Continent a sh:NodeShape ;
+  sh:targetClass ex:ContinentClass ;
+  sh:property ex:Continent_name ;
+.
+
+ex:Continent_name
+  sh:path ex:continentName ;
+  sh:datatype xsd:string ;
+  dash:propertyRole dash:LabelRole ;
+  core:enableOptional false ;
+.
+
+# ---------------------------------------------------------------
+# Organization : explicit LabelRole, multilingual
+# ---------------------------------------------------------------
+ex:Organization a sh:NodeShape ;
+  sh:targetClass ex:OrganizationClass ;
+  sh:property ex:Organization_name, ex:Organization_member, ex:Organization_country ;
+.
+
+ex:Organization_name
+  sh:path skos:prefLabel ;
+  sh:datatype rdf:langString ;
+  dash:propertyRole dash:LabelRole ;
+  dash:searchWidget core:SearchProperty ;
+.
+
+ex:Organization_member
+  sh:path ex:member ;
+  sh:class foaf:Person ;
+  dash:searchWidget core:AutocompleteProperty ;
+.
+
+ex:Organization_country
+  sh:path ex:orgCountry ;
+  sh:class ex:CountryClass ;
+  dash:searchWidget core:ListProperty ;
+  core:sparqlService ex:WikidataService ;
+.
+
+# ---------------------------------------------------------------
+# Concept : explicit LabelRole, multilingual, enableOptional false
+# ---------------------------------------------------------------
+ex:Concept a sh:NodeShape ;
+  sh:targetClass skos:Concept ;
+  sh:property ex:Concept_prefLabel, ex:Concept_broader ;
+.
+
+ex:Concept_prefLabel
+  sh:path skos:prefLabel ;
+  sh:datatype rdf:langString ;
+  dash:propertyRole dash:LabelRole ;
+  core:enableOptional false ;
+.
+
+ex:Concept_broader
+  sh:path skos:broader ;
+  sh:class skos:Concept ;
+  dash:searchWidget core:TreeProperty ;
+.
+
+# ---------------------------------------------------------------
+# Wikidata item (queried through SERVICE)
+# ---------------------------------------------------------------
+ex:WdItem a sh:NodeShape ;
+  sh:targetClass ex:WdItemClass ;
+  sh:property ex:WdItem_occupation ;
+.
+
+ex:WdItem_occupation
+  sh:path ex:occupation ;
+  sh:class skos:Concept ;
+  dash:searchWidget core:ListProperty ;
+.
+
+# ---------------------------------------------------------------
+# Place : SPARQL-based sh:target
+# ---------------------------------------------------------------
+ex:Place a sh:NodeShape ;
+  sh:target [
+    a sh:SPARQLTarget ;
+    sh:select "SELECT ?this WHERE { ?this a <http://example.com/PlaceClass> }"
+  ] ;
+.
+
+# Untyped thing : no sh:targetClass / sh:target
+ex:UntypedThing a sh:NodeShape ;
+.
+
+# rdfs:Resource / owl:Thing as node shapes with target class
+rdfs:Resource a sh:NodeShape ;
+  sh:targetClass rdfs:Resource ;
+  sh:property ex:Resource_seeAlso ;
+.
+
+ex:Resource_seeAlso
+  sh:path rdfs:seeAlso ;
+  sh:class foaf:Person ;
+  dash:searchWidget core:AutocompleteProperty ;
+.
+
+owl:Thing a sh:NodeShape ;
+  sh:targetClass owl:Thing ;
+.
+
+ex:Book a sh:NodeShape ;
+  sh:targetClass ex:BookClass ;
+.

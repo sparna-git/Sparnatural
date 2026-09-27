@@ -1,0 +1,21 @@
+SELECT DISTINCT ?Person_1 WHERE {
+  ?Person_1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.com/Person>.
+  {
+    ?Person_1 <http://example.com/beginDate> ?Date_1_begin;
+      <http://example.com/endDate> ?Date_1_end.
+    FILTER(?Date_1_begin <= "1850-12-31T23:59:59Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>)
+    FILTER(?Date_1_end >= "1800-01-01T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>)
+  }
+  UNION
+  {
+    ?Person_1 <http://example.com/beginDate> ?Date_1_begin.
+    FILTER(NOT EXISTS { ?Person_1 <http://example.com/endDate> ?Date_1_end. })
+    FILTER(?Date_1_begin <= "1850-12-31T23:59:59Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>)
+  }
+  UNION
+  {
+    ?Person_1 <http://example.com/endDate> ?Date_1_end.
+    FILTER(NOT EXISTS { ?Person_1 <http://example.com/beginDate> ?Date_1_begin. })
+    FILTER(?Date_1_end >= "1800-01-01T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>)
+  }
+}

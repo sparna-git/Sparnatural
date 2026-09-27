@@ -1,0 +1,53 @@
+{
+  "type": "query",
+  "subType": "SELECT",
+  "variables": [
+    {
+      "type": "term",
+      "subType": "variable",
+      "value": "Person_1"
+    }
+  ],
+  "solutionModifiers": {},
+  "distinct": true,
+  "where": {
+    "type": "pattern",
+    "subType": "bgpSameSubject",
+    "subject": {
+      "type": "term",
+      "subType": "variable",
+      "value": "Person_1",
+      "rdfType": "http://example.com/Person"
+    },
+    "predicateObjectPairs": [
+      {
+        "type": "predicateObjectPair",
+        "predicate": {
+          "type": "term",
+          "subType": "namedNode",
+          "value": "http://example.com/Person_birthYear"
+        },
+        "object": {
+          "type": "objectCriteria",
+          "variable": {
+            "type": "term",
+            "subType": "variable",
+            "value": "Date_1",
+            "rdfType": "http://special/Z_Date"
+          },
+          "filters": [
+            {
+              "type": "labelledFilter",
+              "label": "-0450|2023",
+              "filter": {
+                "type": "dateFilter",
+                "start": "-0450",
+                "stop": "2023"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

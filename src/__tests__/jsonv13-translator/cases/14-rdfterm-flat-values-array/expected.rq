@@ -1,0 +1,9 @@
+SELECT DISTINCT ?Person_1 ?Country_1 ?Country_1_label WHERE {
+  ?Person_1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.com/Person>.
+  ?Person_1 <http://example.com/Person_country> ?Country_1.
+  ?Country_1 <http://example.com/Country_label> ?Country_1_label.
+  VALUES ?Country_1 {
+    <http://example.com/country/FR>
+    <http://example.com/country/BE>
+  }
+}

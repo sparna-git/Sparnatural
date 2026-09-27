@@ -1,0 +1,15 @@
+SELECT DISTINCT ?Person_1 ?Person_2 ?Country_1 ?Country_1_label WHERE {
+  ?Person_1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.com/Person>.
+  ?Person_1 <http://example.com/Person_age> ?Number_1.
+  FILTER(?Number_1 >= "18"^^<http://www.w3.org/2001/XMLSchema#decimal>)
+  OPTIONAL {
+    ?Person_1 <http://example.com/Person_knows> ?Person_2.
+    ?Person_2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.com/Person>.
+  }
+  FILTER(NOT EXISTS { ?Person_1 <http://example.com/Person_memberOf> <http://example.com/org/acme>. })
+  OPTIONAL {
+    ?Person_1 <http://example.com/Person_country> ?Country_1.
+    ?Country_1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.com/Country>.
+    OPTIONAL { ?Country_1 <http://example.com/Country_label> ?Country_1_label. }
+  }
+}

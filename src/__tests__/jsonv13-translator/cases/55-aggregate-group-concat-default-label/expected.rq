@@ -1,0 +1,7 @@
+SELECT DISTINCT ?Person_1 (GROUP_CONCAT(DISTINCT ?Country_1_label; SEPARATOR = "; ") AS ?Country_1_group_concat) WHERE {
+  ?Person_1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.com/Person>.
+  ?Person_1 <http://example.com/Person_country> ?Country_1.
+  ?Country_1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.com/Country>.
+  ?Country_1 <http://example.com/Country_label> ?Country_1_label.
+}
+GROUP BY ?Person_1

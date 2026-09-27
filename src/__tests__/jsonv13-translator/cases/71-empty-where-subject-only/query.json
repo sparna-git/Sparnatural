@@ -1,0 +1,24 @@
+{
+  "type": "query",
+  "subType": "SELECT",
+  "variables": [
+    {
+      "type": "term",
+      "subType": "variable",
+      "value": "Person_1"
+    }
+  ],
+  "solutionModifiers": {},
+  "distinct": true,
+  "where": {
+    "type": "pattern",
+    "subType": "bgpSameSubject",
+    "subject": {
+      "type": "term",
+      "subType": "variable",
+      "value": "Person_1",
+      "rdfType": "http://example.com/Person"
+    },
+    "predicateObjectPairs": []
+  }
+}

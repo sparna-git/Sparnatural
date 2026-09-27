@@ -1,0 +1,53 @@
+{
+  "type": "query",
+  "subType": "SELECT",
+  "variables": [
+    {
+      "type": "term",
+      "subType": "variable",
+      "value": "Person_1"
+    }
+  ],
+  "solutionModifiers": {},
+  "distinct": true,
+  "where": {
+    "type": "pattern",
+    "subType": "bgpSameSubject",
+    "subject": {
+      "type": "term",
+      "subType": "variable",
+      "value": "Person_1",
+      "rdfType": "http://example.com/Person"
+    },
+    "predicateObjectPairs": [
+      {
+        "type": "predicateObjectPair",
+        "predicate": {
+          "type": "term",
+          "subType": "namedNode",
+          "value": "http://example.com/Person_livedIn"
+        },
+        "object": {
+          "type": "objectCriteria",
+          "variable": {
+            "type": "term",
+            "subType": "variable",
+            "value": "Date_1",
+            "rdfType": "http://special/Z_Date"
+          },
+          "filters": [
+            {
+              "type": "labelledFilter",
+              "label": "1800-01-01T00:00:00.000Z|1850-12-31T23:59:59.000Z",
+              "filter": {
+                "type": "dateFilter",
+                "start": "1800-01-01T00:00:00.000Z",
+                "stop": "1850-12-31T23:59:59.000Z"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

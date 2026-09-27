@@ -1,0 +1,96 @@
+{
+  "type": "query",
+  "subType": "SELECT",
+  "variables": [
+    {
+      "type": "term",
+      "subType": "variable",
+      "value": "Person_1"
+    },
+    {
+      "type": "term",
+      "subType": "variable",
+      "value": "Number_1"
+    },
+    {
+      "type": "term",
+      "subType": "variable",
+      "value": "Text_1"
+    }
+  ],
+  "solutionModifiers": {
+    "order": {
+      "type": "solutionModifier",
+      "subType": "order",
+      "orderDefs": [
+        {
+          "descending": true,
+          "expression": {
+            "type": "term",
+            "subType": "variable",
+            "value": "Number_1"
+          }
+        },
+        {
+          "descending": false,
+          "expression": {
+            "type": "term",
+            "subType": "variable",
+            "value": "Text_1"
+          }
+        }
+      ]
+    },
+    "limitOffset": {
+      "type": "solutionModifier",
+      "subType": "limitOffset",
+      "limit": 50
+    }
+  },
+  "where": {
+    "type": "pattern",
+    "subType": "bgpSameSubject",
+    "subject": {
+      "type": "term",
+      "subType": "variable",
+      "value": "Person_1",
+      "rdfType": "http://example.com/Person"
+    },
+    "predicateObjectPairs": [
+      {
+        "type": "predicateObjectPair",
+        "predicate": {
+          "type": "term",
+          "subType": "namedNode",
+          "value": "http://example.com/Person_age"
+        },
+        "object": {
+          "type": "objectCriteria",
+          "variable": {
+            "type": "term",
+            "subType": "variable",
+            "value": "Number_1",
+            "rdfType": "http://special/Z_Number"
+          }
+        }
+      },
+      {
+        "type": "predicateObjectPair",
+        "predicate": {
+          "type": "term",
+          "subType": "namedNode",
+          "value": "http://example.com/Person_nickname"
+        },
+        "object": {
+          "type": "objectCriteria",
+          "variable": {
+            "type": "term",
+            "subType": "variable",
+            "value": "Text_1",
+            "rdfType": "http://special/Z_Text"
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "type": "query",
+  "subType": "SELECT",
+  "variables": [
+    {
+      "type": "term",
+      "subType": "variable",
+      "value": "Person_1"
+    },
+    {
+      "type": "pattern",
+      "subType": "bind",
+      "expression": {
+        "type": "expression",
+        "subType": "aggregate",
+        "aggregation": "group_concat",
+        "distinct": true,
+        "expression": [
+          {
+            "type": "term",
+            "subType": "variable",
+            "value": "Text_1"
+          }
+        ],
+        "separator": ", "
+      },
+      "variable": {
+        "type": "term",
+        "subType": "variable",
+        "value": "Text_1_group_concat"
+      }
+    }
+  ],
+  "solutionModifiers": {},
+  "distinct": true,
+  "where": {
+    "type": "pattern",
+    "subType": "bgpSameSubject",
+    "subject": {
+      "type": "term",
+      "subType": "variable",
+      "value": "Person_1",
+      "rdfType": "http://example.com/Person"
+    },
+    "predicateObjectPairs": [
+      {
+        "type": "predicateObjectPair",
+        "predicate": {
+          "type": "term",
+          "subType": "namedNode",
+          "value": "http://example.com/Person_nickname"
+        },
+        "object": {
+          "type": "objectCriteria",
+          "variable": {
+            "type": "term",
+            "subType": "variable",
+            "value": "Text_1",
+            "rdfType": "http://special/Z_Text"
+          }
+        }
+      }
+    ]
+  }
+}

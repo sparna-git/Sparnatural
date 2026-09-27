@@ -1,0 +1,64 @@
+{
+  "type": "query",
+  "subType": "SELECT",
+  "variables": [
+    {
+      "type": "pattern",
+      "subType": "bind",
+      "expression": {
+        "type": "expression",
+        "subType": "aggregate",
+        "aggregation": "group_concat",
+        "distinct": true,
+        "expression": [
+          {
+            "type": "term",
+            "subType": "variable",
+            "value": "Organization_1"
+          }
+        ]
+      },
+      "variable": {
+        "type": "term",
+        "subType": "variable",
+        "value": "Organization_1_group_concat"
+      }
+    },
+    {
+      "type": "term",
+      "subType": "variable",
+      "value": "Country_1"
+    }
+  ],
+  "solutionModifiers": {},
+  "distinct": true,
+  "where": {
+    "type": "pattern",
+    "subType": "bgpSameSubject",
+    "subject": {
+      "type": "term",
+      "subType": "variable",
+      "value": "Organization_1",
+      "rdfType": "http://example.com/Organization"
+    },
+    "predicateObjectPairs": [
+      {
+        "type": "predicateObjectPair",
+        "predicate": {
+          "type": "term",
+          "subType": "namedNode",
+          "value": "http://example.com/Organization_country"
+        },
+        "object": {
+          "type": "objectCriteria",
+          "variable": {
+            "type": "term",
+            "subType": "variable",
+            "value": "Country_1",
+            "rdfType": "http://example.com/Country"
+          }
+        }
+      }
+    ]
+  }
+}

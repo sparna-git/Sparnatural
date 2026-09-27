@@ -1,0 +1,8 @@
+SELECT DISTINCT ?Person_1 ?WdItem_1 WHERE {
+  ?Person_1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.com/Person>.
+  SERVICE <https://query.wikidata.org/sparql> {
+    ?Person_1 <http://example.com/Person_wikidata> ?WdItem_1.
+    ?WdItem_1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.com/WdItem>.
+    ?WdItem_1 <http://example.com/WdItem_occupation> <http://example.com/concept/painter>.
+  }
+}

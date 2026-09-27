@@ -1,0 +1,96 @@
+{
+  "type": "query",
+  "subType": "SELECT",
+  "variables": [
+    {
+      "type": "term",
+      "subType": "variable",
+      "value": "Organization_1"
+    },
+    {
+      "type": "term",
+      "subType": "variable",
+      "value": "Person_1"
+    },
+    {
+      "type": "term",
+      "subType": "variable",
+      "value": "Country_1"
+    }
+  ],
+  "solutionModifiers": {},
+  "distinct": true,
+  "where": {
+    "type": "pattern",
+    "subType": "bgpSameSubject",
+    "subject": {
+      "type": "term",
+      "subType": "variable",
+      "value": "Organization_1",
+      "rdfType": "http://example.com/Organization"
+    },
+    "predicateObjectPairs": [
+      {
+        "type": "predicateObjectPair",
+        "predicate": {
+          "type": "term",
+          "subType": "namedNode",
+          "value": "http://example.com/Organization_member"
+        },
+        "object": {
+          "type": "objectCriteria",
+          "variable": {
+            "type": "term",
+            "subType": "variable",
+            "value": "Person_1",
+            "rdfType": "http://example.com/Person"
+          }
+        }
+      },
+      {
+        "type": "predicateObjectPair",
+        "predicate": {
+          "type": "term",
+          "subType": "namedNode",
+          "value": "http://example.com/Organization_country"
+        },
+        "object": {
+          "type": "objectCriteria",
+          "variable": {
+            "type": "term",
+            "subType": "variable",
+            "value": "Country_1",
+            "rdfType": "http://example.com/Country"
+          }
+        }
+      },
+      {
+        "type": "predicateObjectPair",
+        "predicate": {
+          "type": "term",
+          "subType": "namedNode",
+          "value": "http://example.com/Organization_name"
+        },
+        "object": {
+          "type": "objectCriteria",
+          "variable": {
+            "type": "term",
+            "subType": "variable",
+            "value": "Text_1",
+            "rdfType": "http://special/Z_Text"
+          },
+          "filters": [
+            {
+              "type": "labelledFilter",
+              "label": "museum",
+              "filter": {
+                "type": "searchFilter",
+                "search": "museum"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

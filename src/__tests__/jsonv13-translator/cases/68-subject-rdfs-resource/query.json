@@ -1,0 +1,47 @@
+{
+  "type": "query",
+  "subType": "SELECT",
+  "variables": [
+    {
+      "type": "term",
+      "subType": "variable",
+      "value": "Resource_1"
+    },
+    {
+      "type": "term",
+      "subType": "variable",
+      "value": "Person_1"
+    }
+  ],
+  "solutionModifiers": {},
+  "distinct": true,
+  "where": {
+    "type": "pattern",
+    "subType": "bgpSameSubject",
+    "subject": {
+      "type": "term",
+      "subType": "variable",
+      "value": "Resource_1",
+      "rdfType": "http://www.w3.org/2000/01/rdf-schema#Resource"
+    },
+    "predicateObjectPairs": [
+      {
+        "type": "predicateObjectPair",
+        "predicate": {
+          "type": "term",
+          "subType": "namedNode",
+          "value": "http://example.com/Resource_seeAlso"
+        },
+        "object": {
+          "type": "objectCriteria",
+          "variable": {
+            "type": "term",
+            "subType": "variable",
+            "value": "Person_1",
+            "rdfType": "http://example.com/Person"
+          }
+        }
+      }
+    ]
+  }
+}

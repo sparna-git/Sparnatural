@@ -9,6 +9,7 @@ import { SparnaturalQueryIfc } from "../../SparnaturalQueryIfc";
 import { SparnaturalQuery } from "../../SparnaturalQueryIfc-v13";
 import { JsonSparqlTranslator } from "../../generators/sparql/fromjson/JsonSparqlTranslator";
 import { JsonV13SparqlTranslator } from "../../generators/sparql/fromjsonv13/JsonV13SparqlTranslator";
+import { SparqlGeneratorV13 } from "../../generators/sparql/fromjsonv13/SparqlGeneratorV13";
 
 export class QueryGenerator {
   actionStore: ActionStore;
@@ -86,8 +87,8 @@ export class QueryGenerator {
     let selectQueryFromJsonV13 =
       sparqlFromJsonV13Generator.generateQuery(jsonQuery);
 
-    var generatorV13 = new Generator();
-    var queryString = generatorV13.stringify(selectQueryFromJsonV13);
+    var generatorV13 = new SparqlGeneratorV13();
+    var queryString = generatorV13.generate(selectQueryFromJsonV13);
 
     //console.log("Generated SPARQL v13 Query:", queryStringV13);
 

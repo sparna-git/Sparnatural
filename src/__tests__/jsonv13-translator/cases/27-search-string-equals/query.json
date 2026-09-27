@@ -1,0 +1,60 @@
+{
+  "type": "query",
+  "subType": "SELECT",
+  "variables": [
+    {
+      "type": "term",
+      "subType": "variable",
+      "value": "Person_1"
+    }
+  ],
+  "solutionModifiers": {},
+  "distinct": true,
+  "where": {
+    "type": "pattern",
+    "subType": "bgpSameSubject",
+    "subject": {
+      "type": "term",
+      "subType": "variable",
+      "value": "Person_1",
+      "rdfType": "http://example.com/Person"
+    },
+    "predicateObjectPairs": [
+      {
+        "type": "predicateObjectPair",
+        "predicate": {
+          "type": "term",
+          "subType": "namedNode",
+          "value": "http://example.com/Person_email"
+        },
+        "object": {
+          "type": "objectCriteria",
+          "variable": {
+            "type": "term",
+            "subType": "variable",
+            "value": "Text_1",
+            "rdfType": "http://special/Z_Text"
+          },
+          "filters": [
+            {
+              "type": "labelledFilter",
+              "label": "Alice@Example.com",
+              "filter": {
+                "type": "searchFilter",
+                "search": "Alice@Example.com"
+              }
+            },
+            {
+              "type": "labelledFilter",
+              "label": "bob@example.com",
+              "filter": {
+                "type": "searchFilter",
+                "search": "bob@example.com"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

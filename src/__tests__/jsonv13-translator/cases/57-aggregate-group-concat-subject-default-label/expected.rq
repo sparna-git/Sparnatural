@@ -1,0 +1,13 @@
+SELECT DISTINCT (GROUP_CONCAT(DISTINCT ?Organization_1_label; SEPARATOR = "; ") AS ?Organization_1_group_concat) ?Country_1 ?Country_1_label WHERE {
+  ?Organization_1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.com/Organization>.
+  OPTIONAL {
+    ?Organization_1 <http://example.com/Organization_name> ?Organization_1_label.
+    FILTER((LANG(?Organization_1_label)) = "en")
+  }
+  SERVICE <https://query.wikidata.org/sparql> {
+    ?Organization_1 <http://example.com/Organization_country> ?Country_1.
+    ?Country_1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.com/Country>.
+    OPTIONAL { ?Country_1 <http://example.com/Country_label> ?Country_1_label. }
+  }
+}
+GROUP BY ?Country_1 ?Country_1_label

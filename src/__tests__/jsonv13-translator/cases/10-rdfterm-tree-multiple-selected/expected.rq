@@ -1,0 +1,11 @@
+SELECT DISTINCT ?Person_1 ?Concept_1 ?Concept_1_label WHERE {
+  ?Person_1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.com/Person>.
+  ?Person_1 <http://example.com/Person_topic> ?Concept_1.
+  ?Concept_1 <http://example.com/Concept_prefLabel> ?Concept_1_label.
+  FILTER((LANG(?Concept_1_label)) = "en")
+  VALUES ?Concept_1 {
+    <http://example.com/concept/a>
+    <http://example.com/concept/b>
+    <http://example.com/concept/c>
+  }
+}

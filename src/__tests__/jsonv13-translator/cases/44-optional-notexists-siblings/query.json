@@ -1,0 +1,126 @@
+{
+  "type": "query",
+  "subType": "SELECT",
+  "variables": [
+    {
+      "type": "term",
+      "subType": "variable",
+      "value": "Person_1"
+    },
+    {
+      "type": "term",
+      "subType": "variable",
+      "value": "Person_2"
+    },
+    {
+      "type": "term",
+      "subType": "variable",
+      "value": "Country_1"
+    }
+  ],
+  "solutionModifiers": {},
+  "distinct": true,
+  "where": {
+    "type": "pattern",
+    "subType": "bgpSameSubject",
+    "subject": {
+      "type": "term",
+      "subType": "variable",
+      "value": "Person_1",
+      "rdfType": "http://example.com/Person"
+    },
+    "predicateObjectPairs": [
+      {
+        "type": "predicateObjectPair",
+        "predicate": {
+          "type": "term",
+          "subType": "namedNode",
+          "value": "http://example.com/Person_age"
+        },
+        "object": {
+          "type": "objectCriteria",
+          "variable": {
+            "type": "term",
+            "subType": "variable",
+            "value": "Number_1",
+            "rdfType": "http://special/Z_Number"
+          },
+          "filters": [
+            {
+              "type": "labelledFilter",
+              "label": "18-",
+              "filter": {
+                "type": "numberFilter",
+                "min": 18
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "predicateObjectPair",
+        "predicate": {
+          "type": "term",
+          "subType": "namedNode",
+          "value": "http://example.com/Person_knows"
+        },
+        "object": {
+          "type": "objectCriteria",
+          "variable": {
+            "type": "term",
+            "subType": "variable",
+            "value": "Person_2",
+            "rdfType": "http://example.com/Person"
+          }
+        },
+        "subType": "optional"
+      },
+      {
+        "type": "predicateObjectPair",
+        "predicate": {
+          "type": "term",
+          "subType": "namedNode",
+          "value": "http://example.com/Person_memberOf"
+        },
+        "object": {
+          "type": "objectCriteria",
+          "variable": {
+            "type": "term",
+            "subType": "variable",
+            "value": "Organization_1",
+            "rdfType": "http://example.com/Organization"
+          },
+          "values": [
+            {
+              "Organization_1": {
+                "type": "term",
+                "subType": "namedNode",
+                "value": "http://example.com/org/acme",
+                "label": "ACME"
+              }
+            }
+          ]
+        },
+        "subType": "notExists"
+      },
+      {
+        "type": "predicateObjectPair",
+        "predicate": {
+          "type": "term",
+          "subType": "namedNode",
+          "value": "http://example.com/Person_country"
+        },
+        "object": {
+          "type": "objectCriteria",
+          "variable": {
+            "type": "term",
+            "subType": "variable",
+            "value": "Country_1",
+            "rdfType": "http://example.com/Country"
+          }
+        },
+        "subType": "optional"
+      }
+    ]
+  }
+}
