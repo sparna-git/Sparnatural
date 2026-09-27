@@ -68,14 +68,12 @@ describe('SparqlGeneratorV13', () => {
   it('generates the same query as the standard Traqula generator when there are no comments', () => {
     const { query } = buildTestQuery();
     expect(generator.generate(query)).toBe(new Generator().generate(query));
-    expect(generator.generate(query)).toBe(
-      'SELECT ?Person_1 WHERE {\n' +
-      '  ?Person_1 <http://example.com/knows> ?Person_2 .\n' +
-      '  OPTIONAL {\n' +
-      '    ?Person_2 <http://example.com/name> ?Name .\n' +
-      '  }\n' +
-      '}',
-    );
+    expect(generator.generate(query)).toBe(`SELECT ?Person_1 WHERE {
+  ?Person_1 <http://example.com/knows> ?Person_2 .
+  OPTIONAL {
+    ?Person_2 <http://example.com/name> ?Name .
+  }
+}`);
   });
 
   it('prints the comments of triples and basic graph patterns on their own line, before them', () => {
@@ -84,17 +82,15 @@ describe('SparqlGeneratorV13', () => {
     addComment(knows, 'Person knows Person');
     addComment(name, 'Name of the known person');
 
-    expect(generator.generate(query)).toBe(
-      'SELECT ?Person_1 WHERE {\n' +
-      '  # The persons known by Person_1\n' +
-      '  # Person knows Person\n' +
-      '  ?Person_1 <http://example.com/knows> ?Person_2 .\n' +
-      '  OPTIONAL {\n' +
-      '    # Name of the known person\n' +
-      '    ?Person_2 <http://example.com/name> ?Name .\n' +
-      '  }\n' +
-      '}',
-    );
+    expect(generator.generate(query)).toBe(`SELECT ?Person_1 WHERE {
+  # The persons known by Person_1
+  # Person knows Person
+  ?Person_1 <http://example.com/knows> ?Person_2 .
+  OPTIONAL {
+    # Name of the known person
+    ?Person_2 <http://example.com/name> ?Name .
+  }
+}`);
   });
 
   it('prints multiple comments, and comments spanning multiple lines, with a "#" on each line', () => {
@@ -102,17 +98,15 @@ describe('SparqlGeneratorV13', () => {
     addComment(knows, 'first comment');
     addComment(knows, 'second comment\non two lines');
 
-    expect(generator.generate(query)).toBe(
-      'SELECT ?Person_1 WHERE {\n' +
-      '  # first comment\n' +
-      '  # second comment\n' +
-      '  # on two lines\n' +
-      '  ?Person_1 <http://example.com/knows> ?Person_2 .\n' +
-      '  OPTIONAL {\n' +
-      '    ?Person_2 <http://example.com/name> ?Name .\n' +
-      '  }\n' +
-      '}',
-    );
+    expect(generator.generate(query)).toBe(`SELECT ?Person_1 WHERE {
+  # first comment
+  # second comment
+  # on two lines
+  ?Person_1 <http://example.com/knows> ?Person_2 .
+  OPTIONAL {
+    ?Person_2 <http://example.com/name> ?Name .
+  }
+}`);
   });
 
   it('ignores the other metadata attached to the nodes', () => {
@@ -173,14 +167,12 @@ describe('SparqlGeneratorV13', () => {
     }
 
     const generated = generator.generate(selectQuery);
-    expect(generated).toBe(
-      'SELECT ?x ?o WHERE {\n' +
-      '  ?x <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.com/Person> .\n' +
-      '  # criteria on property knows\n' +
-      '  ?x <http://example.com/Person_knows> ?o .\n' +
-      '  ?o <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.com/Person> .\n' +
-      '}',
-    );
+    expect(generated).toBe(`SELECT ?x ?o WHERE {
+  ?x <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.com/Person> .
+  # criteria on property knows
+  ?x <http://example.com/Person_knows> ?o .
+  ?o <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.com/Person> .
+}`);
     // the comments do not change the query itself
     expect(generator.generate(parser.parse(generated))).toBe(
       generator.generate(new JsonV13SparqlTranslator(specProvider, settings).generateQuery(queryJson)),
