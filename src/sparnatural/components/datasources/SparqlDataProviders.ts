@@ -1,17 +1,9 @@
 import { Term } from "@rdfjs/types/data-model";
 import { ListDataProviderIfc, RdfTermDatasourceItem, AutocompleteDataProviderIfc, TreeDataProviderIfc, RdfTermTreeDatasourceItem, ValuesListDataProviderIfc, SinglePredicateDataProviderIfc } from "./DataProviders";
-import { AutocompleteSparqlQueryBuilderIfc, ListSparqlQueryBuilderIfc, SinglePredicateSparqlQueryBuilderIfc, TreeSparqlQueryBuilderIfc, ValuesListSparqlQueryBuilderIfc } from "./SparqlBuilders";
+import { AutocompleteSparqlQueryBuilderIfc, ListSparqlQueryBuilderIfc, SinglePredicateSparqlQueryBuilderIfc, TreeSparqlQueryBuilderIfc, ValuesListSparqlQueryBuilderIfc, QueryPattern } from "./SparqlBuilders";
+export { QueryPattern };
 import { sameTerm } from "../../SparnaturalQueryIfc";
 import { SparqlHandlerIfc } from "rdf-shacl-commons";
-
-/**
- * What a widget hands its datasource : the graph pattern of the query being edited, and
- * the variable of that query the pattern hangs on.
- */
-export interface QueryPattern {
-    pattern: string;
-    subjectVariable: string;
-}
 
 export abstract class BaseSparqlListDataProvider {
     
@@ -132,8 +124,7 @@ export class SparqlListDataProvider extends BaseSparqlListDataProvider implement
             this.lang,
             this.defaultLang,
             this.typePredicate,
-            queryPattern?.pattern,
-            queryPattern?.subjectVariable
+            queryPattern
         );
 
         // TEMPORARY : the list query, only when a pattern was actually injected
@@ -313,8 +304,7 @@ export class SparqlAutocompleDataProvider
           this.lang,
           this.defaultLang,
           this.typePredicate,
-          queryPattern?.pattern,
-          queryPattern?.subjectVariable
+          queryPattern
       );
 
       // TEMPORARY : the autocomplete query, only when a pattern was actually injected

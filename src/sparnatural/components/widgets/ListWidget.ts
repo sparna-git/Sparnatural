@@ -4,6 +4,7 @@ import { DataFactory } from 'rdf-data-factory';
 import "select2";
 import "select2/dist/css/select2.css";
 import { I18n } from "../../settings/I18n";
+import { getSettings } from "../../settings/defaultSettings";
 import { Term } from "@rdfjs/types/data-model";
 import { HTMLComponent } from "../HtmlComponent";
 import { ListDataProviderIfc, RdfTermDatasourceItem, ValuesListDataProviderIfc } from "../datasources/DataProviders";
@@ -77,6 +78,9 @@ export class ListWidget extends AbstractWidget {
    * discards a choice already made by the user.
    */
   #listenToQueryChanges() {
+    // nothing to reload when the datasources are not filtered by the query
+    if (!getSettings().facetedBrowsing) return;
+
     // render() may be called several times on the same widget, register only once
     if (this.queryChangeListener) return;
 
@@ -122,11 +126,15 @@ export class ListWidget extends AbstractWidget {
     this.selectHtml = $(`<select style="width:100%; min-width:200px;"></select>`);
     this.html.append(this.selectHtml);
 
-    // an empty list is not a mishap here : it means the criteria set on the other lines
-    // leave no possible value, which is worth telling the user
+    // with the datasources filtered by the query, an empty list is not a mishap : it
+    // means the other criteria leave no possible value, which is worth telling the user
+    let emptyLabel = getSettings().facetedBrowsing
+      ? I18n.labels.ListWidgetDeadEnd
+      : I18n.labels.ListWidgetNoItem;
+
     let noItemsHtml =
       $(`<div class="no-items" style="font-style:italic;">
-      ${I18n.labels.ListWidgetDeadEnd}
+      ${emptyLabel}
     </div>`);
 
     let errorHtml =
@@ -141,8 +149,9 @@ export class ListWidget extends AbstractWidget {
       if (loadId !== this.loadCounter) return;
 
       // tell the line whether this datasource returned anything : an empty list means
-      // no value can lead to a result, so the line is a dead end
-      this.html[0].dispatchEvent(
+      // no value can lead to a result, so the line is a dead end. Only meaningful when the
+      // datasources are filtered by the query.
+      if (getSettings().facetedBrowsing) this.html[0].dispatchEvent(
         new CustomEvent("datasourceHasValues", {
           bubbles: true,
           detail: { hasValues: items.length > 0 },

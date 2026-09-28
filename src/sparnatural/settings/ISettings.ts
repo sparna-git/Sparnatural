@@ -21,6 +21,8 @@ interface ISettings {
   localCacheDataTtl?: number;
   debug: boolean;
   submitButton?: boolean;
+  // when on, the datasources of the widgets only propose values leading to a result
+  facetedBrowsing?: boolean;
   customization? : {
     autocomplete?: Partial<AutocompleteConfiguration>,
     list?: Partial<ListConfiguration>,   

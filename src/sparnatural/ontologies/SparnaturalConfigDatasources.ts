@@ -9,7 +9,6 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
 SELECT DISTINCT ?value (STR(?value) AS ?label)
 WHERE {
     $this $type $domain .
-    $query
     $this $property ?value .
 }
 ORDER BY UCASE(STR(?label))
@@ -29,7 +28,6 @@ WHERE {
     SELECT DISTINCT ?theLabel (COUNT(?theLabel) AS ?count)
     WHERE {
       $this $type $domain .
-      $query
       $this $property ?theLabel .
       FILTER(lang(?theLabel) = "" || lang(?theLabel) = $lang)
     }
@@ -56,7 +54,6 @@ WHERE {
     SELECT DISTINCT ?theLabel (COUNT(?theLabel) AS ?count)
     WHERE {
       $this $type $domain .
-      $query
       $this $property ?theLabel .
       FILTER(lang(?theLabel) = "" || lang(?theLabel) = $lang)
     }
@@ -77,7 +74,6 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
 SELECT DISTINCT ?uri (STR(?uri) AS ?label)
 WHERE {
     $this $type $domain .
-    $query
     $this $property ?uri .
     FILTER(isIRI(?uri))
 }
@@ -95,7 +91,6 @@ WHERE {
   SELECT DISTINCT ?uri (COUNT($this) AS ?count)
   WHERE {
     $this $type $domain .
-    $query
     $this $property ?uri .
     FILTER(isIRI(?uri))
   }
@@ -113,7 +108,6 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   SELECT DISTINCT ?value (CONCAT(IF(isLiteral(?value) && LANG(?value) != '' && LANG(?value) != $lang,CONCAT(STR(?value), " <sup>(",LANG(?value),")</sup>"),STR(?value))) AS ?label)
   WHERE {
       $this $type $domain .
-      $query
       {
         {
           $this $property ?value . FILTER(isIRI(?value))
@@ -158,7 +152,6 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
     SELECT DISTINCT ?value (COUNT(DISTINCT $this) AS ?count)
     WHERE {
       $this $type $domain .
-      $query
       {
         {
           $this $property ?value . FILTER(isIRI(?value))
@@ -205,7 +198,6 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
     SELECT DISTINCT ?value (COUNT(DISTINCT $this) AS ?count)
     WHERE {
       $this $type $domain .
-      $query
       {
         {
           $this $property ?value . FILTER(isIRI(?value))
@@ -249,7 +241,6 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
 SELECT DISTINCT ?uri ?label
 WHERE {
     $this $type $domain .
-    $query
     $this $property ?uri .
     ?uri $labelPath ?label .
     FILTER(lang(?label) = "" || lang(?label) = $lang)
@@ -272,7 +263,6 @@ WHERE {
     SELECT DISTINCT ?uri (COUNT($this) AS ?count)
     WHERE {
       $this $type $domain .
-      $query
       $this $property ?uri .
       FILTER(isIRI(?uri))
     }
@@ -301,7 +291,6 @@ WHERE {
     SELECT DISTINCT ?uri (COUNT($this) AS ?count)
     WHERE {
       $this $type $domain .
-      $query
       $this $property ?uri .
       FILTER(isIRI(?uri))
     }
@@ -324,7 +313,6 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
 SELECT DISTINCT ?uri ?label
 WHERE {
     $this $type $domain .
-    $query
     $this $property ?uri .
     ?uri $type $range .
     ?uri $labelPath ?label .
@@ -348,7 +336,6 @@ WHERE {
     SELECT DISTINCT ?uri (COUNT($this) AS ?count)
     WHERE {
       $this $type $domain .
-      $query
       $this $property ?uri .
       FILTER(isIRI(?uri))
       ?uri $type $range .
@@ -379,7 +366,6 @@ WHERE {
     SELECT DISTINCT ?uri (COUNT($this) AS ?count)
     WHERE {
       $this $type $domain .
-      $query
       $this $property ?uri .
       FILTER(isIRI(?uri))
       # range criteria
@@ -421,7 +407,6 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
 SELECT DISTINCT ?uri ?label
 WHERE {
   $this $type $domain .
-  $query
   $this $property ?uri .
   ?uri $type $range .
   ?uri $labelPath ?label .
@@ -440,7 +425,6 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
 SELECT DISTINCT ?uri ?label
 WHERE {
   $this $type $domain .
-  $query
   $this $property ?uri .
   ?uri $type $range .
   ?uri $labelPath ?label .
@@ -461,7 +445,6 @@ PREFIX bif: <http://www.openlinksw.com/schemas/bif#>
 SELECT DISTINCT ?uri ?label
  WHERE {
   $this $type $domain .
-  $query
   $this $property ?uri .
   ?uri $type $range .
   ?uri $labelPath ?label .
@@ -480,7 +463,6 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
 SELECT DISTINCT ?uri ?label
 WHERE {
   $this $type $domain .
-  $query
   $this $property ?uri .
   ?uri $type $range .
   FILTER(isIRI(?uri))
@@ -498,7 +480,6 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
 SELECT DISTINCT ?value ?label
 WHERE {
   $this $type $domain .
-  $query
   $this $property ?value .
   FILTER(isLiteral(?value))
   BIND(STR(?value) AS ?label)
@@ -515,7 +496,6 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
 SELECT DISTINCT ?value ?label
 WHERE {
   $this $type $domain .
-  $query
   $this $property ?value .
   FILTER(isLiteral(?value))
   BIND(STR(?value) AS ?label)

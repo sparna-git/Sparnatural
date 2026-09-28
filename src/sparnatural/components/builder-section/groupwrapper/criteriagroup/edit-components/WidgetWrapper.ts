@@ -188,11 +188,14 @@ class WidgetWrapper extends HTMLComponent {
 
   /**
    * Returns the graph pattern of the query being edited, ready to be injected in the
-   * $query placeholder of a datasource template, with the variable it hangs on.
+   * datasource query, with the variable it hangs on.
    *
    * @returns null when there is nothing to inject
    */
   #getQueryPattern(): QueryPattern {
+    // switched off by default : without it Sparnatural behaves exactly as before
+    if (!this.settings.facetedBrowsing) return null;
+
     const sparnatural = this.getRootComponent() as SparnaturalComponent;
     const query = sparnatural.actionStore?.currentQuery;
     if (!query) return null;

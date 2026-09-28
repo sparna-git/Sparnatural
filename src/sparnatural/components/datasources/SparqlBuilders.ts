@@ -1,33 +1,50 @@
 import { Term } from "@rdfjs/types/data-model";
 
 /**
+ * What a widget hands its datasource : the graph pattern of the query being edited, and
+ * the variable of that query the pattern hangs on.
+ */
+export interface QueryPattern {
+    pattern: string;
+    subjectVariable: string;
+}
+
+/**
  * This file contains interfaces and classes for building SPARQL queries
  * for various operations such as listing, autocompleting, and tree structures.
  * It includes template-based query builders that can be customized with specific parameters.
  */
 
 /**
- * Fills the $query placeholder with the pattern of the query being edited. The template
- * subject, written $this or ?this, first takes the name of the variable the pattern hangs
- * on, so that both halves join. Without a pattern, $this stays a plain SPARQL variable.
+ * Injects the pattern of the query being edited into a datasource query. The template
+ * subject, written $this or ?this, takes the name of the variable the pattern hangs on,
+ * so that both halves join. Without a pattern, $this stays a plain SPARQL variable and
+ * the template is returned untouched.
  */
-function injectQueryPattern(
-    sparql: string,
-    queryPattern?: string,
-    subjectVariable?: string
-): string {
+function injectQueryPattern(sparql: string, queryPattern?: QueryPattern): string {
     // a template without $this could not be joined to the pattern : injecting would only
     // make the endpoint combine two unrelated halves
-    const joinable = !!queryPattern && !!subjectVariable && /[?$]this\b/.test(sparql);
+    const joinable = !!queryPattern?.pattern && !!queryPattern.subjectVariable && /[?$]this\b/.test(sparql);
 
-    if (joinable) {
-        // renamed before the pattern is pasted, so that a variable of the query that would
-        // itself be called this is left alone
-        sparql = sparql.replace(/[?$]this\b/g, () => "?" + subjectVariable);
-    }
+    if (!joinable) return sparql;
 
-    // through a function so that a $ inside the pattern is not reinterpreted
-    return sparql.replace(/\$query/g, () => (joinable ? queryPattern : ""));
+    const variable = "?" + queryPattern.subjectVariable;
+
+    // the pattern goes right before the first triple written on the subject.
+    // Anchoring on $this rather than on the first brace matters : in the templates that
+    // count, the first brace opens the outer query, where the subject of the inner one is
+    // unknown. And only an occurrence starting a line is a triple : the first one can sit
+    // inside a COUNT(), which is not a place to paste a graph pattern into.
+    let pasted = false;
+    return sparql.replace(/[?$]this\b/g, (match, offset: number, whole: string) => {
+        const lineStart = whole.lastIndexOf("\n", offset - 1) + 1;
+        const indent = whole.slice(lineStart, offset);
+
+        if (pasted || !/^[ \t]*$/.test(indent)) return variable;
+
+        pasted = true;
+        return queryPattern.pattern + "\n" + indent + variable;
+    });
 }
 
 /**
@@ -95,10 +112,8 @@ export interface ListSparqlQueryBuilderIfc  {
         language: any,
         defaultLanguage: any,
         typePath: string,
-        // graph pattern of the query being edited, injected in the $query placeholder
-        queryPattern?: string,
-        // variable of the query the pattern hangs on, given to the template subject
-        subjectVariable?: string
+        // graph pattern of the query being edited, injected in the datasource query
+        queryPattern?: QueryPattern
     ):string;
 
 }
@@ -138,10 +153,8 @@ export class ListSparqlTemplateQueryBuilder implements ListSparqlQueryBuilderIfc
         language: any,
         defaultLanguage: any,
         typePath: string,
-        // graph pattern of the query being edited, injected in the $query placeholder
-        queryPattern?: string,
-        // variable of the query the pattern hangs on, given to the template subject
-        subjectVariable?: string
+        // graph pattern of the query being edited, injected in the datasource query
+        queryPattern?: QueryPattern
     ): string {
         var reDomain = new RegExp("\\$domain", "g");
         var reProperty = new RegExp("\\$property", "g");
@@ -158,7 +171,7 @@ export class ListSparqlTemplateQueryBuilder implements ListSparqlQueryBuilderIfc
           .replace(reDefaultLang, "'" + defaultLanguage + "'")
           .replace(reType, typePath);
 
-        sparql = injectQueryPattern(sparql, queryPattern, subjectVariable);
+        sparql = injectQueryPattern(sparql, queryPattern);
 
         sparql = this.sparqlPostProcessor.semanticPostProcess(sparql);
 
@@ -237,10 +250,8 @@ export interface AutocompleteSparqlQueryBuilderIfc  {
         language: any,
         defaultLang : any,
         typePath: string,
-        // graph pattern of the query being edited, injected in the $query placeholder
-        queryPattern?: string,
-        // variable of the query the pattern hangs on, given to the template subject
-        subjectVariable?: string
+        // graph pattern of the query being edited, injected in the datasource query
+        queryPattern?: QueryPattern
     ):string;
 
 }
@@ -267,10 +278,8 @@ export class AutocompleteSparqlTemplateQueryBuilder implements AutocompleteSparq
         language: any,
         defaultLanguage : any,
         typePath: string,
-        // graph pattern of the query being edited, injected in the $query placeholder
-        queryPattern?: string,
-        // variable of the query the pattern hangs on, given to the template subject
-        subjectVariable?: string
+        // graph pattern of the query being edited, injected in the datasource query
+        queryPattern?: QueryPattern
     ): string {
         var reDomain = new RegExp("\\$domain", "g");
         var reProperty = new RegExp("\\$property", "g");
@@ -289,7 +298,7 @@ export class AutocompleteSparqlTemplateQueryBuilder implements AutocompleteSparq
           .replace(reDefaultLang, "'" + defaultLanguage + "'")
           .replace(reType, typePath);
 
-        sparql = injectQueryPattern(sparql, queryPattern, subjectVariable);
+        sparql = injectQueryPattern(sparql, queryPattern);
 
         sparql = this.sparqlPostProcessor.semanticPostProcess(sparql);
 
