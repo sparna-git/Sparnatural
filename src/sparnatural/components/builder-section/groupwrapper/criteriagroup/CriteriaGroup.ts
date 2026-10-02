@@ -10,11 +10,10 @@ import GroupWrapper from "../GroupWrapper";
 import { OptionsGroup, OptionTypes } from "./optionsgroup/OptionsGroup";
 import { HTMLComponent } from "../../../HtmlComponent";
 import { SelectedVal } from "../../../SelectedVal";
-import {
-  EndClassWidgetGroup
-} from "./startendclassgroup/EndClassWidgetGroup";
+import { EndClassWidgetGroup } from "./startendclassgroup/EndClassWidgetGroup";
 import ActionsGroup from "../../../buttons/actions/ActionsGroup";
 import { I18n } from "../../../../settings/I18n";
+import { PossibleValuesCheck } from "./PossibleValuesCheck";
 
 class CriteriaGroup extends HTMLComponent {
   startClassGroup: StartClassGroup;
@@ -26,12 +25,14 @@ class CriteriaGroup extends HTMLComponent {
   specProvider: ISparnaturalSpecification;
   parentGroupWrapper: GroupWrapper;
   unselectBtn: UnselectBtn;
+  // #809 : red light when no value of this line can lead to a result
+  possibleValuesCheck = new PossibleValuesCheck(this);
 
   constructor(
     parentComponent: GroupWrapper,
     specProvider: any,
     startClassVal?: SelectedVal,
-    startClassEyeBtn?: boolean
+    startClassEyeBtn?: boolean,
   ) {
     super("CriteriaGroup", parentComponent, null);
     this.specProvider = specProvider;
@@ -42,7 +43,7 @@ class CriteriaGroup extends HTMLComponent {
       I18n.labels.StartClassTemporaryLabel,
       startClassVal,
       // Decides if the selectviewvarBtn is rendered on the startClass. That is the case only for the first one
-      startClassEyeBtn
+      startClassEyeBtn,
     );
   }
 
@@ -52,7 +53,7 @@ class CriteriaGroup extends HTMLComponent {
     this.unselectBtn = new UnselectBtn(this, () => {
       // caught in Parentcomponent
       this.html[0].dispatchEvent(
-        new CustomEvent("onRemoveGrp", { bubbles: true })
+        new CustomEvent("onRemoveGrp", { bubbles: true }),
       );
     }).render();
     return this;
@@ -65,7 +66,7 @@ class CriteriaGroup extends HTMLComponent {
     this.objectPropertyGroup = new ObjectPropertyGroup(
       this,
       this.specProvider,
-      I18n.labels.ObjectPropertyTemporaryLabel
+      I18n.labels.ObjectPropertyTemporaryLabel,
     ).render();
     this.endClassGroup = new EndClassGroup(this, this.specProvider).render();
     this.endClassWidgetGroup = new EndClassWidgetGroup(this, this.specProvider);
@@ -82,11 +83,11 @@ class CriteriaGroup extends HTMLComponent {
         e.stopImmediatePropagation();
         if (!this.#isSelectedVal(e.detail))
           throw Error(
-            "StartClassGroupSelected expects object of type SelectedVal"
+            "StartClassGroupSelected expects object of type SelectedVal",
           );
         this.objectPropertyGroup.onStartClassGroupSelected(e.detail);
         this.endClassGroup.onStartClassGroupSelected(e.detail);
-      }
+      },
     );
 
     // 2. User Selects EndClassVal
@@ -105,7 +106,7 @@ class CriteriaGroup extends HTMLComponent {
 
         if (!this.#isSelectedVal(e.detail))
           throw Error(
-            "onObjectPropertyGroupSelected expects object of type SelectedVal"
+            "onObjectPropertyGroupSelected expects object of type SelectedVal",
           );
 
         // if there is already a where connection or widget values selected, don't change anything
@@ -115,10 +116,11 @@ class CriteriaGroup extends HTMLComponent {
         ) {
           this.endClassGroup.onObjectPropertyGroupSelected(e.detail);
           this.endClassWidgetGroup.render();
+          this.possibleValuesCheck.start();
         }
 
         this.optionsGroup.onObjectPropertyGroupSelected(
-          this.parentGroupWrapper.currentOptionState
+          this.parentGroupWrapper.currentOptionState,
         );
 
         // if there is no AND sibling, enable the AND action again
@@ -130,9 +132,11 @@ class CriteriaGroup extends HTMLComponent {
         if (this.specProvider.getProperty(e.detail.type).getServiceEndpoint()) {
           this.parentGroupWrapper.triggerOption(OptionTypes.SERVICE);
         } else {
-          this.parentGroupWrapper.triggerOption(this.parentGroupWrapper.currentOptionState);
+          this.parentGroupWrapper.triggerOption(
+            this.parentGroupWrapper.currentOptionState,
+          );
         }
-      }
+      },
     );
 
     // gets called by the widget.
@@ -140,7 +144,7 @@ class CriteriaGroup extends HTMLComponent {
       e.stopImmediatePropagation();
       if (e.detail == "" || !e.detail)
         throw Error(
-          'No widgetValue received. Widget Value needs to be provided for "renderWidgetVal"'
+          'No widgetValue received. Widget Value needs to be provided for "renderWidgetVal"',
         );
       if (Array.isArray(e.detail)) {
         // if there is an array with values provided, render all of them
@@ -172,12 +176,12 @@ class CriteriaGroup extends HTMLComponent {
     this.html[0].addEventListener("updateWidgetList", (e: CustomEvent) => {
       if (!("unselectedVal" in e.detail))
         throw Error(
-          "updateWidgetList expects an object of type EndClassWidgetValue"
+          "updateWidgetList expects an object of type EndClassWidgetValue",
         );
       e.stopImmediatePropagation();
-      
+
       this.html[0].dispatchEvent(
-        new CustomEvent("generateQuery", { bubbles: true })
+        new CustomEvent("generateQuery", { bubbles: true }),
       );
     });
 
@@ -198,7 +202,7 @@ class CriteriaGroup extends HTMLComponent {
         // Render WidgetsWrapper and ActionWhere
         this.endClassGroup.editComponents.render();
         this.html[0].dispatchEvent(
-          new CustomEvent("onGrpInputNotCompleted", { bubbles: true })
+          new CustomEvent("onGrpInputNotCompleted", { bubbles: true }),
         );
       } else {
         //we only need widgetswrapper

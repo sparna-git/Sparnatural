@@ -268,3 +268,19 @@ li.groupe.completed {
 		display: none;
 	}
 }
+
+/* #809 : while checking if the line can have a result, and when it cannot, nothing is
+   shown under the line, the status chip in the line says it all */
+.CriteriaGroup.checking-values,
+.CriteriaGroup.no-possible-value {
+	.EditComponents,
+	.ActionsGroup {
+		display: none;
+	}
+}
+
+/* #809 : OPTIONAL / NOT EXISTS would change nothing on a line left out of the query, they are
+   not offered. Hidden rather than removed, so that the line keeps its layout */
+.CriteriaGroup.no-possible-value .OptionsGroup {
+	visibility: hidden;
+}

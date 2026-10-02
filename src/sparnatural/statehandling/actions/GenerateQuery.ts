@@ -9,6 +9,8 @@ import { SparnaturalQueryIfc } from "../../SparnaturalQueryIfc";
 import { SparnaturalQuery } from "../../SparnaturalQueryIfc-v13";
 import { JsonSparqlTranslator } from "../../generators/sparql/fromjson/JsonSparqlTranslator";
 import { JsonV13SparqlTranslator } from "../../generators/sparql/fromjsonv13/JsonV13SparqlTranslator";
+import { AskQueryBuilder } from "../../generators/sparql/AskQueryBuilder";
+import { PossibleValuesCheck } from "../../components/builder-section/groupwrapper/criteriagroup/PossibleValuesCheck";
 
 export class QueryGenerator {
   actionStore: ActionStore;
@@ -50,6 +52,12 @@ export class QueryGenerator {
     var jsonQuery = qryGenV13.generateQuery(
       settings.addDistinct,
       settings.limit,
+    );
+
+    // #809 : the lines with a red light are left out of the query
+    jsonQuery = AskQueryBuilder.withoutLines(
+      jsonQuery,
+      PossibleValuesCheck.redLineVariables(this.actionStore.sparnatural),
     );
 
     //console.log("Generated JSON v13 Query:", jsonQueryV13);
