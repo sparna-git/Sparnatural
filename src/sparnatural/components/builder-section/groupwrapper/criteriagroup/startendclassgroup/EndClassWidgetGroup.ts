@@ -613,7 +613,7 @@ class StatusChip extends HTMLComponent {
     }
     this.html.addClass("noPossibleValue");
     this.backArrow.render();
-    this.html.append($(`<p><span>${UiuxConfig.ICON_TRAFFIC_LIGHT_STOP}<em>${I18n.labels.NoPossibleValue}</em></span></p>`));
+    this.html.append($(`<p><span>${UiuxConfig.ICON_TRAFFIC_LIGHT_STOP}<em>${I18n.labels.NoResults}</em></span></p>`));
     this.frontArrow.render();
     return this;
   }

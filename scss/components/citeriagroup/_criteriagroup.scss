@@ -241,34 +241,6 @@ li.groupe.completed {
 	}
 }
 
-/* Dead end : the datasource of this line returned no value at all, so no choice made
-   here can lead to a result. The "Any" option and the AND control are disabled, they
-   would only lead further into an empty branch. */
-.CriteriaGroup.dead-end {
-
-	.selectAll,
-	.ActionAnd > a {
-		color: #b5b5b5;
-		cursor: not-allowed;
-		pointer-events: none;
-	}
-
-	.selectAll .underline {
-		text-decoration: none;
-		cursor: not-allowed;
-	}
-
-	.or {
-		color: #b5b5b5;
-	}
-
-	/* searching a sub criteria would only dig deeper into the empty branch, so the
-	   whole proposal is hidden rather than shown as an unusable button */
-	.ActionWhere {
-		display: none;
-	}
-}
-
 /* #809 : while checking if the line can have a result, and when it cannot, nothing is
    shown under the line, the status chip in the line says it all */
 .CriteriaGroup.checking-values,
@@ -279,8 +251,8 @@ li.groupe.completed {
 	}
 }
 
-/* #809 : OPTIONAL / NOT EXISTS would change nothing on a line left out of the query, they are
-   not offered. Hidden rather than removed, so that the line keeps its layout */
+/* #809 : OPTIONAL / NOT EXISTS are not offered on a line with a red light. Hidden rather than
+   removed, so that the line keeps its layout */
 .CriteriaGroup.no-possible-value .OptionsGroup {
 	visibility: hidden;
 }

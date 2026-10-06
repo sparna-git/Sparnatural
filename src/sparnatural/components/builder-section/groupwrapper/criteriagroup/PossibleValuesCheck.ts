@@ -1,6 +1,5 @@
 import { SparqlHandlerFactory } from "rdf-shacl-commons";
 import CriteriaGroup from "./CriteriaGroup";
-import GroupWrapper from "../GroupWrapper";
 import { OptionTypes } from "./optionsgroup/OptionsGroup";
 import SparnaturalComponent from "../../../SparnaturalComponent";
 import { SparnaturalJsonGeneratorV13 } from "../../../../generators/json/SparnaturalJson-v13Generator";
@@ -9,14 +8,17 @@ import { getSettings } from "../../../../settings/defaultSettings";
 
 /**
  * #809 : before a line shows its widget, asks the endpoint if the whole query, this line
- * included, can have a result. If not, this line (the user's last move) gets a red light in
- * place of its widget and is left out of the generated query. The other lines are left as they
- * are. A red line is checked again at each query change, to come back when it can.
+ * included, has at least one result. If not, a red light "No results" replaces the widget.
+ * Every line waiting for its value is checked again at each query change, whatever its widget.
  */
 export class PossibleValuesCheck {
+  // answers by ASK query. Every waiting line asks the same question, the whole query : kept
+  // as promises, so that it is sent only once.
+  static #answers = new Map<string, Promise<boolean>>();
+
   #line: CriteriaGroup;
   #state: "checking" | "none" | null = null;
-  // last ASK sent : the same query is not sent twice, and an answer to an older one is ignored
+  // last ASK of this line : the same one is not asked twice, an answer to an older one is ignored
   #lastAsk: string = null;
   #queryListener: () => void = null;
 
@@ -32,26 +34,19 @@ export class PossibleValuesCheck {
     this.#listenToQueryChanges();
   }
 
-  // red light shown, this line is left out of the query
-  hasNoPossibleValue(): boolean {
-    return this.#state === "none";
+  // a line with its property, and neither a value, nor "Any", nor a WHERE : its widget is
+  // shown, or would be
+  #isWaitingForValue(): boolean {
+    const line = this.#line;
+    return (
+      !!line.endClassGroup?.editComponents &&
+      !line.parentGroupWrapper.whereChild &&
+      !(line.endClassWidgetGroup?.widgetValues?.length > 0) &&
+      !line.endClassWidgetGroup?.isSelectAll
+    );
   }
 
-  // object variables of the lines with a red light, to leave them out of the query. Never the
-  // first line, it carries the subject of the whole query.
-  static redLineVariables(sparnatural: SparnaturalComponent, except?: CriteriaGroup): string[] {
-    const root = sparnatural.BgWrapper.componentsList.rootGroupWrapper;
-    const variables: string[] = [];
-    root?.traversePreOrder((grp: GroupWrapper) => {
-      const line = grp.criteriaGroup;
-      if (grp !== root && line !== except && line.possibleValuesCheck.hasNoPossibleValue()) {
-        variables.push(line.endClassGroup.getVarName());
-      }
-    });
-    return variables;
-  }
-
-  // a change elsewhere in the query can bring a red line back
+  // a change anywhere in the query can close this line, or open it again
   #listenToQueryChanges() {
     if (this.#queryListener) return;
     // kept so that the listener can remove itself from the very same element
@@ -63,9 +58,7 @@ export class PossibleValuesCheck {
         root.removeEventListener("queryUpdated", this.#queryListener);
         return;
       }
-      // only a red line is checked again : the red light stays on the line of the user's last
-      // move, a line in use is never turned red by what happens on another line
-      if (this.#state === "none") this.#check(false);
+      if (this.#isWaitingForValue()) this.#check(false);
     };
 
     root.addEventListener("queryUpdated", this.#queryListener);
@@ -81,38 +74,19 @@ export class PossibleValuesCheck {
       this.#apply(true);
       return;
     }
-    // already sent : its answer is shown or on its way
+    // already asked : its answer is shown or on its way
     if (!withSpinner && ask === this.#lastAsk) return;
     this.#lastAsk = ask;
     if (withSpinner) this.#setState("checking");
 
-    const settings = getSettings();
-    if (settings.debug) console.log("[#809] ASK query :\n" + ask);
-    new SparqlHandlerFactory(
-      settings.language,
-      settings.localCacheDataTtl,
-      settings.customization?.headers,
-      settings.customization?.sparqlHandler,
-      (this.#line.getRootComponent() as SparnaturalComponent).catalog,
-    )
-      .buildSparqlHandler(settings.endpoints)
-      .executeSparql(
-        ask,
-        (data: any) => {
-          if (settings.debug) console.log("[#809] ASK answer :", data?.boolean);
-          // only an explicit false is a dead end, anything else shows the widget
-          if (ask === this.#lastAsk) this.#apply(data?.boolean !== false);
-        },
-        (error: any) => {
-          if (ask !== this.#lastAsk) return;
-          // a failing endpoint must never block the user with a wrong red light
-          console.warn("[#809] ASK query failed, widget shown anyway", error);
-          this.#apply(true);
-        },
-      );
+    this.#ask(ask).then((hasResult) => {
+      // the query changed meanwhile, or the line got its value : the answer is no longer needed
+      if (ask === this.#lastAsk && this.#isWaitingForValue())
+        this.#apply(hasResult);
+    });
   }
 
-  // the ASK of the whole query, this line included. Null when this line is not to be checked.
+  // the ASK of the whole query, as it is on screen. Null when this line is not to be checked.
   #buildAsk(): string {
     const line = this.#line;
     const sparnatural = line.getRootComponent() as SparnaturalComponent;
@@ -131,13 +105,12 @@ export class PossibleValuesCheck {
     }
 
     try {
-      // the query of the screen, red lines left out except this one : it must be in its own
-      // ASK, or it could never come back
-      const jsonQuery = AskQueryBuilder.withoutLines(
-        new SparnaturalJsonGeneratorV13(sparnatural).generateQuery(false, 0),
-        PossibleValuesCheck.redLineVariables(sparnatural, line),
+      const jsonQuery = new SparnaturalJsonGeneratorV13(
+        sparnatural,
+      ).generateQuery(false, 0);
+      const ask = new AskQueryBuilder(line.specProvider, settings).build(
+        jsonQuery,
       );
-      const ask = new AskQueryBuilder(line.specProvider, settings).build(jsonQuery);
       return line.specProvider.expandSparql(ask, settings.sparqlPrefixes);
     } catch (err) {
       console.warn("[#809] could not build the ASK query", err);
@@ -145,15 +118,58 @@ export class PossibleValuesCheck {
     }
   }
 
+  // true when the query has at least one result
+  #ask(ask: string): Promise<boolean> {
+    const settings = getSettings();
+    // the same query on another endpoint is another question
+    const key = settings.endpoints[0] + "\n" + ask;
+    let answer = PossibleValuesCheck.#answers.get(key);
+    if (answer) return answer;
+
+    if (settings.debug) console.log("[#809] ASK query :\n" + ask);
+    answer = new Promise<boolean>((resolve) => {
+      new SparqlHandlerFactory(
+        settings.language,
+        settings.localCacheDataTtl,
+        settings.customization?.headers,
+        settings.customization?.sparqlHandler,
+        (this.#line.getRootComponent() as SparnaturalComponent).catalog,
+      )
+        .buildSparqlHandler(settings.endpoints)
+        .executeSparql(
+          ask,
+          (data: any) => {
+            if (settings.debug)
+              console.log("[#809] ASK answer :", data?.boolean);
+            // only an explicit false means no result
+            resolve(data?.boolean !== false);
+          },
+          (error: any) => {
+            // a failing endpoint must never bring a wrong red light, it is asked again next time
+            console.warn("[#809] ASK query failed, widget shown anyway", error);
+            PossibleValuesCheck.#answers.delete(key);
+            resolve(true);
+          },
+        );
+    });
+    PossibleValuesCheck.#answers.set(key, answer);
+    return answer;
+  }
+
   #apply(hasResult: boolean) {
     const state = hasResult ? null : "none";
+    const wasRed = this.#state === "none";
     // nothing to redraw when the answer confirms what is shown
-    if (state !== this.#state) this.#setState(state);
+    if (state === this.#state) return;
+
+    this.#setState(state);
+    // back from a red light : its widget was loaded with a query that had no result, load it
+    // again with the current one
+    if (wasRed) this.#line.endClassGroup.editComponents.render();
   }
 
   #setState(state: "checking" | "none" | null) {
     const line = this.#line;
-    const wasNone = this.#state === "none";
     this.#state = state;
     line.html[0].classList.toggle("checking-values", state === "checking");
     line.html[0].classList.toggle("no-possible-value", state === "none");
@@ -165,8 +181,9 @@ export class PossibleValuesCheck {
     line.html[0].dispatchEvent(
       new CustomEvent("redrawBackgroundAndLinks", { bubbles: true }),
     );
-    // the line enters or leaves the query, the generated query must follow
-    if (wasNone !== (state === "none")) {
+    // a line with a red light will never get a value, which is what normally updates the
+    // query : generate it now, so that it shows this line like the screen does
+    if (state === "none") {
       line.html[0].dispatchEvent(
         new CustomEvent("generateQuery", { bubbles: true }),
       );

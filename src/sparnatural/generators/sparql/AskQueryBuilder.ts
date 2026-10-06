@@ -1,10 +1,6 @@
 import { Generator } from "sparqljs";
 import { ISparnaturalSpecification } from "../../spec-providers/ISparnaturalSpecification";
-import {
-  PredicateObjectPair,
-  SelectVariable,
-  SparnaturalQuery,
-} from "../../SparnaturalQueryIfc-v13";
+import { SparnaturalQuery } from "../../SparnaturalQueryIfc-v13";
 import { JsonV13SparqlTranslator } from "./fromjsonv13/JsonV13SparqlTranslator";
 
 // #809 : builds the ASK telling if a query can have at least one result. Like QueryPatternBuilder,
@@ -41,32 +37,4 @@ export class AskQueryBuilder {
     });
   }
 
-  // Copy of the query without the lines whose object variable is given, nor the selected
-  // variables they bring : how the lines with a red light are left out of the query.
-  static withoutLines(originalQuery: SparnaturalQuery, objectVariables: string[]): SparnaturalQuery {
-    if (objectVariables.length === 0) return originalQuery;
-
-    const query: SparnaturalQuery = JSON.parse(JSON.stringify(originalQuery));
-    query.where.predicateObjectPairs = removePairs(query.where.predicateObjectPairs, objectVariables);
-    query.variables = query.variables?.filter(
-      (v) => !objectVariables.includes(variableName(v))
-    );
-    return query;
-  }
-
-}
-
-function removePairs(pairs: PredicateObjectPair[], objectVariables: string[]): PredicateObjectPair[] {
-  return pairs.filter((pair) => {
-    if (objectVariables.includes(pair.object?.variable?.value)) return false;
-    if (pair.object?.predicateObjectPairs) {
-      pair.object.predicateObjectPairs = removePairs(pair.object.predicateObjectPairs, objectVariables);
-    }
-    return true;
-  });
-}
-
-// the variable a selected column is about, the aggregated one for an aggregate
-function variableName(v: SelectVariable): string {
-  return v.type === "pattern" ? v.expression.expression[0].value : v.value;
 }

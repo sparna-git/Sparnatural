@@ -4,7 +4,6 @@ import { DataFactory } from 'rdf-data-factory';
 import "select2";
 import "select2/dist/css/select2.css";
 import { I18n } from "../../settings/I18n";
-import { getSettings } from "../../settings/defaultSettings";
 import { Term } from "@rdfjs/types/data-model";
 import { HTMLComponent } from "../HtmlComponent";
 import { ListDataProviderIfc, RdfTermDatasourceItem, ValuesListDataProviderIfc } from "../datasources/DataProviders";
@@ -31,14 +30,8 @@ export class ListWidget extends AbstractWidget {
 
   selectHtml: JQuery<HTMLElement>;
 
-  // registered once on the root component, see #listenToQueryChanges
-  private queryChangeListener: () => void;
-
   // incremented on every load, so that a late answer from a previous one is dropped
   private loadCounter = 0;
-
-  // pending reload, so that several queryUpdated in a row trigger a single query
-  private reloadTimer: ReturnType<typeof setTimeout>;
 
   constructor(
     parentComponent: HTMLComponent,
@@ -65,44 +58,8 @@ export class ListWidget extends AbstractWidget {
 
   render() {
     super.render();
-    this.#listenToQueryChanges();
     this.#loadValues();
     return this;
-  }
-
-  /**
-   * Reloads the list whenever the query changes, so that it keeps proposing only values
-   * consistent with the filters set on the other lines.
-   *
-   * A widget is only displayed while its line has no value yet, so a reload never
-   * discards a choice already made by the user.
-   */
-  #listenToQueryChanges() {
-    // nothing to reload when the datasources are not filtered by the query
-    if (!getSettings().facetedBrowsing) return;
-
-    // render() may be called several times on the same widget, register only once
-    if (this.queryChangeListener) return;
-
-    // kept so that the listener can remove itself from the very same element
-    const root = this.getRootComponent().html[0];
-
-    this.queryChangeListener = () => {
-      // the widget is taken off the page as soon as its line gets a value : there is
-      // nothing left to reload, and nothing left to listen for
-      if (!this.html[0]?.isConnected) {
-        clearTimeout(this.reloadTimer);
-        root.removeEventListener("queryUpdated", this.queryChangeListener);
-        this.queryChangeListener = null;
-        return;
-      }
-
-      // queryUpdated fires several times for a single user action, only keep the last
-      clearTimeout(this.reloadTimer);
-      this.reloadTimer = setTimeout(() => this.#loadValues(), 150);
-    };
-
-    root.addEventListener("queryUpdated", this.queryChangeListener);
   }
 
   /**
@@ -126,15 +83,9 @@ export class ListWidget extends AbstractWidget {
     this.selectHtml = $(`<select style="width:100%; min-width:200px;"></select>`);
     this.html.append(this.selectHtml);
 
-    // with the datasources filtered by the query, an empty list is not a mishap : it
-    // means the other criteria leave no possible value, which is worth telling the user
-    let emptyLabel = getSettings().facetedBrowsing
-      ? I18n.labels.ListWidgetDeadEnd
-      : I18n.labels.ListWidgetNoItem;
-
     let noItemsHtml =
       $(`<div class="no-items" style="font-style:italic;">
-      ${emptyLabel}
+      ${I18n.labels.ListWidgetNoItem}
     </div>`);
 
     let errorHtml =
@@ -147,16 +98,6 @@ export class ListWidget extends AbstractWidget {
       // a newer load was started in the meantime, this answer is obsolete : appending it
       // would duplicate the entries of the list
       if (loadId !== this.loadCounter) return;
-
-      // tell the line whether this datasource returned anything : an empty list means
-      // no value can lead to a result, so the line is a dead end. Only meaningful when the
-      // datasources are filtered by the query.
-      if (getSettings().facetedBrowsing) this.html[0].dispatchEvent(
-        new CustomEvent("datasourceHasValues", {
-          bubbles: true,
-          detail: { hasValues: items.length > 0 },
-        })
-      );
 
       if (items.length > 0) {
 

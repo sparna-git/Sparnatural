@@ -64,6 +64,9 @@
 
     /* #809 : red light chip, not removable. Only the icon svg, the arrows keep their size */
     &.noPossibleValue {
+        /* the class before it is not selected, so it has no arrow to fit into : a white gap
+           keeps the chip off its label */
+        margin-left: 10px;
         p > span {
             display: flex;
             align-items: center;
