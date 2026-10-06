@@ -51,10 +51,10 @@
 
             &.notFound {
                 color: red;
-                &::before {
-                    content: "⛔";
-                    margin-right: 4px;
-                    font-size: 1em;
+                svg {
+                    height: 18px;
+                    width: auto;
+                    margin-right: 2px;
                     vertical-align: middle;
                 }
             }

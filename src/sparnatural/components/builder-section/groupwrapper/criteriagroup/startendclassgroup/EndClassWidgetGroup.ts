@@ -541,16 +541,18 @@ export class EndClassWidgetValue extends HTMLComponent {
 
     // set a tooltip if the label is a bit long
     var extraClass = "";
+    var icon = "";
     if(
       this.widgetVal && this.widgetVal.criteria && (getCriteriaType(this.widgetVal.criteria) == CriteriaType.RdfTermCriteria)
       && (this.widgetVal.criteria as RdfTermCriteria).rdfTerm.value == "https://services.sparnatural.eu/api/v1/URI_NOT_FOUND"
     ) {
       extraClass = 'class="notFound"'
+      icon = UiuxConfig.ICON_CIRCLE_QUESTION;
     } else if (this.selectAll) {
       extraClass = 'class="all"';
     }
 
-    let valuelbl = `<p><span ${extraClass}> ${theLabel} </span></p>`;
+    let valuelbl = `<p><span ${extraClass}>${icon} ${theLabel} </span></p>`;
     this.html.append($(valuelbl));
 
     if (theLabel.length > 25) {
@@ -613,7 +615,7 @@ class StatusChip extends HTMLComponent {
     }
     this.html.addClass("noPossibleValue");
     this.backArrow.render();
-    this.html.append($(`<p><span>${UiuxConfig.ICON_TRAFFIC_LIGHT_STOP}<em>${I18n.labels.NoResults}</em></span></p>`));
+    this.html.append($(`<p><span>${UiuxConfig.ICON_NO_ENTRY}<em>${I18n.labels.NoResults}</em></span></p>`));
     this.frontArrow.render();
     return this;
   }
