@@ -2,7 +2,7 @@ import { Term } from "@rdfjs/types/data-model";
 import { ListDataProviderIfc, RdfTermDatasourceItem, AutocompleteDataProviderIfc, TreeDataProviderIfc, RdfTermTreeDatasourceItem, ValuesListDataProviderIfc, SinglePredicateDataProviderIfc } from "./DataProviders";
 import { AutocompleteSparqlQueryBuilderIfc, ListSparqlQueryBuilderIfc, SinglePredicateSparqlQueryBuilderIfc, TreeSparqlQueryBuilderIfc, ValuesListSparqlQueryBuilderIfc, QueryPattern } from "./SparqlBuilders";
 export { QueryPattern };
-import { RDFTerm, sameTerm } from "../../SparnaturalQueryIfc";
+import { sameTerm } from "../../SparnaturalQueryIfc";
 import { SparqlHandlerIfc } from "rdf-shacl-commons";
 
 /**
