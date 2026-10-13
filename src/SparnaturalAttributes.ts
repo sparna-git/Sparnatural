@@ -12,6 +12,7 @@ export class SparnaturalAttributes {
   localCacheDataTtl?: number;
   debug: boolean;
   submitButton?: boolean;
+  facetedBrowsing?: boolean;
   catalog: string;
 
   constructor(element: HTMLElement) {
@@ -44,6 +45,8 @@ export class SparnaturalAttributes {
     this.localCacheDataTtl = this.#read(element, "localCacheDataTtl", true);
     this.debug = this.#read(element, "debug", true);
     this.submitButton = this.#read(element, "submitButton", true);
+
+    this.facetedBrowsing = this.#read(element, "facetedBrowsing", true);
   }
 
   #read(element: HTMLElement, attribute: string, asJson: boolean = false) {

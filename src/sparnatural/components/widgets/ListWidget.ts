@@ -34,6 +34,9 @@ export class ListWidget extends AbstractWidget {
 
   selectHtml: JQuery<HTMLElement>;
 
+  // incremented on every load, so that a late answer from a previous one is dropped
+  private loadCounter = 0;
+
   constructor(
     parentComponent: HTMLComponent,
     config: ListConfiguration,
@@ -61,20 +64,46 @@ export class ListWidget extends AbstractWidget {
 
   render() {
     super.render();
-    this.selectHtml = $(`<select style="width:100%; min-width:200px;"></select>`);    
+    this.#loadValues();
+    return this;
+  }
+
+  /**
+   * Asks the datasource for the values, and fills the list with what comes back.
+   */
+  #loadValues() {
+    // clear what a previous load left behind, keeping the spinner in place
+    if (this.selectHtml) {
+      try {
+        (this.selectHtml as any).select2("destroy");
+      } catch (e) {
+        // select2 was never initialised on it, nothing to undo
+      }
+      this.selectHtml.remove();
+    }
+    this.html.find(".no-items").remove();
+
+    // identifies this load, see the guard at the top of the callbacks below
+    const loadId = ++this.loadCounter;
+
+    this.selectHtml = $(`<select style="width:100%; min-width:200px;"></select>`);
     this.html.append(this.selectHtml);
 
     let noItemsHtml =
-      $(`<div class="no-items" style="display: none; font-style:italic;">
+      $(`<div class="no-items" style="font-style:italic;">
       ${I18n.labels.ListWidgetNoItem}
     </div>`);
 
     let errorHtml =
-      $(`<div class="no-items" style="display: none; font-style:italic;">
+      $(`<div class="no-items" style="font-style:italic;">
       ${I18n.labels.ListWidgetNoItem}
     </div>`);
 
     let callback = (items:RdfTermDatasourceItem[]) => {
+
+      // a newer load was started in the meantime, this answer is obsolete : appending it
+      // would duplicate the entries of the list
+      if (loadId !== this.loadCounter) return;
 
       if (items.length > 0) {
 
@@ -156,6 +185,8 @@ export class ListWidget extends AbstractWidget {
         });        
 
       } else {
+        // there is nothing to choose from, an empty dropdown would only be misleading
+        this.selectHtml.remove();
         this.html.append(noItemsHtml);
       }  
 
@@ -165,6 +196,7 @@ export class ListWidget extends AbstractWidget {
 
     // TODO : this is not working for now
     let errorCallback = (payload:any) => {
+      if (loadId !== this.loadCounter) return;
       this.html.append(errorHtml);
     }
 
@@ -187,9 +219,6 @@ export class ListWidget extends AbstractWidget {
         errorCallback
       );
     }
-
-
-    return this;
   }
 
   // the template when there is one, otherwise the plain label plus the URI link

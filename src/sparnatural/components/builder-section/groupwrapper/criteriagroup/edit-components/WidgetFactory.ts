@@ -15,7 +15,7 @@ import { TimeDatePickerWidget } from "../../../../widgets/timedatepickerwidget/T
 import { TreeConfiguration, TreeWidget } from "../../../../widgets/treewidget/TreeWidget";
 import { ListDataProviderIfc, SortListDataProvider, AutocompleteDataProviderIfc, TreeDataProviderIfc, SortTreeDataProvider, ValuesListDataProviderIfc, SortValuesListDataProvider } from "../../../../datasources/DataProviders";
 import { NoOpListDataProvider, NoOpAutocompleteProvider, NoOpTreeDataProvider } from "../../../../datasources/NoOpDataProviders";
-import { SparqlListDataProvider, SparqlAutocompleDataProvider, SparqlTreeDataProvider, SparqlValuesListDataProvider, SparqlSinglePredicateDataProvider } from "../../../../datasources/SparqlDataProviders";
+import { SparqlListDataProvider, SparqlAutocompleDataProvider, SparqlTreeDataProvider, SparqlValuesListDataProvider, SparqlSinglePredicateDataProvider, QueryPattern } from "../../../../datasources/SparqlDataProviders";
 import ISpecificationProperty from "../../../../../spec-providers/ISpecificationProperty";
 import { IDatasource } from "../../../../../spec-providers/IDatasource";
 import { Catalog, RDFS, SKOS, SparqlHandlerFactory, SparqlHandlerIfc } from "rdf-shacl-commons";
@@ -56,6 +56,10 @@ export class WidgetFactory {
     settings: WidgetFactorySettings;
     catalog?:Catalog;
 
+    // How to get the graph pattern of the query being edited. Never called here, only
+    // forwarded to the data providers, which evaluate it when they build their query.
+    queryPatternProvider?:() => QueryPattern;
+
     private sparqlHandlerFactory:SparqlHandlerFactory;
     private sparqlPostProcessor:{ semanticPostProcess: (sparql:string)=>string };
 
@@ -64,11 +68,14 @@ export class WidgetFactory {
         specProvider: any,
         settings: WidgetFactorySettings,
         catalog:Catalog,
+        // how to get the graph pattern of the query being edited, and its subject variable
+        queryPatternProvider?:() => QueryPattern,
     ) {
         this.parentComponent = parentComponent;
         this.specProvider = specProvider;
         this.settings = settings;
         this.catalog = catalog;
+        this.queryPatternProvider = queryPatternProvider;
 
         // how to handle / execute a SPARQL query
         this.sparqlHandlerFactory = new SparqlHandlerFactory(            
@@ -199,21 +206,24 @@ export class WidgetFactory {
                 // if we have a datasource, possibly the default one, provide a config based
                 // on a SparqlTemplate, otherwise use the handler provided
                 listDataProvider = new SparqlListDataProvider(
-      
+
                   // endpoint URL
                   this.sparqlHandlerFactory.buildSparqlHandler(
                       datasource.sparqlEndpointUrl != null
                       ? [datasource.sparqlEndpointUrl]
                       : this.settings.endpoints
-                  ), 
-      
+                  ),
+
                   new ListSparqlTemplateQueryBuilder(
                     // sparql query (with labelPath interpreted)
                     this.#getFinalQueryString(datasource),
-      
+
                     // sparqlPostProcessor
                     this.sparqlPostProcessor
-                  )
+                  ),
+
+                  // forwarded as is
+                  this.queryPatternProvider
                 );
 
                 // if we need to sort things, add an explicit wrapper around the data provider
@@ -300,21 +310,24 @@ export class WidgetFactory {
             if (datasource != null) {
               // build a SPARQL data provider function using the SPARQL query of the datasource
               autocompleteDataProvider = new SparqlAutocompleDataProvider(
-    
+
                 // endpoint URL
                 this.sparqlHandlerFactory.buildSparqlHandler(
                     datasource.sparqlEndpointUrl != null
                     ? [datasource.sparqlEndpointUrl]
                     : this.settings.endpoints
-                ), 
-    
+                ),
+
                 new AutocompleteSparqlTemplateQueryBuilder(
                   // sparql query (with labelPath interpreted)
                   this.#getFinalQueryString(datasource),
-    
+
                   // sparqlPostProcessor
                   this.sparqlPostProcessor
-                )
+                ),
+
+                // forwarded as is
+                this.queryPatternProvider
               );
             }
     

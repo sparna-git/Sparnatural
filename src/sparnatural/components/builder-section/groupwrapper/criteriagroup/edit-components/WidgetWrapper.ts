@@ -10,6 +10,8 @@ import { AbstractWidget } from "../../../../widgets/AbstractWidget";
 import CriteriaGroup from "../CriteriaGroup";
 import EditComponents from "./EditComponents";
 import { WidgetFactory } from "./WidgetFactory";
+import { QueryPatternBuilder } from "../../../../../generators/sparql/QueryPatternBuilder";
+import { QueryPattern } from "../../../../datasources/SparqlDataProviders";
 
 
 /**
@@ -161,7 +163,7 @@ class WidgetWrapper extends HTMLComponent {
   #createWidgetComponent(
     widgetType: string
   ): AbstractWidget {
-    
+
     let factory:WidgetFactory = new WidgetFactory(
       // parent component
       this,
@@ -170,7 +172,11 @@ class WidgetWrapper extends HTMLComponent {
       // factory settings
       this.settings,
       // catalog
-      (this.getRootComponent() as SparnaturalComponent).catalog
+      (this.getRootComponent() as SparnaturalComponent).catalog,
+      // How to get the pattern of the query being edited. A function rather than a
+      // string, so that it is evaluated when the datasource query is built and always
+      // reflects the current state of the screen.
+      () => this.#getQueryPattern()
     );
 
     return factory.buildWidget(
@@ -178,6 +184,29 @@ class WidgetWrapper extends HTMLComponent {
       this.objectPropVal,
       this.endClassVal
     );
+  }
+
+  /**
+   * Returns the graph pattern of the query being edited, ready to be injected in the
+   * datasource query, with the variable it hangs on.
+   *
+   * @returns null when there is nothing to inject
+   */
+  #getQueryPattern(): QueryPattern {
+    // switched off by default : without it Sparnatural behaves exactly as before
+    if (!this.settings.facetedBrowsing) return null;
+
+    const sparnatural = this.getRootComponent() as SparnaturalComponent;
+    const query = sparnatural.actionStore?.currentQuery;
+    if (!query) return null;
+
+    // Both variables come from this widget, which has always known its own line :
+    // startClassVal is its subject, endClassVal its object.
+    const pattern = new QueryPatternBuilder(this.specProvider, this.settings)
+              .build(query, this.startClassVal.variable, this.endClassVal.variable);
+    if (!pattern) return null;
+
+    return { pattern: pattern, subjectVariable: this.startClassVal.variable };
   }
 
   getWidgetType() {

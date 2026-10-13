@@ -8,8 +8,8 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   `
 SELECT DISTINCT ?value (STR(?value) AS ?label)
 WHERE {
-    ?domain $type $domain .
-    ?domain $property ?value .
+    $this $type $domain .
+    $this $property ?value .
 }
 ORDER BY UCASE(STR(?label))
 LIMIT 500
@@ -27,8 +27,8 @@ WHERE {
   {
     SELECT DISTINCT ?theLabel (COUNT(?theLabel) AS ?count)
     WHERE {
-      ?domain $type $domain .
-      ?domain $property ?theLabel .
+      $this $type $domain .
+      $this $property ?theLabel .
       FILTER(lang(?theLabel) = "" || lang(?theLabel) = $lang)
     }
     GROUP BY ?theLabel
@@ -53,8 +53,8 @@ WHERE {
   {
     SELECT DISTINCT ?theLabel (COUNT(?theLabel) AS ?count)
     WHERE {
-      ?domain $type $domain .
-      ?domain $property ?theLabel .
+      $this $type $domain .
+      $this $property ?theLabel .
       FILTER(lang(?theLabel) = "" || lang(?theLabel) = $lang)
     }
     GROUP BY ?theLabel
@@ -73,8 +73,8 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   `
 SELECT DISTINCT ?uri (STR(?uri) AS ?label)
 WHERE {
-    ?domain $type $domain .
-    ?domain $property ?uri .
+    $this $type $domain .
+    $this $property ?uri .
     FILTER(isIRI(?uri))
 }
 ORDER BY UCASE(STR(?label))
@@ -88,10 +88,10 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
 SELECT ?uri ?count (CONCAT(STR(?uri), ' (', STR(?count), ')') AS ?label) (STR(?uri) as ?itemLabel)
 WHERE {
 {
-  SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
+  SELECT DISTINCT ?uri (COUNT($this) AS ?count)
   WHERE {
-    ?domain $type $domain .
-    ?domain $property ?uri .
+    $this $type $domain .
+    $this $property ?uri .
     FILTER(isIRI(?uri))
   }
   GROUP BY ?uri
@@ -107,31 +107,31 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   `
   SELECT DISTINCT ?value (CONCAT(IF(isLiteral(?value) && LANG(?value) != '' && LANG(?value) != $lang,CONCAT(STR(?value), " <sup>(",LANG(?value),")</sup>"),STR(?value))) AS ?label)
   WHERE {
-      ?domain $type $domain .
+      $this $type $domain .
       {
         {
-          ?domain $property ?value . FILTER(isIRI(?value))
+          $this $property ?value . FILTER(isIRI(?value))
         }
         UNION
         {
-          ?domain $property ?value . 
+          $this $property ?value . 
           FILTER(isLiteral(?value) && (lang(?value) = $lang))
         }
         UNION
         {
-          ?domain $property ?value . 
+          $this $property ?value . 
           FILTER(isLiteral(?value) && (lang(?value) = $defaultLang))
           FILTER NOT EXISTS {
-            ?domain $property ?valuePrefLang .
+            $this $property ?valuePrefLang .
             FILTER(LANG(?valuePrefLang) = $lang)
           }
         }
         UNION
         {
-          ?domain $property ?value . 
+          $this $property ?value . 
           FILTER(isLiteral(?value) && (lang(?value) = ""))
           FILTER NOT EXISTS {
-            ?domain $property ?valueAnyLang .
+            $this $property ?valueAnyLang .
             FILTER((LANG(?valueAnyLang) = $lang) || (LANG(?valueAnyLang) = $defaultLang))
           }
         }
@@ -149,33 +149,33 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   SELECT DISTINCT ?value ?count (CONCAT(IF(isLiteral(?value) && LANG(?value) != '' && LANG(?value) != $lang,CONCAT(STR(?value), " <sup>(",LANG(?value),")</sup>"),STR(?value)), ' (', STR(?count), ')') AS ?label) (STR(?value) as ?itemLabel)
   WHERE {
   {
-    SELECT DISTINCT ?value (COUNT(DISTINCT ?domain) AS ?count)
+    SELECT DISTINCT ?value (COUNT(DISTINCT $this) AS ?count)
     WHERE {
-      ?domain $type $domain .
+      $this $type $domain .
       {
         {
-          ?domain $property ?value . FILTER(isIRI(?value))
+          $this $property ?value . FILTER(isIRI(?value))
         }
         UNION
         {
-          ?domain $property ?value . 
+          $this $property ?value . 
           FILTER(isLiteral(?value) && (lang(?value) = $lang))
         }
         UNION
         {
-          ?domain $property ?value . 
+          $this $property ?value . 
           FILTER(isLiteral(?value) && (lang(?value) = $defaultLang))
           FILTER NOT EXISTS {
-            ?domain $property ?valuePrefLang .
+            $this $property ?valuePrefLang .
             FILTER(LANG(?valuePrefLang) = $lang)
           }
         }
         UNION
         {
-          ?domain $property ?value . 
+          $this $property ?value . 
           FILTER(isLiteral(?value) && (lang(?value) = ""))
           FILTER NOT EXISTS {
-            ?domain $property ?valueAnyLang .
+            $this $property ?valueAnyLang .
             FILTER((LANG(?valueAnyLang) = $lang) || (LANG(?valueAnyLang) = $defaultLang))
           }
         }
@@ -195,33 +195,33 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   SELECT ?value ?count (CONCAT(IF(isLiteral(?value) && LANG(?value) != '' && LANG(?value) != $lang,CONCAT(STR(?value), " <sup>(",LANG(?value),")</sup>"),STR(?value)), ' (', STR(?count), ')') AS ?label) (STR(?value) as ?itemLabel)
   WHERE {
   {
-    SELECT DISTINCT ?value (COUNT(DISTINCT ?domain) AS ?count)
+    SELECT DISTINCT ?value (COUNT(DISTINCT $this) AS ?count)
     WHERE {
-      ?domain $type $domain .
+      $this $type $domain .
       {
         {
-          ?domain $property ?value . FILTER(isIRI(?value))
+          $this $property ?value . FILTER(isIRI(?value))
         }
         UNION
         {
-          ?domain $property ?value . 
+          $this $property ?value . 
           FILTER(isLiteral(?value) && (lang(?value) = $lang))
         }
         UNION
         {
-          ?domain $property ?value . 
+          $this $property ?value . 
           FILTER(isLiteral(?value) && (lang(?value) = $defaultLang))
           FILTER NOT EXISTS {
-            ?domain $property ?valuePrefLang .
+            $this $property ?valuePrefLang .
             FILTER(LANG(?valuePrefLang) = $lang)
           }
         }
         UNION
         {
-          ?domain $property ?value . 
+          $this $property ?value . 
           FILTER(isLiteral(?value) && (lang(?value) = ""))
           FILTER NOT EXISTS {
-            ?domain $property ?valueAnyLang .
+            $this $property ?valueAnyLang .
             FILTER((LANG(?valueAnyLang) = $lang) || (LANG(?valueAnyLang) = $defaultLang))
           }
         }
@@ -240,8 +240,8 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   `
 SELECT DISTINCT ?uri ?label
 WHERE {
-    ?domain $type $domain .
-    ?domain $property ?uri .
+    $this $type $domain .
+    $this $property ?uri .
     ?uri $labelPath ?label .
     FILTER(lang(?label) = "" || lang(?label) = $lang)
     FILTER(isIRI(?uri))
@@ -260,10 +260,10 @@ WHERE {
   SELECT ?uri ?count ?theLabel
   WHERE {
   {
-    SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
+    SELECT DISTINCT ?uri (COUNT($this) AS ?count)
     WHERE {
-      ?domain $type $domain .
-      ?domain $property ?uri .
+      $this $type $domain .
+      $this $property ?uri .
       FILTER(isIRI(?uri))
     }
     GROUP BY ?uri
@@ -288,10 +288,10 @@ WHERE {
   SELECT ?uri ?count ?theLabel
   WHERE {
   {
-    SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
+    SELECT DISTINCT ?uri (COUNT($this) AS ?count)
     WHERE {
-      ?domain $type $domain .
-      ?domain $property ?uri .
+      $this $type $domain .
+      $this $property ?uri .
       FILTER(isIRI(?uri))
     }
     GROUP BY ?uri
@@ -312,8 +312,8 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   `
 SELECT DISTINCT ?uri ?label
 WHERE {
-    ?domain $type $domain .
-    ?domain $property ?uri .
+    $this $type $domain .
+    $this $property ?uri .
     ?uri $type $range .
     ?uri $labelPath ?label .
     FILTER(isIRI(?uri))
@@ -333,10 +333,10 @@ WHERE {
   SELECT ?uri ?count ?theLabel
   WHERE {
   {
-    SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
+    SELECT DISTINCT ?uri (COUNT($this) AS ?count)
     WHERE {
-      ?domain $type $domain .
-      ?domain $property ?uri .
+      $this $type $domain .
+      $this $property ?uri .
       FILTER(isIRI(?uri))
       ?uri $type $range .
     }
@@ -363,10 +363,10 @@ WHERE {
   SELECT ?uri ?count ?theLabel
   WHERE {
   {
-    SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
+    SELECT DISTINCT ?uri (COUNT($this) AS ?count)
     WHERE {
-      ?domain $type $domain .
-      ?domain $property ?uri .
+      $this $type $domain .
+      $this $property ?uri .
       FILTER(isIRI(?uri))
       # range criteria
       ?uri $type $range .
@@ -406,8 +406,8 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   `
 SELECT DISTINCT ?uri ?label
 WHERE {
-  ?domain $type $domain .
-  ?domain $property ?uri .
+  $this $type $domain .
+  $this $property ?uri .
   ?uri $type $range .
   ?uri $labelPath ?label .
   FILTER(isIRI(?uri))
@@ -424,8 +424,8 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   `
 SELECT DISTINCT ?uri ?label
 WHERE {
-  ?domain $type $domain .
-  ?domain $property ?uri .
+  $this $type $domain .
+  $this $property ?uri .
   ?uri $type $range .
   ?uri $labelPath ?label .
   FILTER(isIRI(?uri))
@@ -444,8 +444,8 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
 PREFIX bif: <http://www.openlinksw.com/schemas/bif#>
 SELECT DISTINCT ?uri ?label
  WHERE {
-  ?domain $type $domain .
-  ?domain $property ?uri .
+  $this $type $domain .
+  $this $property ?uri .
   ?uri $type $range .
   ?uri $labelPath ?label .
   FILTER(isIRI(?uri))
@@ -462,8 +462,8 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   `
 SELECT DISTINCT ?uri ?label
 WHERE {
-  ?domain $type $domain .
-  ?domain $property ?uri .
+  $this $type $domain .
+  $this $property ?uri .
   ?uri $type $range .
   FILTER(isIRI(?uri))
   BIND(STR(?uri) AS ?label)
@@ -479,8 +479,8 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   `
 SELECT DISTINCT ?value ?label
 WHERE {
-  ?domain $type $domain .
-  ?domain $property ?value .
+  $this $type $domain .
+  $this $property ?value .
   FILTER(isLiteral(?value))
   BIND(STR(?value) AS ?label)
   FILTER(CONTAINS(LCASE(STR(?value)), LCASE("$key"))) 
@@ -495,8 +495,8 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   `
 SELECT DISTINCT ?value ?label
 WHERE {
-  ?domain $type $domain .
-  ?domain $property ?value .
+  $this $type $domain .
+  $this $property ?value .
   FILTER(isLiteral(?value))
   BIND(STR(?value) AS ?label)
   FILTER(STRSTARTS(LCASE(STR(?value)), LCASE("$key"))) 

@@ -31,6 +31,8 @@ export class EndClassWidgetGroup extends HTMLComponent {
   expandedValuesWrapper: JQuery;
   popoverCloseBtn: JQuery;
   isSelectAll:boolean = false;
+  // #809 : chip shown in place of the values, while checking or when no value is possible
+  #statusChip: StatusChip | null = null;
   #clickOutsideHandler: ((e: JQuery.ClickEvent) => void) | null = null;
   #resizeHandler: (() => void) | null = null;
 
@@ -265,6 +267,17 @@ export class EndClassWidgetGroup extends HTMLComponent {
     this.html[0].dispatchEvent(
       new CustomEvent("onGrpInputCompleted", { bubbles: true })
     );
+  }
+
+  // #809 : loading chip while checking, red light chip when no value is possible
+  showStatusChip(checking: boolean) {
+    this.hideStatusChip();
+    this.#statusChip = new StatusChip(this, checking).render();
+  }
+
+  hideStatusChip() {
+    this.#statusChip?.destroy();
+    this.#statusChip = null;
   }
 
   // All items which got selected in the widget will be added add the back of the EndClassGroup.
@@ -528,16 +541,18 @@ export class EndClassWidgetValue extends HTMLComponent {
 
     // set a tooltip if the label is a bit long
     var extraClass = "";
+    var icon = "";
     if(
       this.widgetVal && this.widgetVal.criteria && (getCriteriaType(this.widgetVal.criteria) == CriteriaType.RdfTermCriteria)
       && (this.widgetVal.criteria as RdfTermCriteria).rdfTerm.value == "https://services.sparnatural.eu/api/v1/URI_NOT_FOUND"
     ) {
       extraClass = 'class="notFound"'
+      icon = UiuxConfig.ICON_CIRCLE_QUESTION;
     } else if (this.selectAll) {
       extraClass = 'class="all"';
     }
 
-    let valuelbl = `<p><span ${extraClass}> ${theLabel} </span></p>`;
+    let valuelbl = `<p><span ${extraClass}>${icon} ${theLabel} </span></p>`;
     this.html.append($(valuelbl));
 
     if (theLabel.length > 25) {
@@ -576,5 +591,32 @@ export class EndClassWidgetValue extends HTMLComponent {
     let tmp = document.createElement("DIV");
     tmp.innerHTML = html;
     return tmp.textContent || tmp.innerText || "";
+  }
+}
+
+// #809 : looks like a value chip, but is not a value : not removable, never in the query
+class StatusChip extends HTMLComponent {
+  backArrow = new ArrowComponent(this, UiuxConfig.COMPONENT_ARROW_BACK);
+  frontArrow = new ArrowComponent(this, UiuxConfig.COMPONENT_ARROW_FRONT);
+  checking: boolean;
+
+  constructor(parentComponent: EndClassWidgetGroup, checking: boolean) {
+    // while checking, a bare spinner rather than an empty chip
+    super(checking ? "checkingValues" : "EndClassWidgetValue", parentComponent, null);
+    this.checking = checking;
+    this.htmlParent = parentComponent.valuesWrapper;
+  }
+
+  render(): this {
+    super.render();
+    if (this.checking) {
+      this.html.append(UiuxConfig.ICON_LOOADER);
+      return this;
+    }
+    this.html.addClass("noPossibleValue");
+    this.backArrow.render();
+    this.html.append($(`<p><span>${UiuxConfig.ICON_NO_ENTRY}<em>${I18n.labels.NoResults}</em></span></p>`));
+    this.frontArrow.render();
+    return this;
   }
 }

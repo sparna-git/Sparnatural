@@ -25,6 +25,7 @@
   "ButtonAdd": "Ajouter",
   "ListWidgetSelectValue": "Selectionnez une valeur...",
   "ListWidgetNoItem": "... Oups, aucune valeur trouvée !",
+  "NoResults": "Aucun résultat",
   "StartClassTemporaryLabel": "Chercher des ressources",
   "ObjectPropertyTemporaryLabel": "relié(e) à",
   "labelOptionOptional": "Optionnel",

@@ -24,6 +24,8 @@ export class QueryGenerator {
     }
     // if the query editor is empty, don't do anything
     if (this.actionStore.sparnatural.isEmpty()) {
+      // the screen is empty, the last generated query no longer describes it
+      this.actionStore.currentQuery = null;
       return;
     }
 
