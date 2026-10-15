@@ -469,11 +469,13 @@ export class WidgetFactory {
                   // sparql query (with labelPath interpreted)
                   this.#getFinalQueryString(treeRootsDatasource),
                   this.#getFinalQueryString(treeChildrenDatasource),
-    
+
                   // sparqlPostProcessor
                   this.sparqlPostProcessor
-                )
-    
+                ),
+
+                // forwarded as is
+                this.queryPatternProvider
               );
             }
     

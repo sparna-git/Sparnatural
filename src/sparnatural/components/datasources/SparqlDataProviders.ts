@@ -396,13 +396,17 @@ export class SparqlTreeDataProvider implements TreeDataProviderIfc {
     queryBuilder:TreeSparqlQueryBuilderIfc;
     sparqlHandler:SparqlHandlerIfc;
 
+    // How to get the graph pattern of the query being edited, from the WidgetFactory.
+    queryPatternProvider?:() => QueryPattern;
 
     constructor(
         sparqlHandler:SparqlHandlerIfc,
-        queryBuilder: TreeSparqlQueryBuilderIfc
+        queryBuilder: TreeSparqlQueryBuilderIfc,
+        queryPatternProvider?:() => QueryPattern
     ) {
         this.queryBuilder = queryBuilder;
-        this.sparqlHandler = sparqlHandler;        
+        this.sparqlHandler = sparqlHandler;
+        this.queryPatternProvider = queryPatternProvider;
     }
 
     init(
@@ -422,7 +426,9 @@ export class SparqlTreeDataProvider implements TreeDataProviderIfc {
         callback:(items:RdfTermTreeDatasourceItem[]) => void,
         errorCallback?:(payload:any) => void
     ):void {
-        
+        // evaluated now, not when the widget was built, so it reflects the current screen
+        const queryPattern = this.queryPatternProvider ? this.queryPatternProvider() : null;
+
         // 1. create the SPARQL
         let sparql = this.queryBuilder.buildRootsSparqlQuery(
             domainType,
@@ -430,8 +436,12 @@ export class SparqlTreeDataProvider implements TreeDataProviderIfc {
             rangeType,
             this.lang,
             this.defaultLang,
-            this.typePredicate
+            this.typePredicate,
+            queryPattern
         );
+
+        // TEMPORARY : the tree roots query, only when a pattern was actually injected
+        if (queryPattern?.pattern) console.log("sujet : " + queryPattern.subjectVariable + "\n" + sparql);
 
         // 2. execute it
         this.sparqlHandler.executeSparql(
@@ -449,7 +459,9 @@ export class SparqlTreeDataProvider implements TreeDataProviderIfc {
       callback:(items:RdfTermTreeDatasourceItem[]) => void,
       errorCallback?:(payload:any) => void
   ):void {
-      
+    // evaluated when the node is opened, not when the widget was built
+    const queryPattern = this.queryPatternProvider ? this.queryPatternProvider() : null;
+
     // 1. create the SPARQL
     let sparql = this.queryBuilder.buildChildrenSparqlQuery(
         node,
@@ -458,8 +470,12 @@ export class SparqlTreeDataProvider implements TreeDataProviderIfc {
         rangeType,
         this.lang,
         this.defaultLang,
-        this.typePredicate
+        this.typePredicate,
+        queryPattern
     );
+
+    // TEMPORARY : the tree children query, only when a pattern was actually injected
+    if (queryPattern?.pattern) console.log("sujet : " + queryPattern.subjectVariable + "\n" + sparql);
 
     // 2. execute it
     this.sparqlHandler.executeSparql(

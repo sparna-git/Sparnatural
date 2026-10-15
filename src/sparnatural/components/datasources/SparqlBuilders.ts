@@ -317,7 +317,9 @@ export interface TreeSparqlQueryBuilderIfc  {
         range:string,
         language: any,
         defaultLanguage: any,
-        typePath: string
+        typePath: string,
+        // graph pattern of the query being edited, injected in the datasource query
+        queryPattern?: QueryPattern
     ):string;
 
     buildChildrenSparqlQuery(
@@ -327,7 +329,9 @@ export interface TreeSparqlQueryBuilderIfc  {
         range:string,
         language: any,
         defaultLanguage: any,
-        typePath: string
+        typePath: string,
+        // graph pattern of the query being edited, injected in the datasource query
+        queryPattern?: QueryPattern
     ):string;
 
 }
@@ -355,21 +359,25 @@ export class TreeSparqlTemplateQueryBuilder implements TreeSparqlQueryBuilderIfc
         range: string,        
         language: any,
         defaultLanguage: any,
-        typePath: string
+        typePath: string,
+        // graph pattern of the query being edited, injected in the datasource query
+        queryPattern?: QueryPattern
     ): string {
-        return this.#buildSparql(this.rootsQueryString,null,domain,property,range,language,defaultLanguage,typePath);
+        return this.#buildSparql(this.rootsQueryString,null,domain,property,range,language,defaultLanguage,typePath,queryPattern);
     }
 
     buildChildrenSparqlQuery(
         node:string,
         domain: string,
         property: string,
-        range: string,        
+        range: string,
         language: any,
         defaultLanguage: any,
-        typePath: string
+        typePath: string,
+        // graph pattern of the query being edited, injected in the datasource query
+        queryPattern?: QueryPattern
     ): string {
-        return this.#buildSparql(this.childrenQueryString,node,domain,property,range,language,defaultLanguage,typePath);
+        return this.#buildSparql(this.childrenQueryString,node,domain,property,range,language,defaultLanguage,typePath,queryPattern);
     }
 
     #buildSparql(
@@ -377,10 +385,11 @@ export class TreeSparqlTemplateQueryBuilder implements TreeSparqlQueryBuilderIfc
         node:string|null,
         domain: string,
         property: string,
-        range: string,        
+        range: string,
         language: any,
         defaultLanguage: any,
-        typePath: string
+        typePath: string,
+        queryPattern?: QueryPattern
     ) {
         var reDomain = new RegExp("\\$domain", "g");
         var reProperty = new RegExp("\\$property", "g");
@@ -401,6 +410,10 @@ export class TreeSparqlTemplateQueryBuilder implements TreeSparqlQueryBuilderIfc
             var reNode = new RegExp("\\$node", "g");
             sparql = sparql.replace(reNode, "<" + node + ">");
           }
+
+        // nodes are never removed, the tree must stay navigable : in templates counting on
+        // $this, the pattern only brings to 0, so disables, the nodes leading to no result
+        sparql = injectQueryPattern(sparql, queryPattern);
 
         sparql = this.sparqlPostProcessor.semanticPostProcess(sparql);
 

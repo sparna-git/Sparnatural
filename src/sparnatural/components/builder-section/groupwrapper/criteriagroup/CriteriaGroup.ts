@@ -114,9 +114,11 @@ class CriteriaGroup extends HTMLComponent {
           !this.parentGroupWrapper.whereChild &&
           this.endClassWidgetGroup?.widgetValues?.length === 0
         ) {
-          this.endClassGroup.onObjectPropertyGroupSelected(e.detail);
           this.endClassWidgetGroup.render();
-          this.possibleValuesCheck.start();
+          // #809 : the widget is built only once the ASK says the line can have a result
+          this.possibleValuesCheck.start(() =>
+            this.endClassGroup.onObjectPropertyGroupSelected(e.detail),
+          );
         }
 
         this.optionsGroup.onObjectPropertyGroupSelected(

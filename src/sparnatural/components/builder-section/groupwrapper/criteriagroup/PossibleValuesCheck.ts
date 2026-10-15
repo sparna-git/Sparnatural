@@ -21,25 +21,30 @@ export class PossibleValuesCheck {
   // last ASK of this line : the same one is not asked twice, an answer to an older one is ignored
   #lastAsk: string = null;
   #queryListener: () => void = null;
+  // builds the widget of the line, given by start()
+  #renderWidget: () => void = null;
 
   constructor(line: CriteriaGroup) {
     this.#line = line;
   }
 
-  // called when the property of the line is selected. Only with facetedBrowsing on : without it,
-  // Sparnatural behaves exactly as before
-  start() {
-    if (!getSettings().facetedBrowsing) return;
+  // called when the property of the line is selected. Without facetedBrowsing, the widget is
+  // built right away, as before
+  start(renderWidget: () => void) {
+    this.#renderWidget = renderWidget;
+    if (!getSettings().facetedBrowsing) {
+      renderWidget();
+      return;
+    }
     this.#check(true);
     this.#listenToQueryChanges();
   }
 
-  // a line with its property, and neither a value, nor "Any", nor a WHERE : its widget is
-  // shown, or would be
+  // neither a value, nor "Any", nor a WHERE : its widget is shown, or would be. Only called
+  // after start(), the property of the line is known
   #isWaitingForValue(): boolean {
     const line = this.#line;
     return (
-      !!line.endClassGroup?.editComponents &&
       !line.parentGroupWrapper.whereChild &&
       !(line.endClassWidgetGroup?.widgetValues?.length > 0) &&
       !line.endClassWidgetGroup?.isSelectAll
@@ -157,15 +162,19 @@ export class PossibleValuesCheck {
   }
 
   #apply(hasResult: boolean) {
-    const state = hasResult ? null : "none";
     const wasRed = this.#state === "none";
-    // nothing to redraw when the answer confirms what is shown
-    if (state === this.#state) return;
+    if (hasResult) {
+      const editComponents = this.#line.endClassGroup.editComponents;
+      // first green answer : the widget, and its datasource query, only start now
+      if (!editComponents) this.#renderWidget();
+      // back from a red light : its widget was loaded with a query that had no result, load it
+      // again with the current one
+      else if (wasRed) editComponents.render();
+    }
 
-    this.#setState(state);
-    // back from a red light : its widget was loaded with a query that had no result, load it
-    // again with the current one
-    if (wasRed) this.#line.endClassGroup.editComponents.render();
+    const state = hasResult ? null : "none";
+    // nothing to redraw when the answer confirms what is shown
+    if (state !== this.#state) this.#setState(state);
   }
 
   #setState(state: "checking" | "none" | null) {
