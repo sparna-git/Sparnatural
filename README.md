@@ -215,7 +215,15 @@ There is currently an [experimental support for the SERVICE keyword](http://docs
 
 ## Support for Aggregation queries
 
-Since version 9.0.0, Sparnatural supports `COUNT` queries and other aggregation functions.
+Sparnatural supports `COUNT` queries and other aggregation functions, such as `GROUP_CONCAT`
+
+## Display rich information in dropdowns and autocomplete
+
+Sparnatural supports [displaying rich information, such as definitions or any other metadata, in dropdown lists and autocomplete suggestions](https://docs.sparnatural.eu/templates-configuration.html). This enables to provide richer context to the end-user before selecting a value.
+
+## Facet-like browsing
+
+Sparnatural supports a ["faceted browsing" mode](https://docs.sparnatural.eu/Faceted-browsing.html), in which every criteria and every value proposed to the user is filtered according to the complete query. This enables to explore the knowledge graph without the risk of writing a query that would return 0 results.
 
 ## Querying multiple endpoints
 
@@ -225,7 +233,11 @@ Sparnatural can also [act as a frontend for multiple SPARQL endpoints](https://d
 
 ### No UNION or BIND
 
-Sparnatural does not support the creation of UNION, BIND
+Sparnatural does not support the creation of UNION or BIND clauses.
+
+### Tree-shaped queries only (no cycles)
+
+Sparnatural does not support the creation of query patterns involving a cycle
 
 ### SPARQL endpoint needs to be CORS-enabled
 
