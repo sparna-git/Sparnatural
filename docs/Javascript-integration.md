@@ -29,6 +29,7 @@ Sparnatural is inserted as custom HTML element named `spar-natural` (note the da
 | `defaultLang` | Dataset default language. A language in which the dataset always provides labels/titles that can be used as default if a label in the user language is not present. | `en` | Recommended|
 | `debug` | If set to `true`, Sparnatural will log JSON and SPARQL queries on the console, as they are generated. | `false` | Optional |
 | `distinct` | Whether the `DISTINCT` keyword should be inserted to the generated SPARQL query. | `true` | Optional|
+| `facetedBrowsing` | Enables a [facet-like behavior](Faceted-browsing.md) where all criterias are dynamically used to filter the rest of the query | `false` | Optional|
 | `lang` | User language preference. The language code to use to display labels of classes and properties from the configuration file, and to query for values in lists and search fields. | `en` | Recommended|
 | `limit` |A number that will be used to add a `LIMIT` keyword in the generated SPARQL queries. If set to an empty string or a negative number, no `LIMIT` keyword is inserted. | `-1` | Optional
 | `maxDepth` | Maximum depth of the constructed query (number of inner 'Where' clauses). | `4` | Optional

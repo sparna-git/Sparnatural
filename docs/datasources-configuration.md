@@ -62,7 +62,7 @@ The provided default datasources to populate the lists do **not** use the range 
 
 This is usually sufficient and more performant but this can be a problem if the same property in the same domain can refer to entities of different type in the Sparnatural configuration. For example consider the situation where _"the creator of a Document can be either a Person or an Organization"_. When listing the values of possible creators of documents, both Persons and Organization will be mixed in the same list.
 
-To use the range as a criteria in the query and filter the list based on the type of the value, you need to create a custom datasource based on one of the predefined query template having a "`..._with_range_...`" in its URI, such as [datasources:query_list_label_with_range_alpha](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_with_range_alpha). This will garantee that only values of the selected type will appear in the list. See [below](https://docs.sparnatural.eu/datasources-configuration.html#preconfigured-sparql-query-with-another-property) on how to create a custom datasource based on a predefined query template including the range criteria.
+To use the range as a criteria in the query and filter the list based on the type of the value, you need to create a custom datasource based on one of the predefined query template having a "`..._with_range_...`" in its URI, such as [datasources:query_list_label_with_range_alpha](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_with_range_alpha). This will garantee that only values of the selected type will appear in the list. See [below](#preconfigured-sparql-query-with-another-property) on how to create a custom datasource based on a predefined query template including the range criteria.
 
 
 
@@ -180,7 +180,7 @@ You can provide your own SPARQL queries to populate lists or autocomplete sugges
 Additionally, the query can return, optionally:
 - an extra `?group` variable, which will be used to generate `optgroup` sections in lists widgets, and will be used as hover tooltips in autocompletion lists. This is used to indicate the source endpoint of the result in cases of multiple endpoints.
 - an extra `?itemLabel` variable, which will be used, if present, as the label of the selected value; for exemple, `?label` can hold a count, like _"Italy (307)"_, while `?itemLabel` can be just _"Italy"_.
-- any other variable name to be displayed in [list/autocomplete/tree templates](templates-configuration.html), such as definitions, icons, etc.
+- any other variable name to be displayed in [list/autocomplete/tree templates](templates-configuration.md), such as definitions, icons, etc.
 
 In this SPARQL query, you can use the following placeholders that will be replaced automatically by Sparnatural before executing the query:
 - **`$domain`**, if present, will be replaced by the URI of the domain node shape (the one pointing to the property shape with `sh:property`);
@@ -357,7 +357,7 @@ The SPARQL query CAN return 2 other variables :
 
   - **`?hasChildren`**, a boolean to indicate if the node has children. If not present, all tree items can be unfolded, even when have no children; if present and set to false, an item cannot be unfolded. 
   - **`?count`** to indicate the number of times a node is used as a value; nodes with a count = 0 will be disabled and cannot be selected as a value.
-  - and it can return any other variable name to be displayed in [tree templates](templates-configuration.html), such as definitions, icons, etc.
+  - and it can return any other variable name to be displayed in [tree templates](templates-configuration.md), such as definitions, icons, etc.
 
 In these SPARQL query, the same replacement of the **`$domain`**, **`$range`**, **`$property`**, etc. than in the queries for list/autocomplete will happen (see above). The following additional replacements will happen:
 - **`$node`**, if present, will be replaced by the URI of the node being clicked;
