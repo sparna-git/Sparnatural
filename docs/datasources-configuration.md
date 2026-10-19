@@ -11,8 +11,8 @@ In its simplest and most common form a datasource is a SPARQL query that returns
 The [`datasources:datasource`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource) annotation is placed on the corresponding property shape in the SHACL configuration. 
  The value of this annotation can be either:
 
-1. The URI pre-configured datasource that is shipped with Sparnatural;
-1. The URI of a pre-configured SPARQL query, plus a property URI to be injected in this query;
+1. The URI of a [pre-configured datasource](http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource) that is shipped with Sparnatural;
+1. The URI of a [pre-configured SPARQL query](http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlQuery), plus a property URI to be injected in this query;
 1. The URI of your own custom datasource;
 
 These 3 solutions are described below.
@@ -22,11 +22,11 @@ These 3 solutions are described below.
 ### Preconfigured datasources for a ListProperty
 
 
-Sparnatural comes preconfigured with datasources that can populate lists based on `rdfs:label`, `skos:prefLabel`, `foaf:name`, `dcterms:title`, `schema:name` or the URI of the entity. For each of these properties, 3 flavors of datasource exist :
+Sparnatural comes preconfigured with datasources that can populate lists based on `rdfs:label`, `skos:prefLabel`, `foaf:name`, `dcterms:title`, `schema:name` properties, or with the URI of the resource. For each of these properties, 3 flavors of datasource exist :
 
-  - an alphabetical ordering
-  - an alphabetical ordering plus the count shown in parenthesis
-  - a descending count ordering.
+  - an alphabetical ordering (suffixed with `_alpha`)
+  - an alphabetical ordering plus the count shown in parenthesis (suffixed with `_alpha_with_count`)
+  - a descending count ordering (suffixed with `_count`).
 
 Use one of these datasources if your RDF data relies on one of these properties.
 
@@ -44,6 +44,17 @@ You can find these identifiers in the [Sparnatural datasource ontology documenta
 
 ![Screenshot Protégé datasources](/assets/images/protege-screenshot-datasources-1.png)
 
+To use one of these datasources in a SHACL configuration, simply annotate a property shape having a `dash:searchWidget core:ListProperty` with a [`datasources:datasource`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource) annotation, and use one of the predefined datasource URI as an object:
+
+```turtle
+  this:Place_type_list sh:path rico:hasOrHadPlaceType;
+    sh:name "place type"@en;
+    sh:nodeKind sh:IRI;
+    sh:node this:PlaceType;
+    dash:searchWidget core:ListProperty;
+    datasources:datasource <http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_skospreflabel_alpha> .
+```
+
 
 ### A note on the range criteria in default list datasources
 
@@ -51,13 +62,19 @@ The provided default datasources to populate the lists do **not** use the range 
 
 This is usually sufficient and more performant but this can be a problem if the same property in the same domain can refer to entities of different type in the Sparnatural configuration. For example consider the situation where _"the creator of a Document can be either a Person or an Organization"_. When listing the values of possible creators of documents, both Persons and Organization will be mixed in the same list.
 
-To use the range as a criteria in the query and filter the list based on the type of the value, you need to create a custom datasource based on one of the predefined query template having a "`..._with_range_...`" in its identifier. This will garantee that only values of the selected type will appear in the list. See below on how to create a custom datasource based on a predefined query template including the range criteria.
+To use the range as a criteria in the query and filter the list based on the type of the value, you need to create a custom datasource based on one of the predefined query template having a "`..._with_range_...`" in its URI, such as [datasources:query_list_label_with_range_alpha](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_with_range_alpha). This will garantee that only values of the selected type will appear in the list. See [below](https://docs.sparnatural.eu/datasources-configuration.html#preconfigured-sparql-query-with-another-property) on how to create a custom datasource based on a predefined query template including the range criteria.
 
 
 
 ### Preconfigured datasources for an AutocompleteProperty
 
-Sparnatural comes preconfigured with datasources that can populate autocomplete fields based on `rdfs:label`, `skos:prefLabel`, `foaf:name`, `dcterms:title`, `schema:name` or the URI of the entity. For each of these properties, 3 flavors of datasource exist : either searching by the beginning of the value with `strstarts()`, anywhere in the value with `contains()` or using Virtuoso-specific `bif:contains()` function. Additionally, a search datasource can search on the URI using the `contains()` function.
+Sparnatural comes preconfigured with datasources that can populate autocomplete fields based on `rdfs:label`, `skos:prefLabel`, `foaf:name`, `dcterms:title`, `schema:name` or with the URI of the resource. For each of these properties, 3 flavors of datasource exist :
+
+  - search by the beginning of the value with `strstarts()` (suffixed with `strstarts`)
+  - search anywhere in the value with `contains()` (suffixed with `contains`)
+  - use Virtuoso-specific `bif:contains()` function (suffixed with `bifcontains`)
+
+Additionally, another search datasource can search on the URI using the `contains()` function.
 
 The preconfigured datasource identifiers for an AutocompleteProperty are :
 
@@ -82,6 +99,17 @@ Similarly to list datasources, you find these under the "Entity IRI" > "Individu
 
 ![Screenshot Protégé datasources](/assets//images/protege-screenshot-datasources-2.png)
 
+To use one of these datasources in a SHACL configuration, simply annotate your property shape having a `dash:searchWidget core:AutocompleteProperty` with a [`datasources:datasource`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource) annotation, and use one of the predefined datasource URI as an object:
+
+```turtle
+  this:Place_type_autocomplete sh:path rico:hasOrHadPlaceType;
+    sh:name "place type"@en;
+    sh:nodeKind sh:IRI;
+    sh:node this:PlaceType;
+    dash:searchWidget core:AutocompleteProperty;
+    datasources:datasource <http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_skospreflabel_contains> .
+```
+
 
 ## Preconfigured SPARQL query with another property
 
@@ -92,32 +120,32 @@ If the preconfigured datasources do not fit the data model to be queried, you ha
 
 1. a `datasources:queryTemplate` property to one of the preconfigured SPARQL query template that are bundled with Sparnatural.
   
-  1. For property shapes using [`core:TreeProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty) as their `dash:searchWidget`, and returning URIs (the most common case) this can be:
-     1. [`datasources:query_list_label_alpha`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_alpha)
-     1. [`datasources:query_list_label_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_count)
-     1. [`datasources:query_list_label_alpha_with_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_alpha_with_count)
-     1. [`datasources:query_list_label_with_range_alpha`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_with_range_alpha) : to be used if you need the range to be part of the query - alphabetical ordering variant
-     1. [`datasources:query_list_label_with_range_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_with_range_count) : to be used if you need the range to be part of the query - descending count ordering variant
-     1. [`datasources:query_list_label_with_range_alpha_with_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_with_range_alpha_with_count) : to be used if you need the range to be part of the query - alphabetical ordering variant with count in parenthesis variant
-  1. For property shapes using [`core:TreeProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty) as their `dash:searchWidget`, but returning literal values, this can be:
-    1. [`datasources:query_literal_list_alpha`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_literal_list_alpha) (literals ordered alphabetically)
-    1. [`datasources:query_literal_list_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_literal_list_count) (literals ordered by descending count)
-    1. [`datasources:query_literal_list_alpha_with_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_literal_list_alpha_with_count) (literals ordered alphabetically with the count in parenthesis)
-  1. For property shapes using [`core:TreeProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty) as their `dash:searchWidget`, in the rare edge case where the value can be sometimes a literal value, sometimes a URI with a label property:
-    1. [`datasources:query_list_URI_or_literal_alpha`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_URI_or_literal_alpha) - values ordered alphabetically
-    1. [`datasources:query_list_URI_or_literal_alpha_with_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_URI_or_literal_alpha_with_count) - values ordered alphabetically with count in parenthesis
-    1. [`datasources:query_list_URI_or_literal_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_URI_or_literal_count) - values ordered by descending count
-  1. For property shapes using [`core:AutocompleteProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#AutocompleteProperty) as their `dash:searchWidget`, this can be:
-     1. [`datasources:query_search_label_strstarts`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_label_strstarts) : search using `STRSTARTS` SPARQL function
-     1. [`datasources:query_search_label_contains`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_label_contains) : search using `CONTAINS` SPARQL function
-     1. [`datasources:query_search_label_bifcontains`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_label_bifcontains) : search using `bif:contains` Virtuoso-specific SPARQL function
-     1. [`datasources:query_search_URI_contains`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_URI_contains) :  : search using `CONTAINS` SPARQL function inside the URI
-     1. [`datasources:query_search_literal_strstarts`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_literal_contains) :  : search inside the value as a literal, not a URI, using SPARQL `STRSTARTS` function
-     1. [`datasources:query_search_literal_contains`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_literal_contains) :  : search inside the value as a literal, not a URI, using SPARQL `CONTAINS` function
+    1. For property shapes using [`core:ListProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty) as their `dash:searchWidget`, and returning URIs (the most common case) this can be:
+       1. [`datasources:query_list_label_alpha`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_alpha)
+       1. [`datasources:query_list_label_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_count)
+       1. [`datasources:query_list_label_alpha_with_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_alpha_with_count)
+       1. [`datasources:query_list_label_with_range_alpha`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_with_range_alpha) : to be used if you need the range to be part of the query - alphabetical ordering variant
+       1. [`datasources:query_list_label_with_range_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_with_range_count) : to be used if you need the range to be part of the query - descending count ordering variant
+       1. [`datasources:query_list_label_with_range_alpha_with_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_with_range_alpha_with_count) : to be used if you need the range to be part of the query - alphabetical ordering variant with count in parenthesis variant
+    2. For property shapes using [`core:ListProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty) as their `dash:searchWidget`, but returning literal values, this can be:
+      1. [`datasources:query_literal_list_alpha`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_literal_list_alpha) (literals ordered alphabetically)
+      1. [`datasources:query_literal_list_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_literal_list_count) (literals ordered by descending count)
+      1. [`datasources:query_literal_list_alpha_with_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_literal_list_alpha_with_count) (literals ordered alphabetically with the count in parenthesis)
+    3. For property shapes using [`core:ListProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty) as their `dash:searchWidget`, in the rare edge case where the value can be sometimes a literal value, sometimes a URI with a label property:
+      1. [`datasources:query_list_URI_or_literal_alpha`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_URI_or_literal_alpha) - values ordered alphabetically
+      1. [`datasources:query_list_URI_or_literal_alpha_with_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_URI_or_literal_alpha_with_count) - values ordered alphabetically with count in parenthesis
+      1. [`datasources:query_list_URI_or_literal_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_URI_or_literal_count) - values ordered by descending count
+    4. For property shapes using [`core:AutocompleteProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#AutocompleteProperty) as their `dash:searchWidget`, this can be:
+       1. [`datasources:query_search_label_strstarts`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_label_strstarts) : search using `STRSTARTS` SPARQL function
+       1. [`datasources:query_search_label_contains`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_label_contains) : search using `CONTAINS` SPARQL function
+       1. [`datasources:query_search_label_bifcontains`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_label_bifcontains) : search using `bif:contains` Virtuoso-specific SPARQL function
+       1. [`datasources:query_search_URI_contains`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_URI_contains) :  : search using `CONTAINS` SPARQL function inside the URI
+       1. [`datasources:query_search_literal_strstarts`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_literal_contains) :  : search inside the value as a literal, not a URI, using SPARQL `STRSTARTS` function
+       1. [`datasources:query_search_literal_contains`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_literal_contains) :  : search inside the value as a literal, not a URI, using SPARQL `CONTAINS` function
 
-1. And one of those 2 properties:
+2. And one of those 2 properties:
    1. [`datasources:labelProperty`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#labelProperty) with the IRI of property that corresponds to the label to be retrieved or searched, in replacement, and playing the same role, as one of the 5 default properties of Sparnatural (`rdfs:label`, `skos:prefLabel`, `foaf:name`, `dcterms:title`, `schema:name`)
-   1. [`datasources:labelPath`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#labelPath) with the SPARQL property path to use (using angle brackets, no prefixes) to fetch the label of entities. In particular this allows to deal with situations where the labels are reified as separate entities.
+   2. [`datasources:labelPath`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#labelPath) with the SPARQL property path to use (using angle brackets, no prefixes) to fetch the label of entities. In particular this allows to deal with situations where the labels are reified as separate entities.
 
 For example to create a new custom datasource that will use `dc:title` as the label, and use an alphabetical ordering, the corresponding SHACL configuration will be the following:
 
@@ -144,13 +172,15 @@ exconfig:myCustomDatasource a datasources:SparqlDatasource ;
 
 ### Configuring your own SPARQL query
 
-You can provide your own SPARQL queries to populate lists or autocomplete suggestions. To do so, attach a [`datasources:queryString`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#queryString) annotation on your datasource object, holding the SPARQL query that should be used to populate the list/autocomplete.
+You can provide your own SPARQL queries to populate lists or autocomplete suggestions. To do so, create a resource of type [`datasources:SparqlDatasource`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource), and attach a [`datasources:queryString`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#queryString) annotation on it, holding the SPARQL query that should be used to populate the list/autocomplete.
 
 **The SPARQL query MUST return 2 variables : `?uri` and `?label`, populated anyway you like.** 
+**The SPARQL query MUST use the variable `$this` as the URI of the subject of the current criteria, if required.** 
 
 Additionally, the query can return, optionally:
 - an extra `?group` variable, which will be used to generate `optgroup` sections in lists widgets, and will be used as hover tooltips in autocompletion lists. This is used to indicate the source endpoint of the result in cases of multiple endpoints.
 - an extra `?itemLabel` variable, which will be used, if present, as the label of the selected value; for exemple, `?label` can hold a count, like _"Italy (307)"_, while `?itemLabel` can be just _"Italy"_.
+- any other variable name to be displayed in [list/autocomplete/tree templates](templates-configuration.html), such as definitions, icons, etc.
 
 In this SPARQL query, you can use the following placeholders that will be replaced automatically by Sparnatural before executing the query:
 - **`$domain`**, if present, will be replaced by the URI of the domain node shape (the one pointing to the property shape with `sh:property`);
@@ -171,8 +201,8 @@ WHERE {
   { 
     SELECT DISTINCT ?uri (COUNT(?domain) AS ?count) 
     WHERE {
-      ?domain a $domain .
-      ?domain $property ?uri .
+      $this a $domain .
+      $this $property ?uri .
       FILTER(isIRI(?uri))
       # Note how the $range criteria is not used in this query 
     }
@@ -220,8 +250,8 @@ You can populate dropdown lists with literal values. In this case **The SPARQL q
 ```sparql
 SELECT DISTINCT ?value (STR(?value) AS ?label)
 WHERE {
-    ?domain $type $domain .
-    ?domain $property ?value .
+    $this $type $domain .
+    $this $property ?value .
 }
 ORDER BY UCASE(STR(?label))
 LIMIT 500
@@ -242,6 +272,7 @@ The preconfigured datasource identifiers for roots datasource on a TreeProperty 
 
 1. [`datasources:tree_root_skostopconcept`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_root_skostopconcept) : reads the roots of a SKOS ConceptScheme using `skos:hasTopConcept` or `^skos:topConceptOf`, _assuming the URI of the Sparnatural entity in the config is equal to the URI of the ConceptScheme_
 1. [`datasources:tree_root_skostopconcept_with_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_root_skostopconcept_with_count) : same as previous, but returns the number of occurences of each node in parenthesis
+1. [`datasources:tree_root_domain_subClassOf`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_root_domain_subClassOf) : A tree based on subClassOf that assumes the domain URI is the root of the tree we want to build
 
 #### Preconfigured datasources for the children of a TreeProperty
 
@@ -251,6 +282,7 @@ The preconfigured datasource identifiers for children datasource on a TreeProper
 
 1. [`datasources:tree_children_skosnarrower`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_children_skosnarrower) : reads the children of a node using `skos:narrower` or `^skos:broader`
 1. [`datasources:tree_children_skosnarrower_with_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_children_skosnarrower_with_count) : same as previous, but returns the number of occurences of each node in parenthesis
+1. [`datasources:tree_children_subClassOf`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_children_subClassOf) : A tree based on subClassOf that assumes the domain URI is the root of the tree we want to build
 
 ### Tree widget example configuration
 
@@ -273,7 +305,7 @@ shape:SpecialitePharmaceutique_classificationATC sh:path ex:atcClassification;
 shape:tree_atc_root a config-datasources:SparqlDatasource;
   config-datasources:queryString """PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
-SELECT ?uri (CONCAT(?code, \" - \", STR(?rdfs_label)) AS ?label) (COUNT(?x) AS ?count)
+SELECT ?uri (CONCAT(?code, \" - \", STR(?rdfs_label)) AS ?label) (COUNT($this) AS ?count)
 WHERE {
  ?uri rdfs:subClassOf <http://data.esante.gouv.fr/whocc/atc/ATC> .
  ?uri rdfs:label ?rdfs_label .
@@ -282,7 +314,7 @@ WHERE {
 
  # Counts how many time the URI is used as value in the criteria build in Sparnatural
  OPTIONAL {
- ?x $property ?uri .
+   $this $property ?uri .
  }
 }
 GROUP BY ?uri ?code ?rdfs_label
@@ -292,7 +324,7 @@ ORDER BY ?label""" .
 shape:tree_atc_child a config-datasources:SparqlDatasource;
   config-datasources:queryString """PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
-SELECT ?uri (CONCAT(?code, \" - \", STR(?rdfs_label)) AS ?label) ?hasChildren (COUNT(?x) AS ?count)
+SELECT ?uri (CONCAT(?code, \" - \", STR(?rdfs_label)) AS ?label) ?hasChildren (COUNT($this) AS ?count)
 WHERE {
  # The $node variable will be replaced by the URI of the node being expanded in the tree 
  ?uri rdfs:subClassOf $node .
@@ -306,7 +338,7 @@ WHERE {
 
  # Counts how many time the URI is used as value in the criteria build in Sparnatural
  OPTIONAL {
- ?x $property ?uri .
+   $this $property ?uri .
  }
 
 }
@@ -319,10 +351,13 @@ ORDER BY ?label""" .
 You can provide your own SPARQL queries to populate a tree widget. To do so, you need 2 datasources : one that will populate the roots of the tree (entries at first level), and one that will be used to populate the children of a tree, when clicked (see the [annotations for a SelectResourceProperty](https://docs.sparnatural.eu/OWL-based-configuration#annotations-for-a-selectresourceproperty) for more information).
 
 **The SPARQL query MUST return 2 variables : `?uri` and `?label`, populated anyway you like.**
+**The SPARQL query MUST use the variable `$this` as the URI of the subject of the current criteria, if required.** 
+
 The SPARQL query CAN return 2 other variables :
 
   - **`?hasChildren`**, a boolean to indicate if the node has children. If not present, all tree items can be unfolded, even when have no children; if present and set to false, an item cannot be unfolded. 
   - **`?count`** to indicate the number of times a node is used as a value; nodes with a count = 0 will be disabled and cannot be selected as a value.
+  - and it can return any other variable name to be displayed in [tree templates](templates-configuration.html), such as definitions, icons, etc.
 
 In these SPARQL query, the same replacement of the **`$domain`**, **`$range`**, **`$property`**, etc. than in the queries for list/autocomplete will happen (see above). The following additional replacements will happen:
 - **`$node`**, if present, will be replaced by the URI of the node being clicked;
@@ -331,7 +366,7 @@ A typical query that populates the `?hasChildren` and `?count` variable looks li
 
 ```sparql
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
-SELECT DISTINCT ?uri (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label) ?hasChildren (COUNT(?x) AS ?count)
+SELECT DISTINCT ?uri (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label) ?hasChildren (COUNT($this) AS ?count)
 WHERE {
 
   {
@@ -352,8 +387,8 @@ WHERE {
 
   # Counts how many time the URI is used as value in the criteria build in Sparnatural
   OPTIONAL {
-    ?x a $domain .
-    ?x $property ?uri .
+    $this a $domain .
+    $this $property ?uri .
     # here we choose not to use the $range criteria, but it can also be used
     # ?uri a $range .
   }
