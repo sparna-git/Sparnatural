@@ -64,6 +64,7 @@ export class ListWidget extends AbstractWidget {
 
   render() {
     super.render();
+    this.reloadOnQueryChange(() => this.#loadValues());
     this.#loadValues();
     return this;
   }

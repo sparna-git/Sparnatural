@@ -36,6 +36,9 @@ export class AutoCompleteWidget extends AbstractWidget {
   protected configuration: AutocompleteConfiguration;
   itemTemplate: ItemTemplate;
 
+  // incremented on every search, so that a late answer from a previous one is dropped
+  private searchCounter = 0;
+
   constructor(
     parentComponent: HTMLComponent,
     configuration: AutocompleteConfiguration,
@@ -150,13 +153,32 @@ export class AutoCompleteWidget extends AbstractWidget {
         this.toggleSpinner("");
       }
 
-      // build final list
+      // build final list : the setter shows it only if the input has the focus, so a
+      // reload triggered from another line does not open the popup
       awesomplete.list = list;
-      awesomplete.evaluate();
     };
 
     let errorCallback = (payload: any) => {
       this.toggleSpinner(I18n.labels.AutocompleteSpinner_NoResults);
+    };
+
+    // fetches the proposals for the phrase
+    let search = (phrase: string) => {
+      const searchId = ++this.searchCounter;
+      this.toggleSpinner(I18n.labels.AutocompleteSpinner_Searching);
+      this.configuration.dataProvider.getAutocompleteSuggestions(
+        this.startClassVal.type,
+        this.objectPropVal.type,
+        this.endClassVal.type,
+        phrase,
+        // a newer search was started in the meantime, this answer is obsolete
+        (items) => {
+          if (searchId === this.searchCounter) callback(items);
+        },
+        (payload) => {
+          if (searchId === this.searchCounter) errorCallback(payload);
+        },
+      );
     };
 
     // when user selects a value from the autocompletion list...
@@ -194,18 +216,14 @@ export class AutoCompleteWidget extends AbstractWidget {
           window.clearTimeout(autocompleteTimer);
         }
 
-        autocompleteTimer = window.setTimeout(() => {
-          this.toggleSpinner(I18n.labels.AutocompleteSpinner_Searching);
-          this.configuration.dataProvider.getAutocompleteSuggestions(
-            this.startClassVal.type,
-            this.objectPropVal.type,
-            this.endClassVal.type,
-            phrase,
-            callback,
-            errorCallback,
-          );
-        }, 350);
+        autocompleteTimer = window.setTimeout(() => search(phrase), 350);
       }
+    });
+
+    // the proposals already shown depend on the other lines : search again on the typed text
+    this.reloadOnQueryChange(() => {
+      const phrase = (queryInput as HTMLInputElement).value;
+      if (phrase.length >= 3) search(phrase);
     });
 
     return this;

@@ -5,6 +5,7 @@ import { DataFactory, Literal } from "rdf-data-factory";
 import { Term } from "@rdfjs/types/data-model";
 import { RDFTerm, LabelledCriteria, Criteria, RdfTermCriteria } from "../../SparnaturalQueryIfc";
 import { RdfTermDatasourceItem, SinglePredicateDataProviderIfc } from "../datasources/DataProviders";
+import { getSettings } from "../../settings/defaultSettings";
 
 const factory = new DataFactory();
 
@@ -35,6 +36,15 @@ export abstract class AbstractWidget extends HTMLComponent {
   protected blockEndTriple = false;
   protected spinner = new LoadingSpinner(this).render();
 
+  // registered once on the root component, see reloadOnQueryChange
+  private queryChangeListener: () => void;
+
+  // render() rebuilds the html, so the reload of the last render is the one to call
+  private queryChangeReload: () => void;
+
+  // pending reload, so that several queryUpdated in a row trigger a single one
+  private reloadTimer: ReturnType<typeof setTimeout>;
+
   constructor(
     baseCssClass: string,
     parentComponent: HTMLComponent,
@@ -55,6 +65,43 @@ export abstract class AbstractWidget extends HTMLComponent {
     super.render();
     this.spinner.render();
     return this;
+  }
+
+  /**
+   * Calls reload whenever the query changes, so that the widget keeps proposing only values
+   * consistent with the filters set on the other lines.
+   *
+   * A widget is only displayed while its line has no value yet, so a reload never
+   * discards a choice already made by the user.
+   */
+  protected reloadOnQueryChange(reload: () => void) {
+    // nothing to reload when the datasources are not filtered by the query
+    if (!getSettings().facetedBrowsing) return;
+
+    this.queryChangeReload = reload;
+
+    // render() may be called several times on the same widget, register only once
+    if (this.queryChangeListener) return;
+
+    // kept so that the listener can remove itself from the very same element
+    const root = this.getRootComponent().html[0];
+
+    this.queryChangeListener = () => {
+      // the widget is taken off the page as soon as its line gets a value : there is
+      // nothing left to reload, and nothing left to listen for
+      if (!this.html[0]?.isConnected) {
+        clearTimeout(this.reloadTimer);
+        root.removeEventListener("queryUpdated", this.queryChangeListener);
+        this.queryChangeListener = null;
+        return;
+      }
+
+      // queryUpdated fires several times for a single user action, only keep the last
+      clearTimeout(this.reloadTimer);
+      this.reloadTimer = setTimeout(() => this.queryChangeReload(), 150);
+    };
+
+    root.addEventListener("queryUpdated", this.queryChangeListener);
   }
 
   // Is used to parse the inputs from the ISparnaturalJson e.g "preloaded" queries
