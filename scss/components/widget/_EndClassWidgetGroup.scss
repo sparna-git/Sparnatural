@@ -9,6 +9,18 @@
     flex-wrap: nowrap;
   flex-grow: 1;
 
+    // the negative margin is for the chips : without them it lets the line overflow
+    &:not(:has(.EndClassWidgetValue, .checkingValues)) {
+        margin-left: 0;
+    }
+
+    // the last chip sticks out by 8px (margin -13px, padding 5px) : the line must keep room for it
+    &:has(.EndClassWidgetValue, .checkingValues)::after {
+        content: '';
+        flex: none;
+        width: 8px;
+    }
+
     .EndClassWidgetValuesWrapper {
         display: flex;
         flex-wrap: nowrap;

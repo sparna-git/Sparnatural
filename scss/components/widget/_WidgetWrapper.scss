@@ -1,5 +1,38 @@
 @use '../../base';
 
+/* the widget would leave the list : the words that can be spared are removed */
+.EditComponents.compactWidget .WidgetWrapper {
+    .widgetEndType,
+    .widgetLabel {
+        display: none;
+    }
+}
+
+/* still too wide : "select all" stays on its line, and the widget goes under it */
+.EditComponents.stackedWidget .WidgetWrapper {
+    height: 51px + base.$height-components-under;
+    .widgetLabel {
+        display: none;
+    }
+    .edit-trait.first {
+        top: 25px;
+    }
+    &>a,
+    &>div {
+        left: 25px;
+        top: 44px;
+        min-width: 0;
+    }
+    .awesomplete,
+    input {
+        max-width: 100%;
+    }
+    // hidden by select2 but it still widens the page : the width is set inline in ListWidget
+    select {
+        min-width: 0 !important;
+    }
+}
+
 .nb-choice-2 {
     .WidgetWrapper {
         border-left: 3px solid var(--primary-color-main);

@@ -1,17 +1,35 @@
 .ObjectPropertyTypeId{
     position: relative;
     display: flex;
+    min-width: 0;
 
     .currentWrapper {
         padding-left: 10px;
         padding-right: 0;
-        
+        min-width: 0;
+    }
+
+    // the label is cut first, then the arrow gives way
+    & > .currentWrapper {
+        flex: 0 9999 auto;
+        min-width: 35px;
+    }
+
+    .componentFrontArrow {
+        flex: 0 1 auto;
+        min-width: 0;
+    }
+
+    .labelLine {
+        min-width: 0;
     }
 
     span.current {
         width: 232px;
         &.selected {
             width: auto;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         &.temporary-label {
             width: auto;

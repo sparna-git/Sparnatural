@@ -89,16 +89,16 @@ class ObjectPropertyGroup extends HTMLComponent {
         detail: this.objectPropVal,
       })
     );
-    var desc = this.specProvider.getProperty(this.objectPropVal.type).getTooltip();
+    const property = this.specProvider.getProperty(this.objectPropVal.type);
+    const desc = property.getTooltip();
+    // the label can be cut on a narrow line : the tooltip always shows it in full
+    const content = desc ? `${property.getLabel()}<br/>${desc}` : property.getLabel();
 
-    if(desc) {
-			$(this.ParentCriteriaGroup.objectPropertyGroup.html).find('.ObjectPropertyTypeId').attr('data-tippy-content', desc.replace(/"/g, '&quot;') ) ;
-			var tippySettings = Object.assign({}, TOOLTIP_CONFIG);
-			tippySettings.placement = "top-start";
-			tippy('.ObjectPropertyGroup .ObjectPropertyTypeId[data-tippy-content]', tippySettings);
-		} else {
-			$(this.ParentCriteriaGroup.objectPropertyGroup.html).removeAttr('data-tippy-content') ;
-		}
+    const selector = this.html.find('.ObjectPropertyTypeId').first();
+    selector.attr('data-tippy-content', content.replace(/"/g, '&quot;'));
+    var tippySettings = Object.assign({}, TOOLTIP_CONFIG);
+    tippySettings.placement = "top-start";
+    tippy(selector[0], tippySettings);
   }
 
   getTypeSelected() {

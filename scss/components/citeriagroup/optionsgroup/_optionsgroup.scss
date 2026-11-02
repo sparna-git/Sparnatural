@@ -53,4 +53,14 @@
                 }
             }
     }
+    // the property would get unreadable : the labels are cut, like the values
+    &.compactOptions {
+        .Optional span,
+        .NotExists span {
+            max-width: 45px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
 }

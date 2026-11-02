@@ -5,6 +5,8 @@ import CriteriaGroup from "../CriteriaGroup";
 import NotExistsComponent from "./optioncomponents/NotExistsComponent";
 import OptionalComponent from "./optioncomponents/OptionalComponent";
 
+const MIN_PROPERTY_WIDTH = 90;
+
 /**
  * Name corresponds to the CSS class set on the CriteriaGroup and the linkWhereBottom
  * See TriggerOption.switchState()
@@ -27,6 +29,7 @@ export class OptionsGroup extends HTMLComponent {
   NotExistsComponent: NotExistsComponent;
   specProvider: ISparnaturalSpecification;
   optionalArrow: OptionalArrow;
+  #widthObserver: ResizeObserver | null = null;
 
   constructor(ParentCriteriaGroup: CriteriaGroup, specProvider: ISparnaturalSpecification) {
     super("OptionsGroup", ParentCriteriaGroup, null);
@@ -107,10 +110,25 @@ export class OptionsGroup extends HTMLComponent {
     ) {
       this.NotExistsComponent.render();
     }
-    
+
+    this.#widthObserver = new ResizeObserver(() => this.#keepPropertyReadable());
+    this.#widthObserver.observe(this.ParentCriteriaGroup.objectPropertyGroup.html[0]);
+
     this.html[0].dispatchEvent(
       new CustomEvent("redrawBackgroundAndLinks", { bubbles: true })
     );
+  }
+
+  // The options take a lot of room on the line : their labels are cut before the property gets unreadable
+  #keepPropertyReadable() {
+    if (!this.html?.[0].isConnected) return;
+    const propertyGroup = this.ParentCriteriaGroup.objectPropertyGroup;
+    const label = propertyGroup.inputSelector.htmlCurentValue[0];
+
+    this.html.removeClass("compactOptions");
+    const labelIsCut = label.scrollWidth > label.clientWidth;
+    const tooSmall = propertyGroup.html[0].getBoundingClientRect().width < MIN_PROPERTY_WIDTH;
+    this.html.toggleClass("compactOptions", labelIsCut && tooSmall);
   }
 
   #addOptionsPossible() {
@@ -130,6 +148,8 @@ export class OptionsGroup extends HTMLComponent {
   }
 
   #removeOptionalComponents() {
+    this.#widthObserver?.disconnect();
+    this.html.removeClass("compactOptions");
     this.OptionalComponent.html.remove();
     this.NotExistsComponent.html.remove();
     this.html[0].dispatchEvent(

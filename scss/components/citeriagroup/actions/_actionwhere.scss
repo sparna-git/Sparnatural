@@ -29,3 +29,16 @@
         }
     }
 }
+
+/* the line would leave the list : the text goes on two lines */
+.EditComponents.stackedWhere .ActionWhere {
+    .whereEnd {
+        display: block;
+    }
+    .edit-trait {
+        top: 13px;
+    }
+    a {
+        top: 26px;
+    }
+}

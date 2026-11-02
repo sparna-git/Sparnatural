@@ -77,6 +77,24 @@
         }
     }
 
+    // nothing selected yet, the selector is blank : it shrinks on a narrow line
+    &:has(span.current:not(.selected)) {
+        flex: 1 1 60px;
+        min-width: 0;
+        max-width: max-content;
+        .ClassTypeId,
+        .currentWrapper {
+            min-width: 0;
+        }
+        .labelLine {
+            min-width: 0;
+            overflow: hidden;
+        }
+        .componentFrontArrow {
+            flex: none;
+        }
+    }
+
     // Style appliqué à .EndClassGroup quand il contient un élément .focus fix z-index #683
     &:has(> .focus) {
         z-index: 11;

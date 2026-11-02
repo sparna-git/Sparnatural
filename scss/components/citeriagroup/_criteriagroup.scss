@@ -241,6 +241,20 @@ li.groupe.completed {
 	}
 }
 
+/* room for the widget, when it is under the "select all" line */
+.CriteriaGroup:has(.EditComponents.stackedWidget) {
+	margin-bottom: base.$margin-component-onEdit + base.$height-components-under;
+}
+
+/* room for the second line of the "where" text */
+.CriteriaGroup:has(.EditComponents.stackedWhere) {
+	margin-bottom: base.$margin-component-onEdit + 26px;
+}
+
+.CriteriaGroup:has(.EditComponents.stackedWidget.stackedWhere) {
+	margin-bottom: base.$margin-component-onEdit + base.$height-components-under + 26px;
+}
+
 /* #809 : while checking if the line can have a result, and when it cannot, nothing is
    shown under the line, the status chip in the line says it all */
 .CriteriaGroup.checking-values,

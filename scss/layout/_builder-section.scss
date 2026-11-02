@@ -28,4 +28,8 @@
 	}
     display: block;
 	padding: 0 base.$margin-component;
+	// strong zoom : the room goes to the lines
+	@media (max-width: base.$width-strong-zoom) {
+		padding: 0;
+	}
 }

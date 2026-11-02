@@ -18,6 +18,8 @@ import { I18n } from "../../../../../settings/I18n";
 import { ExpandWidgetValuesBtn } from "../../../../buttons/ExpandWidgetValuesBtn";
 import { TippyInfo } from "../../../../buttons/TippyInfo";
 
+const MIN_CHIP_WIDTH = 80;
+
 /*
   This class is responsible for rendering the WidgetValues, selected by a widget.
   This values are added in a 'list' after the EndClassGroup
@@ -67,7 +69,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
         this.expandedValuesWrapper.css("width", newWidth + "px");
         this.#positionCloseBtn();
       }
-      if (this.widgetValues.length > 0) {
+      if (this.#hasChips()) {
         requestAnimationFrame(() => this.#calculateChipWidths());
       }
     };
@@ -80,7 +82,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
     // Listen on CriteriaGroup (parent) since OptionsGroup is a sibling, not an ancestor
     const criteriaGroupEl = (this.parentComponent as CriteriaGroup).html[0];
     criteriaGroupEl.addEventListener("redrawBackgroundAndLinks", () => {
-      if (this.widgetValues.length > 0) {
+      if (this.#hasChips()) {
         this.#resizeHandler();
       }
     });
@@ -273,6 +275,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
   showStatusChip(checking: boolean) {
     this.hideStatusChip();
     this.#statusChip = new StatusChip(this, checking).render();
+    requestAnimationFrame(() => this.#calculateChipWidths());
   }
 
   hideStatusChip() {
@@ -387,7 +390,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
     }
 
     // Calculate chip max-width to fit maxPerRow items on one line
-    if (total > 0 && !skipRecalc) {
+    if (this.#hasChips() && !skipRecalc) {
       requestAnimationFrame(() => this.#calculateChipWidths());
     } else {
       this.valuesWrapper[0].style.removeProperty('--chip-max-width');
@@ -396,9 +399,16 @@ export class EndClassWidgetGroup extends HTMLComponent {
     }
   }
 
+  // the "select all" and status chips are shown in the row, but are not in widgetValues
+  #hasChips(): boolean {
+    return this.isSelectAll || this.#statusChip !== null || this.widgetValues.length > 0;
+  }
+
   #calculateChipWidths() {
     const maxPerRow = getSettings().maxVisiblePerRow || 3;
     const total = this.widgetValues.length;
+    // measured with the smallest chips : the property takes its room first
+    this.valuesWrapper[0].style.setProperty('--chip-max-width', MIN_CHIP_WIDTH + 'px');
 
     // --- Chip width for valuesWrapper (main row) ---
     const criteriaGroupEl = (this.parentComponent as CriteriaGroup).html[0] as HTMLElement;
@@ -436,8 +446,11 @@ export class EndClassWidgetGroup extends HTMLComponent {
     }
 
     const visibleCount = Math.min(total, maxPerRow);
-    const chipWidth = (availableWidth + extra_width + (visibleCount - 1) * 13) / Math.max(visibleCount, maxPerRow-1) ;
-    const clampedWidth = Math.max(80, Math.min(220, Math.floor(chipWidth)));
+    // these chips are not in widgetValues and no value comes next to them, up to the row border
+    const chipWidth = this.isSelectAll || this.#statusChip !== null
+      ? availableWidth - 20
+      : (availableWidth + extra_width + (visibleCount - 1) * 13) / Math.max(visibleCount, maxPerRow-1);
+    const clampedWidth = Math.max(MIN_CHIP_WIDTH, Math.min(220, Math.floor(chipWidth)));
     this.valuesWrapper[0].style.setProperty('--chip-max-width', clampedWidth + 'px');
 
     // --- Chip width for expandedValuesWrapper (based on its own width) ---
@@ -452,7 +465,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
       const expandedPR = parseFloat(getComputedStyle(expandedEl).paddingRight) || 0;
       const expandedAvailWidth = expandedWidth - expandedPR;
       const expandedChipWidth = (expandedAvailWidth + (maxPerRow - 1) * 13) / maxPerRow;
-      const expandedClamped = Math.max(80, Math.min(220, Math.floor(expandedChipWidth)));
+      const expandedClamped = Math.max(MIN_CHIP_WIDTH, Math.min(220, Math.floor(expandedChipWidth)));
       this.expandedValuesWrapper[0].style.setProperty('--chip-max-width', expandedClamped + 'px');
     } else {
       this.expandedValuesWrapper[0].style.removeProperty('--chip-max-width');
@@ -555,13 +568,12 @@ export class EndClassWidgetValue extends HTMLComponent {
     let valuelbl = `<p><span ${extraClass}>${icon} ${theLabel} </span></p>`;
     this.html.append($(valuelbl));
 
-    if (theLabel.length > 25) {
-      new TippyInfo(this, this.#stripLabelHtml(theLabel), {
-        placement: 'top',
-        delay: [500, 100],
-        theme: 'sparnatural',
-      });
-    }
+    // the label can be cut on a narrow line : the tooltip always shows it in full
+    new TippyInfo(this, this.#stripLabelHtml(theLabel), {
+      placement: 'top',
+      delay: [500, 100],
+      theme: 'sparnatural',
+    });
 
     this.frontArrow.render();
     this.unselectBtn = new UnselectBtn(this, () => {

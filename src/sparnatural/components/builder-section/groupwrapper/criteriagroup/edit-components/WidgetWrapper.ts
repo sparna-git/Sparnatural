@@ -106,8 +106,8 @@ class WidgetWrapper extends HTMLComponent {
     let selectAnySpan = `<span class="selectAll" id="selectAll">
     <span class="underline">
     ${I18n.labels.SelectAllValues}
-    </span> 
-    ${parenthesisLabel} 
+    </span>
+    <span class="widgetEndType">${parenthesisLabel}</span>
     </span>`;
 
     let orSpan = `<span class="or">
@@ -115,7 +115,7 @@ class WidgetWrapper extends HTMLComponent {
     </span> `;
     
     let endLabel = this.#getEndLabel(this.widgetType);
-    let endLabelSpan = `<span>
+    let endLabelSpan = `<span class="widgetLabel">
       ${endLabel}
     </span>
     `;

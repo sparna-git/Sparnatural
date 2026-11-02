@@ -3,6 +3,8 @@
 .ObjectPropertyGroup {
     /*margin-right: -15px;*/
     padding-left: 10px;
+    // on a narrow line the label is truncated, its first letters stay visible
+    min-width: 45px;
     .nice-select{
         padding-left:1em;
     }

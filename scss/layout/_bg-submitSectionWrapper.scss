@@ -1,4 +1,4 @@
-
+@use '../base';
 
 .submitSection {
     height: 41px;
@@ -12,6 +12,10 @@
         top: 14px;
         width: fit-content;
         right:30px;
+        // strong zoom : same as the builder section, which has no padding anymore
+        @media (max-width: base.$width-strong-zoom) {
+            right: 0;
+        }
         padding: 10px;
         padding-left: 12px;
         border-radius: 5px;

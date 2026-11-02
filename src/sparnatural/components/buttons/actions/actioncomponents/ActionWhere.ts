@@ -41,9 +41,9 @@ class ActionWhere extends HTMLComponent {
       <span class="edit-num"> ${choiceNumber}</span>
     </span>`);
     let where = $(`
-      <div> ${I18n.labels.Search} ${endLabel} ${
+      <div> ${I18n.labels.Search} <span class="whereEnd">${endLabel} ${
       I18n.labels.That
-    } </div>
+    }</span> </div>
     `);
     this.btn = $(`<a>${UiuxConfig.ICON_PLUS}</a>`);
     where = where.add(this.btn[0]);
