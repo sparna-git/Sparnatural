@@ -9,6 +9,7 @@ class ActionAnd extends HTMLComponent {
     let widgetHtml = $(`<span class="trait-and-bottom"></span>`);
     super("ActionAnd", parentComponent, widgetHtml);
     this.btn = $(`<a>${I18n.labels.And}</a>`);
+    HTMLComponent.setAriaButton(this.btn, `${I18n.labels.And}, ${I18n.labels["AddLine.label"]}`);
     this.widgetHtml = this.widgetHtml.add(this.btn);
 
     this.btn[0].addEventListener("click", () => {

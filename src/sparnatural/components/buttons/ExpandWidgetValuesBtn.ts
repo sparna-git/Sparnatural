@@ -1,6 +1,7 @@
 import { HTMLComponent } from "../HtmlComponent";
 import { ArrowComponent } from "./ArrowComponent";
 import UiuxConfig from "../IconsConstants";
+import { I18n } from "../../settings/I18n";
 
 export class ExpandWidgetValuesBtn extends HTMLComponent {
     onClick: (e: JQuery.ClickEvent) => void;
@@ -24,7 +25,8 @@ export class ExpandWidgetValuesBtn extends HTMLComponent {
         let label = `<p><span class="count">+${this.count}</span></p>`;
         this.html.append($(label));
         this.frontArrow.render();
-        
+        HTMLComponent.setAriaButton(this.html, `${I18n.labels["MoreValues.label"]} (+${this.count})`);
+
         this.html.off("click").on("click", (e) => this.onClick(e));
         return this;
     }

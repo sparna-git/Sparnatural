@@ -1,5 +1,6 @@
 import UiuxConfig from "../IconsConstants";
 import { HTMLComponent } from "../HtmlComponent";
+import { I18n } from "../../settings/I18n";
 
 export class DisplayBtn extends HTMLComponent {
   selected = false;
@@ -16,6 +17,9 @@ export class DisplayBtn extends HTMLComponent {
   }
 
   render(): this {
+    // the name says what a click does : "Afficher" or "Masquer"
+    const labelKey = this.selected ? "HideResultOptions.label" : "ShowResultOptions.label";
+    HTMLComponent.setAriaButton(this.widgetHtml, I18n.labels[labelKey]);
     super.render();
     this.#addClickListener();
     return this;

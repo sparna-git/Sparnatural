@@ -1,6 +1,8 @@
 import { SelectedVal } from "../../../../SelectedVal";
 import GroupWrapper from "../../GroupWrapper";
 import LinkWhereBottom from "../../LinkWhereBottom";
+import { HTMLComponent } from "../../../../HtmlComponent";
+import { I18n } from "../../../../../settings/I18n";
 
 let removeEditComponents = (grpWrapper: GroupWrapper) => {
   grpWrapper.criteriaGroup.endClassGroup.html[0].dispatchEvent(
@@ -42,5 +44,10 @@ export function addWhereComponent(
   grpWrapper.linkWhereBottom = new LinkWhereBottom(grpWrapper).render();
   grpWrapper.html[0].dispatchEvent(
     new CustomEvent("redrawBackgroundAndLinks", { bubbles: true })
+  );
+  // the line number is known once redrawn
+  HTMLComponent.announce(
+    grpWrapper.html[0],
+    I18n.format("Announce.lineAdded", { n: grpWrapper.whereChild.lineNumber })
   );
 }

@@ -46,6 +46,9 @@ class BaseOptionComponent extends HTMLComponent {
     this.backArrow.render();
     this.html.append($(`<span>${this.label}</span>`));
     this.frontArrow.render();
+    // the visible label can be cut : the whole word stays available
+    HTMLComponent.setAriaButton(this.html, this.label);
+    this.html.attr("aria-pressed", "false");
 
     return this;
   }
@@ -59,10 +62,12 @@ class BaseOptionComponent extends HTMLComponent {
 
   select() {
     this.html[0].classList.add("Enabled");
+    this.html.attr("aria-pressed", "true");
   }
 
   unselect() {
     this.html[0].classList.remove("Enabled");
+    this.html.attr("aria-pressed", "false");
   }
 }
 

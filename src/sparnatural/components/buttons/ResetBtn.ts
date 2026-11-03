@@ -11,7 +11,9 @@ export class ResetBtn extends HTMLComponent {
     );
 
     super("reset-wrapper", ParentComponent, widgetHtml);
-    this.widgetHtml.on("click", (e: JQuery.ClickEvent) => {
+    HTMLComponent.setAriaButton(this.widgetHtml.find("a"), I18n.labels["Reset.tooltip"]);
+    // on the button itself : on the wrapper, screen readers would also announce a "clickable" element
+    this.widgetHtml.find("a").on("click", (e: JQuery.ClickEvent) => {
       callBack();
     });
 

@@ -11,6 +11,7 @@ export class PlayBtn extends HTMLComponent {
       `<span title="${I18n.labels["Submit.tooltip"]}">${UiuxConfig.ICON_PLAY}</span>`
     );
     super("playBtn", ParentComponent, widgetHtml);
+    HTMLComponent.setAriaButton(this.widgetHtml, I18n.labels["Submit.tooltip"]);
     this.callback = callback;
     // add clicklistener
     let that = this;
@@ -37,6 +38,7 @@ export class PlayBtn extends HTMLComponent {
   disable() {
     // set a disabled CSS class, trigger the loader
     this.html.addClass("submitDisable loadingEnabled");
+    this.widgetHtml.attr({ "aria-disabled": "true", "aria-busy": "true" });
   }
 
   /**
@@ -44,6 +46,7 @@ export class PlayBtn extends HTMLComponent {
    */
   removeLoading() {
     this.html.removeClass("loadingEnabled");
+    this.widgetHtml.removeAttr("aria-busy");
   }
 
   /**
@@ -51,5 +54,6 @@ export class PlayBtn extends HTMLComponent {
    */
   enable() {
     this.html.removeClass("submitDisable");
+    this.widgetHtml.removeAttr("aria-disabled");
   }
 }

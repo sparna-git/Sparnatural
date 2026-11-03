@@ -88,4 +88,20 @@ export class HTMLComponent implements IRenderable {
     el.classList.remove(oldState);
     el.classList.add(newState);
   };
+
+  /**
+   * Tells screen readers that a clickable element is a button, and what it does.
+   */
+  static setAriaButton(el: JQuery<HTMLElement>, label: string) {
+    el.attr({ role: "button", "aria-label": label });
+    // the icon inside has no name : the screen reader must stop on the button
+    el.find("svg").attr("aria-hidden", "true");
+  };
+
+  /**
+   * Asks screen readers to read a message, without moving the focus. See the live region in SparnaturalComponent.
+   */
+  static announce(el: HTMLElement, message: string) {
+    el.dispatchEvent(new CustomEvent("announce", { bubbles: true, detail: message }));
+  };
 }

@@ -5,6 +5,7 @@
 import UiuxConfig from "../IconsConstants";
 import { OptionsGroup } from "../builder-section/groupwrapper/criteriagroup/optionsgroup/OptionsGroup";
 import { HTMLComponent } from "../HtmlComponent";
+import { I18n } from "../../settings/I18n";
 
 export class OptionalArrow extends HTMLComponent {
   selected = false;
@@ -19,9 +20,12 @@ export class OptionalArrow extends HTMLComponent {
   }
   render(): this {
     super.render();
+    HTMLComponent.setAriaButton(this.widgetHtml, I18n.labels["Options.label"]);
+    this.widgetHtml.attr("aria-expanded", String(this.selected));
     this.widgetHtml.on("click", (e: JQuery.ClickEvent) => {
       e.stopImmediatePropagation();
       this.selected = this.selected ? false : true;
+      this.widgetHtml.attr("aria-expanded", String(this.selected));
       this.callBack(this.selected);
     });
     return this;

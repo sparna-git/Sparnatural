@@ -68,6 +68,7 @@ class WidgetWrapper extends HTMLComponent {
     $(this.html)
       .find(".selectAll")
       .first()
+      .attr("role", "button")
       .on("click", () => {
         this.html[0].dispatchEvent(
           new CustomEvent("selectAll", { bubbles: true })

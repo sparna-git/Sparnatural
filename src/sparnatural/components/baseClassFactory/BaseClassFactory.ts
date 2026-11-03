@@ -28,11 +28,12 @@ class BaseClassFactory {
     };
     let html: JQuery<HTMLElement>;
     switch (baseCssClass) {
+      // role none : screen readers do not announce the lines of the query as a list
       case this.liTags.find(findCallBack):
-        html = $(`<li class="${baseCssClass}"></li>`);
+        html = $(`<li class="${baseCssClass}" role="none"></li>`);
         break;
       case this.ulTags.find(findCallBack):
-        html = $(`<ul class="${baseCssClass}"></ul>`);
+        html = $(`<ul class="${baseCssClass}" role="none"></ul>`);
         break;
       case this.spanTags.find(findCallBack):
         html = $(`<span class="${baseCssClass}"></span>`);

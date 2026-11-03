@@ -20,7 +20,8 @@ class VariableSection extends HTMLComponent {
 
   render(): this {
     super.render();
-    this.linesWrapper = $('<div class="linesWrapper"></div>');
+    // closed at first : its height is 0, but screen readers and the keyboard would still reach its content
+    this.linesWrapper = $('<div class="linesWrapper" style="visibility: hidden"></div>');
     let line1 = $('<div class="line1"></div>');
     let line2 = $('<div class="line2"></div>');
     this.linesWrapper.append(line1).append(line2);
@@ -60,6 +61,7 @@ class VariableSection extends HTMLComponent {
   #renderShowHideBtn() {
     let displayaction = (display: boolean) => {
       if (display) {
+        $(this.linesWrapper).css("visibility", "visible");
         $(this.linesWrapper).animate(
           {
             height: $(this.linesWrapper).get(0).scrollHeight,
@@ -77,7 +79,7 @@ class VariableSection extends HTMLComponent {
           },
           500,
           () => {
-            $(this.linesWrapper).css("overflow", "hidden");
+            $(this.linesWrapper).css({ overflow: "hidden", visibility: "hidden" });
           }
         );
         this.variableOrderMenu.draggables.forEach((draggableItem) => {

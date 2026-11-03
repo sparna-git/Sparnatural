@@ -54,6 +54,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
 
     this.popoverCloseBtn = $(`<span class="popoverCloseBtn">${UiuxConfig.ICON_ARROW_TOP}</span>`);
     this.expandedValuesWrapper.append(this.popoverCloseBtn);
+    HTMLComponent.setAriaButton(this.popoverCloseBtn, I18n.labels["Close.label"]);
     this.popoverCloseBtn.on("click", (e) => {
       e.stopPropagation();
       this.#collapseExpanded();
@@ -166,6 +167,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
   // input : the widget value to remove
   #onRemoveValue(e: CustomEvent) {
     let valueToDel: EndClassWidgetValue = e.detail;
+    this.#announceValue("Announce.valueRemoved", valueToDel);
 
     // special case: if the value to delete is the selectAll value
     let unselectedValue: EndClassWidgetValue;
@@ -276,6 +278,10 @@ export class EndClassWidgetGroup extends HTMLComponent {
     this.hideStatusChip();
     this.#statusChip = new StatusChip(this, checking).render();
     requestAnimationFrame(() => this.#calculateChipWidths());
+    // the spinner and the red light also say what happens to screen readers
+    const lineNumber = (this.parentComponent as CriteriaGroup).parentGroupWrapper.lineNumber;
+    const key = checking ? "Announce.checking" : "Announce.noResults";
+    HTMLComponent.announce(this.html[0], I18n.format(key, { n: lineNumber }));
   }
 
   hideStatusChip() {
@@ -284,7 +290,16 @@ export class EndClassWidgetGroup extends HTMLComponent {
   }
 
   // All items which got selected in the widget will be added add the back of the EndClassGroup.
+  // screen readers : says which value was added or removed, and on which line
+  #announceValue(key: string, value: EndClassWidgetValue) {
+    const label = value.selectAll ? I18n.labels.SelectAllValues : value.widgetVal.label;
+    const text = $("<div>").html(label).text().trim();
+    const lineNumber = (this.parentComponent as CriteriaGroup).parentGroupWrapper.lineNumber;
+    HTMLComponent.announce(this.html[0], I18n.format(key, { label: text, n: lineNumber }));
+  }
+
   #renderNewSelectedValue(endClassWidgetVal: EndClassWidgetValue) {
+    this.#announceValue("Announce.valueAdded", endClassWidgetVal);
     endClassWidgetVal.render();
     // Insert in first in DOM wrapper
     if (this.valuesWrapper[0].firstChild) {
@@ -351,6 +366,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
         });
       }
       this.expandBtn.render(total - maxPerRow);
+      this.expandBtn.html.attr("aria-expanded", String(isExpanded));
       if (!this.html.find(this.expandBtn.html).length) {
         this.html.append(this.expandBtn.html);
       }
@@ -367,10 +383,13 @@ export class EndClassWidgetGroup extends HTMLComponent {
     const widgetComp:AbstractWidget | undefined = (this.parentComponent as CriteriaGroup).endClassGroup.getWidgetComponent()
     if(widgetComp && widgetComp.valueRepetition == ValueRepetition.MULTIPLE) {
       // now (re)render the addMoreValuesButton
+      const endClassType = (this.parentComponent as CriteriaGroup).endClassGroup.endClassVal.type;
+      const addLabel = `${I18n.labels["AddValue.label"]} ${this.specProvider.getEntity(endClassType).getLabel()}`;
       this.addWidgetValueBtn?.html
         ? this.addWidgetValueBtn.render()
         : (this.addWidgetValueBtn = new AddWidgetValueBtn(
           this,
+          addLabel,
           this.#addMoreValues
         ).render());
       
@@ -576,7 +595,8 @@ export class EndClassWidgetValue extends HTMLComponent {
     });
 
     this.frontArrow.render();
-    this.unselectBtn = new UnselectBtn(this, () => {
+    const removeLabel = `${I18n.labels["RemoveValue.label"]} ${this.#stripLabelHtml(theLabel)}`;
+    this.unselectBtn = new UnselectBtn(this, removeLabel, () => {
       this.html[0].dispatchEvent(
         new CustomEvent("onRemoveEndClassWidgetValue", {
           bubbles: true,

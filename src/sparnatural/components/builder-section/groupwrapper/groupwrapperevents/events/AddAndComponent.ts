@@ -1,6 +1,8 @@
 import { SelectedVal } from "../../../..//SelectedVal";
 import GroupWrapper from "../../GroupWrapper";
 import LinkAndBottom from "../../LinkAndBottom";
+import { HTMLComponent } from "../../../../HtmlComponent";
+import { I18n } from "../../../../../settings/I18n";
 
 //add GroupWrapper as a Sibling
 export function addAndComponent(
@@ -34,6 +36,11 @@ export function addAndComponent(
   grpWrapper.linkAndBottom = new LinkAndBottom(grpWrapper).render();
   grpWrapper.html[0].dispatchEvent(
     new CustomEvent("redrawBackgroundAndLinks", { bubbles: true })
+  );
+  // the line number is known once redrawn
+  HTMLComponent.announce(
+    grpWrapper.html[0],
+    I18n.format("Announce.lineAdded", { n: grpWrapper.andSibling.lineNumber })
   );
 
   // disable the AND on this line

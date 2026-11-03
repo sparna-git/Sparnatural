@@ -8,6 +8,7 @@ import {HierarchicalClassSelectBuilder, JsonDagRow, DagWidgetDefaultValue} from 
 import { DagIfc, DagNodeIfc, DagNode} from "../../../../../dag/Dag";
 import ISpecificationProperty from "../../../../../spec-providers/ISpecificationProperty";
 import { ISpecificationEntry } from "../../../../../spec-providers/ISpecificationEntry";
+import { I18n } from "../../../../../settings/I18n";
 
 /**
  * The property selector
@@ -122,6 +123,11 @@ class ObjectPropertyTypeId extends HTMLComponent {
       (e: CustomEvent) => {
         let selectedValue = e.detail.value ;
         this.setCurrentContent(selectedValue) ;
+        const lineNumber = this.GrandParent.parentGroupWrapper.lineNumber;
+        if (lineNumber) {
+          const label = this.specProvider.getProperty(selectedValue).getLabel();
+          HTMLComponent.announce(this.html[0], I18n.format("Announce.selected", { label: label, n: lineNumber }));
+        }
         //disable further choice on nice-select
         this.widgetHtml[0].classList.add("disabled");
         this.widgetHtml[0].classList.remove("open");

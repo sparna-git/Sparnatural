@@ -1,6 +1,7 @@
 import { OptionTypes } from "../../components/builder-section/groupwrapper/criteriagroup/optionsgroup/OptionsGroup";
 import GroupWrapper from "../../components/builder-section/groupwrapper/GroupWrapper";
 import SparnaturalComponent from "../../components/SparnaturalComponent";
+import { I18n } from "../../settings/I18n";
 /*
   Triggered either on an addSiblingComponen/addWhereChild OR a onRemoveGrpWrapper
 */
@@ -12,10 +13,13 @@ export default function redrawBackgroundAndLinks(
   let index = 0;
   let currentHeight = 0;
   let previousHeight = 0;
+  let lineNumber = 0;
   // traversePreOrder through components and calculate background / linkAndBottoms /  for them
   sparnatural.BgWrapper.componentsList.rootGroupWrapper.traversePreOrder(
     (grpWrapper: GroupWrapper) => {
       renderLinks(grpWrapper);
+      lineNumber++;
+      labelLine(grpWrapper, lineNumber);
       //render background
       currentHeight = grpWrapper.criteriaGroup.html.outerHeight(true) + 1;
       cssdef += drawBackgroundOfGroupWrapper(
@@ -61,6 +65,18 @@ function renderLinks(grpWrapper: GroupWrapper) {
     grpWrapper.linkAndBottom.html.remove();
     if (grpWrapper.html) grpWrapper.linkAndBottom.render();
   }
+}
+
+// for screen readers : the buttons acting on the whole line say which one, numbered in the order of display
+function labelLine(grpWrapper: GroupWrapper, lineNumber: number) {
+  grpWrapper.lineNumber = lineNumber;
+  const criteriaGroup = grpWrapper.criteriaGroup;
+  criteriaGroup.unselectBtn?.widgetHtml.attr("aria-label", `${I18n.labels["RemoveLine.label"]} ${lineNumber}`);
+  criteriaGroup.optionsGroup?.optionalArrow?.widgetHtml.attr("aria-label", `${I18n.labels["Options.label"]} ${lineNumber}`);
+  criteriaGroup.actionsGroup?.actions?.actionAnd?.btn.attr(
+    "aria-label",
+    `${I18n.labels.And}, ${I18n.labels["AddLineAfter.label"]} ${lineNumber}`
+  );
 }
 
 function drawBackgroundOfGroupWrapper(

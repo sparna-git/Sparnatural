@@ -14,4 +14,13 @@ export class I18n {
   static init(lang: any) {
     I18n.labels = I18n.i18nLabelsResources[lang];
   }
+
+  // fills the {name} parts of a label, e.g. "Ligne {n} ajoutée"
+  static format(key: string, params: { [name: string]: string | number }): string {
+    let label: string = I18n.labels[key];
+    Object.keys(params).forEach((name) => {
+      label = label.replace(`{${name}}`, String(params[name]));
+    });
+    return label;
+  }
 }

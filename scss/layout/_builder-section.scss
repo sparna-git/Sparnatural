@@ -1,11 +1,14 @@
 @use '../base';
 
 .builder-section{
+    position: relative;
+    // after the lines in the HTML, but displayed at the top
     .reset-wrapper {
-		position: relative;
+		position: absolute;
+		top: 0;
+		left: base.$margin-component;
+		right: base.$margin-component;
 		height: 0;
-		max-width: 100%;
-		margin: 0 auto;
 		&>.reset-form {
 			position: absolute;
 			right: 0;
@@ -31,5 +34,9 @@
 	// strong zoom : the room goes to the lines
 	@media (max-width: base.$width-strong-zoom) {
 		padding: 0;
+		.reset-wrapper {
+			left: 0;
+			right: 0;
+		}
 	}
 }

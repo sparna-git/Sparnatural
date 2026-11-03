@@ -10,7 +10,8 @@ export class ArrowComponent extends HTMLComponent {
 
     super(baseCssClass, ParenComponent, null);
     this.arrowStyle = arrowStyle;
-    this.widgetHtml = $(arrowStyle);
+    // only a decoration : nothing to read for a screen reader
+    this.widgetHtml = $(arrowStyle).attr("aria-hidden", "true");
   }
   render() {
     // if it's a Front Arrow then prepend the html

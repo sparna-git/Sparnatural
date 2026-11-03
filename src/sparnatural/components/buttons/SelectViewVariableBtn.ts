@@ -1,5 +1,6 @@
 import UiuxConfig from "../IconsConstants";
 import { HTMLComponent } from "../HtmlComponent";
+import { I18n } from "../../settings/I18n";
 
 /*
     Switch Component having a binary state:
@@ -12,14 +13,18 @@ export class SelectViewVariableBtn extends HTMLComponent {
   callBack;
 
   visible = false;
-  
+  // the label of the class, known only once it is selected
+  getClassLabel: () => string;
+
   constructor(
     ParentComponent: HTMLComponent,
-    callBack: (selected: boolean) => void
+    callBack: (selected: boolean) => void,
+    getClassLabel: () => string
   ) {
     let widgetHtml = $(UiuxConfig.ICON_NOT_SELECTED_VARIABLE); //default
     super("selectViewVariableBtn", ParentComponent, widgetHtml);
     this.callBack = callBack;
+    this.getClassLabel = getClassLabel;
   }
 
   render() {
@@ -28,6 +33,12 @@ export class SelectViewVariableBtn extends HTMLComponent {
     } else {
       this.widgetHtml = $(UiuxConfig.ICON_NOT_SELECTED_VARIABLE);
     }
+    // the name says what a click does : "Afficher" or "Masquer"
+    const labelKey = this.selected ? "HideFromResults.label" : "ShowInResults.label";
+    HTMLComponent.setAriaButton(
+      this.widgetHtml,
+      I18n.labels[labelKey].replace("{label}", this.getClassLabel())
+    );
     super.render();
     if(!this.alwaysDisabled) {
       this.#addClickListener();
@@ -84,6 +95,7 @@ export class SelectViewVariableBtn extends HTMLComponent {
 
   disable() {
     this.html.addClass("disabled");
+    this.widgetHtml.attr("aria-disabled", "true");
     this.#removeClickListener();
   }
 
@@ -94,6 +106,7 @@ export class SelectViewVariableBtn extends HTMLComponent {
     // make sure we don't enable twise
     if(this.html.hasClass("disabled")) {
       this.html.removeClass("disabled");
+      this.widgetHtml.removeAttr("aria-disabled");
       this.#addClickListener();
     }
   }

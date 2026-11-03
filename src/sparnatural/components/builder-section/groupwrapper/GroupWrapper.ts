@@ -29,6 +29,8 @@ class GroupWrapper extends HTMLComponent {
   depth: number;
   // order among siblings (used to determine whether it is the first line)
   order: number;
+  // position in the order of display, set at each redraw, read by screen readers
+  lineNumber: number;
 
   constructor(
     parentGroupWrapper: GroupWrapper,

@@ -46,6 +46,7 @@ class ActionWhere extends HTMLComponent {
     }</span> </div>
     `);
     this.btn = $(`<a>${UiuxConfig.ICON_PLUS}</a>`);
+    HTMLComponent.setAriaButton(this.btn, `${I18n.labels.Search} ${endLabel} ${I18n.labels.That}`);
     where = where.add(this.btn[0]);
     editTrait = editTrait.add(where);
     this.btn[0].addEventListener("click", () => {

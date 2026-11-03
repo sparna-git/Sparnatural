@@ -14,6 +14,8 @@ import { ISpecificationEntry } from "../../../../../spec-providers/ISpecificatio
 import { SelectKeyInfoBtn } from "../../../../buttons/SelectKeyInfoBtn";
 import { SHACLSpecificationEntity } from "../../../../../spec-providers/shacl/SHACLSpecificationEntity";
 import { DASH, NodeShape } from "rdf-shacl-commons";
+import { I18n } from "../../../../../settings/I18n";
+import type CriteriaGroup from "../CriteriaGroup";
 
 /**
  * Handles the selection of a Class, either in the DOMAIN selection or the RANGE selection.
@@ -87,7 +89,8 @@ class ClassTypeId extends HTMLComponent {
     // also append eye button to currentWrapper
     this.selectViewVariableBtn = new SelectViewVariableBtn(
       this,
-      this.#onchangeViewVariable
+      this.#onchangeViewVariable,
+      () => this.htmlCurentValue.text().trim()
     );
     this.selectViewVariableBtn.htmlParent = selectVarWrapper ;
     this.selectViewVariableBtn.render();
@@ -140,7 +143,8 @@ class ClassTypeId extends HTMLComponent {
         new CustomEvent("onRemoveEndClass", { bubbles: true })
       );
     };
-    this.UnselectButton = new UnselectBtn(this, removeEndClassEvent).render();
+    const removeLabel = `${I18n.labels["RemoveClass.label"]} ${this.htmlCurentValue.text().trim()}`;
+    this.UnselectButton = new UnselectBtn(this, removeLabel, removeEndClassEvent).render();
   }
   
   setSelectedEntity(id:string) {
@@ -161,6 +165,12 @@ class ClassTypeId extends HTMLComponent {
       (e: CustomEvent) => {
         let selectedValue = e.detail.value ;
         this.setSelectedEntity(selectedValue) ;
+        // a new line is numbered only once drawn : its first class, filled in automatically, is not read
+        const lineNumber = (this.parentComponent.parentComponent as CriteriaGroup).parentGroupWrapper.lineNumber;
+        if (lineNumber) {
+          const label = this.specProvider.getEntity(selectedValue).getLabel();
+          HTMLComponent.announce(this.html[0], I18n.format("Announce.selected", { label: label, n: lineNumber }));
+        }
         //disable further choice on nice-select
         this.widgetHtml[0].classList.add("disabled");
         this.widgetHtml[0].classList.remove("open");

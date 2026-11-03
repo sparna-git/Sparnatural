@@ -1,6 +1,8 @@
 import SparnaturalComponent from "../../components/SparnaturalComponent";
 import ComponentsList from "../../components/builder-section/ComponentsList";
 import GroupWrapper from "../../components/builder-section/groupwrapper/GroupWrapper";
+import { HTMLComponent } from "../../components/HtmlComponent";
+import { I18n } from "../../settings/I18n";
 
 /*
   This method traverses first preorder through the tree and looks for the child component to delete.
@@ -12,6 +14,8 @@ export default function deleteGrpWrapper(
 ) {
   // element to delete
   let elToDel = e.detail as GroupWrapper;
+  // read before the lines get renumbered
+  const removedLineNumber = elToDel.lineNumber;
   // utility function
   let deleteIt = (el: GroupWrapper) => {
     el?.linkWhereBottom?.html?.empty()?.remove();
@@ -67,6 +71,10 @@ export default function deleteGrpWrapper(
 
   sparnatural.html[0].dispatchEvent(
     new CustomEvent("redrawBackgroundAndLinks")
+  );
+  HTMLComponent.announce(
+    sparnatural.html[0],
+    I18n.format("Announce.lineRemoved", { n: removedLineNumber })
   );
   // there might have been variables in the variable section which now got deleted
   sparnatural.html[0].dispatchEvent(

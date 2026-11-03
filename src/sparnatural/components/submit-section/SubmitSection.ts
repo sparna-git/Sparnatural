@@ -3,6 +3,7 @@ import { PlayBtn } from "../buttons/PlayBtn";
 import { HTMLComponent } from "../HtmlComponent";
 import SparnaturalComponent from "../SparnaturalComponent";
 import { SparnaturalElement } from "../../../SparnaturalElement";
+import { I18n } from "../../settings/I18n";
 
 class SubmitSection extends HTMLComponent {
   playBtn: PlayBtn;
@@ -26,6 +27,7 @@ class SubmitSection extends HTMLComponent {
         detail: this.ParentSparnatural,
       });
       this.html[0].dispatchEvent(e);
+      HTMLComponent.announce(this.html[0], I18n.labels["Announce.searchStarted"]);
     }
   };
 

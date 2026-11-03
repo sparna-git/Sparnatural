@@ -44,7 +44,7 @@ export class DraggableComponent extends HTMLComponent {
     let editVar = $(`
         <input type="text" minlength="1">
         </input>
-        `).val(varName);
+        `).val(varName).attr("aria-label", I18n.labels["ColumnName.label"]);
 
         let aggrActionIput =  $(`<input type="hidden" name="selectedAggr" />`) ;
         let aggrAction = $(`
@@ -76,7 +76,7 @@ export class DraggableComponent extends HTMLComponent {
 
     let widgetHtml =
       $(`<div class="variableSelected flexWrap" data-variableName="${varName}">
-            <span class="variable-handle">
+            <span class="variable-handle" aria-hidden="true">
                 ${UiuxConfig.COMPONENT_DRAG_HANDLE}
             </span>
             ${icon_display}
@@ -91,7 +91,12 @@ export class DraggableComponent extends HTMLComponent {
     $(aggrOptions).append(aggrOptionsExtend);
     $(widgetHtml).append(aggrOptions);
     $(widgetHtml).append(aggrBadgeValue);
-    
+
+    // screen readers : the drag handle above works only with a mouse, it is hidden from them
+    HTMLComponent.setAriaButton(aggrAction, I18n.format("Aggregation.label", { label: varName }));
+    aggrOptions.find("li").attr("role", "button");
+    aggrOptionsExtend.attr("role", "button");
+
     super("sortableItem", parentComponent, widgetHtml);
 
     

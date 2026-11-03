@@ -27,6 +27,8 @@ export class VariableOptionsSelectBtn extends HTMLComponent {
 
       $(labelName).append(swithHtml);
     super("variablesOptionsSelect", ParentComponent, widgetHtml);
+    // the visible text is outside of the <label> : the checkbox gets it as its name
+    $(input[0]).attr("aria-label", I18n.labels.SwitchVariablesNames);
     // add clicklistener
     input[0].addEventListener("change", (e) => {
       this.selected = this.selected ? false : true;

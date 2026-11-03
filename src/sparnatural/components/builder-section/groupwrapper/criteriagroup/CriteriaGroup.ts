@@ -50,7 +50,7 @@ class CriteriaGroup extends HTMLComponent {
   render(): this {
     super.render();
     this.#renderChildComponents();
-    this.unselectBtn = new UnselectBtn(this, () => {
+    this.unselectBtn = new UnselectBtn(this, I18n.labels["RemoveLine.label"], () => {
       // caught in Parentcomponent
       this.html[0].dispatchEvent(
         new CustomEvent("onRemoveGrp", { bubbles: true }),
@@ -109,12 +109,15 @@ class CriteriaGroup extends HTMLComponent {
             "onObjectPropertyGroupSelected expects object of type SelectedVal",
           );
 
-        // if there is already a where connection or widget values selected, don't change anything
+        // if there is already a where connection, widget values or "select all" selected, don't change anything
         if (
           !this.parentGroupWrapper.whereChild &&
-          this.endClassWidgetGroup?.widgetValues?.length === 0
+          this.endClassWidgetGroup?.widgetValues?.length === 0 &&
+          !this.endClassWidgetGroup?.isSelectAll
         ) {
           this.endClassWidgetGroup.render();
+          // screen readers : the button removing the line comes after the content of the line
+          this.html.append(this.unselectBtn.html);
           // #809 : the widget is built only once the ASK says the line can have a result
           this.possibleValuesCheck.start(() =>
             this.endClassGroup.onObjectPropertyGroupSelected(e.detail),
