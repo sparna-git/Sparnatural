@@ -33,6 +33,18 @@
     }
 }
 
+/* adding a value : no "select all" line above, the widget stays on the first line, next to the 1 */
+.EditComponents.stackedWidget .WidgetWrapper:not(:has(.selectAll)) {
+    height: 51px;
+    .edit-trait.first {
+        top: 50%;
+    }
+    &>a,
+    &>div {
+        top: 0;
+    }
+}
+
 .nb-choice-2 {
     .WidgetWrapper {
         border-left: 3px solid var(--primary-color-main);

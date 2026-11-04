@@ -95,7 +95,9 @@ export class DraggableComponent extends HTMLComponent {
     // screen readers : the drag handle above works only with a mouse, it is hidden from them
     HTMLComponent.setAriaButton(aggrAction, I18n.format("Aggregation.label", { label: varName }));
     aggrOptions.find("li").attr("role", "button");
+    HTMLComponent.setKeyboardButton(aggrOptions.find("li"));
     aggrOptionsExtend.attr("role", "button");
+    HTMLComponent.setKeyboardButton(aggrOptionsExtend);
 
     super("sortableItem", parentComponent, widgetHtml);
 

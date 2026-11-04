@@ -427,10 +427,15 @@
         margin-bottom: 0;
     }
 
+    // invisible, but the size of the switch : with a size of 0, screen readers skip it
     .switch input {
         opacity: 0;
-        width: 0;
-        height: 0;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        margin: 0;
     }
 
     .slider {
@@ -463,6 +468,12 @@
 
     input:focus + .slider {
         box-shadow: 0 0 1px #ccc;
+    }
+
+    // keyboard : outlined like the buttons when reached with Tab
+    input:focus-visible + .slider {
+        outline: 3px solid var(--focus-color, #00338d);
+        outline-offset: 2px;
     }
 
     input:checked + .slider:before {

@@ -116,8 +116,10 @@ class CriteriaGroup extends HTMLComponent {
           !this.endClassWidgetGroup?.isSelectAll
         ) {
           this.endClassWidgetGroup.render();
-          // screen readers : the button removing the line comes after the content of the line
+          // screen readers and Tab : the values, then removing the line, then "et" (both are positioned
+          // absolutely, the screen does not change)
           this.html.append(this.unselectBtn.html);
+          this.html.append(this.actionsGroup.html);
           // #809 : the widget is built only once the ASK says the line can have a result
           this.possibleValuesCheck.start(() =>
             this.endClassGroup.onObjectPropertyGroupSelected(e.detail),

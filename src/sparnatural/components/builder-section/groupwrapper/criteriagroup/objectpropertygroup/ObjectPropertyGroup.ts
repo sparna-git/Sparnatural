@@ -91,13 +91,21 @@ class ObjectPropertyGroup extends HTMLComponent {
     );
     const property = this.specProvider.getProperty(this.objectPropVal.type);
     const desc = property.getTooltip();
-    // the label can be cut on a narrow line : the tooltip always shows it in full
+    // the full label, for when it is cut ("ty...") : with the description of the config if there is one
     const content = desc ? `${property.getLabel()}<br/>${desc}` : property.getLabel();
 
     const selector = this.html.find('.ObjectPropertyTypeId').first();
     selector.attr('data-tippy-content', content.replace(/"/g, '&quot;'));
     var tippySettings = Object.assign({}, TOOLTIP_CONFIG);
     tippySettings.placement = "top-start";
+    // without description, shown only when the label is cut : checked when shown, the zoom can change it
+    if (!desc) {
+      tippySettings.onShow = () => {
+        const label = selector.find(".current")[0];
+        // false cancels the tooltip
+        if (!label || label.scrollWidth <= label.clientWidth) return false;
+      };
+    }
     tippy(selector[0], tippySettings);
   }
 

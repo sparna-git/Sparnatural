@@ -38,7 +38,18 @@ export class PlayBtn extends HTMLComponent {
   disable() {
     // set a disabled CSS class, trigger the loader
     this.html.addClass("submitDisable loadingEnabled");
-    this.widgetHtml.attr({ "aria-disabled": "true", "aria-busy": "true" });
+    // screen readers say "unavailable" when coming back on the button, not right after the click
+    const btn = this.widgetHtml[0];
+    if (document.activeElement === btn) {
+      btn.addEventListener("blur", () => this.#markDisabled(), { once: true });
+    } else {
+      this.#markDisabled();
+    }
+  }
+
+  #markDisabled() {
+    // it may have been enabled again meanwhile
+    if (this.isDisabled()) this.widgetHtml.attr("aria-disabled", "true");
   }
 
   /**
@@ -46,7 +57,6 @@ export class PlayBtn extends HTMLComponent {
    */
   removeLoading() {
     this.html.removeClass("loadingEnabled");
-    this.widgetHtml.removeAttr("aria-busy");
   }
 
   /**

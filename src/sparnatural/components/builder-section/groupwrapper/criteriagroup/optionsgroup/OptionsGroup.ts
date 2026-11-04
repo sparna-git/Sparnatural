@@ -4,6 +4,7 @@ import { HTMLComponent } from "../../../../HtmlComponent";
 import CriteriaGroup from "../CriteriaGroup";
 import NotExistsComponent from "./optioncomponents/NotExistsComponent";
 import OptionalComponent from "./optioncomponents/OptionalComponent";
+import { I18n } from "../../../../../settings/I18n";
 
 const MIN_PROPERTY_WIDTH = 90;
 
@@ -114,6 +115,12 @@ export class OptionsGroup extends HTMLComponent {
     this.#widthObserver = new ResizeObserver(() => this.#keepPropertyReadable());
     this.#widthObserver.observe(this.ParentCriteriaGroup.objectPropertyGroup.html[0]);
 
+    // screen readers : which options were shown
+    const shown = [this.OptionalComponent, this.NotExistsComponent]
+      .filter((option) => option.html[0].isConnected)
+      .map((option) => option.label);
+    HTMLComponent.announce(this.html[0], I18n.format("Announce.optionsShown", { label: shown.join(", ") }));
+
     this.html[0].dispatchEvent(
       new CustomEvent("redrawBackgroundAndLinks", { bubbles: true })
     );
@@ -152,6 +159,7 @@ export class OptionsGroup extends HTMLComponent {
     this.html.removeClass("compactOptions");
     this.OptionalComponent.html.remove();
     this.NotExistsComponent.html.remove();
+    HTMLComponent.announce(this.html[0], I18n.labels["Announce.optionsHidden"]);
     this.html[0].dispatchEvent(
       new CustomEvent("redrawBackgroundAndLinks", { bubbles: true })
     );

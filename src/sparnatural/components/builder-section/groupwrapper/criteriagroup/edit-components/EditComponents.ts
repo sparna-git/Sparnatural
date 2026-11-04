@@ -72,6 +72,7 @@ class EditComponents extends HTMLComponent {
     }
     this.#addEventListeners();
     this.#watchWidth();
+    this.#initKeyboard();
     return this;
   }
   // The selectedValues are widgetValues which got selected by the user
@@ -80,6 +81,63 @@ class EditComponents extends HTMLComponent {
     super.render();
     this.widgetWrapper.render();
     this.#watchWidth();
+    this.#initKeyboard();
+  }
+
+  // Keyboard : "select all", the widget and "search ... that +" are reached with Tab or the arrows.
+  // After a choice made with the keyboard, the focus comes on the first one.
+  #initKeyboard() {
+    const selectAll = this.html.find(".selectAll").first();
+    HTMLComponent.setKeyboardButton(selectAll);
+    if (this.#whereButton()) HTMLComponent.setKeyboardButton(this.actionWhere.btn);
+    this.html[0].addEventListener("keydown", (e: KeyboardEvent) => this.#moveWithArrows(e));
+    if (HTMLComponent.focusFollows()) {
+      // said before "Tous·tes" : what these choices are for
+      const endLabel = this.specProvider.getEntity(this.endClassVal.type).getLabel();
+      const context = I18n.format("ChooseValue.label", { label: endLabel });
+      setTimeout(() => {
+        const first = this.#keyboardItems()[0];
+        if (first) {
+          HTMLComponent.focusWithConfirmation(first, context);
+          return;
+        }
+        // adding a value : only the field of the widget, built a bit later (Select2 waits for its values)
+        const observer = new MutationObserver(() => {
+          const field = this.#keyboardItems()[0];
+          if (!field) return;
+          observer.disconnect();
+          if (HTMLComponent.focusFollows()) HTMLComponent.focusWithConfirmation(field, context);
+        });
+        observer.observe(this.html[0], { childList: true, subtree: true });
+        setTimeout(() => observer.disconnect(), 3000);
+      }, 0);
+    }
+  }
+
+  // the "where" button is not shown again when values are added
+  #whereButton(): HTMLElement {
+    const btn = this.actionWhere?.btn[0];
+    return btn && this.html[0].contains(btn) ? btn : null;
+  }
+
+  #keyboardItems(): HTMLElement[] {
+    const el = this.html[0];
+    const widgetField = el.querySelector<HTMLElement>(
+      ":scope > .WidgetWrapper .select2-selection, :scope > .WidgetWrapper input:not([type=hidden]), :scope > .WidgetWrapper button"
+    );
+    return [el.querySelector<HTMLElement>(".selectAll"), widgetField, this.#whereButton()].filter(Boolean);
+  }
+
+  // the arrows go from item to item, except inside the widget, which uses them itself
+  #moveWithArrows(e: KeyboardEvent) {
+    const next = e.key === "ArrowDown" || e.key === "ArrowRight";
+    const previous = e.key === "ArrowUp" || e.key === "ArrowLeft";
+    const target = e.target as HTMLElement;
+    if ((!next && !previous) || !(target.matches(".selectAll") || target === this.#whereButton())) return;
+    e.preventDefault();
+    const items = this.#keyboardItems();
+    const index = items.indexOf(target);
+    items[next ? Math.min(index + 1, items.length - 1) : Math.max(index - 1, 0)]?.focus();
   }
 
   destroy() {

@@ -20,12 +20,11 @@ export class OptionalArrow extends HTMLComponent {
   }
   render(): this {
     super.render();
+    // what a click shows or hides is announced by OptionsGroup
     HTMLComponent.setAriaButton(this.widgetHtml, I18n.labels["Options.label"]);
-    this.widgetHtml.attr("aria-expanded", String(this.selected));
     this.widgetHtml.on("click", (e: JQuery.ClickEvent) => {
       e.stopImmediatePropagation();
       this.selected = this.selected ? false : true;
-      this.widgetHtml.attr("aria-expanded", String(this.selected));
       this.callBack(this.selected);
     });
     return this;

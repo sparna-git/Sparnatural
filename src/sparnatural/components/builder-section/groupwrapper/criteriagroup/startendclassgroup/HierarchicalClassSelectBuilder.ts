@@ -3,7 +3,10 @@ import { ISparnaturalSpecification } from "../../../../../spec-providers/ISparna
 import UiuxConfig from "../../../../IconsConstants";
 import tippy from "tippy.js";
 import { TOOLTIP_CONFIG } from "../../../../../settings/defaultSettings";
+import { I18n } from "../../../../../settings/I18n";
 
+// unique ids of the items, read by screen readers through aria-activedescendant
+let optionId = 0;
 
 export interface JsonDagRow {
   label: string,
@@ -464,6 +467,13 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
       this.parentComponent.html[0].classList.add('focus') ;
     }
     hideClassSelector() {
+      // a closed list leaves the Tab order, once the focus has left it
+      const list = this.htmlSelectUiUx[0];
+      if (document.activeElement === list) {
+        list.addEventListener("blur", () => list.removeAttribute("tabindex"), { once: true });
+      } else {
+        list.removeAttribute("tabindex");
+      }
       this.parentComponent.html[0].classList.remove('focus') ;
       this.htmlSelectUiUx.removeClass('open') ;
     }
@@ -537,6 +547,7 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
 
 
       this.displayClassSelector() ;
+      this.#initKeyboard() ;
 
       tippy(
         this.html[0].querySelectorAll(".item-sel[data-tippy-content]"),
@@ -558,6 +569,94 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
       );
 
       return this.html.children();
+    }
+
+    // Keyboard : a list of choices reached with Tab. The arrows move in the shown list, Enter or Space
+    // chooses, right and left go in and out of a sub list. The clicks of the mouse are reused.
+    #initKeyboard() {
+      // on the outer box, which stays in the page once closed : the focus is kept there after a choice
+      const list = this.htmlSelectUiUx[0];
+      // the name says which list it is : the subject, the property or the object
+      const labelKey = this.parentComponent.baseCssClass === "ObjectPropertyTypeId" ? "ChooseProperty.label"
+        : this.parentComponent.parentComponent?.baseCssClass === "StartClassGroup" ? "ChooseSubject.label"
+        : "ChooseObject.label";
+      list.setAttribute("tabindex", "0");
+      list.setAttribute("role", "listbox");
+      list.setAttribute("aria-label", I18n.labels[labelKey]);
+      // the lists inside are only a layout : announced, they would be a second list in the list
+      this.htmlSelectUiUx[0].querySelectorAll("ul").forEach((ul) => ul.setAttribute("role", "none"));
+      this.htmlSelectUiUx[0].querySelectorAll("li").forEach((li) => {
+        li.id = "sparnatural-option-" + (++optionId);
+        li.setAttribute("role", "option");
+        li.setAttribute("aria-label", li.querySelector(".item-label").textContent);
+        if (li.classList.contains("disabled")) li.setAttribute("aria-disabled", "true");
+      });
+
+      list.addEventListener("focus", () => {
+        // not after a click of the mouse : no outline on the first item
+        if (!this.#activeItem() && list.matches(":focus-visible")) this.#setActiveItem(this.#shownItems()[0]);
+      });
+      list.addEventListener("keydown", (e: KeyboardEvent) => this.#onKeyDown(e));
+
+      // after a choice made with the keyboard, the next list gets the focus once it is in the page
+      if (HTMLComponent.focusFollows()) setTimeout(() => HTMLComponent.focusWithConfirmation(list), 0);
+    }
+
+    #shownItems(): HTMLElement[] {
+      return Array.from(this.htmlSelectUiUx[0].querySelectorAll<HTMLElement>("ul.active-pane > li"));
+    }
+
+    #activeItem(): HTMLElement {
+      return this.htmlSelectUiUx[0].querySelector<HTMLElement>("ul.active-pane > li.kbActive");
+    }
+
+    #setActiveItem(li: HTMLElement) {
+      this.htmlSelectUiUx[0].querySelectorAll("li.kbActive").forEach((el) => el.classList.remove("kbActive"));
+      if (!li) return;
+      li.classList.add("kbActive");
+      li.scrollIntoView({ block: "nearest" });
+      this.htmlSelectUiUx[0].setAttribute("aria-activedescendant", li.id);
+    }
+
+    #onKeyDown(e: KeyboardEvent) {
+      const items = this.#shownItems();
+      const active = this.#activeItem();
+      const index = items.indexOf(active);
+      switch (e.key) {
+        case "ArrowDown":
+          this.#setActiveItem(items[Math.min(index + 1, items.length - 1)]);
+          break;
+        case "ArrowUp":
+          this.#setActiveItem(items[Math.max(index - 1, 0)]);
+          break;
+        case "Home":
+          this.#setActiveItem(items[0]);
+          break;
+        case "End":
+          this.#setActiveItem(items[items.length - 1]);
+          break;
+        case "Enter":
+        case " ":
+          // like a click : chooses the item, or opens its sub list when it cannot be chosen
+          active?.querySelector<HTMLElement>(".item-sel")?.click();
+          if (active?.classList.contains("disabled")) this.#setActiveItem(this.#shownItems()[0]);
+          break;
+        case "ArrowRight":
+          if (active?.classList.contains("have-childs")) {
+            active.querySelector<HTMLElement>(".item-traverse").click();
+            this.#setActiveItem(this.#shownItems()[0]);
+          }
+          break;
+        case "ArrowLeft":
+          if (!this.htmlSelectUiUxLists[0].classList.contains("root-display")) {
+            this.htmlBreadCrumBack[0].click();
+            this.#setActiveItem(this.#shownItems()[0]);
+          }
+          break;
+        default:
+          return;
+      }
+      e.preventDefault();
     }
 
     getCountDisplay(count:number) {

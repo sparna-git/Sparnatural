@@ -4,11 +4,15 @@ import { RDFTerm } from "../../SparnaturalQueryIfc";
 // can be opened without selecting the item. A template can also write its own
 // <a class="item-link"> : the click handling below applies to both.
 
+// screen readers : the link would be read as its address after each item, and the keyboard cannot
+// reach it inside a list. Hidden from them, still clickable with the mouse.
+const HIDDEN_LINK_ATTRIBUTES = `aria-hidden="true" tabindex="-1"`;
+
 // list and autocomplete : a real link, so middle click and "open in new tab" work
 export function uriLinkHtml(term: RDFTerm): string {
   if (term?.type !== "uri") return "";
   let uri = escapeHtml(term.value);
-  return ` <a class="item-link" href="${uri}" target="_blank" rel="noopener" title="${uri}"></a>`;
+  return ` <a class="item-link" href="${uri}" target="_blank" rel="noopener" title="${uri}" ${HIDDEN_LINK_ATTRIBUTES}></a>`;
 }
 
 // jstree renders the item inside its own <a>, and an <a> nested in an <a> is invalid
@@ -16,7 +20,15 @@ export function uriLinkHtml(term: RDFTerm): string {
 export function uriLinkHtmlNoAnchor(term: RDFTerm): string {
   if (term?.type !== "uri") return "";
   let uri = escapeHtml(term.value);
-  return ` <span class="item-link" role="link" tabindex="-1" data-href="${uri}" title="${uri}"></span>`;
+  return ` <span class="item-link" role="link" data-href="${uri}" title="${uri}" ${HIDDEN_LINK_ATTRIBUTES}></span>`;
+}
+
+// the same for the links a template writes itself
+export function hideLinksFromScreenReaders(element: HTMLElement) {
+  element.querySelectorAll(LINK_SELECTOR).forEach((link) => {
+    link.setAttribute("aria-hidden", "true");
+    link.setAttribute("tabindex", "-1");
+  });
 }
 
 /**

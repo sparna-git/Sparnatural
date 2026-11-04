@@ -169,7 +169,8 @@ class ClassTypeId extends HTMLComponent {
         const lineNumber = (this.parentComponent.parentComponent as CriteriaGroup).parentGroupWrapper.lineNumber;
         if (lineNumber) {
           const label = this.specProvider.getEntity(selectedValue).getLabel();
-          HTMLComponent.announce(this.html[0], I18n.format("Announce.selected", { label: label, n: lineNumber }));
+          // true : with the keyboard, the focus goes to the next list, which the screen reader reads
+          HTMLComponent.announce(this.html[0], I18n.format("Announce.selected", { label: label, n: lineNumber }), true);
         }
         //disable further choice on nice-select
         this.widgetHtml[0].classList.add("disabled");

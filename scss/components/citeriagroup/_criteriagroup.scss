@@ -242,7 +242,7 @@ li.groupe.completed {
 }
 
 /* room for the widget, when it is under the "select all" line */
-.CriteriaGroup:has(.EditComponents.stackedWidget) {
+.CriteriaGroup:has(.EditComponents.stackedWidget .selectAll) {
 	margin-bottom: base.$margin-component-onEdit + base.$height-components-under;
 }
 

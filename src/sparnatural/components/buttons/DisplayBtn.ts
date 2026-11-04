@@ -17,29 +17,28 @@ export class DisplayBtn extends HTMLComponent {
   }
 
   render(): this {
-    // the name says what a click does : "Afficher" or "Masquer"
-    const labelKey = this.selected ? "HideResultOptions.label" : "ShowResultOptions.label";
-    HTMLComponent.setAriaButton(this.widgetHtml, I18n.labels[labelKey]);
+    HTMLComponent.setAriaButton(this.widgetHtml, this.#name());
     super.render();
     this.#addClickListener();
     return this;
+  }
+
+  // the name says what a click does : "Afficher" or "Masquer"
+  #name(): string {
+    return I18n.labels[this.selected ? "HideResultOptions.label" : "ShowResultOptions.label"];
   }
 
   #addClickListener() {
     // add clicklistener
     this.widgetHtml.on("click", (e: JQuery.ClickEvent) => {
       this.selected = this.selected ? false : true;
-      if (this.selected) {
-        this.widgetHtml = $(`<a class="displayButton">
-        ${UiuxConfig.ICON_ARROW_TOP}
-        </a>`);
-      } else {
-        this.widgetHtml = $(`<a class="displayButton">
-        ${UiuxConfig.ICON_ARROW_BOTTOM}
-        </a>`);
-      }
+      // only the icon is changed : the button keeps the focus
+      this.widgetHtml.html(this.selected ? UiuxConfig.ICON_ARROW_TOP : UiuxConfig.ICON_ARROW_BOTTOM);
+      this.widgetHtml.find("svg").attr("aria-hidden", "true");
+      HTMLComponent.renameOnBlur(this.widgetHtml, this.#name());
       this.callBack(this.selected);
-      this.render();
+      const key = this.selected ? "Announce.resultOptionsShown" : "Announce.resultOptionsHidden";
+      HTMLComponent.announce(this.html[0], I18n.labels[key]);
     });
   }
 }

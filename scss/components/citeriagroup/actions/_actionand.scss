@@ -9,13 +9,15 @@
     height: 46px;
     z-index:1;
     
-    &:hover .ActionAnd {display: block;}
+    &:hover .ActionAnd,
+    &:focus-within .ActionAnd {opacity: 1;}
 
     &>div {
         position: absolute;
     }
     .ActionAnd {
-        display:none;
+        // invisible rather than display: none, so that the keyboard and screen readers reach it
+        opacity: 0;
         left: math.div(base.$margin-children-li, 2);
         top: math.div(base.$margin-component, 2)+0;
         line-height: 46px;

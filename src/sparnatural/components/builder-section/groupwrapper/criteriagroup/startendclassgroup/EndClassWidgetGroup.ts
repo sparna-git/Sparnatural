@@ -167,7 +167,9 @@ export class EndClassWidgetGroup extends HTMLComponent {
   // input : the widget value to remove
   #onRemoveValue(e: CustomEvent) {
     let valueToDel: EndClassWidgetValue = e.detail;
-    this.#announceValue("Announce.valueRemoved", valueToDel);
+    // the remove button, which has the focus, is going away : the focus follows, the message is said with it
+    const focusFollows = HTMLComponent.focusFollows();
+    this.#announceValue("Announce.valueRemoved", valueToDel, true);
 
     // special case: if the value to delete is the selectAll value
     let unselectedValue: EndClassWidgetValue;
@@ -213,6 +215,15 @@ export class EndClassWidgetGroup extends HTMLComponent {
     const remainingValues = this.widgetValues.length;
     this.#redistributeValues();
     this.#updateLayout(true, remainingValues > maxPerRow);
+
+    // values left : the focus goes to the remove button of the first one. Without, the widget comes
+    // back and takes it, "Tous·tes"
+    if (focusFollows && remainingValues > 0) {
+      setTimeout(() => {
+        const removeBtn = this.widgetValues[0]?.unselectBtn?.widgetHtml[0];
+        if (removeBtn?.isConnected) HTMLComponent.focusWithConfirmation(removeBtn);
+      }, 0);
+    }
 
     this.html[0].dispatchEvent(
       new CustomEvent("updateWidgetList", {
@@ -280,8 +291,17 @@ export class EndClassWidgetGroup extends HTMLComponent {
     requestAnimationFrame(() => this.#calculateChipWidths());
     // the spinner and the red light also say what happens to screen readers
     const lineNumber = (this.parentComponent as CriteriaGroup).parentGroupWrapper.lineNumber;
-    const key = checking ? "Announce.checking" : "Announce.noResults";
-    HTMLComponent.announce(this.html[0], I18n.format(key, { n: lineNumber }));
+    if (!checking) {
+      HTMLComponent.announce(this.html[0], I18n.format("Announce.noResults", { n: lineNumber }));
+      return;
+    }
+    // only when the check lasts : a quick answer comes once the widget is already shown
+    const chip = this.#statusChip;
+    setTimeout(() => {
+      if (this.#statusChip === chip) {
+        HTMLComponent.announce(this.html[0], I18n.format("Announce.checking", { n: lineNumber }));
+      }
+    }, 1000);
   }
 
   hideStatusChip() {
@@ -291,21 +311,29 @@ export class EndClassWidgetGroup extends HTMLComponent {
 
   // All items which got selected in the widget will be added add the back of the EndClassGroup.
   // screen readers : says which value was added or removed, and on which line
-  #announceValue(key: string, value: EndClassWidgetValue) {
+  #announceValue(key: string, value: EndClassWidgetValue, focusMoves = false) {
     const label = value.selectAll ? I18n.labels.SelectAllValues : value.widgetVal.label;
     const text = $("<div>").html(label).text().trim();
     const lineNumber = (this.parentComponent as CriteriaGroup).parentGroupWrapper.lineNumber;
-    HTMLComponent.announce(this.html[0], I18n.format(key, { label: text, n: lineNumber }));
+    HTMLComponent.announce(this.html[0], I18n.format(key, { label: text, n: lineNumber }), focusMoves);
   }
 
   #renderNewSelectedValue(endClassWidgetVal: EndClassWidgetValue) {
-    this.#announceValue("Announce.valueAdded", endClassWidgetVal);
+    // true : with the keyboard, said with the remove button of the new value, which gets the focus
+    this.#announceValue("Announce.valueAdded", endClassWidgetVal, true);
     endClassWidgetVal.render();
     // Insert in first in DOM wrapper
     if (this.valuesWrapper[0].firstChild) {
       this.valuesWrapper[0].insertBefore(endClassWidgetVal.html[0], this.valuesWrapper[0].firstChild);
     } else {
       this.valuesWrapper.append(endClassWidgetVal.html);
+    }
+    // keyboard : the focus goes to the remove button of the new value : "Valeur Tous·tes ajoutée.
+    // Supprimer la valeur Tous·tes". Right now, before the widget that has the focus is removed,
+    // otherwise the focus falls on the page in between ("Sparnatural document")
+    if (HTMLComponent.focusFollows()) {
+      const removeBtn = endClassWidgetVal.unselectBtn?.widgetHtml[0];
+      if (removeBtn?.isConnected) HTMLComponent.focusWithConfirmation(removeBtn);
     }
   }
 
@@ -587,11 +615,16 @@ export class EndClassWidgetValue extends HTMLComponent {
     let valuelbl = `<p><span ${extraClass}>${icon} ${theLabel} </span></p>`;
     this.html.append($(valuelbl));
 
-    // the label can be cut on a narrow line : the tooltip always shows it in full
+    // the full label, only when it is cut ("co...") : checked when shown, the zoom can change it
     new TippyInfo(this, this.#stripLabelHtml(theLabel), {
       placement: 'top',
       delay: [500, 100],
       theme: 'sparnatural',
+      onShow: () => {
+        const label = this.html[0].querySelector<HTMLElement>("p > span");
+        // false cancels the tooltip
+        if (!label || label.scrollWidth <= label.clientWidth) return false;
+      },
     });
 
     this.frontArrow.render();

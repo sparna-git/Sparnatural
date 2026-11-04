@@ -1,7 +1,7 @@
 import Handlebars from "handlebars";
 import { SelectedVal } from "../SelectedVal";
 import { RdfTermDatasourceItem } from "../datasources/DataProviders";
-import { keepLinksClickable } from "./ItemLink";
+import { hideLinksFromScreenReaders, keepLinksClickable } from "./ItemLink";
 
 // Optional Handlebars template to customize how datasource items are displayed in a widget.
 // Read from an HTML element whose ID is the URI of the NodeShape targetted by the property,
@@ -23,7 +23,11 @@ export class ItemTemplate {
   // the class it styles next to its own CSS rules
   render(item: RdfTermDatasourceItem): string {
     if (!this.#compiled) throw new Error("No template available for rendering");
-    return this.#compiled(item);
+    // the links of the template are hidden from screen readers, like the ones Sparnatural adds
+    let holder = document.createElement("div");
+    holder.innerHTML = this.#compiled(item);
+    hideLinksFromScreenReaders(holder);
+    return holder.innerHTML;
   }
 
   // same rendering as a DOM element, with the links it contains made clickable

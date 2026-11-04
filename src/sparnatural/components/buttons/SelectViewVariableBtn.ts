@@ -33,12 +33,7 @@ export class SelectViewVariableBtn extends HTMLComponent {
     } else {
       this.widgetHtml = $(UiuxConfig.ICON_NOT_SELECTED_VARIABLE);
     }
-    // the name says what a click does : "Afficher" or "Masquer"
-    const labelKey = this.selected ? "HideFromResults.label" : "ShowInResults.label";
-    HTMLComponent.setAriaButton(
-      this.widgetHtml,
-      I18n.labels[labelKey].replace("{label}", this.getClassLabel())
-    );
+    HTMLComponent.setAriaButton(this.widgetHtml, this.#name());
     super.render();
     if(!this.alwaysDisabled) {
       this.#addClickListener();
@@ -55,6 +50,20 @@ export class SelectViewVariableBtn extends HTMLComponent {
 
 
 
+  // the name says what a click does : "Afficher" or "Masquer"
+  #name(): string {
+    const labelKey = this.selected ? "HideFromResults.label" : "ShowInResults.label";
+    return I18n.labels[labelKey].replace("{label}", this.getClassLabel());
+  }
+
+  // the content and attributes of the other icon, on the same element
+  #swapIcon() {
+    const icon = $(this.selected ? UiuxConfig.ICON_SELECTED_VARIABLE : UiuxConfig.ICON_NOT_SELECTED_VARIABLE)[0];
+    const current = this.widgetHtml[0];
+    current.innerHTML = icon.innerHTML;
+    Array.from(icon.attributes).forEach((attribute) => current.setAttribute(attribute.name, attribute.value));
+  }
+
   #addClickListener() {
     this.widgetHtml.on("click", (e: JQuery.ClickEvent) => {
       // one Variable always(!) needs to be selected
@@ -64,8 +73,16 @@ export class SelectViewVariableBtn extends HTMLComponent {
         if(length < 2 && this.selected === true) lastSelectedVar = true
       }}))
       if(lastSelectedVar) return
+      // a click of the user : the click() of the code below sends a plain Event
+      const byUser = e.originalEvent instanceof MouseEvent;
       this.selected = this.selected ? false : true;
-      this.render();
+      // changed in place, not rendered again : the button keeps the focus
+      this.#swapIcon();
+      HTMLComponent.renameOnBlur(this.widgetHtml, this.#name());
+      if (byUser) {
+        const key = this.selected ? "Announce.columnShown" : "Announce.columnHidden";
+        HTMLComponent.announce(this.html[0], I18n.format(key, { label: this.getClassLabel() }));
+      }
       this.callBack(this.selected);
     });
   }

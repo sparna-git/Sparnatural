@@ -40,7 +40,9 @@ export function addAndComponent(
   // the line number is known once redrawn
   HTMLComponent.announce(
     grpWrapper.html[0],
-    I18n.format("Announce.lineAdded", { n: grpWrapper.andSibling.lineNumber })
+    I18n.format("Announce.lineAdded", { n: grpWrapper.andSibling.lineNumber }),
+    // true : with the keyboard, the focus goes to the list of the new line
+    true
   );
 
   // disable the AND on this line

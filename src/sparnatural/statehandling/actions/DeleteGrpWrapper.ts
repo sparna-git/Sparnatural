@@ -74,7 +74,9 @@ export default function deleteGrpWrapper(
   );
   HTMLComponent.announce(
     sparnatural.html[0],
-    I18n.format("Announce.lineRemoved", { n: removedLineNumber })
+    I18n.format("Announce.lineRemoved", { n: removedLineNumber }),
+    // true : said with the next focus, when the widget of the line above comes back
+    true
   );
   // there might have been variables in the variable section which now got deleted
   sparnatural.html[0].dispatchEvent(

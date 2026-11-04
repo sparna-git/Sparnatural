@@ -66,3 +66,9 @@ body .select2-container--default {
 	padding: 2px;
 	font-size:0.75em;
 }
+// keyboard : the button reached with Tab is clearly outlined, the mouse is not concerned
+// --focus-color can be set by a theme : dark blue by default, visible on white, green and orange
+spar-natural .Sparnatural [role="button"]:focus-visible {
+	outline: 3px solid var(--focus-color, #00338d);
+	outline-offset: 2px;
+}

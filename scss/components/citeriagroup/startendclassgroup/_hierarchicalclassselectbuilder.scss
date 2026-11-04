@@ -538,3 +538,8 @@
         scrollbar-color: var(--primary-color-main) #e8e8e8;
     }
 }
+// keyboard : the item reached with the arrows
+.htmlSelectUiUx li.kbActive {
+    outline: 3px solid var(--focus-color, #00338d);
+    outline-offset: -3px;
+}
