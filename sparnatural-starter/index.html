@@ -111,7 +111,7 @@
       <!-- ================= SPARNATURAL ================= -->
       <section class="container mt-3">
         <spar-natural
-          src="configs/sparnatural-config-garance.ttl"
+          src="configs/sparnatural-config-garance-1.ttl"
           endpoint="https://sparql.archives-nationales.culture.gouv.fr/garance/sparql"
           prefixes="skos:http://www.w3.org/2004/02/skos/core# dct:http://purl.org/dc/terms/"
           lang="fr"
@@ -119,6 +119,7 @@
           distinct="true"
           debug="true"
           limit="1000"
+          facetedBrowsing="true"
         >
           <!-- template par defaut-->
           <script id="default-template" type="text/x-handlebars-template">
