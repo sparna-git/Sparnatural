@@ -67,8 +67,18 @@ body .select2-container--default {
 	font-size:0.75em;
 }
 // keyboard : the button reached with Tab is clearly outlined, the mouse is not concerned
-// --focus-color can be set by a theme : dark blue by default, visible on white, green and orange
+// --focus-color can be set by a theme : dark green by default, at least 3:1 on white, green and orange
 spar-natural .Sparnatural [role="button"]:focus-visible {
-	outline: 3px solid var(--focus-color, #00338d);
+	outline: 3px solid var(--focus-color, #005c3d);
 	outline-offset: 2px;
+}
+// widget fields (list, autocomplete, dates...) : the same outline, instead of the browser one
+spar-natural .Sparnatural :is(input, select, textarea, .select2-selection):focus-visible {
+	outline: 3px solid var(--focus-color, #005c3d);
+	outline-offset: 2px;
+}
+// search field of an open list, that select2 puts at the end of the page
+.select2-container--default .select2-search__field:focus-visible {
+	outline: 3px solid var(--focus-color, #005c3d);
+	outline-offset: 0;
 }

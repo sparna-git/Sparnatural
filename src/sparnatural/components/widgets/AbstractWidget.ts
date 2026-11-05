@@ -261,6 +261,18 @@ export abstract class AbstractWidget extends HTMLComponent {
     const elements = this.spinner.html[0].getElementsByClassName("load");
     if (elements.length > 0) elements[0].classList.toggle("show");
     if (message != null) this.spinner.renderMessage(message);
+    // next frame : the widget may not be in the page yet
+    requestAnimationFrame(() => this.#fitSpinner());
+  }
+
+  // zoom : no room on the right of the widget, the spinner and its message go inside it, empty while loading
+  #fitSpinner() {
+    const spinner = this.spinner.html[0];
+    spinner.classList.remove("inside");
+    const list = spinner.closest(".componentsListe");
+    if (list && spinner.getBoundingClientRect().right > list.getBoundingClientRect().right) {
+      spinner.classList.add("inside");
+    }
   }
 }
 export { RDFTerm };

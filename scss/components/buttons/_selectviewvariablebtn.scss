@@ -45,3 +45,13 @@
         }
     }
 }
+// keyboard : round outline, like the remove buttons. On the box around the icon : rounding the
+// icon itself would cut the ends of its slash. Prefixed to win over the rule of all the buttons
+spar-natural .Sparnatural .selectViewVariableBtn:has(> [role="button"]:focus-visible) {
+    border-radius: 50%;
+    outline: 3px solid var(--focus-color, #005c3d);
+    outline-offset: 2px;
+}
+spar-natural .Sparnatural .selectViewVariableBtn > [role="button"]:focus-visible {
+    outline: none;
+}

@@ -125,3 +125,12 @@
     }
 
 }
+
+// keyboard : the outline of Tous·tes sticks to it, with 7px kept before the "ou" for it.
+// Prefixed to win over the rule of all the buttons, in sparnatural.scss
+spar-natural .Sparnatural .selectAll {
+    margin-right: 7px;
+}
+spar-natural .Sparnatural .selectAll:focus-visible {
+    outline-offset: 0;
+}

@@ -11,3 +11,13 @@ span.unselect {
     border-radius: 100%;
   }
 }
+
+// keyboard : the outline goes on the round icon, the element around it is taller than the icon.
+// Prefixed to win over the rule of all the buttons, in sparnatural.scss
+spar-natural .Sparnatural .unselect > [role="button"]:focus-visible {
+  outline: none;
+}
+spar-natural .Sparnatural .unselect > [role="button"]:focus-visible > svg {
+  outline: 3px solid var(--focus-color, #005c3d);
+  outline-offset: 2px;
+}

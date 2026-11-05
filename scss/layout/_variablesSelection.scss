@@ -472,7 +472,7 @@
 
     // keyboard : outlined like the buttons when reached with Tab
     input:focus-visible + .slider {
-        outline: 3px solid var(--focus-color, #00338d);
+        outline: 3px solid var(--focus-color, #005c3d);
         outline-offset: 2px;
     }
 

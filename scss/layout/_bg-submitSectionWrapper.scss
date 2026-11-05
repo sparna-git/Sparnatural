@@ -64,4 +64,14 @@
     }
 }
 
+// keyboard : the outline goes on the rounded box around the button, to follow its corners.
+// Prefixed to win over the rule of all the buttons, in sparnatural.scss
+spar-natural .Sparnatural a.playBtn:has(> [role="button"]:focus-visible) {
+    outline: 3px solid var(--focus-color, #005c3d);
+    outline-offset: 2px;
+}
+spar-natural .Sparnatural a.playBtn > [role="button"]:focus-visible {
+    outline: none;
+}
+
 

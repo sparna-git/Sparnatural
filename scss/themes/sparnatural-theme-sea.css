@@ -73,6 +73,11 @@
   --default-text-color-light: #fff;
 
   /**
+  * Color of the keyboard focus outline (dark blue), at least 3:1 on the colors of the theme
+  **/
+  --focus-color: #002255;
+
+  /**
  * Red, Green and Blue components for the background color.
  * An alpha is added to this color at each line (0.1, 0.2, 0.3, etc.)
  **/

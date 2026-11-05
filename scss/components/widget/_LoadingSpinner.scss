@@ -16,6 +16,12 @@
     &.show {
         display: block;
     }
+    // zoom : inside the widget, where its text goes, instead of overflowing on the right
+    &.inside {
+        left: 0;
+        margin-left: 0;
+        pointer-events: none;
+    }
     .load {
         display: none;
         width: 32px;
