@@ -6,6 +6,7 @@ _Pour des exemples de fonctionnement de Sparnatural et de sa configuration, cons
 ## 1. Fonctionnalités
 
 - [Documentation de référence des widgets Sparnatural](widgets.md) : toutes les façons possibles de sélectionner une valeur de critère dans Sparnatural. Consultez ceci pour apprendre certaines des fonctionnalités de Sparnatural.
+- [Fonctionnalités d'accessibilité](Accessibility.md) : zoom, lecteurs d'écran et navigation au clavier.
 
 
 ## 2. Pour commencer

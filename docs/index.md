@@ -16,6 +16,7 @@ _For examples of how Sparnatural works and can be configured, have a look at the
 ### 1. Features
 
 - [Reference documentation of Sparnatural widgets](widgets.md) : all the possible ways to select a criteria value in Sparnatural. Read this to learn some of the features of Sparnatural.
+- [Accessibility features](fr/Accessibility.md) : zoom, screen readers and keyboard navigation (in French for now).
 
 ### 2. Getting started
 
