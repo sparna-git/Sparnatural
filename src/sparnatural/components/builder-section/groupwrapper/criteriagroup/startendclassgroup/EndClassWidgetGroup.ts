@@ -255,6 +255,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
     this.#renderNewSelectedValue(endClassWidgetVal);
 
     this.#updateLayout();
+    this.#focusNewValue(endClassWidgetVal);
 
     // asks to remove the value selection part, with 1 and 2
     this.html[0].dispatchEvent(
@@ -273,6 +274,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
     this.#renderNewSelectedValue(endClassWidgetVal);
 
     this.#updateLayout();
+    this.#focusNewValue(endClassWidgetVal);
 
     // asks to remove the value selection part, with 1 and 2
     this.html[0].dispatchEvent(
@@ -328,13 +330,14 @@ export class EndClassWidgetGroup extends HTMLComponent {
     } else {
       this.valuesWrapper.append(endClassWidgetVal.html);
     }
-    // keyboard : the focus goes to the remove button of the new value : "Valeur Tous·tes ajoutée.
-    // Supprimer la valeur Tous·tes". Right now, before the widget that has the focus is removed,
-    // otherwise the focus falls on the page in between ("Sparnatural document")
-    if (HTMLComponent.focusFollows()) {
-      const removeBtn = endClassWidgetVal.unselectBtn?.widgetHtml[0];
-      if (removeBtn?.isConnected) HTMLComponent.focusWithConfirmation(removeBtn);
-    }
+  }
+
+  // keyboard : the focus goes to the remove button of the new value : "Valeur rue ajoutée. Supprimer la valeur rue".
+  // After #updateLayout, which moves the values and would lose it, before the widget is removed ("Sparnatural document")
+  #focusNewValue(endClassWidgetVal: EndClassWidgetValue) {
+    if (!HTMLComponent.focusFollows()) return;
+    const removeBtn = endClassWidgetVal.unselectBtn?.widgetHtml[0];
+    if (removeBtn?.isConnected) HTMLComponent.focusWithConfirmation(removeBtn);
   }
 
   #redistributeValues() {
