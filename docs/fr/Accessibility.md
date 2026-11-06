@@ -42,7 +42,7 @@ Les options des résultats sont nommées de la même façon : "Trier de A à Z",
 Après une action, un message court est lu, par exemple :
 
 - "Sélection : Lieu"
-- "Valeur `Rue` ajoutée", "Valeur Paris supprimée"
+- "Valeur rue ajoutée", "Valeur rue supprimée"
 - "Ligne 2 ajoutée", "Ligne 2 supprimée"
 - "Recherche des valeurs possibles", "Aucun résultat pour la ligne 2"
 - "Recherche lancée", "Recherche réinitialisée"
