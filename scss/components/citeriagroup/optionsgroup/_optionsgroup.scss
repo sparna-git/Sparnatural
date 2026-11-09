@@ -35,11 +35,18 @@
             font-size: 14px;
             margin-right: -20px;
             cursor: pointer;
-            span {
+            > span {
                 text-indent: 13px;
                 background: var(--secondary-color-light);
                 border-top: 3px solid #fff;
                 border-bottom: 3px solid #fff;
+            }
+            // a box of the height of the text : the keyboard outline goes around it
+            .optionLabel {
+                display: inline-block;
+                text-indent: 0;
+                line-height: normal;
+                vertical-align: middle;
             }
             input {
                 display: none;
@@ -48,16 +55,30 @@
             &.Enabled {
                 @include mixins.arrow-back-colors(var(--secondary-color-important), #fff);
 				@include mixins.arrow-front-colors(var(--secondary-color-important), #fff);
-                span {
+                > span {
                     background: var(--secondary-color-important);
                 }
             }
     }
-    // the property would get unreadable : the labels are cut, like the values
+    // keyboard : the outline goes around the text only, and over the arrow next to it.
+    // [role] to win over the rule of all the buttons, in sparnatural.scss
+    .Optional[role="button"]:focus-visible,
+    .NotExists[role="button"]:focus-visible {
+        outline: none;
+        z-index: 3;
+        // positioned : drawn after the front arrow, which would hide the right of the outline
+        .optionLabel {
+            position: relative;
+            z-index: 1;
+            outline: 3px solid var(--focus-color, #005c3d);
+            outline-offset: 2px;
+        }
+    }
+    // the property would get unreadable : the labels are cut, like the values.
+    // Cut on the text itself (45px with the 13px before it) : the outline around it stays whole
     &.compactOptions {
-        .Optional span,
-        .NotExists span {
-            max-width: 45px;
+        .optionLabel {
+            max-width: 32px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;

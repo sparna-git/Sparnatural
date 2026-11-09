@@ -44,7 +44,8 @@ class BaseOptionComponent extends HTMLComponent {
     // htmlStructure rendering:
     super.render();
     this.backArrow.render();
-    this.html.append($(`<span>${this.label}</span>`));
+    // inner span : the keyboard outline goes around the text only
+    this.html.append($(`<span><span class="optionLabel">${this.label}</span></span>`));
     this.frontArrow.render();
     // the visible label can be cut : the whole word stays available
     HTMLComponent.setAriaButton(this.html, this.label);

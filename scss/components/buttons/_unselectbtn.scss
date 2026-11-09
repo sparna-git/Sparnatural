@@ -21,3 +21,7 @@ spar-natural .Sparnatural .unselect > [role="button"]:focus-visible > svg {
   outline: 3px solid var(--focus-color, #005c3d);
   outline-offset: 2px;
 }
+// over its neighbours, like the arrow of the "+", which would hide the outline
+spar-natural .Sparnatural .unselect:has(> [role="button"]:focus-visible) {
+  z-index: 3;
+}
