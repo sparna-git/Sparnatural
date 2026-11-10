@@ -81,6 +81,7 @@
   "TreeWidgetNoData": "Aucune information trouvée...",
   "TreeWidgetDelete": "Effacer la sélection",
   "TreeWidgetSelect": "Sélectionner",
+  "TreeWidgetOpen.label": "Ouvrir l'arborescence",
   "MapWidgetOpenMap": "Ouvrir la carte",
   "MapWidgetCloseMap": "Fermer",
   "MapWidgetValidate": "Valider la zone de recherche",

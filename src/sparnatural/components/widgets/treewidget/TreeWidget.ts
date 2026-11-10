@@ -234,6 +234,17 @@ export class TreeWidget extends AbstractWidget {
       .find(".treeClose")
       .on("click", { arg1: this }, this.onClickClose);
 
+    // keyboard and screen readers : the icon and the actions of the layer are buttons, Escape closes it
+    HTMLComponent.setAriaButton(this.button, I18n.labels["TreeWidgetOpen.label"]);
+    HTMLComponent.setAriaButton(this.displayLayer.find(".treeClose"), I18n.labels["Close.label"]);
+    HTMLComponent.setAriaButton(this.displayLayer.find(".treeCancel"), I18n.labels.TreeWidgetDelete);
+    HTMLComponent.setAriaButton(this.displayLayer.find(".treeSubmit"), I18n.labels.TreeWidgetSelect);
+    this.displayLayer.on("keydown", (e: JQuery.KeyDownEvent) => {
+      if (e.key !== "Escape") return;
+      e.stopPropagation();
+      this.onClickClose({ data: { arg1: this } });
+    });
+
     this.displayLayer.hide();
 
     return this;
@@ -247,6 +258,8 @@ export class TreeWidget extends AbstractWidget {
     } else {
       $("#ecgrw-" + this.IdCriteriaGroupe + "-displayLayer .treeNotice").hide();
     }
+    // opened while loading : the layer was narrower when measured
+    if (this.displayLayer.is(":visible")) this.#fitLayer();
   };
 
   //limit to 3 selction
@@ -314,7 +327,32 @@ export class TreeWidget extends AbstractWidget {
   onClickDisplay = function (e: any) {
     let this_:TreeWidget = e.data.arg1;
     this_.displayLayer.show();
+    this_.#fitLayer();
+    // keyboard : the focus goes in the tree, browsed with the arrows, checked with Space
+    if (HTMLComponent.focusFollows()) {
+      const firstNode = this_.displayLayer.find(".jstree-anchor")[0];
+      (firstNode ?? this_.jsTree[0]).focus();
+    }
   };
+
+  // zoom : no room on the right of the button, the layer opens on its left (.openLeft)
+  #fitLayer() {
+    const layer = this.displayLayer[0];
+    layer.classList.remove("openLeft");
+    layer.style.transform = "";
+    if (layer.getBoundingClientRect().right <= document.documentElement.clientWidth - 10) return;
+    layer.classList.add("openLeft");
+    // not out of the window on the left either : moved with a transform, a margin would widen it
+    const left = layer.getBoundingClientRect().left;
+    if (left < 10) layer.style.transform = `translateX(${10 - left}px)`;
+  }
+
+  // the layer is closed : the focus, that was in it, goes back to the button that opens it
+  #focusButtonBack() {
+    const active = document.activeElement;
+    const lost = !active || active === document.body || this.displayLayer[0].contains(active);
+    if (lost && this.button[0].isConnected && HTMLComponent.focusFollows()) this.button[0].focus();
+  }
 
   onClickCancel = function (e: any) {
     let this_:TreeWidget = e.data.arg1;
@@ -322,6 +360,7 @@ export class TreeWidget extends AbstractWidget {
     // which re-enables the nodes disabled under a checked one and clears the greying
     this_.jsTree.jstree(true).deselect_all();
     this_.displayLayer.hide();
+    this_.#focusButtonBack();
   };
 
   onClickSelect = function (e: any) {
@@ -329,13 +368,15 @@ export class TreeWidget extends AbstractWidget {
     const values = this_.getValue()
     this_.displayLayer?.hide();
     this_.triggerRenderWidgetVal(values)
-    
+    // nothing checked : no value takes the focus
+    this_.#focusButtonBack();
   };
 
   onClickClose = function (e: any) {
     let this_:TreeWidget = e.data.arg1;
     this_.displayLayer?.hide();
     $(this_.parentComponent).trigger("change");
+    this_.#focusButtonBack();
   };
 
   getValue = function ():Array<LabelledCriteria<RdfTermCriteria>> {

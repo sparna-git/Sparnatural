@@ -32,6 +32,12 @@
         box-shadow: 0px 2px 3px 0px #cfcfcf;
         z-index: 2;
 
+        // zoom, no room on the right : opens on the left, its right side where its left side would be
+        &.openLeft {
+            left: auto;
+            right: 5%;
+        }
+
         .treeClose {
             position: absolute;
             top: 5px;

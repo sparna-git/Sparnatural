@@ -123,7 +123,7 @@ class EditComponents extends HTMLComponent {
   #keyboardItems(): HTMLElement[] {
     const el = this.html[0];
     const widgetField = el.querySelector<HTMLElement>(
-      ":scope > .WidgetWrapper .select2-selection, :scope > .WidgetWrapper input:not([type=hidden]), :scope > .WidgetWrapper button"
+      ":scope > .WidgetWrapper .select2-selection, :scope > .WidgetWrapper input:not([type=hidden]), :scope > .WidgetWrapper button, :scope > .WidgetWrapper .treeBtnDisplay"
     );
     return [el.querySelector<HTMLElement>(".selectAll"), widgetField, this.#whereButton()].filter(Boolean);
   }

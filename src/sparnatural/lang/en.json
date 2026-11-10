@@ -81,6 +81,7 @@
   "TreeWidgetNoData": "No data could be found...",
   "TreeWidgetDelete": "Clear selection",
   "TreeWidgetSelect": "Select",
+  "TreeWidgetOpen.label": "Open the tree",
   "MapWidgetOpenMap": "Open Map",
   "MapWidgetCloseMap": "Close Map",
   "MapWidgetValidate": "Validate search area",
