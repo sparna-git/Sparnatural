@@ -254,6 +254,17 @@ li.groupe.completed {
 	margin-bottom: base.$margin-component-onEdit + base.$height-components-under + 26px;
 }
 
+/* and one more line when the buttons of the widget go under its fields */
+.CriteriaGroup:has(.EditComponents.wrappedWidget) {
+	margin-bottom: base.$margin-component-onEdit + base.$height-components-under;
+}
+.CriteriaGroup:has(.EditComponents.wrappedWidget .selectAll) {
+	margin-bottom: base.$margin-component-onEdit + base.$height-components-under * 2;
+}
+.CriteriaGroup:has(.EditComponents.wrappedWidget.stackedWhere .selectAll) {
+	margin-bottom: base.$margin-component-onEdit + base.$height-components-under * 2 + 26px;
+}
+
 /* #809 : while checking if the line can have a result, and when it cannot, nothing is
    shown under the line, the status chip in the line says it all */
 .CriteriaGroup.checking-values,

@@ -68,7 +68,7 @@ export class TimeDatePickerWidget extends AbstractWidget {
   render() {
     super.render();
     this.html.append(
-      $(`<span>${I18n.labels.LabelDateFrom}&nbsp;</span>`)
+      $(`<span class="dateLabel">${I18n.labels.LabelDateFrom}&nbsp;</span>`)
     );
     this.inputStart = $(
       `<input id="input-start" placeholder="${
@@ -81,7 +81,7 @@ export class TimeDatePickerWidget extends AbstractWidget {
       }" autocomplete="off" class="${this.dateFormat}" />`
     );
     this.inputValue = $(`<input id="input-value" type="hidden"/>`);
-    let span = $(`<span>&nbsp;${I18n.labels.LabelDateTo}&nbsp;</span>`);
+    let span = $(`<span class="dateLabel">&nbsp;${I18n.labels.LabelDateTo}&nbsp;</span>`);
     this.html
       .append(this.inputStart)
       .append(span)

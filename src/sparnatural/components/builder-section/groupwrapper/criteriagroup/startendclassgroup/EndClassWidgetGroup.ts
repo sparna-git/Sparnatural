@@ -684,6 +684,16 @@ class StatusChip extends HTMLComponent {
     this.html.addClass("noPossibleValue");
     this.backArrow.render();
     this.html.append($(`<p><span>${UiuxConfig.ICON_NO_ENTRY}<em>${I18n.labels.NoResults}</em></span></p>`));
+    // the whole text, only when it is cut, like the values
+    new TippyInfo(this, I18n.labels.NoResults, {
+      placement: 'top',
+      delay: [500, 100],
+      theme: 'sparnatural',
+      onShow: () => {
+        const text = this.html[0].querySelector<HTMLElement>("p > span > em");
+        if (!text || text.scrollWidth <= text.clientWidth) return false;
+      },
+    });
     this.frontArrow.render();
     return this;
   }

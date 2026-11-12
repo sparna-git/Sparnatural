@@ -67,11 +67,18 @@
         /* the class before it is not selected, so it has no arrow to fit into : a white gap
            keeps the chip off its label */
         margin-left: 10px;
+        // "safe" : too narrow, it starts on the left instead of overflowing on both sides
         p > span {
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: safe center;
             gap: 6px;
+        }
+        // cut with "...", the whole text in a tooltip
+        p > span > em {
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         p > span > svg {
             height: 26px;

@@ -3,8 +3,26 @@
 /* the widget would leave the list : the words that can be spared are removed */
 .EditComponents.compactWidget .WidgetWrapper {
     .widgetEndType,
-    .widgetLabel {
+    .widgetLabel,
+    .dateLabel {
         display: none;
+    }
+    // dates : "de" and "à" stay in the placeholders, the fields keep just the room for jj/mm/aaaa
+    .timedatepicker-widget > input {
+        margin-right: 5px;
+        padding: 5px 6px;
+    }
+    .timedatepicker-widget > input.day {
+        width: 88px;
+    }
+    // numbers and search : narrower fields
+    .number-widget > form > input {
+        width: 80px;
+        padding: 6px;
+    }
+    .search-widget > input {
+        width: 110px;
+        padding: 6px;
     }
 }
 
@@ -43,6 +61,27 @@
     &>div {
         top: 0;
     }
+}
+
+/* numbers : "entre" is kept, "[ ] et [ ]" alone reads oddly */
+.EditComponents.compactWidget .WidgetWrapper:has(> .number-widget) .widgetLabel,
+.EditComponents.stackedWidget .WidgetWrapper:has(> .number-widget) .widgetLabel {
+    display: inline;
+}
+// adding a value : the fields stay after "entre", not over it
+.EditComponents.stackedWidget .WidgetWrapper:not(:has(.selectAll)):has(> .number-widget) > div {
+    left: 100%;
+}
+
+/* still too wide (dates, numbers, search) : the buttons go on one more line, under the fields */
+.EditComponents.wrappedWidget .WidgetWrapper {
+    height: 51px + base.$height-components-under * 2;
+    &>div {
+        white-space: normal;
+    }
+}
+.EditComponents.wrappedWidget .WidgetWrapper:not(:has(.selectAll)) {
+    height: 51px + base.$height-components-under;
 }
 
 .nb-choice-2 {

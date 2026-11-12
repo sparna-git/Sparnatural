@@ -167,11 +167,13 @@ class EditComponents extends HTMLComponent {
     const fits = (selector: string) =>
       Array.from(el.querySelectorAll(selector))
         .every((part) => part.getBoundingClientRect().right <= listRight);
-    const WIDGET_LINE = ":scope > .WidgetWrapper > *";
+    // fields and buttons that do not shrink with the widget overflow it, so they are measured too
+    const WIDGET_LINE = ":scope > .WidgetWrapper > *, :scope > .WidgetWrapper > "
+      + ":is(.timedatepicker-widget, .number-widget, .search-widget, .boolean-widget) > *";
     const WHERE_LINE = ":scope > .ActionWhere *";
 
     const previousClasses = el.className;
-    el.classList.remove("compactWidget", "stackedWidget", "stackedWhere");
+    el.classList.remove("compactWidget", "stackedWidget", "wrappedWidget", "stackedWhere");
     widget?.style.removeProperty("width");
 
     if (!fits(WIDGET_LINE)) {
@@ -187,6 +189,10 @@ class EditComponents extends HTMLComponent {
       }
       if (!fits(WIDGET_LINE)) {
         el.classList.add("compactWidget");
+      }
+      // dates, numbers, search : the buttons go on one more line, under the fields
+      if (!fits(WIDGET_LINE)) {
+        el.classList.add("wrappedWidget");
       }
     }
     // the "where" line goes on two lines

@@ -465,6 +465,37 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
     displayClassSelector() {
       this.htmlSelectUiUx.addClass('open') ;
       this.parentComponent.html[0].classList.add('focus') ;
+      // measured once in the page
+      requestAnimationFrame(() => this.#fitLists());
+    }
+
+    // the list would go out of the window. With a zoom a flat list takes the width of its labels,
+    // then the list moves left, without leaving the window on the left
+    #fitLists() {
+      const lists = this.htmlSelectUiUxLists[0];
+      const uls = lists.querySelectorAll<HTMLElement>("ul");
+      lists.style.removeProperty("width");
+      lists.style.removeProperty("transform");
+      uls.forEach((ul) => ul.style.removeProperty("width"));
+      if (!lists.isConnected) return;
+      const maxRight = document.documentElement.clientWidth - 10;
+      if (lists.getBoundingClientRect().right <= maxRight) return;
+
+      const ul = lists.querySelector<HTMLElement>("ul.active-pane");
+      // narrower only with a zoom : the page is then less than 1024 CSS pixels wide
+      const zoomed = window.innerWidth < 1024;
+      if (zoomed && this.isFlatHierarchy() && ul) {
+        const fullWidth = lists.getBoundingClientRect().width;
+        const scrollbar = ul.offsetWidth - ul.clientWidth;
+        ul.style.width = "max-content";
+        const width = Math.ceil(Math.min(fullWidth, ul.getBoundingClientRect().width + scrollbar)) + "px";
+        lists.style.width = width;
+        uls.forEach((el) => el.style.width = width);
+      }
+      const rect = lists.getBoundingClientRect();
+      if (rect.right > maxRight) {
+        lists.style.transform = `translateX(${Math.max(maxRight - rect.right, 10 - rect.left)}px)`;
+      }
     }
     hideClassSelector() {
       // a closed list leaves the Tab order, once the focus has left it
