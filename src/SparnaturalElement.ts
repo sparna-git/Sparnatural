@@ -79,7 +79,7 @@ export class SparnaturalElement extends HTMLElement {
 
   /* NOTE : defaultlang is all lowercase, see https://stackoverflow.com/questions/60566257/web-components-attributechangedcallback-not-firing */
   static get observedAttributes() {
-    return ["src", "lang", "defaultlang", "endpoint","facetedBrowsing"];
+    return ["src", "lang", "defaultlang", "endpoint", "facetedbrowsing"];
   }
   attributeChangedCallback(
     name: string,
@@ -115,7 +115,7 @@ export class SparnaturalElement extends HTMLElement {
           getSettings().endpoints = newValue.split(" ");
           break;
         }
-        case "facetedBrowsing": {
+        case "facetedbrowsing": {
           getSettings().facetedBrowsing = newValue === "true";
           break;
         }

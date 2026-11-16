@@ -56,6 +56,7 @@ L'élément qui a le focus est entouré d'un contour vert foncé. Les touches à
 
 - **Tab / Maj + Tab** : passer à l'élément suivant / précédent ;
 - **flèches haut et bas** : parcourir une liste ;
+- **flèches droite et gauche** : dans un arbre, ouvrir / fermer une branche ;
 - **Début / Fin** : aller au premier / dernier élément d'une liste ;
 - **Entrée ou Espace** : choisir un élément, activer un bouton.
 
