@@ -102,9 +102,7 @@ export class PossibleValuesCheck {
       sparnatural.actionStore?.quiet ||
       // no result is expected in a NOT EXISTS, and irrelevant in an OPTIONAL
       option === OptionTypes.OPTIONAL ||
-      option === OptionTypes.NOTEXISTS ||
-      // the multiple endpoints handler cannot merge ASK answers
-      settings.endpoints?.length !== 1
+      option === OptionTypes.NOTEXISTS
     ) {
       return null;
     }
@@ -126,8 +124,8 @@ export class PossibleValuesCheck {
   // true when the query has at least one result
   #ask(ask: string): Promise<boolean> {
     const settings = getSettings();
-    // the same query on another endpoint is another question
-    const key = settings.endpoints[0] + "\n" + ask;
+    // the same query on other endpoints is another question, all of them count
+    const key = settings.endpoints.join(" ") + "\n" + ask;
     let answer = PossibleValuesCheck.#answers.get(key);
     if (answer) return answer;
 
