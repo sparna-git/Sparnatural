@@ -119,14 +119,20 @@ export class ListWidget extends AbstractWidget {
         // when groups are used the same term can come from several datasets : merge them
         let displayedItems = hasGroups?mergeDatasourceResults(items):items;
 
+        // attributes set by jQuery and not concatenated : an apostrophe in a value would cut the attribute
+        let buildOption = (item: RdfTermDatasourceItem) => {
+          // select item label : either displayed label, or itemLabel if provided
+          let itemLabel = item.itemLabel?item.itemLabel:item.label;
+          return $("<option></option>")
+            .val(JSON.stringify(item.term))
+            .attr("data-itemLabel", itemLabel)
+            .html(item.label);
+        };
+
         if(!hasGroups) {
           // no groups were defined at all
           displayedItems.forEach(item => {
-            // select item label : either displayed label, or itemLabel if provided
-            let itemLabel = item.itemLabel?item.itemLabel:item.label;
-            this.selectHtml.append(
-              $("<option value='" + JSON.stringify(item.term) + "' data-itemLabel='"+itemLabel+"'>" + item.label + "</option>")
-            );
+            this.selectHtml.append(buildOption(item));
           });
         } else {
           // we found some groups, organise the list content with optgroup
@@ -134,15 +140,11 @@ export class ListWidget extends AbstractWidget {
           const groupsAfterMerge = [...new Set(displayedItems.map(item => item.group))];
 
           groupsAfterMerge.forEach(group => {
-            let html = "<optgroup label=\""+group+"\">";
+            let optgroup = $("<optgroup></optgroup>").attr("label", group);
             displayedItems.filter(item => (item.group == group)).forEach(item => {
-              // select item label : either displayed label, or itemLabel if provided
-              let itemLabel = item.itemLabel?item.itemLabel:item.label;
-              
-              html += "<option value='" + JSON.stringify(item.term) + "' data-itemLabel='"+itemLabel+"'>" + item.label + "</option>";
+              optgroup.append(buildOption(item));
             });
-            html += "</optgroup>"
-            this.selectHtml.append($(html));
+            this.selectHtml.append(optgroup);
           })
         }
 
@@ -192,17 +194,18 @@ export class ListWidget extends AbstractWidget {
       }  
 
       // switch off spinner
-      this.toggleSpinner('')
+      this.toggleSpinner('', false)
     }
 
     // TODO : this is not working for now
     let errorCallback = (payload:any) => {
       if (loadId !== this.loadCounter) return;
       this.html.append(errorHtml);
+      this.toggleSpinner('', false);
     }
 
     // toggle spinner before loading
-    this.toggleSpinner(I18n.labels.AutocompleteSpinner_Searching);
+    this.toggleSpinner(I18n.labels.AutocompleteSpinner_Searching, true);
 
     // if there are some provided values like in sh:in...
     if(this.configuration.values?.length > 0) {

@@ -108,6 +108,10 @@ export class SparqlListDataProvider extends BaseSparqlListDataProvider implement
     // How to get the graph pattern of the query being edited, from the WidgetFactory.
     queryPatternProvider?:() => QueryPattern;
 
+    // last successful load : reused when the same query is asked again, e.g. "+" on the same line
+    lastSparql?: string;
+    lastItems?: RdfTermDatasourceItem[];
+
     constructor(
         sparqlHandler:SparqlHandlerIfc,
         queryBuilder: ListSparqlQueryBuilderIfc,
@@ -143,10 +147,21 @@ export class SparqlListDataProvider extends BaseSparqlListDataProvider implement
         // TEMPORARY : the list query, only when a pattern was actually injected
         if (queryPattern?.pattern) console.log("sujet : " + queryPattern.subjectVariable + "\n" + sparql);
 
-        // 2. execute it
+        // same query as the last load : no request, answered asynchronously like the network would
+        if (this.lastItems && sparql === this.lastSparql) {
+            const items = this.lastItems;
+            setTimeout(() => callback(items));
+            return;
+        }
+
+        // 2. execute it, keeping only a successful answer
         super.doExecuteWithCallback(
             sparql,
-            callback,
+            (items:RdfTermDatasourceItem[]) => {
+                this.lastSparql = sparql;
+                this.lastItems = items;
+                callback(items);
+            },
             errorCallback
         );
   }

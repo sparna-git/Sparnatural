@@ -256,10 +256,11 @@ export abstract class AbstractWidget extends HTMLComponent {
     });
   }
 
-  // toggle spinner component when loading a datasource
-  toggleSpinner(message?: string) {
+  // toggle spinner component when loading a datasource. show forces the state : a toggle gets out of
+  // step when a load is replaced by a newer one before its answer
+  toggleSpinner(message?: string, show?: boolean) {
     const elements = this.spinner.html[0].getElementsByClassName("load");
-    if (elements.length > 0) elements[0].classList.toggle("show");
+    if (elements.length > 0) elements[0].classList.toggle("show", show);
     if (message != null) this.spinner.renderMessage(message);
     // next frame : the widget may not be in the page yet
     requestAnimationFrame(() => this.#fitSpinner());
