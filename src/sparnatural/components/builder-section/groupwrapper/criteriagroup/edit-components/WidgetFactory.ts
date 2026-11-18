@@ -243,7 +243,9 @@ export class WidgetFactory {
               ...{
                 dataProvider: listDataProvider,
                 values:this.specProvider.getProperty(objectPropVal.type).getValues(),
-              },          
+                // lets the widget know if the other lines changed since its last load
+                queryPatternProvider: this.queryPatternProvider,
+              },
               ...this.settings.customization?.list
             };
     

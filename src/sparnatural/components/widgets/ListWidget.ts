@@ -10,6 +10,7 @@ import { HTMLComponent } from "../HtmlComponent";
 import { ListDataProviderIfc, RdfTermDatasourceItem, ValuesListDataProviderIfc } from "../datasources/DataProviders";
 import { NoOpListDataProvider } from "../datasources/NoOpDataProviders";
 import { mergeDatasourceResults } from "../datasources/SparqlDataProviders";
+import { QueryPattern } from "../datasources/SparqlBuilders";
 import { RDFTerm, RdfTermCriteria, LabelledCriteria } from "../../SparnaturalQueryIfc";
 import { ItemTemplate } from "./ItemTemplate";
 import { keepLinksClickable, uriLinkHtml } from "./ItemLink";
@@ -18,7 +19,9 @@ const factory = new DataFactory();
 
 export interface ListConfiguration {
   dataProvider: ListDataProviderIfc | ValuesListDataProviderIfc,
-  values?: Term[]
+  values?: Term[],
+  // the other lines of the query, the same pattern the datasource puts in its query
+  queryPatternProvider?: () => QueryPattern
 }
 
 export class ListWidget extends AbstractWidget {
@@ -36,6 +39,10 @@ export class ListWidget extends AbstractWidget {
 
   // incremented on every load, so that a late answer from a previous one is dropped
   private loadCounter = 0;
+
+  // values of the last load, with the other lines of the query they were loaded for
+  private lastItems?: RdfTermDatasourceItem[];
+  private lastContext?: string;
 
   constructor(
     parentComponent: HTMLComponent,
@@ -207,11 +214,28 @@ export class ListWidget extends AbstractWidget {
     // toggle spinner before loading
     this.toggleSpinner(I18n.labels.AutocompleteSpinner_Searching, true);
 
+    // other lines unchanged since the last load (e.g. "+" on this line) : its values are still right
+    const context = this.#queryContext();
+    if (this.lastItems && context === this.lastContext) {
+      const items = this.lastItems;
+      setTimeout(() => callback(items));
+      return;
+    }
+
+    // keeps the answer of the current load only, with the context it was loaded for
+    let loadCallback = (items:RdfTermDatasourceItem[]) => {
+      if (loadId === this.loadCounter) {
+        this.lastItems = items;
+        this.lastContext = context;
+      }
+      callback(items);
+    }
+
     // if there are some provided values like in sh:in...
     if(this.configuration.values?.length > 0) {
       (this.configuration.dataProvider as ValuesListDataProviderIfc).getListContent(
         this.configuration.values,
-        callback,
+        loadCallback,
         errorCallback
       );
     } else {
@@ -219,10 +243,16 @@ export class ListWidget extends AbstractWidget {
         this.startClassVal.type,
         this.objectPropVal.type,
         this.endClassVal.type,
-        callback,
+        loadCallback,
         errorCallback
       );
     }
+  }
+
+  // the other lines of the query as text, empty when faceted browsing is off
+  #queryContext(): string {
+    const pattern = this.configuration.queryPatternProvider?.();
+    return pattern ? pattern.subjectVariable + "\n" + pattern.pattern : "";
   }
 
   // the template when there is one, otherwise the plain label plus the URI link

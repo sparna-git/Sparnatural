@@ -1,6 +1,21 @@
 import { Term } from "@rdfjs/types/data-model";
-import { ListDataProviderIfc, RdfTermDatasourceItem, AutocompleteDataProviderIfc, TreeDataProviderIfc, RdfTermTreeDatasourceItem, ValuesListDataProviderIfc, SinglePredicateDataProviderIfc } from "./DataProviders";
-import { AutocompleteSparqlQueryBuilderIfc, ListSparqlQueryBuilderIfc, SinglePredicateSparqlQueryBuilderIfc, TreeSparqlQueryBuilderIfc, ValuesListSparqlQueryBuilderIfc, QueryPattern } from "./SparqlBuilders";
+import {
+  ListDataProviderIfc,
+  RdfTermDatasourceItem,
+  AutocompleteDataProviderIfc,
+  TreeDataProviderIfc,
+  RdfTermTreeDatasourceItem,
+  ValuesListDataProviderIfc,
+  SinglePredicateDataProviderIfc,
+} from "./DataProviders";
+import {
+  AutocompleteSparqlQueryBuilderIfc,
+  ListSparqlQueryBuilderIfc,
+  SinglePredicateSparqlQueryBuilderIfc,
+  TreeSparqlQueryBuilderIfc,
+  ValuesListSparqlQueryBuilderIfc,
+  QueryPattern,
+} from "./SparqlBuilders";
 export { QueryPattern };
 import { sameTerm } from "../../SparnaturalQueryIfc";
 import { SparqlHandlerIfc } from "rdf-shacl-commons";
@@ -9,260 +24,257 @@ import { SparqlHandlerIfc } from "rdf-shacl-commons";
  * An endpoint answering an error can still return a parseable payload, without any
  * result set. Report it through the errorCallback rather than failing on data.results.
  */
-function hasResultSet(data:any, errorCallback?:(payload:any) => void):boolean {
-    if(data?.results?.bindings) return true;
-    if(errorCallback) errorCallback(data);
-    return false;
+function hasResultSet(
+  data: any,
+  errorCallback?: (payload: any) => void,
+): boolean {
+  if (data?.results?.bindings) return true;
+  if (errorCallback) errorCallback(data);
+  return false;
 }
 
 export abstract class BaseSparqlListDataProvider {
-    
-    sparqlHandler:SparqlHandlerIfc;
-    lang: string;
-    defaultLang: string;
-    typePredicate: string;
+  sparqlHandler: SparqlHandlerIfc;
+  lang: string;
+  defaultLang: string;
+  typePredicate: string;
 
-    constructor(
-        sparqlHandler:SparqlHandlerIfc
-    ) {
-        this.sparqlHandler = sparqlHandler;        
-    }
+  constructor(sparqlHandler: SparqlHandlerIfc) {
+    this.sparqlHandler = sparqlHandler;
+  }
 
-    init(lang: string, defaultLang: string, typePredicate: string): void {
-        this.lang = lang;
-        this.defaultLang = defaultLang;
-        this.typePredicate = typePredicate;
-    }
+  init(lang: string, defaultLang: string, typePredicate: string): void {
+    this.lang = lang;
+    this.defaultLang = defaultLang;
+    this.typePredicate = typePredicate;
+  }
 
-    doExecuteWithCallback(
-        sparqlQuery: string,
-        callback:(items:RdfTermDatasourceItem[]) => void,
-        errorCallback?:(payload:any) => void
-    ):void {
+  doExecuteWithCallback(
+    sparqlQuery: string,
+    callback: (items: RdfTermDatasourceItem[]) => void,
+    errorCallback?: (payload: any) => void,
+  ): void {
+    // 2. execute it
+    this.sparqlHandler.executeSparql(
+      sparqlQuery,
+      (data: { results: { bindings: any } }) => {
+        if (!hasResultSet(data, errorCallback)) return;
 
-        // 2. execute it
-        this.sparqlHandler.executeSparql(sparqlQuery,(data:{results:{bindings:any}}) => {
-            if(!hasResultSet(data, errorCallback)) return;
-
-            // 3. parse the results
-            let result = new Array<RdfTermDatasourceItem>;
-            for (let index = 0; index < data.results.bindings.length; index++) {
-                const solution = data.results.bindings[index];
-                // this is to avoid corner-cases with GraphDB queries returning only count=0 in aggregation queries.
-                // we need at least 2 bindings anyway
-                if(Object.keys(solution).length > 1) {
-                    
-                    if(solution.uri) {
-                        // if we find a "uri" column...
-                        // read uri key & label key
-                        result[result.length] = {term:solution.uri, label:solution.label.value, group:solution.group?.value, itemLabel:solution.itemLabel?.value, bindings: solution };
-                    } else if(solution.value) {
-                        // if we find a "value" column...
-                        // read value key & label key
-                        result[result.length] = {term:solution.value, label:solution.label.value, group:solution.group?.value, itemLabel:solution.itemLabel?.value, bindings: solution };
-                    } else {
-                        // try to determine the payload column by taking the column other than label
-                        let columnName = this.getRdfTermColumn(solution);
-                        if(columnName) {
-                            result[result.length] ={term:solution[columnName], label:solution.label.value, group:solution.group?.value, itemLabel:solution.itemLabel?.value, bindings: solution };
-                        } else {
-                            throw Error("Could not determine which column to read from the result set")
-                        }
-                    }
-                }
+        // 3. parse the results
+        let result = new Array<RdfTermDatasourceItem>();
+        for (let index = 0; index < data.results.bindings.length; index++) {
+          const solution = data.results.bindings[index];
+          // this is to avoid corner-cases with GraphDB queries returning only count=0 in aggregation queries.
+          // we need at least 2 bindings anyway
+          if (Object.keys(solution).length > 1) {
+            if (solution.uri) {
+              // if we find a "uri" column...
+              // read uri key & label key
+              result[result.length] = {
+                term: solution.uri,
+                label: solution.label.value,
+                group: solution.group?.value,
+                itemLabel: solution.itemLabel?.value,
+                bindings: solution,
+              };
+            } else if (solution.value) {
+              // if we find a "value" column...
+              // read value key & label key
+              result[result.length] = {
+                term: solution.value,
+                label: solution.label.value,
+                group: solution.group?.value,
+                itemLabel: solution.itemLabel?.value,
+                bindings: solution,
+              };
+            } else {
+              // try to determine the payload column by taking the column other than label
+              let columnName = this.getRdfTermColumn(solution);
+              if (columnName) {
+                result[result.length] = {
+                  term: solution[columnName],
+                  label: solution.label.value,
+                  group: solution.group?.value,
+                  itemLabel: solution.itemLabel?.value,
+                  bindings: solution,
+                };
+              } else {
+                throw Error(
+                  "Could not determine which column to read from the result set",
+                );
+              }
             }
+          }
+        }
 
-            // 4. call the callback
-            callback(result);
-        },
-        errorCallback
+        // 4. call the callback
+        callback(result);
+      },
+      errorCallback,
     );
   }
 
   getRdfTermColumn(aBindingSet: any): string | undefined {
     let foundKey: string | undefined = undefined;
     for (const key of Object.keys(aBindingSet)) {
-        if (key != "label") {
-            if (!foundKey) {
-            foundKey = key;
-            } else {
-            // it means there are more than one column, don't know which one to take, break
-            return undefined;
-            }
+      if (key != "label") {
+        if (!foundKey) {
+          foundKey = key;
+        } else {
+          // it means there are more than one column, don't know which one to take, break
+          return undefined;
         }
+      }
     }
     return foundKey;
   }
-
 }
-
 
 /**
  * Implementation of ListDataProviderIfc that executes a SPARQL query against an endpoint,
  * and read the 'uri' and 'label' columns.
  */
-export class SparqlListDataProvider extends BaseSparqlListDataProvider implements ListDataProviderIfc {
+export class SparqlListDataProvider
+  extends BaseSparqlListDataProvider
+  implements ListDataProviderIfc
+{
+  queryBuilder: ListSparqlQueryBuilderIfc;
 
-    queryBuilder:ListSparqlQueryBuilderIfc;
+  // How to get the graph pattern of the query being edited, from the WidgetFactory.
+  queryPatternProvider?: () => QueryPattern;
 
-    // How to get the graph pattern of the query being edited, from the WidgetFactory.
-    queryPatternProvider?:() => QueryPattern;
-
-    // last successful load : reused when the same query is asked again, e.g. "+" on the same line
-    lastSparql?: string;
-    lastItems?: RdfTermDatasourceItem[];
-
-    constructor(
-        sparqlHandler:SparqlHandlerIfc,
-        queryBuilder: ListSparqlQueryBuilderIfc,
-        queryPatternProvider?:() => QueryPattern
-    ) {
-        super(sparqlHandler);
-        this.queryBuilder = queryBuilder;
-        this.queryPatternProvider = queryPatternProvider;
-
-    }
-
-    getListContent(
-        domainType: string,
-        predicate: string,
-        rangeType: string,
-        callback:(items:RdfTermDatasourceItem[]) => void,
-        errorCallback?:(payload:any) => void
-    ):void {
-        // evaluated now, not when the widget was built, so it reflects the current screen
-        const queryPattern = this.queryPatternProvider ? this.queryPatternProvider() : null;
-
-        // 1. create the SPARQL
-        let sparql = this.queryBuilder.buildSparqlQuery(
-            domainType,
-            predicate,
-            rangeType,
-            this.lang,
-            this.defaultLang,
-            this.typePredicate,
-            queryPattern
-        );
-
-        // TEMPORARY : the list query, only when a pattern was actually injected
-        if (queryPattern?.pattern) console.log("sujet : " + queryPattern.subjectVariable + "\n" + sparql);
-
-        // same query as the last load : no request, answered asynchronously like the network would
-        if (this.lastItems && sparql === this.lastSparql) {
-            const items = this.lastItems;
-            setTimeout(() => callback(items));
-            return;
-        }
-
-        // 2. execute it, keeping only a successful answer
-        super.doExecuteWithCallback(
-            sparql,
-            (items:RdfTermDatasourceItem[]) => {
-                this.lastSparql = sparql;
-                this.lastItems = items;
-                callback(items);
-            },
-            errorCallback
-        );
+  constructor(
+    sparqlHandler: SparqlHandlerIfc,
+    queryBuilder: ListSparqlQueryBuilderIfc,
+    queryPatternProvider?: () => QueryPattern,
+  ) {
+    super(sparqlHandler);
+    this.queryBuilder = queryBuilder;
+    this.queryPatternProvider = queryPatternProvider;
   }
 
+  getListContent(
+    domainType: string,
+    predicate: string,
+    rangeType: string,
+    callback: (items: RdfTermDatasourceItem[]) => void,
+    errorCallback?: (payload: any) => void,
+  ): void {
+    // evaluated now, not when the widget was built, so it reflects the current screen
+    const queryPattern = this.queryPatternProvider
+      ? this.queryPatternProvider()
+      : null;
+
+    // 1. create the SPARQL
+    let sparql = this.queryBuilder.buildSparqlQuery(
+      domainType,
+      predicate,
+      rangeType,
+      this.lang,
+      this.defaultLang,
+      this.typePredicate,
+      queryPattern,
+    );
+
+    // TEMPORARY : the list query, only when a pattern was actually injected
+    if (queryPattern?.pattern)
+      console.log("sujet : " + queryPattern.subjectVariable + "\n" + sparql);
+
+    // 2. execute it
+    super.doExecuteWithCallback(sparql, callback, errorCallback);
+  }
 }
 
+export class SparqlValuesListDataProvider
+  extends BaseSparqlListDataProvider
+  implements ValuesListDataProviderIfc
+{
+  queryBuilder: ValuesListSparqlQueryBuilderIfc;
 
-export class SparqlValuesListDataProvider extends BaseSparqlListDataProvider implements ValuesListDataProviderIfc {
-    
-    queryBuilder:ValuesListSparqlQueryBuilderIfc;
-
-    constructor(
-        sparqlHandler:SparqlHandlerIfc,
-        queryBuilder: ValuesListSparqlQueryBuilderIfc
-    ) {
-        super(sparqlHandler);  
-        this.queryBuilder = queryBuilder;      
-    }
-
-
-    getListContent(
-        values:Term[],
-        callback:(items:RdfTermDatasourceItem[]) => void,
-        errorCallback?:(payload:any) => void
-    ):void {
-        // 1. create the SPARQL
-        let sparql = this.queryBuilder.buildSparqlQuery(
-            values,
-            this.lang,
-            this.defaultLang,
-            this.typePredicate
-        );
-
-        // 2. execute it
-        super.doExecuteWithCallback(
-            sparql,
-            callback,
-            errorCallback
-        );
+  constructor(
+    sparqlHandler: SparqlHandlerIfc,
+    queryBuilder: ValuesListSparqlQueryBuilderIfc,
+  ) {
+    super(sparqlHandler);
+    this.queryBuilder = queryBuilder;
   }
 
-}
+  getListContent(
+    values: Term[],
+    callback: (items: RdfTermDatasourceItem[]) => void,
+    errorCallback?: (payload: any) => void,
+  ): void {
+    // 1. create the SPARQL
+    let sparql = this.queryBuilder.buildSparqlQuery(
+      values,
+      this.lang,
+      this.defaultLang,
+      this.typePredicate,
+    );
 
+    // 2. execute it
+    super.doExecuteWithCallback(sparql, callback, errorCallback);
+  }
+}
 
 // Fetches the value of a single predicate (typically the label) for a given
 // URI via SPARQL, reading the 'uri' and 'label' columns.
-export class SparqlSinglePredicateDataProvider implements SinglePredicateDataProviderIfc {
+export class SparqlSinglePredicateDataProvider
+  implements SinglePredicateDataProviderIfc
+{
+  sparqlHandler: SparqlHandlerIfc;
+  queryBuilder: SinglePredicateSparqlQueryBuilderIfc;
+  lang: string;
+  defaultLang: string;
 
-    sparqlHandler:SparqlHandlerIfc;
-    queryBuilder:SinglePredicateSparqlQueryBuilderIfc;
-    lang: string;
-    defaultLang: string;
+  constructor(
+    sparqlHandler: SparqlHandlerIfc,
+    queryBuilder: SinglePredicateSparqlQueryBuilderIfc,
+  ) {
+    this.sparqlHandler = sparqlHandler;
+    this.queryBuilder = queryBuilder;
+  }
 
-    constructor(
-        sparqlHandler:SparqlHandlerIfc,
-        queryBuilder: SinglePredicateSparqlQueryBuilderIfc
-    ) {
-        this.sparqlHandler = sparqlHandler;
-        this.queryBuilder = queryBuilder;
-    }
+  init(lang: string, defaultLang: string): void {
+    this.lang = lang;
+    this.defaultLang = defaultLang;
+  }
 
-    init(lang: string, defaultLang: string): void {
-        this.lang = lang;
-        this.defaultLang = defaultLang;
-    }
+  getSinglePredicate(
+    uri: string,
+    predicate: string,
+    callback: (items: RdfTermDatasourceItem[]) => void,
+    errorCallback?: (payload: any) => void,
+  ): void {
+    let sparql = this.queryBuilder.buildSparqlQuery(
+      uri,
+      predicate,
+      this.lang,
+      this.defaultLang,
+    );
 
-    getSinglePredicate(
-        uri:string,
-        predicate:string,
-        callback:(items:RdfTermDatasourceItem[]) => void,
-        errorCallback?:(payload:any) => void
-    ):void {
-        let sparql = this.queryBuilder.buildSparqlQuery(
-            uri,
-            predicate,
-            this.lang,
-            this.defaultLang
-        );
+    this.sparqlHandler.executeSparql(
+      sparql,
+      (data: { results: { bindings: any } }) => {
+        if (!hasResultSet(data, errorCallback)) return;
 
-        this.sparqlHandler.executeSparql(sparql,(data:{results:{bindings:any}}) => {
-            if(!hasResultSet(data, errorCallback)) return;
-
-            // read the 'uri' and 'label' columns
-            let result = new Array<RdfTermDatasourceItem>;
-            for (let index = 0; index < data.results.bindings.length; index++) {
-                const solution = data.results.bindings[index];
-                if(solution.uri && solution.label) {
-                    result[result.length] = {
-                        term: solution.uri,
-                        label: solution.label.value
-                    };
-                }
-            }
-            callback(result);
-        },
-        errorCallback
-        );
-    }
-
+        // read the 'uri' and 'label' columns
+        let result = new Array<RdfTermDatasourceItem>();
+        for (let index = 0; index < data.results.bindings.length; index++) {
+          const solution = data.results.bindings[index];
+          if (solution.uri && solution.label) {
+            result[result.length] = {
+              term: solution.uri,
+              label: solution.label.value,
+            };
+          }
+        }
+        callback(result);
+      },
+      errorCallback,
+    );
+  }
 }
-
 
 /**
  * Implementation of AutocompleteDataProviderIfc that executes a SPARQL query against an endpoint,
@@ -275,100 +287,121 @@ export class SparqlAutocompleDataProvider
   defaultLang: string;
   typePredicate: string;
 
-    queryBuilder:AutocompleteSparqlQueryBuilderIfc;
-    sparqlHandler:SparqlHandlerIfc;
+  queryBuilder: AutocompleteSparqlQueryBuilderIfc;
+  sparqlHandler: SparqlHandlerIfc;
 
-    // How to get the graph pattern of the query being edited, from the WidgetFactory.
-    queryPatternProvider?:() => QueryPattern;
+  // How to get the graph pattern of the query being edited, from the WidgetFactory.
+  queryPatternProvider?: () => QueryPattern;
 
-    constructor(
-        sparqlHandler: SparqlHandlerIfc,
-        queryBuilder: AutocompleteSparqlQueryBuilderIfc,
-        queryPatternProvider?:() => QueryPattern
-    ) {
-        this.queryBuilder = queryBuilder;
-        this.sparqlHandler = sparqlHandler;
-        this.queryPatternProvider = queryPatternProvider;
-    }
+  constructor(
+    sparqlHandler: SparqlHandlerIfc,
+    queryBuilder: AutocompleteSparqlQueryBuilderIfc,
+    queryPatternProvider?: () => QueryPattern,
+  ) {
+    this.queryBuilder = queryBuilder;
+    this.sparqlHandler = sparqlHandler;
+    this.queryPatternProvider = queryPatternProvider;
+  }
 
-    init(lang: string, defaultLang: string, typePredicate: string): void {
-        this.lang = lang;
-        this.defaultLang = defaultLang;
-        this.typePredicate = typePredicate;
-    }
+  init(lang: string, defaultLang: string, typePredicate: string): void {
+    this.lang = lang;
+    this.defaultLang = defaultLang;
+    this.typePredicate = typePredicate;
+  }
 
   getAutocompleteSuggestions(
-      domain: string,
-      predicate: string,
-      range: string,
-      key: string,
-      callback:(items:RdfTermDatasourceItem[]) => void,
-      errorCallback?:(payload:any) => void
+    domain: string,
+    predicate: string,
+    range: string,
+    key: string,
+    callback: (items: RdfTermDatasourceItem[]) => void,
+    errorCallback?: (payload: any) => void,
   ): void {
+    if (
+      key.startsWith("http") &&
+      SparqlAutocompleDataProvider.isValidUrl(key, ["http", "https"])
+    ) {
+      // valid URI given, return it directly
+      let result = new Array<RdfTermDatasourceItem>();
+      result.push({
+        term: {
+          type: "uri",
+          value: key,
+        },
+        label: key,
+      });
+      callback(result);
+      return;
+    }
 
-      
+    // evaluated on every keystroke, not when the widget was built
+    const queryPattern = this.queryPatternProvider
+      ? this.queryPatternProvider()
+      : null;
 
-      if(key.startsWith("http") && SparqlAutocompleDataProvider.isValidUrl(key, ["http", "https"])) {
-          // valid URI given, return it directly
-          let result = new Array<RdfTermDatasourceItem>;
-          result.push({
-              term:{
-                  type: "uri",
-                  value: key
-              },
-              label:key
-          });
-          callback(result);  
-          return;
-      }
+    // 1. create the SPARQL
+    let sparql = this.queryBuilder.buildSparqlQuery(
+      domain,
+      predicate,
+      range,
+      key,
+      this.lang,
+      this.defaultLang,
+      this.typePredicate,
+      queryPattern,
+    );
 
-      // evaluated on every keystroke, not when the widget was built
-      const queryPattern = this.queryPatternProvider ? this.queryPatternProvider() : null;
+    // TEMPORARY : the autocomplete query, only when a pattern was actually injected
+    if (queryPattern?.pattern)
+      console.log("sujet : " + queryPattern.subjectVariable + "\n" + sparql);
 
-      // 1. create the SPARQL
-      let sparql = this.queryBuilder.buildSparqlQuery(
-          domain,
-          predicate,
-          range,
-          key,
-          this.lang,
-          this.defaultLang,
-          this.typePredicate,
-          queryPattern
-      );
+    // 2. execute it
+    this.sparqlHandler.executeSparql(
+      sparql,
+      (data: { results: { bindings: any } }) => {
+        if (!hasResultSet(data, errorCallback)) return;
 
-      // TEMPORARY : the autocomplete query, only when a pattern was actually injected
-      if (queryPattern?.pattern) console.log("sujet : " + queryPattern.subjectVariable + "\n" + sparql);
+        // 3. parse the results
+        let result = new Array<RdfTermDatasourceItem>();
+        for (let index = 0; index < data.results.bindings.length; index++) {
+          const solution = data.results.bindings[index];
 
-      // 2. execute it
-      this.sparqlHandler.executeSparql(sparql,(data:{results:{bindings:any}}) => {
-          if(!hasResultSet(data, errorCallback)) return;
-
-          // 3. parse the results
-          let result = new Array<RdfTermDatasourceItem>;
-          for (let index = 0; index < data.results.bindings.length; index++) {
-              const solution = data.results.bindings[index];
-              
-              if(solution.uri) {
-                  // read uri key & label key
-                  result[result.length] ={term:solution.uri, label:solution.label.value, group:solution.group?.value, bindings: solution };
-              } else if(solution.value) {
-                  result[result.length] ={term:solution.value, label:solution.label.value, group:solution.group?.value, bindings: solution };
-              } else {
-                  // try to determine the payload column by taking the column other than label
-                  let columnName = this.getRdfTermColumn(solution);
-                  if(columnName) {
-                      result[result.length] ={term:solution[columnName], label:solution.label.value, bindings: solution};
-                  } else {
-                      throw Error("Could not determine which column to read from the result set")
-                  }
-              }
+          if (solution.uri) {
+            // read uri key & label key
+            result[result.length] = {
+              term: solution.uri,
+              label: solution.label.value,
+              group: solution.group?.value,
+              bindings: solution,
+            };
+          } else if (solution.value) {
+            result[result.length] = {
+              term: solution.value,
+              label: solution.label.value,
+              group: solution.group?.value,
+              bindings: solution,
+            };
+          } else {
+            // try to determine the payload column by taking the column other than label
+            let columnName = this.getRdfTermColumn(solution);
+            if (columnName) {
+              result[result.length] = {
+                term: solution[columnName],
+                label: solution.label.value,
+                bindings: solution,
+              };
+            } else {
+              throw Error(
+                "Could not determine which column to read from the result set",
+              );
+            }
           }
+        }
 
-          // 4. call the callback
-          callback(result);
+        // 4. call the callback
+        callback(result);
       },
-      errorCallback
+      errorCallback,
     );
   }
 
@@ -385,151 +418,154 @@ export class SparqlAutocompleDataProvider
         return foundKey;
       }
     }
-  }  
+  }
 
-  static isValidUrl(s:string, protocols:string[]) {
-      try {
-          let url = new URL(s);
-          return protocols
-              ? url.protocol
-                  ? protocols.map(x => `${x.toLowerCase()}:`).includes(url.protocol)
-                  : false
-              : true;
-      } catch (err) {
-          return false;
-      }
-  };
-
+  static isValidUrl(s: string, protocols: string[]) {
+    try {
+      let url = new URL(s);
+      return protocols
+        ? url.protocol
+          ? protocols.map((x) => `${x.toLowerCase()}:`).includes(url.protocol)
+          : false
+        : true;
+    } catch (err) {
+      return false;
+    }
+  }
 }
 
 export class SparqlTreeDataProvider implements TreeDataProviderIfc {
-   
-    lang: string;
-    defaultLang: string;
-    typePredicate: string;
+  lang: string;
+  defaultLang: string;
+  typePredicate: string;
 
-    queryBuilder:TreeSparqlQueryBuilderIfc;
-    sparqlHandler:SparqlHandlerIfc;
+  queryBuilder: TreeSparqlQueryBuilderIfc;
+  sparqlHandler: SparqlHandlerIfc;
 
-    // How to get the graph pattern of the query being edited, from the WidgetFactory.
-    queryPatternProvider?:() => QueryPattern;
+  // How to get the graph pattern of the query being edited, from the WidgetFactory.
+  queryPatternProvider?: () => QueryPattern;
 
-    constructor(
-        sparqlHandler:SparqlHandlerIfc,
-        queryBuilder: TreeSparqlQueryBuilderIfc,
-        queryPatternProvider?:() => QueryPattern
-    ) {
-        this.queryBuilder = queryBuilder;
-        this.sparqlHandler = sparqlHandler;
-        this.queryPatternProvider = queryPatternProvider;
-    }
+  constructor(
+    sparqlHandler: SparqlHandlerIfc,
+    queryBuilder: TreeSparqlQueryBuilderIfc,
+    queryPatternProvider?: () => QueryPattern,
+  ) {
+    this.queryBuilder = queryBuilder;
+    this.sparqlHandler = sparqlHandler;
+    this.queryPatternProvider = queryPatternProvider;
+  }
 
-    init(
-        lang:string,
-        defaultLang:string,
-        typePredicate:string,
-    ):void {
-        this.lang = lang;
-        this.defaultLang = defaultLang;
-        this.typePredicate = typePredicate;
-    }
+  init(lang: string, defaultLang: string, typePredicate: string): void {
+    this.lang = lang;
+    this.defaultLang = defaultLang;
+    this.typePredicate = typePredicate;
+  }
 
-    getRoots(
-        domainType: string,
-        predicate: string,
-        rangeType: string,
-        callback:(items:RdfTermTreeDatasourceItem[]) => void,
-        errorCallback?:(payload:any) => void
-    ):void {
-        // evaluated now, not when the widget was built, so it reflects the current screen
-        const queryPattern = this.queryPatternProvider ? this.queryPatternProvider() : null;
-
-        // 1. create the SPARQL
-        let sparql = this.queryBuilder.buildRootsSparqlQuery(
-            domainType,
-            predicate,
-            rangeType,
-            this.lang,
-            this.defaultLang,
-            this.typePredicate,
-            queryPattern
-        );
-
-        // TEMPORARY : the tree roots query, only when a pattern was actually injected
-        if (queryPattern?.pattern) console.log("sujet : " + queryPattern.subjectVariable + "\n" + sparql);
-
-        // 2. execute it
-        this.sparqlHandler.executeSparql(
-            sparql,
-            this.#getParser(callback, errorCallback),
-            errorCallback
-        );
-    }
-
-  getChildren(
-      node: string,
-      domainType: string,
-      predicate: string,
-      rangeType: string,
-      callback:(items:RdfTermTreeDatasourceItem[]) => void,
-      errorCallback?:(payload:any) => void
-  ):void {
-    // evaluated when the node is opened, not when the widget was built
-    const queryPattern = this.queryPatternProvider ? this.queryPatternProvider() : null;
+  getRoots(
+    domainType: string,
+    predicate: string,
+    rangeType: string,
+    callback: (items: RdfTermTreeDatasourceItem[]) => void,
+    errorCallback?: (payload: any) => void,
+  ): void {
+    // evaluated now, not when the widget was built, so it reflects the current screen
+    const queryPattern = this.queryPatternProvider
+      ? this.queryPatternProvider()
+      : null;
 
     // 1. create the SPARQL
-    let sparql = this.queryBuilder.buildChildrenSparqlQuery(
-        node,
-        domainType,
-        predicate,
-        rangeType,
-        this.lang,
-        this.defaultLang,
-        this.typePredicate,
-        queryPattern
+    let sparql = this.queryBuilder.buildRootsSparqlQuery(
+      domainType,
+      predicate,
+      rangeType,
+      this.lang,
+      this.defaultLang,
+      this.typePredicate,
+      queryPattern,
     );
 
-    // TEMPORARY : the tree children query, only when a pattern was actually injected
-    if (queryPattern?.pattern) console.log("sujet : " + queryPattern.subjectVariable + "\n" + sparql);
+    // TEMPORARY : the tree roots query, only when a pattern was actually injected
+    if (queryPattern?.pattern)
+      console.log("sujet : " + queryPattern.subjectVariable + "\n" + sparql);
 
     // 2. execute it
     this.sparqlHandler.executeSparql(
-        sparql,
-        this.#getParser(callback, errorCallback),
-        errorCallback
+      sparql,
+      this.#getParser(callback, errorCallback),
+      errorCallback,
+    );
+  }
+
+  getChildren(
+    node: string,
+    domainType: string,
+    predicate: string,
+    rangeType: string,
+    callback: (items: RdfTermTreeDatasourceItem[]) => void,
+    errorCallback?: (payload: any) => void,
+  ): void {
+    // evaluated when the node is opened, not when the widget was built
+    const queryPattern = this.queryPatternProvider
+      ? this.queryPatternProvider()
+      : null;
+
+    // 1. create the SPARQL
+    let sparql = this.queryBuilder.buildChildrenSparqlQuery(
+      node,
+      domainType,
+      predicate,
+      rangeType,
+      this.lang,
+      this.defaultLang,
+      this.typePredicate,
+      queryPattern,
     );
 
+    // TEMPORARY : the tree children query, only when a pattern was actually injected
+    if (queryPattern?.pattern)
+      console.log("sujet : " + queryPattern.subjectVariable + "\n" + sparql);
+
+    // 2. execute it
+    this.sparqlHandler.executeSparql(
+      sparql,
+      this.#getParser(callback, errorCallback),
+      errorCallback,
+    );
   }
 
   #getParser(
-      callback:(items:RdfTermTreeDatasourceItem[]) => void,
-      errorCallback?:(payload:any) => void
-  ):(data: any) => void {
-      return (data) => {
-        if(!hasResultSet(data, errorCallback)) return;
+    callback: (items: RdfTermTreeDatasourceItem[]) => void,
+    errorCallback?: (payload: any) => void,
+  ): (data: any) => void {
+    return (data) => {
+      if (!hasResultSet(data, errorCallback)) return;
 
-        // 3. parse the results
-        let result = new Array<RdfTermTreeDatasourceItem>;
-        for (let index = 0; index < data.results.bindings.length; index++) {
-            const solution = data.results.bindings[index];
+      // 3. parse the results
+      let result = new Array<RdfTermTreeDatasourceItem>();
+      for (let index = 0; index < data.results.bindings.length; index++) {
+        const solution = data.results.bindings[index];
 
-            result[result.length] = {
-                term:solution.uri,
-                label:solution.label.value,
-                itemLabel:solution.itemLabel?.value,
-                bindings: solution,
-                // make sure to parse the value as a boolean so that it is not a string
-                // we also test on "1" because Virtuoso returns this as a result instead of a true boolean
-                hasChildren:solution.hasChildren?((solution.hasChildren.value === "true" || solution.hasChildren.value == 1)?true:false):true,
-                disabled:solution.count?solution.count.value == 0:false
-            };
-        }
-
-        // 4. call the callback
-        callback(result);    
+        result[result.length] = {
+          term: solution.uri,
+          label: solution.label.value,
+          itemLabel: solution.itemLabel?.value,
+          bindings: solution,
+          // make sure to parse the value as a boolean so that it is not a string
+          // we also test on "1" because Virtuoso returns this as a result instead of a true boolean
+          hasChildren: solution.hasChildren
+            ? solution.hasChildren.value === "true" ||
+              solution.hasChildren.value == 1
+              ? true
+              : false
+            : true,
+          disabled: solution.count ? solution.count.value == 0 : false,
+        };
       }
-  }
 
+      // 4. call the callback
+      callback(result);
+    };
+  }
 }
 
 /**
@@ -538,28 +574,33 @@ export class SparqlTreeDataProvider implements TreeDataProviderIfc {
  * with a group that is the concatenation of the groups of the merged items.
  * @returns a new list of datasource items in which the items have been merge based on their rdfTerm equality.
  */
-export function mergeDatasourceResults(items:RdfTermDatasourceItem[]):RdfTermDatasourceItem[] {
-    let result:RdfTermDatasourceItem[] = new Array<RdfTermDatasourceItem>();
+export function mergeDatasourceResults(
+  items: RdfTermDatasourceItem[],
+): RdfTermDatasourceItem[] {
+  let result: RdfTermDatasourceItem[] = new Array<RdfTermDatasourceItem>();
 
-    // iterate on each item
-    items.forEach(item => {
-        // if it wasn't already added...
-        if(!result.some(itemInResult => sameTerm(itemInResult.term, item.term))) {
-            // find all items with the same URI
-            let sameTerms = items.filter(i => sameTerm(item.term, i.term));
-            // add the first identical item of this in our result table, with a merged group
-            let newTerm:RdfTermDatasourceItem = {
-                term: sameTerms[0].term,
-                label : sameTerms[0].label,
-                itemLabel: sameTerms[0].itemLabel,
-                group: sameTerms.map(i => i.group).join(" + "),
-                // TODO : merge bindings of all identical terms
-                bindings: sameTerms[0].bindings ? {...sameTerms[0].bindings} : undefined
-            }
-            result.push(newTerm);
-        }
+  // iterate on each item
+  items.forEach((item) => {
+    // if it wasn't already added...
+    if (
+      !result.some((itemInResult) => sameTerm(itemInResult.term, item.term))
+    ) {
+      // find all items with the same URI
+      let sameTerms = items.filter((i) => sameTerm(item.term, i.term));
+      // add the first identical item of this in our result table, with a merged group
+      let newTerm: RdfTermDatasourceItem = {
+        term: sameTerms[0].term,
+        label: sameTerms[0].label,
+        itemLabel: sameTerms[0].itemLabel,
+        group: sameTerms.map((i) => i.group).join(" + "),
+        // TODO : merge bindings of all identical terms
+        bindings: sameTerms[0].bindings
+          ? { ...sameTerms[0].bindings }
+          : undefined,
+      };
+      result.push(newTerm);
+    }
+  });
 
-    });
-
-    return result;
+  return result;
 }
