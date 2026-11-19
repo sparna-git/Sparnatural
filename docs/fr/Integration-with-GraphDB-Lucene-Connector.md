@@ -1,5 +1,8 @@
 _[Accueil](index.html) > Intégration avec le connecteur Lucene de GraphDB_
 
+Cette page a été traduite automatiquement à partir de la [page d'origine en anglais](../Integration-with-GraphDB-Lucene-Connector.md) - le 19/11/2026
+
+
 # Intégration avec le connecteur Lucene de GraphDB
 
 ## Introduction

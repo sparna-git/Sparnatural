@@ -1,5 +1,8 @@
 _[Accueil](index.html) > Utiliser Sparnatural dans React_
 
+Cette page a été traduite automatiquement à partir de la [page d'origine en anglais](../react-integration.md) - le 19/11/2026
+
+
 # Utiliser Sparnatural dans React
 Sparnatural n'est pas publié en tant que composant React séparé, mais il est toujours possible de l'utiliser. Cependant, il y a quelques points importants à prendre en compte :
 - Sparnatural utilise toujours un peu de JQuery, les tests actuels n'ont montré aucun problème mais soyez vigilant.

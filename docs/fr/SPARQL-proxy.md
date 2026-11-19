@@ -1,5 +1,8 @@
 _[Accueil](index.html) > Proxy de point de terminaison SPARQL_
 
+Cette page a été traduite automatiquement à partir de la [page d'origine en anglais](../SPARQL-proxy.md) - le 19/11/2026
+
+
 # Proxy de point de terminaison SPARQL
 
 ## 2 problèmes : https:// et CORS

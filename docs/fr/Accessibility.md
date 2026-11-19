@@ -1,5 +1,8 @@
 _[Accueil](index.html) > Fonctionnalités d'accessibilité_
 
+Cette page a été traduite automatiquement à partir de la [page d'origine en anglais](../Accessibility.md) - le 19/11/2026
+
+
 # Fonctionnalités d'accessibilité
 
 _/!\ Ces améliorations sont disponibles depuis la version 14 de Sparnatural._

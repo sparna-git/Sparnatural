@@ -1,5 +1,8 @@
 _[Accueil](index.html) > Interrogation d'un point d'accès SPARQL protégé par mot de passe_
 
+Cette page a été traduite automatiquement à partir de la [page d'origine en anglais](../Querying-a-password-protected-SPARQL-endpoint.md) - le 19/11/2026
+
+
 # Interrogation d'un point d'accès SPARQL protégé par mot de passe
 
 ## Le problème
