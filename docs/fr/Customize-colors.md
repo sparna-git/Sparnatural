@@ -1,5 +1,8 @@
 _[Accueil](index.html) > Personnaliser les couleurs_
 
+Cette page a été traduite automatiquement à partir de la [page d'origine en anglais](../Customize-colors.md) - le 19/11/2026
+
+
 # Comment personnaliser les couleurs de Sparnatural ?
 
 _/!\ Cette fonctionnalité est disponible depuis la version 8.1 de Sparnatural._

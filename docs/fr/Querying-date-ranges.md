@@ -1,5 +1,8 @@
 _[Accueil](index.html) > Requête de plages de dates_
 
+Cette page a été traduite automatiquement à partir de la [page d'origine en anglais](../Querying-date-ranges.md) - le 19/11/2026
+
+
 # Requête de plages de dates
 
 ## Le problème

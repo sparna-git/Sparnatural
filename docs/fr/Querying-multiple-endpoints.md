@@ -1,5 +1,8 @@
 _[Accueil](index.html) > Interrogation de plusieurs points d'accès_
 
+Cette page a été traduite automatiquement à partir de la [page d'origine en anglais](../Querying-multiple-endpoints.md) - le 19/11/2026
+
+
 # Prise en charge de la requête de plusieurs points d'accès
 
 ## Cas d'utilisation

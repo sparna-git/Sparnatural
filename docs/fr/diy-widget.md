@@ -1,5 +1,8 @@
 _[Accueil](index.html) > Comment créer votre propre widget_
 
+Cette page a été traduite automatiquement à partir de la [page d'origine en anglais](../diy-widget.md) - le 19/11/2026
+
+
 ** /!\ Ceci est obsolète. **
 
 # Comment créer votre propre widget

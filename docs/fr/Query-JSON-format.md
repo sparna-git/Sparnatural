@@ -1,5 +1,8 @@
 _[Accueil](index.html) > Format JSON de la requête_
 
+Cette page a été traduite automatiquement à partir de la [page d'origine en anglais](../Query-JSON-format.md) - le 19/11/2026
+
+
 # Format JSON de la requête Sparnatural
 
 

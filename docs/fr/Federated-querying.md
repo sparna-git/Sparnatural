@@ -1,5 +1,8 @@
 _[Accueil](index.html) > Prise en charge des requêtes fédérées_
 
+Cette page a été traduite automatiquement à partir de la [page d'origine en anglais](../Federated-querying.md) - le 19/11/2026
+
+
 # Prise en charge des requêtes fédérées (mot-clé SERVICE)
 
 ## Le problème
@@ -144,4 +147,68 @@ SELECT DISTINCT ?ProvidedCHO_1 ?ProvidedCHO_1_label WHERE {
   }
 }
 LIMIT 1000
+```
+
+
+## Joining on literal values
+
+Parfois, la clé pour faire la jointure entre le triplestore local et le triplestore distant est une valeur littérale. Voir la discussion originale sur [#605](https://github.com/sparna-git/Sparnatural/issues/605). Dans ce cas, la façon de configurer cela en SHACL est la suivante :
+
+1. Déclarer la propriété qui contient dans le triplestore local la clé pour faire la jointure avec le service SPARQL distant. Comme par exemple _"lcsh id"_.
+
+```turtle
+this:Museum a sh:NodeShape;
+  sh:targetClass dbpedia:Museum;
+  sh:nodeKind sh:IRI;
+  rdfs:label "Museum"@en, "Musée"@fr;
+  sh:property
+    # la propriété exprimant la valeur littérale
+   this:Museum_LCSH_id .
+
+# L'identifiant Library of Congress, un Littéral
+this:Museum_LCSH_id 
+  sh:path dbpedia:fake_lcsh_id;
+  sh:name "LCSH ID"@en, "LCSH ID"@fr;  
+  sh:node this:LCSHIdentifier;
+  dash:searchWidget core:NonSelectableProperty .
+```
+
+2. Déclarer une contrainte `sh:node` sur cette propriété pointant vers l'entité dans la configuration qui "représente" ces valeurs littérales, comme par exemple _"LCSH Identifier"_
+
+
+```turtle
+
+# L'identifiant Library of Congress, un Littéral
+this:Museum_LCSH_id 
+  # pointe vers un Literal NodeShape
+  sh:node this:LCSHIdentifier .
+
+# Un Littéral NodeShape
+this:LCSHIdentifier a sh:NodeShape;
+  # Ceci représente des littéraux
+  sh:nodeKind sh:Literal;
+  rdfs:label "Library of Congress Subject Headings ID"@en, "Library of Congress Subject Headings ID"@fr;
+  # ...
+.
+```
+
+3. Ensuite, attachez une propriété à cette entité littérale, qui représente comment ce même littéral est exprimé dans le service SPARQL distant. Cela peut sembler contre-intuitif, car les littéraux ne peuvent normalement pas avoir de propriétés, mais cette propriété sera une _propriété inverse_ **_de_** l'entité distante **_vers_** le littéral. C'est cette propriété qui sera annotée avec `core:sparqlService`. La propriété utilise également un `sh:node` pour déclarer son entité "range", comme d'habitude.
+
+Comme ceci :
+
+```turtle
+# Un Littéral NodeShape
+this:LCSHIdentifier a sh:NodeShape;
+  # propriété attachée à ce littéral
+  sh:property this:Wikidata_hasLCSHIdentifier ;
+.
+
+# La propriété étant une propriété inverse et faisant le lien avec l'élément Wikidata
+# Remarquez l'utilisation de inversePath
+this:Wikidata_hasLCAuthorityIdentifier sh:path [ sh:inversePath wdt:P244 ] ;
+  sh:name "is LC Authority ID of"@en, "is LC Authority ID of"@fr;
+  sh:nodeKind sh:IRI;
+  sh:node this:MuseumWikidata;
+  #ci utilise un mot-clé SPARQL SERVICE 
+  core:sparqlService <https://www.wikidata.org> .
 ```

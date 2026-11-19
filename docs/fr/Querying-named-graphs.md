@@ -1,5 +1,8 @@
 _[Accueil](index.html) > Interrogation de graphes nommés spécifiques_
 
+Cette page a été traduite automatiquement à partir de la [page d'origine en anglais](../Querying-named-graphs.md) - le 19/11/2026
+
+
 # Interroger des graphes nommés spécifiques
 
 ## Cas d'utilisation

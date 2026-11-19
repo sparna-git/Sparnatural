@@ -1,5 +1,8 @@
 _[Accueil](index.html) > Intégration JavaScript_
 
+Cette page a été traduite automatiquement à partir de la [page d'origine en anglais](../Javascript-integration.md) - le 19/11/2026
+
+
 # Intégration JavaScript et référence des paramètres
 
 ## Constructeur

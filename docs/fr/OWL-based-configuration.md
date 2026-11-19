@@ -1,5 +1,8 @@
 _[Accueil](index.html) > Configuration basée sur OWL_
 
+Cette page a été traduite automatiquement à partir de la [page d'origine en anglais](../OWL-based-configuration.md) - le 19/11/2026
+
+
 # Configuration basée sur OWL
 
 Sparnatural peut être configuré à l'aide d'un fichier OWL édité dans [Protégé](http://protege.stanford.edu) et enregistré en Turtle.

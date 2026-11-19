@@ -1,5 +1,8 @@
 _[Accueil](index.html) > Widgets_
 
+Cette page a été traduite automatiquement à partir de la [page d'origine en anglais](../widgets.md) - le 19/11/2026
+
+
 # Widgets Sparnatural
 
 Il s'agit d'une documentation de référence pour les widgets Sparnatural.
@@ -18,7 +21,7 @@ Il s'agit d'une documentation de référence pour les widgets Sparnatural.
 | <img src="https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/widgets/list-widget-literals.png" width="75%" /> | Affichage des valeurs littérales uniquement (le type EDM est une valeur littérale) |
 | <img src="https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/widgets/list-widget-mix-literal-URIs.png" width="75%" /> | Affichage d'un mélange de valeurs littérales et d'URIs |
 | <img src="https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/widgets/list-widget-literals.png" width="75%" /> | Liste des valeurs d'URI avec un libellé listé par ordre alphabétique |
-| TODO | Listing des valeurs en utilisant optgroup |
+| <img src="https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/widgets/list-widget-optgroups.png" width="75%" /> | Liste des valeurs en utilisant optgroup |
 
 
 ### Description
@@ -28,17 +31,21 @@ Le widget de liste est implémenté en utilisant le [composant select2 JQuery](h
 
 Les widgets de liste peuvent fonctionner à la fois avec des URIs + des libellés, ou avec des valeurs littérales. Ils peuvent même mélanger des URIs et des littéraux dans la même liste.
 
-L'ordre de tri des éléments dans la liste, ainsi que leurs libellés précis, dépend de la requête SPARQL sous-jacente qui peuple la liste. Sparnatural fournit des [sources de données par défaut](http://docs.sparnatural.eu/OWL-based-configuration-datasources.html#preconfigured-datasources-for-a-listproperty) qui peuvent être ordonnées alphabétiquement, alphabétiquement en montrant le nombre d'occurrences entre parenthèses, ou ordonnées par nombre décroissant d'occurrences.
+L'ordre de tri des éléments dans la liste, ainsi que leurs libellés précis, dépend de la requête SPARQL sous-jacente qui peuple la liste. Sparnatural fournit des [sources de données par défaut](http://docs.sparnatural.eu/datasources-configuration.html#preconfigured-datasources-for-a-listproperty) qui peuvent être ordonnées alphabétiquement, alphabétiquement en montrant le nombre d'occurrences entre parenthèses, ou ordonnées par nombre décroissant d'occurrences.
 
 Les widgets prennent en charge `optgroup` pour regrouper les valeurs en sections. Le regroupement est également fourni par la requête SPARQL, et est utilisé en particulier lors de [l'interrogation de plusieurs points de terminaison](Querying-multiple-endpoints).
 
 ### Configuration
 
-Dans la configuration OWL, déclarez une sous-propriété de [`config-core:ListProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty)
+Dans votre configuration SHACL, ajoutez une annotation dash:searchWidget avec la valeur [`config-core:ListProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty).
+
+### Configuration par défaut
+
+Par défaut, les widgets de liste sont utilisés si les statistiques sont disponibles dans la configuration et si le nombre d'objets distincts pour la propriété est inférieur à 500.
 
 ### Sources de données
 
-La liste des URI ainsi que leurs libellés doit être [configurée à l'aide d'une source de données SPARQL](http://docs.sparnatural.eu/OWL-based-configuration-datasources.html#preconfigured-datasources-for-a-listproperty).
+La liste des URI ainsi que leurs libellés doit être [configurée à l'aide d'une source de données SPARQL](http://docs.sparnatural.eu/datasources-configuration.html#preconfigured-datasources-for-a-listproperty).
 
 La source de données par défaut utilisée est [`datasources:list_URI_or_literal_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_URI_or_literal_count), reposant elle-même sur la requête SPARQL [`datasources:query_list_URI_or_literal_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_URI_or_literal_count)
 
@@ -89,40 +96,53 @@ SELECT DISTINCT ?Museum_1 ?Country_2 WHERE {
 
 |  Exemple  | Description |
 | -------- | ----------- |
-| ![Capture d ecran](https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/widgets/template-list-widget.png) | Widget de liste avec template |
+| ![Capture d'écran du widget de liste avec template](https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/widgets/template-list-widget.png) | Widget de liste avec template montrant un rendu personnalisé des éléments |
 
 
 ### Description
 
-Le widget de liste avec template etend le widget de liste en permettant de personnaliser l affichage.
+Le widget de liste avec template étend le widget de liste en permettant de personnaliser la manière dont chaque élément est affiché dans la liste déroulante. Il utilise le mécanisme de templating de select2 pour rendre les éléments en fonction d'un template personnalisé qui peut accéder à toutes les données de l'ensemble de résultats SPARQL, y compris des liaisons supplémentaires au-delà de l'URI et du libellé.
+
+Ce widget est utile lorsque vous souhaitez afficher des informations riches sur chaque élément directement dans la liste déroulante, comme l'affichage de plusieurs champs (par exemple, prénom, nom, compte, etc.) dans un format personnalisé.
 
 ### Configuration
 
-Dans votre configuration SHACL, ajoutez une annotation dash:searchWidget avec la valeur [config-core:TemplateListProperty](http://data.sparna.fr/ontologies/sparnatural-config-core#TemplateListProperty).
+Dans votre configuration SHACL, ajoutez une annotation `dash:searchWidget` avec la valeur [`config-core:TemplateListProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#TemplateListProperty).
 
-### Definition du Template
+### Définition du template
 
-Le template est defini dans un element HTML avec ID = URI de la propriete + "-template".
+Le template est défini dans un élément HTML sur la page avec un identifiant spécifique. L'identifiant doit être l'URI de la propriété (la PropertyShape) suivi de `-template`.
 
-Exemple:
+Par exemple, si votre propriété a l'URI `https://data.example.fr/def/myModel#P123`, vous définirez le template comme suit :
 
 ```html
+<!-- votre composant Sparnatural -->
+<spar-natural src="..." lang="fr" />
+
+<!-- une div cachée contenant le template -->
 <div style="display:none;" id="https://data.example.fr/def/myModel#P123-template">
    <b>${data.firstName}</b> <u>${data.lastName}</u> (${data.count})
 </div>
 ```
 
-### Variables du Template
+### Variables du template
 
-- data.term - Le terme RDF
-- data.label - Le libelle
-- data.group - Le groupe
-- data.itemLabel - Le libelle pur
-- data.<variable> - Autres bindings SPARQL
+Le template a accès à toutes les données de l'objet `RdfTermDatasourceItem`, y compris :
 
-### Exemple de Requete SPARQL
+- `data.term` - Le terme RDF (URI ou littéral)
+- `data.label` - Le libellé d'affichage
+- `data.group` - Le groupe optionnel pour optgroup
+- `data.itemLabel` - Le libellé pur sans information supplémentaire
+- `data.<nomVariable>` - Toutes les liaisons supplémentaires de la requête SPARQL (par exemple, `data.count`, `data.firstName`, etc.)
+
+### Exemple de requête SPARQL
+
+Pour utiliser efficacement le widget de liste avec template, votre requête SPARQL doit retourner des colonnes supplémentaires au-delà des colonnes standard `uri` et `label`. Par exemple :
 
 ```sparql
+PREFIX ex: <https://data.example.fr/def/myModel#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
 SELECT ?uri ?label ?firstName ?lastName ?count WHERE {
   ?uri a ex:Person .
   ?uri rdfs:label ?label .
@@ -130,11 +150,22 @@ SELECT ?uri ?label ?firstName ?lastName ?count WHERE {
   ?uri ex:lastName ?lastName .
   ?uri ex:publicationCount ?count .
 }
+ORDER BY ?label
 ```
 
-### Comportement de Secours
+Dans cet exemple, le template peut accéder à `${data.firstName}`, `${data.lastName}`, et `${data.count}` en plus des champs standard.
 
-Si le template n est pas trouve, le widget utilise le comportement standard de ListWidget.
+### Comportement de secours
+
+Si un élément de template avec l'identifiant attendu n'est pas trouvé sur la page, le widget de liste avec template se rabat automatiquement sur le comportement standard du widget de liste, en affichant uniquement le libellé.
+
+### Sources de données
+
+Le widget de liste avec template utilise les mêmes sources de données que le widget de liste. La source de données doit retourner toutes les colonnes auxquelles vous souhaitez accéder dans votre template. Voir [les sources de données du widget de liste](#sources-de-données) pour plus d'informations.
+
+### Génération SPARQL
+
+La logique de génération de requête SPARQL est identique à celle du widget de liste.
 
 ## Widget d'autocomplétion
 
@@ -150,11 +181,15 @@ Le widget d'autocomplétion est implémenté en se basant sur la bibliothèque [
 
 ### Configuration
 
-Dans la configuration OWL, déclarez une sous-propriété de [`config-core:AutocompleteProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#AutocompleteProperty)
+Dans votre configuration SHACL, ajoutez une annotation dash:searchWidget avec la valeur [`config-core:AutocompleteProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#AutocompleteProperty).
+
+### Configuration par défaut
+
+Par défaut, les widgets d'autocomplétion sont utilisés si aucun des autres widgets n'a correspondu.
 
 ### Sources de données
 
-La liste des propositions affichées à l'utilisateur doit être [configurée à l'aide d'une source de données SPARQL](http://docs.sparnatural.eu/OWL-based-configuration-datasources.html#preconfigured-datasources-for-an-autocompleteproperty).
+La liste des propositions affichées à l'utilisateur doit être [configurée à l'aide d'une source de données SPARQL](http://docs.sparnatural.eu/datasources-configuration.html#preconfigured-datasources-for-an-autocompleteproperty).
 La source de données par défaut utilisée est [`datasources:search_URI_contains`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_URI_contains), elle-même reposant sur la requête SPARQL [`datasources:query_search_URI_contains`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_URI_contains). Si la plage est un littéral, la source de données par défaut est [`datasources:search_literal_contains`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_literal_contains), elle-même reposant sur la requête SPARQL [`datasources:query_search_literal_contains`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_literal_contains)
 
 ### Clause SPARQL
@@ -177,7 +212,11 @@ Le widget arborescent est implémenté en utilisant la [bibliothèque JS tree](h
 
 ### Configuration
 
-Dans la configuration OWL, déclarez une sous-propriété de [`config-core:TreeProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#TreeProperty)
+Dans votre configuration SHACL, ajoutez une annotation dash:searchWidget avec la valeur [`config-core:TreeProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#TreeProperty).
+
+### Configuration par défaut
+
+Le widget arborescent n'a pas de comportement par défaut, il doit être déclaré explicitement dans la configuration.
 
 ### Sources de données
 
@@ -204,7 +243,11 @@ Le widget de recherche permet simplement d'entrer des caractères qui seront rec
 
 ### Configuration
 
-Dans la configuration OWL, déclarez une sous-propriété de [`config-core:SearchProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#SearchProperty), **ou l'une de ses sous-propriétés**, qui influencera la logique de génération SPARQL (voir ci-dessous).
+Dans votre configuration SHACL, ajoutez une annotation dash:searchWidget avec la valeur [`config-core:SearchProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#SearchProperty), **ou l'une de ses sous-propriétés**, qui influencera la logique de génération SPARQL (voir ci-dessous).
+
+### Configuration par défaut
+
+Le widget de recherche de chaîne de caractères est utilisé par défaut si le sh:nodeKind est sh:Literal et s'il n'y a soit aucune statistique disponible, soit un nombre de valeurs distinctes supérieur à 500.
 
 ### Datasources
 
@@ -254,8 +297,12 @@ Le widget de plage de dates est implémenté en utilisant [@chenfengyuan/datepic
 
 ### Configuration
 
-Dans la configuration OWL, déclarez une sous-propriété de [`config-core:TimeProperty-Date`](http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty-Date).
-De plus, si les entités dans le graphe de connaissances sont associées à une plage de dates et éventuellement une date exacte, et que vous souhaitez tester si la plage de dates recherchée chevauche la plage de dates des entités, vous pourriez utiliser les propriétés [`config-core:beginDateProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#beginDateProperty), [`config-core:endDateProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#endDateProperty) et éventuellement [`config-core:exactDateProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#exactDateProperty) pour indiquer respectivement les URI utilisés pour exprimer la date de début, la date de fin et la date exacte sur les entités. Plus de détails peuvent être trouvés dans la [documentation détaillée de la fonction de requête de plage de dates](http://docs.sparnatural.eu/Querying-date-ranges.html).
+Dans votre configuration SHACL, ajoutez une annotation dash:searchWidget avec la valeur [`config-core:TimeProperty-Date`](http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty-Date).
+De plus, si les entités dans le graphe de connaissances sont associées à une plage de dates et éventuellement une date exacte, et que vous souhaitez tester si la plage de dates recherchée chevauche la plage de dates des entités, vous pouvez utiliser les annotations [`config-core:beginDateProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#beginDateProperty), [`config-core:endDateProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#endDateProperty) et éventuellement [`config-core:exactDateProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#exactDateProperty) pour indiquer respectivement les URI utilisés pour exprimer la date de début, la date de fin et la date exacte sur les entités. Plus de détails peuvent être trouvés dans la [documentation détaillée de la fonction de requête de plage de dates](http://docs.sparnatural.eu/Querying-date-ranges.html).
+
+### Configuration par défaut
+
+Le widget de plage de dates est utilisé par défaut si le sh:datatype est xsd:date ou xsd:dateTime.
 
 ### Sources de données
 
@@ -277,7 +324,7 @@ Pour des requêtes avancées sur les plages de dates, consultez la [documentatio
 
 ### Apparence
 
-
+<img src="https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/widgets/time-widget-year.png" />
 
 ### Description
 
@@ -286,7 +333,11 @@ Le widget de plage d'années est implémenté en utilisant [@chenfengyuan/datepi
 
 ### Configuration
 
-Dans la configuration OWL, déclarez une sous-propriété de [`config-core:TimeProperty-Year`](http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty-Year).
+Dans votre configuration SHACL, ajoutez une annotation dash:searchWidget avec la valeur [`config-core:TimeProperty-Year`](http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty-Year).
+
+### Configuration par défaut
+
+Le widget de plage d'années est utilisé par défaut si le sh:datatype est xsd:gYear.
 
 ### Sources de données
 
@@ -317,7 +368,11 @@ Peut limiter la plage des champs de saisie en fonction du type de données indiq
 
 ### Configuration
 
-Dans la configuration OWL, déclarez une sous-propriété de [`config-core:NumberProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#NumberProperty).
+Dans votre configuration SHACL, ajoutez une annotation dash:searchWidget avec la valeur [`config-core:NumberProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#NumberProperty).
+
+### Configuration par défaut
+
+Le widget de plage numérique est utilisé par défaut si le sh:datatype est dans cette liste : `xsd:byte`, `xsd:decimal`, `xsd:double`, `xsd:float`, `xsd:int`, `xsd:integer`, `xsd:long`, `xsd:nonNegativeInteger`, `xsd:short`, `xsd:unsignedByte`, `xsd:unsignedInt`, `xsd:unsignedLong`, `xsd:unsignedShort`.
 
 ### Sources de données
 
@@ -359,7 +414,11 @@ Permet de sélectionner une valeur booléenne "true" ou "false".
 
 ### Configuration
 
-Dans la configuration OWL, déclarez une sous-propriété de [`config-core:BooleanProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#BooleanProperty).
+Dans votre configuration SHACL, ajoutez une annotation dash:searchWidget avec la valeur [`config-core:BooleanProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#BooleanProperty).
+
+### Configuration par défaut
+
+Aucune configuration par défaut.
 
 ### Sources de données
 
@@ -407,7 +466,7 @@ Pour plus d'informations sur les littéraux WKT, consultez la [page Wikipedia](h
 
 ### Configuration
 
-Dans la configuration OWL, déclarez une sous-propriété de [`config-core:MapProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#MapProperty).
+Dans votre configuration SHACL, ajoutez une annotation dash:searchWidget avec la valeur [`config-core:MapProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#MapProperty).
 
 ### Sources de données
 
@@ -435,7 +494,7 @@ Désactive complètement la possibilité pour l'utilisateur de sélectionner une
 
 ### Configuration
 
-Dans la configuration OWL, déclarez une sous-propriété de [`config-core:NonSelectableProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#NonSelectableProperty).
+Dans votre configuration SHACL, ajoutez une annotation dash:searchWidget avec la valeur [`config-core:NonSelectableProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#NonSelectableProperty).
 
 ### Sources de données
 

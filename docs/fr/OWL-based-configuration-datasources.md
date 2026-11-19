@@ -1,5 +1,8 @@
 _[Accueil](index.html) > Configuration des sources de données basée sur OWL_
 
+Cette page a été traduite automatiquement à partir de la [page d'origine en anglais](../OWL-based-configuration-datasources.md) - le 19/11/2026
+
+
 # Sources de données
 
 ## Principes de base des sources de données
