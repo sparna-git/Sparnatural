@@ -125,16 +125,18 @@
               prefixes="rdfs:http://www.w3.org/2000/01/rdf-schema#"
             />-->
 
-            <!--<spar-natural
-                    src="configs/nakala/nakala-shacl-filtered.ttl configs/nakala/nakala-statistics.ttl configs/nakala/edm.owl.rdf configs/nakala/ore-terms.rdf configs/nakala/dcterms_2012-06-14.n3 configs/nakala/nakala-labels.ttl""
+            <spar-natural
+                    src="configs/nakala/nakala-shacl-filtered.ttl configs/nakala/nakala-statistics.ttl configs/nakala/edm.owl.rdf configs/nakala/ore-terms.rdf configs/nakala/dcterms_2012-06-14.n3 configs/nakala/nakala-labels.ttl"
                     endpoint="https://nakala.fr/sparql"
                     prefixes="skos:http://www.w3.org/2004/02/skos/core# dct:http://purl.org/dc/terms/"
                     lang="fr"
                     defaultLang="fr"
                     distinct="true"
                     debug="true"
-            ></spar-natural>-->
+                    facetedBrowsing="true"
+            ></spar-natural>
 
+            <!--
             <spar-natural
               src="configs/sparnatural-config-dbpedia-en.ttl"
               endpoint="https://dbpedia.org/sparql"
@@ -145,6 +147,7 @@
               debug="true"
               facetedBrowsing="true"
             ></spar-natural>
+            -->
 
             <!--       
         <spar-natural
@@ -174,8 +177,8 @@
             <div class="col-md-12">
               <span style="font-size: 90%">
                 Les requêtes sont envoyées à
-                <a id="endpoint" href="https://dbpedia.org/sparql"
-                  >https://dbpedia.org/sparql</a
+                <a id="endpoint" href="https://nakala.fr/sparql"
+                  >https://nakala.fr/sparql</a
                 >
               </span>
             </div>

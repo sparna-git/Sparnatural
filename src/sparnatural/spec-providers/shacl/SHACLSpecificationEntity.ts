@@ -136,7 +136,7 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
         }
 
 
-        // 3. complement the initial list with their parents
+        // 3. complement the initial list with their parents - they should be disabled in the tree, but they should be present to make the tree complete
         let disabledList:string[] = new Array<string>();
         // while not all parents of all entities are not part of the list...
         while(!entities.every(entity => {

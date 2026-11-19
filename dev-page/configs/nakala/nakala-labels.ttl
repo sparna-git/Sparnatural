@@ -118,6 +118,8 @@ shape:Place  rdf:type   sh:NodeShape ;
   sh:targetClass ore:ResourceMap ;
   sh:deactivated "true"^^xsd:boolean .
 
+shape:ProvidedCHO_isPartOf sh:deactivated "true"^^xsd:boolean .
+
 shape:Label a sh:NodeShape ;
 sh:targetClass ore:Label ;
 sh:deactivated "true"^^xsd:boolean .

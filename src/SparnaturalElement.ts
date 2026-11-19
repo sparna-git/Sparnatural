@@ -77,9 +77,9 @@ export class SparnaturalElement extends HTMLElement {
     );
   }
 
-  /* NOTE : defaultlang is all lowercase, see https://stackoverflow.com/questions/60566257/web-components-attributechangedcallback-not-firing */
+  /* NOTE : defaultlang and facetedbrowsing are all lowercase, see https://stackoverflow.com/questions/60566257/web-components-attributechangedcallback-not-firing */
   static get observedAttributes() {
-    return ["src", "lang", "defaultlang", "endpoint", "facetedbrowsing"];
+    return ["src", "lang", "defaultlang", "endpoint","facetedbrowsing"];
   }
   attributeChangedCallback(
     name: string,
