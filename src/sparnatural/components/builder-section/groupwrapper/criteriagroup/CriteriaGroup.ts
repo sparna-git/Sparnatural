@@ -50,12 +50,16 @@ class CriteriaGroup extends HTMLComponent {
   render(): this {
     super.render();
     this.#renderChildComponents();
-    this.unselectBtn = new UnselectBtn(this, I18n.labels["RemoveLine.label"], () => {
-      // caught in Parentcomponent
-      this.html[0].dispatchEvent(
-        new CustomEvent("onRemoveGrp", { bubbles: true }),
-      );
-    }).render();
+    this.unselectBtn = new UnselectBtn(
+      this,
+      I18n.labels["RemoveLine.label"],
+      () => {
+        // caught in Parentcomponent
+        this.html[0].dispatchEvent(
+          new CustomEvent("onRemoveGrp", { bubbles: true }),
+        );
+      },
+    ).render();
     return this;
   }
 
@@ -121,8 +125,11 @@ class CriteriaGroup extends HTMLComponent {
           this.html.append(this.unselectBtn.html);
           this.html.append(this.actionsGroup.html);
           // #809 : the widget is built only once the ASK says the line can have a result
-          this.possibleValuesCheck.start(() =>
-            this.endClassGroup.onObjectPropertyGroupSelected(e.detail),
+          this.possibleValuesCheck.start((forcedWidgetType?: string) =>
+            this.endClassGroup.onObjectPropertyGroupSelected(
+              e.detail,
+              forcedWidgetType,
+            ),
           );
         }
 

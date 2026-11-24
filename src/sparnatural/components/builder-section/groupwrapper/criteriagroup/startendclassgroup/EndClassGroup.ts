@@ -19,9 +19,9 @@ class EndClassGroup extends HTMLComponent {
     variable: null,
   };
   // shadow variable for http://data.sparna.fr/ontologies/sparnatural-config-core/index-en.html#defaultLabelProperty
-  defaultLblVar: SelectedVal ={
-    type:null,
-    variable:null
+  defaultLblVar: SelectedVal = {
+    type: null,
+    variable: null,
   };
   inputSelector: ClassTypeId;
   ParentCriteriaGroup: CriteriaGroup;
@@ -31,7 +31,10 @@ class EndClassGroup extends HTMLComponent {
   startClassVal: SelectedVal;
   objectPropVal: SelectedVal;
 
-  constructor(ParentCriteriaGroup: CriteriaGroup, specProvider: ISparnaturalSpecification) {
+  constructor(
+    ParentCriteriaGroup: CriteriaGroup,
+    specProvider: ISparnaturalSpecification,
+  ) {
     super("EndClassGroup", ParentCriteriaGroup, null);
     this.specProvider = specProvider;
     this.ParentCriteriaGroup = this.parentComponent as CriteriaGroup;
@@ -54,14 +57,14 @@ class EndClassGroup extends HTMLComponent {
         e.stopImmediatePropagation();
         this.#createSparqlVar(e.detail);
         this.#valueWasSelected();
-      }
+      },
     );
 
     this.html[0].addEventListener("onSelectViewVar", (e: CustomEvent) => {
-      if(e.detail.selected) {
+      if (e.detail.selected) {
         e.detail.selected
-        ? this.html.addClass("VariableSelected")
-        : this.html.removeClass("VariableSelected");
+          ? this.html.addClass("VariableSelected")
+          : this.html.removeClass("VariableSelected");
       }
     });
   }
@@ -72,25 +75,25 @@ class EndClassGroup extends HTMLComponent {
       new CustomEvent("getSparqlVar", {
         bubbles: true,
         detail: {
-          type : type,
+          type: type,
           callback: (variable: string) => {
             //callback
             this.endClassVal.variable = variable;
-          }
-        }
-      })
+          },
+        },
+      }),
     );
   }
-  
+
   // adding a defaultlblProperty
   // see: https://docs.sparnatural.eu/OWL-based-configuration#classes-configuration-reference
   #syncDefaultLblVar() {
     let type = this.endClassVal.type;
     let name = this.endClassVal.variable;
-    const lbl = this.specProvider.getEntity(type).getDefaultLabelProperty()
-    if(lbl) {
-      this.defaultLblVar.type = lbl
-      this.defaultLblVar.variable = `${name}_label`
+    const lbl = this.specProvider.getEntity(type).getDefaultLabelProperty();
+    if (lbl) {
+      this.defaultLblVar.type = lbl;
+      this.defaultLblVar.variable = `${name}_label`;
     }
   }
 
@@ -102,22 +105,26 @@ class EndClassGroup extends HTMLComponent {
     this.inputSelector = new ClassTypeId(
       this,
       this.specProvider,
-      '',
-      startClassVal
+      "",
+      startClassVal,
     );
     this.inputSelector.render();
   }
 
-  onObjectPropertyGroupSelected(objectPropVal: SelectedVal) {
+  onObjectPropertyGroupSelected(
+    objectPropVal: SelectedVal,
+    forcedWidgetType?: string,
+  ) {
     this.objectPropVal = objectPropVal;
     if (!this.editComponents) {
-      // this is where the widgets will be determined and rendered    
+      // this is where the widgets will be determined and rendered
       this.editComponents = new EditComponents(
         this,
         this.startClassVal,
         objectPropVal,
         this.endClassVal,
-        this.specProvider
+        this.specProvider,
+        forcedWidgetType,
       ).render();
     }
   }
@@ -129,24 +136,26 @@ class EndClassGroup extends HTMLComponent {
       new CustomEvent("EndClassGroupSelected", {
         bubbles: true,
         detail: this.endClassVal,
-      })
+      }),
     );
 
     let entity = this.specProvider.getEntity(this.endClassVal.type);
     var desc = entity.getTooltip();
     if (desc) {
-      $(this.html).find(".ClassTypeId").attr("data-tippy-content", desc.replace(/"/g, '&quot;'));
+      $(this.html)
+        .find(".ClassTypeId")
+        .attr("data-tippy-content", desc.replace(/"/g, "&quot;"));
       var tippySettings = Object.assign({}, TOOLTIP_CONFIG);
       tippySettings.placement = "top-start";
       tippy(".EndClassGroup .ClassTypeId[data-tippy-content]", tippySettings);
     } else {
       $(this.ParentCriteriaGroup.endClassGroup.html).removeAttr(
-        "data-tippy-content"
+        "data-tippy-content",
       );
     }
 
     // if entity is a blank node, deactivate eye selector
-    if(entity.isBlankNodeEntity()) {
+    if (entity.isBlankNodeEntity()) {
       this.inputSelector.getSelectViewVariableBtn().setAlwaysDisabled(true);
     }
   }
@@ -159,13 +168,13 @@ class EndClassGroup extends HTMLComponent {
     return this.endClassVal.variable;
   }
 
-  getDefaultLblVar(){
-    return this.defaultLblVar?.variable
+  getDefaultLblVar() {
+    return this.defaultLblVar?.variable;
   }
 
   setVarName(name: string) {
     this.endClassVal.variable = name;
-    this.#syncDefaultLblVar()
+    this.#syncDefaultLblVar();
   }
 
   getTypeSelected() {
@@ -176,9 +185,8 @@ class EndClassGroup extends HTMLComponent {
    * @returns the widgetComponent inside this EndClassGroup, to examine its characteristics
    * (e.g. determine if single or multiple values)
    */
-  getWidgetComponent():AbstractWidget {
+  getWidgetComponent(): AbstractWidget {
     return this.editComponents.widgetWrapper.widgetComponent;
   }
-
 }
 export default EndClassGroup;

@@ -14,7 +14,7 @@ const MIN_STACKED_WIDGET_WIDTH = 100;
 class EditComponents extends HTMLComponent {
   // the list of widget types for which the "WHERE" option should be available
   // this is an array of string to facilitate test with the widgetType value below
-  static RENDER_WHERE_WIDGET_TYPES : Array<string> = [
+  static RENDER_WHERE_WIDGET_TYPES: Array<string> = [
     Config.LIST_PROPERTY,
     Config.LITERAL_LIST_PROPERTY,
     Config.RDFS_LITERAL,
@@ -29,6 +29,7 @@ class EditComponents extends HTMLComponent {
   actionWhere: ActionWhere;
   widgetWrapper: WidgetWrapper;
   specProvider: ISparnaturalSpecification;
+  forcedWidgetType?: string;
   #widthObserver: ResizeObserver | null = null;
 
   constructor(
@@ -36,13 +37,15 @@ class EditComponents extends HTMLComponent {
     startCassVal: SelectedVal,
     objectPropVal: SelectedVal,
     endClassVal: SelectedVal,
-    specProvider: ISparnaturalSpecification
+    specProvider: ISparnaturalSpecification,
+    forcedWidgetType?: string,
   ) {
     super("EditComponents", parentComponent, null);
     this.startClassVal = startCassVal;
     this.objectPropVal = objectPropVal;
     this.endClassVal = endClassVal;
     this.specProvider = specProvider;
+    this.forcedWidgetType = forcedWidgetType;
   }
   render(): this {
     super.render();
@@ -51,23 +54,23 @@ class EditComponents extends HTMLComponent {
       this.specProvider,
       this.startClassVal,
       this.objectPropVal,
-      this.endClassVal
+      this.endClassVal,
+      this.forcedWidgetType,
     ).render();
 
     let widgetType = this.widgetWrapper.getWidgetType();
     if (
-      EditComponents.RENDER_WHERE_WIDGET_TYPES.indexOf(widgetType) > -1
-      &&
+      EditComponents.RENDER_WHERE_WIDGET_TYPES.indexOf(widgetType) > -1 &&
       // Do not allow WHERE if wehave reached max depth
-      !this.maxDepthIsReached()
-      &&
+      !this.maxDepthIsReached() &&
       // If this owl:Class is not in a rdf:domain of a owl:ObjectProperty don't allow
-      (this.specProvider.getEntity(this.endClassVal.type).getConnectedEntities().length !== 0)
-    ){
+      this.specProvider.getEntity(this.endClassVal.type).getConnectedEntities()
+        .length !== 0
+    ) {
       this.actionWhere = new ActionWhere(
         this,
         this.specProvider,
-        this.#onAddWhere
+        this.#onAddWhere,
       ).render();
     }
     this.#addEventListeners();
@@ -89,11 +92,16 @@ class EditComponents extends HTMLComponent {
   #initKeyboard() {
     const selectAll = this.html.find(".selectAll").first();
     HTMLComponent.setKeyboardButton(selectAll);
-    if (this.#whereButton()) HTMLComponent.setKeyboardButton(this.actionWhere.btn);
-    this.html[0].addEventListener("keydown", (e: KeyboardEvent) => this.#moveWithArrows(e));
+    if (this.#whereButton())
+      HTMLComponent.setKeyboardButton(this.actionWhere.btn);
+    this.html[0].addEventListener("keydown", (e: KeyboardEvent) =>
+      this.#moveWithArrows(e),
+    );
     if (HTMLComponent.focusFollows()) {
       // said before "Tous·tes" : what these choices are for
-      const endLabel = this.specProvider.getEntity(this.endClassVal.type).getLabel();
+      const endLabel = this.specProvider
+        .getEntity(this.endClassVal.type)
+        .getLabel();
       const context = I18n.format("ChooseValue.label", { label: endLabel });
       setTimeout(() => {
         const first = this.#keyboardItems()[0];
@@ -106,7 +114,8 @@ class EditComponents extends HTMLComponent {
           const field = this.#keyboardItems()[0];
           if (!field) return;
           observer.disconnect();
-          if (HTMLComponent.focusFollows()) HTMLComponent.focusWithConfirmation(field, context);
+          if (HTMLComponent.focusFollows())
+            HTMLComponent.focusWithConfirmation(field, context);
         });
         observer.observe(this.html[0], { childList: true, subtree: true });
         setTimeout(() => observer.disconnect(), 3000);
@@ -123,9 +132,13 @@ class EditComponents extends HTMLComponent {
   #keyboardItems(): HTMLElement[] {
     const el = this.html[0];
     const widgetField = el.querySelector<HTMLElement>(
-      ":scope > .WidgetWrapper .select2-selection, :scope > .WidgetWrapper input:not([type=hidden]), :scope > .WidgetWrapper button, :scope > .WidgetWrapper .treeBtnDisplay"
+      ":scope > .WidgetWrapper .select2-selection, :scope > .WidgetWrapper input:not([type=hidden]), :scope > .WidgetWrapper button, :scope > .WidgetWrapper .treeBtnDisplay",
     );
-    return [el.querySelector<HTMLElement>(".selectAll"), widgetField, this.#whereButton()].filter(Boolean);
+    return [
+      el.querySelector<HTMLElement>(".selectAll"),
+      widgetField,
+      this.#whereButton(),
+    ].filter(Boolean);
   }
 
   // the arrows go from item to item, except inside the widget, which uses them itself
@@ -133,11 +146,17 @@ class EditComponents extends HTMLComponent {
     const next = e.key === "ArrowDown" || e.key === "ArrowRight";
     const previous = e.key === "ArrowUp" || e.key === "ArrowLeft";
     const target = e.target as HTMLElement;
-    if ((!next && !previous) || !(target.matches(".selectAll") || target === this.#whereButton())) return;
+    if (
+      (!next && !previous) ||
+      !(target.matches(".selectAll") || target === this.#whereButton())
+    )
+      return;
     e.preventDefault();
     const items = this.#keyboardItems();
     const index = items.indexOf(target);
-    items[next ? Math.min(index + 1, items.length - 1) : Math.max(index - 1, 0)]?.focus();
+    items[
+      next ? Math.min(index + 1, items.length - 1) : Math.max(index - 1, 0)
+    ]?.focus();
   }
 
   destroy() {
@@ -151,9 +170,11 @@ class EditComponents extends HTMLComponent {
     this.#widthObserver = new ResizeObserver(() => this.#fitInsideList());
     const row = this.html[0].closest(".CriteriaGroup");
     if (row) this.#widthObserver.observe(row);
-    this.html[0].querySelectorAll(":scope > .WidgetWrapper > div").forEach((widget) => {
-      this.#widthObserver.observe(widget);
-    });
+    this.html[0]
+      .querySelectorAll(":scope > .WidgetWrapper > div")
+      .forEach((widget) => {
+        this.#widthObserver.observe(widget);
+      });
   }
 
   // The widget starts under the end class : on a narrow list it would go out on the right.
@@ -163,17 +184,26 @@ class EditComponents extends HTMLComponent {
     const list = el.closest(".componentsListe");
     if (!list) return;
     const listRight = list.getBoundingClientRect().right;
-    const widget = el.querySelector<HTMLElement>(":scope > .WidgetWrapper > div");
+    const widget = el.querySelector<HTMLElement>(
+      ":scope > .WidgetWrapper > div",
+    );
     const fits = (selector: string) =>
-      Array.from(el.querySelectorAll(selector))
-        .every((part) => part.getBoundingClientRect().right <= listRight);
+      Array.from(el.querySelectorAll(selector)).every(
+        (part) => part.getBoundingClientRect().right <= listRight,
+      );
     // fields and buttons that do not shrink with the widget overflow it, so they are measured too
-    const WIDGET_LINE = ":scope > .WidgetWrapper > *, :scope > .WidgetWrapper > "
-      + ":is(.timedatepicker-widget, .number-widget, .search-widget, .boolean-widget) > *";
+    const WIDGET_LINE =
+      ":scope > .WidgetWrapper > *, :scope > .WidgetWrapper > " +
+      ":is(.timedatepicker-widget, .number-widget, .search-widget, .boolean-widget) > *";
     const WHERE_LINE = ":scope > .ActionWhere *";
 
     const previousClasses = el.className;
-    el.classList.remove("compactWidget", "stackedWidget", "wrappedWidget", "stackedWhere");
+    el.classList.remove(
+      "compactWidget",
+      "stackedWidget",
+      "wrappedWidget",
+      "stackedWhere",
+    );
     widget?.style.removeProperty("width");
 
     if (!fits(WIDGET_LINE)) {
@@ -185,7 +215,13 @@ class EditComponents extends HTMLComponent {
       if (naturalWidth) {
         const availableWidth = listRight - widget.getBoundingClientRect().left;
         // rounded down : with the zoom, a fraction of a pixel would count as an overflow
-        widget.style.width = Math.floor(Math.max(MIN_STACKED_WIDGET_WIDTH, Math.min(naturalWidth, availableWidth))) + "px";
+        widget.style.width =
+          Math.floor(
+            Math.max(
+              MIN_STACKED_WIDGET_WIDTH,
+              Math.min(naturalWidth, availableWidth),
+            ),
+          ) + "px";
       }
       if (!fits(WIDGET_LINE)) {
         el.classList.add("compactWidget");
@@ -202,7 +238,9 @@ class EditComponents extends HTMLComponent {
 
     // the height of the edit part may change : background and links must follow
     if (el.className !== previousClasses) {
-      el.dispatchEvent(new CustomEvent("redrawBackgroundAndLinks", { bubbles: true }));
+      el.dispatchEvent(
+        new CustomEvent("redrawBackgroundAndLinks", { bubbles: true }),
+      );
     }
   }
 
@@ -213,7 +251,7 @@ class EditComponents extends HTMLComponent {
       (e: CustomEvent) => {
         e.stopImmediatePropagation();
         this.onSelectAll();
-      }
+      },
     );
   }
 
@@ -223,8 +261,8 @@ class EditComponents extends HTMLComponent {
   onSelectAll() {
     this.html[0].dispatchEvent(
       new CustomEvent("selectAll", {
-        bubbles: true
-      })
+        bubbles: true,
+      }),
     );
   }
 
@@ -235,7 +273,7 @@ class EditComponents extends HTMLComponent {
       new CustomEvent("addWhereComponent", {
         bubbles: true,
         detail: this.endClassVal,
-      })
+      }),
     );
   };
 
@@ -247,7 +285,7 @@ class EditComponents extends HTMLComponent {
         detail: (index: number) => {
           if (index >= getSettings().maxDepth) maxreached = true;
         },
-      })
+      }),
     );
     return maxreached;
   }

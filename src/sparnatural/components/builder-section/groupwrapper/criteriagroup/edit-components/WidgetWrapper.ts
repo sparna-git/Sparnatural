@@ -13,12 +13,11 @@ import { WidgetFactory } from "./WidgetFactory";
 import { QueryPatternBuilder } from "../../../../../generators/sparql/QueryPatternBuilder";
 import { QueryPattern } from "../../../../datasources/SparqlDataProviders";
 
-
 /**
  *  creates the corresponding widget
  **/
 class WidgetWrapper extends HTMLComponent {
-  settings: ISettings = getSettings()
+  settings: ISettings = getSettings();
   widgetType?: string;
   widgetComponent: AbstractWidget;
   specProvider: ISparnaturalSpecification;
@@ -32,7 +31,9 @@ class WidgetWrapper extends HTMLComponent {
     specProvider: ISparnaturalSpecification,
     startClassVal: SelectedVal,
     objectPropVal: SelectedVal,
-    endClassVal: SelectedVal
+    endClassVal: SelectedVal,
+    // #816 imposes a widget other than the configured one
+    forcedWidgetType?: string,
   ) {
     super("WidgetWrapper", parentComponent, null);
     this.specProvider = specProvider;
@@ -40,7 +41,11 @@ class WidgetWrapper extends HTMLComponent {
     this.objectPropVal = objectPropVal;
     this.endClassVal = endClassVal;
 
-    this.widgetType = this.specProvider.getProperty(this.objectPropVal.type).getPropertyType(this.endClassVal.type);
+    this.widgetType =
+      forcedWidgetType ??
+      this.specProvider
+        .getProperty(this.objectPropVal.type)
+        .getPropertyType(this.endClassVal.type);
   }
 
   render() {
@@ -71,7 +76,7 @@ class WidgetWrapper extends HTMLComponent {
       .attr("role", "button")
       .on("click", () => {
         this.html[0].dispatchEvent(
-          new CustomEvent("selectAll", { bubbles: true })
+          new CustomEvent("selectAll", { bubbles: true }),
         );
       });
   }
@@ -80,19 +85,19 @@ class WidgetWrapper extends HTMLComponent {
     // if non selectable, simply exit
     if (this.widgetType == Config.NON_SELECTABLE_PROPERTY) {
       this.html[0].dispatchEvent(
-        new CustomEvent("redrawBackgroundAndLinks", { bubbles: true })
+        new CustomEvent("redrawBackgroundAndLinks", { bubbles: true }),
       );
       return this;
     }
 
-    this.widgetComponent = this.#createWidgetComponent(
-      this.widgetType
-    );
+    this.widgetComponent = this.#createWidgetComponent(this.widgetType);
   }
 
   #addWidgetHTML(widgetType?: string) {
     var parenthesisLabel =
-      " (" + this.specProvider.getEntity(this.endClassVal.type).getLabel() + ") ";
+      " (" +
+      this.specProvider.getEntity(this.endClassVal.type).getLabel() +
+      ") ";
     if (this.widgetType == Config.BOOLEAN_PROPERTY) {
       parenthesisLabel = " ";
     }
@@ -114,22 +119,23 @@ class WidgetWrapper extends HTMLComponent {
     let orSpan = `<span class="or">
       ${I18n.labels.Or}
     </span> `;
-    
+
     let endLabel = this.#getEndLabel(this.widgetType);
     let endLabelSpan = `<span class="widgetLabel">
       ${endLabel}
     </span>
     `;
 
-    let htmlString = '';
+    let htmlString = "";
     widgetType == Config.NON_SELECTABLE_PROPERTY
-    ? (htmlString = lineSpan + selectAnySpan)
-
-    // if there is a value, do not propose the "Any" selection option
-    // : (this.widgetComponent.getWidgetValues().length > 0)
-    : ((this.parentComponent.parentComponent.parentComponent as CriteriaGroup).endClassWidgetGroup.getWidgetValues().length > 0)
-      ?(htmlString = lineSpan + endLabelSpan) 
-      :(htmlString = lineSpan + selectAnySpan + orSpan + endLabelSpan);
+      ? (htmlString = lineSpan + selectAnySpan)
+      : // if there is a value, do not propose the "Any" selection option
+      // : (this.widgetComponent.getWidgetValues().length > 0)
+      (
+          this.parentComponent.parentComponent.parentComponent as CriteriaGroup
+        ).endClassWidgetGroup.getWidgetValues().length > 0
+      ? (htmlString = lineSpan + endLabelSpan)
+      : (htmlString = lineSpan + selectAnySpan + orSpan + endLabelSpan);
 
     this.widgetHtml = $(`<span id="selectAllWrapper">${htmlString}</span>`);
 
@@ -161,11 +167,8 @@ class WidgetWrapper extends HTMLComponent {
     }
   }
 
-  #createWidgetComponent(
-    widgetType: string
-  ): AbstractWidget {
-
-    let factory:WidgetFactory = new WidgetFactory(
+  #createWidgetComponent(widgetType: string): AbstractWidget {
+    let factory: WidgetFactory = new WidgetFactory(
       // parent component
       this,
       // spec provider
@@ -177,13 +180,14 @@ class WidgetWrapper extends HTMLComponent {
       // How to get the pattern of the query being edited. A function rather than a
       // string, so that it is evaluated when the datasource query is built and always
       // reflects the current state of the screen.
-      () => this.#getQueryPattern()
+      () => this.#getQueryPattern(),
     );
 
     return factory.buildWidget(
       this.startClassVal,
       this.objectPropVal,
-      this.endClassVal
+      this.endClassVal,
+      widgetType,
     );
   }
 
@@ -203,8 +207,10 @@ class WidgetWrapper extends HTMLComponent {
 
     // Both variables come from this widget, which has always known its own line :
     // startClassVal is its subject, endClassVal its object.
-    const pattern = new QueryPatternBuilder(this.specProvider, this.settings)
-              .build(query, this.startClassVal.variable, this.endClassVal.variable);
+    const pattern = new QueryPatternBuilder(
+      this.specProvider,
+      this.settings,
+    ).build(query, this.startClassVal.variable, this.endClassVal.variable);
     if (!pattern) return null;
 
     return { pattern: pattern, subjectVariable: this.startClassVal.variable };

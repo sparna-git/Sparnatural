@@ -5,16 +5,26 @@ import SparnaturalComponent from "../../../SparnaturalComponent";
 import { SparnaturalJsonGeneratorV13 } from "../../../../generators/json/SparnaturalJson-v13Generator";
 import { AskQueryBuilder } from "../../../../generators/sparql/AskQueryBuilder";
 import { getSettings } from "../../../../settings/defaultSettings";
+import { Config } from "../../../../ontologies/SparnaturalConfig";
+
+import { PredicateObjectPair } from "../../../../SparnaturalQueryIfc-v13";
 
 /**
  * #809 : before a line shows its widget, asks the endpoint if the whole query, this line
  * included, has at least one result. If not, a red light "No results" replaces the widget.
  * Every line waiting for its value is checked again at each query change, whatever its widget.
  */
+
+// #816 : below this number of possible values, an autocomplete becomes a list
+const MAX_LIST_VALUES = 500;
+
+// what the endpoint says about the line. count : only when a COUNT was sent
+type Answer = { hasResult: boolean; count?: number };
+
 export class PossibleValuesCheck {
   // answers by ASK query. Every waiting line asks the same question, the whole query : kept
   // as promises, so that it is sent only once.
-  static #answers = new Map<string, Promise<boolean>>();
+  static #answers = new Map<string, Promise<Answer>>();
 
   #line: CriteriaGroup;
   #state: "checking" | "none" | null = null;
@@ -22,7 +32,7 @@ export class PossibleValuesCheck {
   #lastAsk: string = null;
   #queryListener: () => void = null;
   // builds the widget of the line, given by start()
-  #renderWidget: () => void = null;
+  #renderWidget: (forcedWidgetType?: string) => void = null;
 
   constructor(line: CriteriaGroup) {
     this.#line = line;
@@ -30,7 +40,7 @@ export class PossibleValuesCheck {
 
   // called when the property of the line is selected. Without facetedBrowsing, the widget is
   // built right away, as before
-  start(renderWidget: () => void) {
+  start(renderWidget: (forcedWidgetType?: string) => void) {
     this.#renderWidget = renderWidget;
     if (!getSettings().facetedBrowsing) {
       renderWidget();
@@ -76,7 +86,7 @@ export class PossibleValuesCheck {
     // nothing to check : the widget is shown
     if (!ask) {
       this.#lastAsk = null;
-      this.#apply(true);
+      this.#apply({ hasResult: true });
       return;
     }
     // already asked : its answer is shown or on its way
@@ -84,11 +94,21 @@ export class PossibleValuesCheck {
     this.#lastAsk = ask;
     if (withSpinner) this.#setState("checking");
 
-    this.#ask(ask).then((hasResult) => {
+    this.#ask(ask).then((answer) => {
       // the query changed meanwhile, or the line got its value : the answer is no longer needed
       if (ask === this.#lastAsk && this.#isWaitingForValue())
-        this.#apply(hasResult);
+        this.#apply(answer);
     });
+  }
+
+  // #817 : the number of lines of the query, those under a WHERE included
+  static #countLines(pairs: PredicateObjectPair[] = []): number {
+    let count = 0;
+    for (const pair of pairs) {
+      count +=
+        1 + PossibleValuesCheck.#countLines(pair.object?.predicateObjectPairs);
+    }
+    return count;
   }
 
   // the ASK of the whole query, as it is on screen. Null when this line is not to be checked.
@@ -111,9 +131,18 @@ export class PossibleValuesCheck {
       const jsonQuery = new SparnaturalJsonGeneratorV13(
         sparnatural,
       ).generateQuery(false, 0);
-      const ask = new AskQueryBuilder(line.specProvider, settings).build(
-        jsonQuery,
-      );
+      // #817 : a line alone, nothing else can restrict its values
+      if (
+        PossibleValuesCheck.#countLines(
+          jsonQuery.where?.predicateObjectPairs,
+        ) <= 1
+      )
+        return null;
+
+      const builder = new AskQueryBuilder(line.specProvider, settings);
+      const ask = this.#canBecomeList()
+        ? builder.buildCount(jsonQuery, line.endClassGroup.endClassVal.variable)
+        : builder.build(jsonQuery);
       return line.specProvider.expandSparql(ask, settings.sparqlPrefixes);
     } catch (err) {
       console.warn("[#809] could not build the ASK query", err);
@@ -122,7 +151,7 @@ export class PossibleValuesCheck {
   }
 
   // true when the query has at least one result
-  #ask(ask: string): Promise<boolean> {
+  #ask(ask: string): Promise<Answer> {
     const settings = getSettings();
     // the same query on other endpoints is another question, all of them count
     const key = settings.endpoints.join(" ") + "\n" + ask;
@@ -130,7 +159,7 @@ export class PossibleValuesCheck {
     if (answer) return answer;
 
     if (settings.debug) console.log("[#809] ASK query :\n" + ask);
-    answer = new Promise<boolean>((resolve) => {
+    answer = new Promise<Answer>((resolve) => {
       new SparqlHandlerFactory(
         settings.language,
         settings.localCacheDataTtl,
@@ -142,16 +171,23 @@ export class PossibleValuesCheck {
         .executeSparql(
           ask,
           (data: any) => {
+            // a COUNT answers with one ?count, an ASK with a boolean
+            const count = data?.results?.bindings?.[0]?.count?.value;
+            if (count !== undefined) {
+              if (settings.debug) console.log("[#816] COUNT answer :", count);
+              resolve({ hasResult: Number(count) > 0, count: Number(count) });
+              return;
+            }
             if (settings.debug)
               console.log("[#809] ASK answer :", data?.boolean);
             // only an explicit false means no result
-            resolve(data?.boolean !== false);
+            resolve({ hasResult: data?.boolean !== false });
           },
           (error: any) => {
             // a failing endpoint must never bring a wrong red light, it is asked again next time
             console.warn("[#809] ASK query failed, widget shown anyway", error);
             PossibleValuesCheck.#answers.delete(key);
-            resolve(true);
+            resolve({ hasResult: true });
           },
         );
     });
@@ -159,20 +195,26 @@ export class PossibleValuesCheck {
     return answer;
   }
 
-  #apply(hasResult: boolean) {
+  #apply(answer: Answer) {
     const wasRed = this.#state === "none";
-    if (hasResult) {
+    if (answer.hasResult) {
       const editComponents = this.#line.endClassGroup.editComponents;
       // first green answer : the widget, and its datasource query, only start now
-      if (!editComponents) this.#renderWidget();
-      // back from a red light : its widget was loaded with a query that had no result, load it
-      // again with the current one
+      if (!editComponents) this.#renderWidget(this.#widgetTypeFor(answer));
+      // back from a red light : load it again with the current query
       else if (wasRed) editComponents.render();
     }
 
-    const state = hasResult ? null : "none";
+    const state = answer.hasResult ? null : "none";
     // nothing to redraw when the answer confirms what is shown
     if (state !== this.#state) this.#setState(state);
+  }
+
+  // #816 : few possible values, the autocomplete is shown as a list. Undefined : the configured widget
+  #widgetTypeFor(answer: Answer): string {
+    if (answer.count !== undefined && answer.count < MAX_LIST_VALUES)
+      return Config.LIST_PROPERTY;
+    return undefined;
   }
 
   #setState(state: "checking" | "none" | null) {
@@ -195,5 +237,20 @@ export class PossibleValuesCheck {
         new CustomEvent("generateQuery", { bubbles: true }),
       );
     }
+  }
+
+  // #816 : an autocomplete whose values have a label (LabelRole). Only before its widget
+  // is built, the type does not change afterwards
+  #canBecomeList(): boolean {
+    const line = this.#line;
+    if (line.endClassGroup.editComponents) return false;
+    const endClass = line.endClassGroup.endClassVal.type;
+    const widgetType = line.specProvider
+      .getProperty(line.objectPropertyGroup.objectPropVal.type)
+      .getPropertyType(endClass);
+    return (
+      widgetType === Config.AUTOCOMPLETE_PROPERTY &&
+      !!line.specProvider.getEntity(endClass).getDefaultLabelProperty()
+    );
   }
 }

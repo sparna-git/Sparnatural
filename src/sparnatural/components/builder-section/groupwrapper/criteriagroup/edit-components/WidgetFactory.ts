@@ -3,630 +3,702 @@ import { Datasources } from "../../../../../ontologies/SparnaturalConfigDatasour
 import { HTMLComponent } from "../../../../HtmlComponent";
 import { SelectedVal } from "../../../../SelectedVal";
 import { AbstractWidget } from "../../../../widgets/AbstractWidget";
-import { AutocompleteConfiguration, AutoCompleteWidget } from "../../../../widgets/AutoCompleteWidget";
-import { BooleanConfiguration, BooleanWidget } from "../../../../widgets/BooleanWidget";
-import { ListSparqlTemplateQueryBuilder, AutocompleteSparqlTemplateQueryBuilder, TreeSparqlTemplateQueryBuilder, ValuesListSparqlTemplateQueryBuilder, SinglePredicateSparqlQueryBuilder } from "../../../../datasources/SparqlBuilders";
+import {
+  AutocompleteConfiguration,
+  AutoCompleteWidget,
+} from "../../../../widgets/AutoCompleteWidget";
+import {
+  BooleanConfiguration,
+  BooleanWidget,
+} from "../../../../widgets/BooleanWidget";
+import {
+  ListSparqlTemplateQueryBuilder,
+  AutocompleteSparqlTemplateQueryBuilder,
+  TreeSparqlTemplateQueryBuilder,
+  ValuesListSparqlTemplateQueryBuilder,
+  SinglePredicateSparqlQueryBuilder,
+} from "../../../../datasources/SparqlBuilders";
 import { ListConfiguration, ListWidget } from "../../../../widgets/ListWidget";
 import MapWidget, { MapConfiguration } from "../../../../widgets/MapWidget";
 import { NoWidget } from "../../../../widgets/NoWidget";
-import { NumberConfiguration, NumberWidget } from "../../../../widgets/NumberWidget";
-import { SearchConfiguration, SearchRegexWidget } from "../../../../widgets/SearchRegexWidget";
+import {
+  NumberConfiguration,
+  NumberWidget,
+} from "../../../../widgets/NumberWidget";
+import {
+  SearchConfiguration,
+  SearchRegexWidget,
+} from "../../../../widgets/SearchRegexWidget";
 import { TimeDatePickerWidget } from "../../../../widgets/timedatepickerwidget/TimeDatePickerWidget";
-import { TreeConfiguration, TreeWidget } from "../../../../widgets/treewidget/TreeWidget";
-import { ListDataProviderIfc, SortListDataProvider, AutocompleteDataProviderIfc, TreeDataProviderIfc, SortTreeDataProvider, ValuesListDataProviderIfc, SortValuesListDataProvider } from "../../../../datasources/DataProviders";
-import { NoOpListDataProvider, NoOpAutocompleteProvider, NoOpTreeDataProvider } from "../../../../datasources/NoOpDataProviders";
-import { SparqlListDataProvider, SparqlAutocompleDataProvider, SparqlTreeDataProvider, SparqlValuesListDataProvider, SparqlSinglePredicateDataProvider, QueryPattern } from "../../../../datasources/SparqlDataProviders";
+import {
+  TreeConfiguration,
+  TreeWidget,
+} from "../../../../widgets/treewidget/TreeWidget";
+import {
+  ListDataProviderIfc,
+  SortListDataProvider,
+  AutocompleteDataProviderIfc,
+  TreeDataProviderIfc,
+  SortTreeDataProvider,
+  ValuesListDataProviderIfc,
+  SortValuesListDataProvider,
+} from "../../../../datasources/DataProviders";
+import {
+  NoOpListDataProvider,
+  NoOpAutocompleteProvider,
+  NoOpTreeDataProvider,
+} from "../../../../datasources/NoOpDataProviders";
+import {
+  SparqlListDataProvider,
+  SparqlAutocompleDataProvider,
+  SparqlTreeDataProvider,
+  SparqlValuesListDataProvider,
+  SparqlSinglePredicateDataProvider,
+  QueryPattern,
+} from "../../../../datasources/SparqlDataProviders";
 import ISpecificationProperty from "../../../../../spec-providers/ISpecificationProperty";
 import { IDatasource } from "../../../../../spec-providers/IDatasource";
-import { Catalog, RDFS, SKOS, SparqlHandlerFactory, SparqlHandlerIfc } from "rdf-shacl-commons";
+import {
+  Catalog,
+  RDFS,
+  SKOS,
+  SparqlHandlerFactory,
+  SparqlHandlerIfc,
+} from "rdf-shacl-commons";
 
 /**
  * Inversion of coupling : we don't want to depend on ISettings as this class is meant to be reused
  * elsewhere than in Sparnatural, hence we define our own interface of what we depend on.
  */
 export class WidgetFactorySettings {
+  language: string;
+  defaultLanguage: string;
+  typePredicate: string;
+  maxOr?: number;
 
-    language: string;
-    defaultLanguage: string;
-    typePredicate: string;
-    maxOr?: number;
-    
-    sparqlPrefixes?: { [key: string]: string };
-    endpoints?: string[];
-    catalog?: string;
-    localCacheDataTtl?: number;
-    
-    customization? : {
-      autocomplete?: Partial<AutocompleteConfiguration>,
-      list?: Partial<ListConfiguration>,
-      tree?: Partial<TreeConfiguration>,
-      number?: Partial<NumberConfiguration>,
-      map?: Partial<MapConfiguration>,
-      headers?: Map<string,string>,
-      sparqlHandler?: SparqlHandlerIfc
-    }
+  sparqlPrefixes?: { [key: string]: string };
+  endpoints?: string[];
+  catalog?: string;
+  localCacheDataTtl?: number;
+
+  customization?: {
+    autocomplete?: Partial<AutocompleteConfiguration>;
+    list?: Partial<ListConfiguration>;
+    tree?: Partial<TreeConfiguration>;
+    number?: Partial<NumberConfiguration>;
+    map?: Partial<MapConfiguration>;
+    headers?: Map<string, string>;
+    sparqlHandler?: SparqlHandlerIfc;
+  };
 }
 
-
-
 export class WidgetFactory {
+  parentComponent: HTMLComponent;
+  specProvider: any;
+  settings: WidgetFactorySettings;
+  catalog?: Catalog;
 
-    parentComponent:HTMLComponent;
-    specProvider: any;
-    settings: WidgetFactorySettings;
-    catalog?:Catalog;
+  // How to get the graph pattern of the query being edited. Never called here, only
+  // forwarded to the data providers, which evaluate it when they build their query.
+  queryPatternProvider?: () => QueryPattern;
 
-    // How to get the graph pattern of the query being edited. Never called here, only
-    // forwarded to the data providers, which evaluate it when they build their query.
-    queryPatternProvider?:() => QueryPattern;
+  private sparqlHandlerFactory: SparqlHandlerFactory;
+  private sparqlPostProcessor: {
+    semanticPostProcess: (sparql: string) => string;
+  };
 
-    private sparqlHandlerFactory:SparqlHandlerFactory;
-    private sparqlPostProcessor:{ semanticPostProcess: (sparql:string)=>string };
+  constructor(
+    parentComponent: HTMLComponent,
+    specProvider: any,
+    settings: WidgetFactorySettings,
+    catalog: Catalog,
+    // how to get the graph pattern of the query being edited, and its subject variable
+    queryPatternProvider?: () => QueryPattern,
+  ) {
+    this.parentComponent = parentComponent;
+    this.specProvider = specProvider;
+    this.settings = settings;
+    this.catalog = catalog;
+    this.queryPatternProvider = queryPatternProvider;
 
-    constructor(
-        parentComponent:HTMLComponent,
-        specProvider: any,
-        settings: WidgetFactorySettings,
-        catalog:Catalog,
-        // how to get the graph pattern of the query being edited, and its subject variable
-        queryPatternProvider?:() => QueryPattern,
-    ) {
-        this.parentComponent = parentComponent;
-        this.specProvider = specProvider;
-        this.settings = settings;
-        this.catalog = catalog;
-        this.queryPatternProvider = queryPatternProvider;
+    // how to handle / execute a SPARQL query
+    this.sparqlHandlerFactory = new SparqlHandlerFactory(
+      this.settings.language,
+      this.settings.localCacheDataTtl,
+      this.settings.customization.headers,
+      this.settings.customization.sparqlHandler,
+      this.catalog,
+    );
 
-        // how to handle / execute a SPARQL query
-        this.sparqlHandlerFactory = new SparqlHandlerFactory(            
-            this.settings.language,
-            this.settings.localCacheDataTtl,
-            this.settings.customization.headers,
-            this.settings.customization.sparqlHandler,
-            this.catalog
+    // how to post-process the generated SPARQL after it is constructed and before it is send
+    this.sparqlPostProcessor = {
+      semanticPostProcess: (sparql: any) => {
+        // also add prefixes
+        for (let key in this.settings.sparqlPrefixes) {
+          sparql = sparql.replace(
+            "SELECT ",
+            "PREFIX " +
+              key +
+              ": <" +
+              this.settings.sparqlPrefixes[key] +
+              "> \nSELECT ",
+          );
+        }
+        return this.specProvider.expandSparql(
+          sparql,
+          this.settings.sparqlPrefixes,
         );
+      },
+    };
+  }
 
-        // how to post-process the generated SPARQL after it is constructed and before it is send
-        this.sparqlPostProcessor = { semanticPostProcess: (sparql: any) => {
-            // also add prefixes
-            for (let key in this.settings.sparqlPrefixes) {
-              sparql = sparql.replace(
-                "SELECT ",
-                "PREFIX " +
-                  key +
-                  ": <" +
-                  this.settings.sparqlPrefixes[key] +
-                  "> \nSELECT "
+  /**
+   * Creates a widget for the specified criteria subject / predicate / object
+   *
+   * @param startClassVal the type + variable name of the subject
+   * @param objectPropVal the type + variable name of the property
+   * @param endClassVal the type + variable name of the object
+   * @returns the widget component to be displayed
+   */
+  buildWidget(
+    startClassVal: SelectedVal,
+    objectPropVal: SelectedVal,
+    endClassVal: SelectedVal,
+    // #816 : a widget other than the configured one
+    forcedWidgetType?: string,
+  ): AbstractWidget {
+    let property: ISpecificationProperty = this.specProvider.getProperty(
+      objectPropVal.type,
+    );
+
+    // read the widgetType from the config
+    const configuredWidgetType = property.getPropertyType(endClassVal.type);
+    const widgetType = forcedWidgetType ?? configuredWidgetType;
+
+    switch (widgetType) {
+      case Config.LITERAL_LIST_PROPERTY:
+      case Config.LIST_PROPERTY:
+        // the datasource of the config is made for the configured widget, not for a forced one
+        var datasource: IDatasource =
+          widgetType === configuredWidgetType ? property.getDatasource() : null;
+
+        if (datasource == null) {
+          // datasource still null
+          // if a default endpoint was provided, provide default datasource
+          if (this.settings.endpoints || this.settings.catalog) {
+            // if there are some values specified in the config with sh:in, use a values datasource
+            if (property.getValues()) {
+              datasource = {
+                queryTemplate: Datasources.QUERY_STRINGS_BY_QUERY_TEMPLATE.get(
+                  Datasources.QUERY_LIST_LABEL_VALUES_ALPHA,
+                ),
+                labelPath:
+                  "<" + RDFS.LABEL.value + ">|<" + SKOS.PREF_LABEL.value + ">",
+              };
+            }
+
+            // if there is a default label property on the end class, use it to populate the dropdown
+            else if (
+              this.specProvider
+                .getEntity(endClassVal.type)
+                .getDefaultLabelProperty()
+            ) {
+              let defautlDatasource = property.hasQualifiedValueShapeRange()
+                ? Datasources.QUERY_LIST_LABEL_WITH_RANGE_ALPHA
+                : Datasources.QUERY_LIST_LABEL_ALPHA;
+              datasource = {
+                queryTemplate:
+                  Datasources.QUERY_STRINGS_BY_QUERY_TEMPLATE.get(
+                    defautlDatasource,
+                  ),
+                labelProperty: this.specProvider
+                  .getEntity(endClassVal.type)
+                  .getDefaultLabelProperty(),
+              };
+              // if there is no datasource and no default label on the end class, but we can guess the end class could be skos:Concept,
+              // use a skos:prefLabel datasource
+            } else if (
+              this.specProvider.getEntity(endClassVal.type).couldBeSkosConcept()
+            ) {
+              let defautlDatasource = property.hasQualifiedValueShapeRange()
+                ? Datasources.QUERY_LIST_LABEL_WITH_RANGE_ALPHA
+                : Datasources.QUERY_LIST_LABEL_ALPHA;
+              datasource = {
+                queryTemplate:
+                  Datasources.QUERY_STRINGS_BY_QUERY_TEMPLATE.get(
+                    defautlDatasource,
+                  ),
+                labelProperty: SKOS.PREF_LABEL.value,
+              };
+            } else {
+              // that datasource can work indifferently with URIs or Literals
+              datasource = Datasources.DATASOURCES_CONFIG.get(
+                // better use alphabetical ordering first since URIs will be segregated in the "h" letter and not mixed
+                // Datasources.LIST_URI_OR_LITERAL_ALPHA_WITH_COUNT
+                Datasources.LIST_URI_OR_LITERAL_ALPHA,
               );
             }
-            return this.specProvider.expandSparql(sparql, this.settings.sparqlPrefixes);
           }
         }
-    }
 
+        let listDataProvider: ListDataProviderIfc | ValuesListDataProviderIfc =
+          new NoOpListDataProvider();
+        if (datasource != null) {
+          if (property.getValues()) {
+            // if there was some fixed values specified in the config, use a ValuesListDataProvider
+            listDataProvider = new SparqlValuesListDataProvider(
+              // endpoint URL
+              this.sparqlHandlerFactory.buildSparqlHandler(
+                datasource.sparqlEndpointUrl != null
+                  ? [datasource.sparqlEndpointUrl]
+                  : this.settings.endpoints,
+              ),
 
-    /**
-     * Creates a widget for the specified criteria subject / predicate / object
-     * 
-     * @param startClassVal the type + variable name of the subject
-     * @param objectPropVal the type + variable name of the property
-     * @param endClassVal the type + variable name of the object
-     * @returns the widget component to be displayed
-     */
-    buildWidget(
-        startClassVal: SelectedVal,
-        objectPropVal: SelectedVal,
-        endClassVal: SelectedVal,
-    ): AbstractWidget {
-        let property:ISpecificationProperty = this.specProvider.getProperty(objectPropVal.type);
+              new ValuesListSparqlTemplateQueryBuilder(
+                // sparql query (with labelPath interpreted)
+                this.#getFinalQueryString(datasource),
 
-        // read the widgetType from the config
-        const widgetType = property.getPropertyType(endClassVal.type);
-
-        switch (widgetType) {
-          case Config.LITERAL_LIST_PROPERTY:
-          case Config.LIST_PROPERTY:
-    
-            // determine custom datasource
-            var datasource:IDatasource = property.getDatasource();
-    
-            if (datasource == null) {
-              // datasource still null
-              // if a default endpoint was provided, provide default datasource
-              if (this.settings.endpoints || this.settings.catalog) {
-                // if there are some values specified in the config with sh:in, use a values datasource
-                if(property.getValues()) {
-                  datasource = {
-                    queryTemplate: Datasources.QUERY_STRINGS_BY_QUERY_TEMPLATE.get(
-                      Datasources.QUERY_LIST_LABEL_VALUES_ALPHA
-                    ),
-                    labelPath: "<"+RDFS.LABEL.value+">|<"+SKOS.PREF_LABEL.value+">"
-                  }
-                }
-
-                // if there is a default label property on the end class, use it to populate the dropdown
-                else if(this.specProvider.getEntity(endClassVal.type).getDefaultLabelProperty()) {
-                  let defautlDatasource = property.hasQualifiedValueShapeRange()?Datasources.QUERY_LIST_LABEL_WITH_RANGE_ALPHA:Datasources.QUERY_LIST_LABEL_ALPHA
-                  datasource = {
-                    queryTemplate: Datasources.QUERY_STRINGS_BY_QUERY_TEMPLATE.get(
-                      defautlDatasource
-                    ),
-                    labelProperty: this.specProvider.getEntity(endClassVal.type).getDefaultLabelProperty(),
-                  }
-                // if there is no datasource and no default label on the end class, but we can guess the end class could be skos:Concept,
-                // use a skos:prefLabel datasource  
-                } else if(this.specProvider.getEntity(endClassVal.type).couldBeSkosConcept()) {
-                  let defautlDatasource = property.hasQualifiedValueShapeRange()?Datasources.QUERY_LIST_LABEL_WITH_RANGE_ALPHA:Datasources.QUERY_LIST_LABEL_ALPHA
-                  datasource = {
-                    queryTemplate: Datasources.QUERY_STRINGS_BY_QUERY_TEMPLATE.get(
-                      defautlDatasource
-                    ),
-                    labelProperty: SKOS.PREF_LABEL.value,
-                  }
-                } else {
-                  // that datasource can work indifferently with URIs or Literals
-                  datasource = Datasources.DATASOURCES_CONFIG.get(
-                    // better use alphabetical ordering first since URIs will be segregated in the "h" letter and not mixed
-                    // Datasources.LIST_URI_OR_LITERAL_ALPHA_WITH_COUNT
-                    Datasources.LIST_URI_OR_LITERAL_ALPHA
-                  );
-                }
-    
-              }
-            }
-    
-            let listDataProvider:ListDataProviderIfc | ValuesListDataProviderIfc = new NoOpListDataProvider();
-            if (datasource != null) {
-              if(property.getValues()) {
-                // if there was some fixed values specified in the config, use a ValuesListDataProvider
-                listDataProvider = new SparqlValuesListDataProvider(
-      
-                  // endpoint URL
-                  this.sparqlHandlerFactory.buildSparqlHandler(
-                      datasource.sparqlEndpointUrl != null
-                      ? [datasource.sparqlEndpointUrl]
-                      : this.settings.endpoints
-                  ), 
-      
-                  new ValuesListSparqlTemplateQueryBuilder(
-                    // sparql query (with labelPath interpreted)
-                    this.#getFinalQueryString(datasource),
-      
-                    // sparqlPostProcessor
-                    this.sparqlPostProcessor
-                  )
-                );
-
-                // if we need to sort things, add an explicit wrapper around the data provider
-                if(!(datasource.noSort == true)) {
-                  listDataProvider = new SortValuesListDataProvider(listDataProvider);
-                }
-                
-              } else {
-                // if we have a datasource, possibly the default one, provide a config based
-                // on a SparqlTemplate, otherwise use the handler provided
-                listDataProvider = new SparqlListDataProvider(
-
-                  // endpoint URL
-                  this.sparqlHandlerFactory.buildSparqlHandler(
-                      datasource.sparqlEndpointUrl != null
-                      ? [datasource.sparqlEndpointUrl]
-                      : this.settings.endpoints
-                  ),
-
-                  new ListSparqlTemplateQueryBuilder(
-                    // sparql query (with labelPath interpreted)
-                    this.#getFinalQueryString(datasource),
-
-                    // sparqlPostProcessor
-                    this.sparqlPostProcessor
-                  ),
-
-                  // forwarded as is
-                  this.queryPatternProvider
-                );
-
-                // if we need to sort things, add an explicit wrapper around the data provider
-                if(!(datasource.noSort == true)) {
-                  listDataProvider = new SortListDataProvider(listDataProvider);
-                }
-              }
-
-            }
-    
-
-    
-            // create the configuration object : use the default configuration, then the generated data provider, then overwrite with 
-            // what is set in the provided configuration object for the corresponding section
-            let listConfig:ListConfiguration = {
-              ...ListWidget.defaultConfiguration,
-              ...{
-                dataProvider: listDataProvider,
-                values:this.specProvider.getProperty(objectPropVal.type).getValues(),
-                // lets the widget know if the other lines changed since its last load
-                queryPatternProvider: this.queryPatternProvider,
-              },
-              ...this.settings.customization?.list
-            };
-    
-            // init data provider
-            listConfig.dataProvider.init(
-              this.settings.language,
-              this.settings.defaultLanguage,
-              this.settings.typePredicate
+                // sparqlPostProcessor
+                this.sparqlPostProcessor,
+              ),
             );
-    
-            // Determine which widget to create based on widgetType
-            let finalWidget = new ListWidget(
-                this.parentComponent,
-                listConfig,
-                startClassVal,
-                objectPropVal,
-                endClassVal
-              );
-            
-            let listResolver = this.#buildLabelResolver(endClassVal.type);
-            finalWidget.setLabelResolver(
-              listResolver.dataProvider,
-              listResolver.predicate
-            );
-            return finalWidget;
-    
-          case Config.AUTOCOMPLETE_PROPERTY:
-    
-            // to be passed in anonymous functions
-            var theSpecProvider = this.specProvider;
-    
-            // determine custom datasource
-            var datasource:IDatasource = this.specProvider.getProperty(objectPropVal.type).getDatasource();
-    
-            if (datasource == null) {
-              // datasource still null
-              // if a default endpoint was provided, provide default datasource
-              if (this.settings.endpoints) {
-                if(this.specProvider.getEntity(endClassVal.type).isLiteralEntity()) {
-                  datasource = Datasources.DATASOURCES_CONFIG.get(
-                    Datasources.SEARCH_LITERAL_CONTAINS
-                  );
-                } else {
-    
-                  // if there is a default label property on the end class, use it to search in the autocomplete
-                  if(this.specProvider.getEntity(endClassVal.type).getDefaultLabelProperty()) {
-                    datasource = {
-                      queryTemplate: Datasources.QUERY_STRINGS_BY_QUERY_TEMPLATE.get(
-                        Datasources.QUERY_SEARCH_LABEL_CONTAINS
-                      ),
-                      labelProperty: this.specProvider.getEntity(endClassVal.type).getDefaultLabelProperty(),
-                    }
-                  } else {
-                    // otherwise just search on the URI 
-                    datasource = Datasources.DATASOURCES_CONFIG.get(
-                      Datasources.SEARCH_URI_CONTAINS
-                    );
-                  }              
-                }
-              }
-            }
-    
-            let autocompleteDataProvider:AutocompleteDataProviderIfc = new NoOpAutocompleteProvider();
-            if (datasource != null) {
-              // build a SPARQL data provider function using the SPARQL query of the datasource
-              autocompleteDataProvider = new SparqlAutocompleDataProvider(
 
-                // endpoint URL
-                this.sparqlHandlerFactory.buildSparqlHandler(
-                    datasource.sparqlEndpointUrl != null
-                    ? [datasource.sparqlEndpointUrl]
-                    : this.settings.endpoints
-                ),
-
-                new AutocompleteSparqlTemplateQueryBuilder(
-                  // sparql query (with labelPath interpreted)
-                  this.#getFinalQueryString(datasource),
-
-                  // sparqlPostProcessor
-                  this.sparqlPostProcessor
-                ),
-
-                // forwarded as is
-                this.queryPatternProvider
+            // if we need to sort things, add an explicit wrapper around the data provider
+            if (!(datasource.noSort == true)) {
+              listDataProvider = new SortValuesListDataProvider(
+                listDataProvider,
               );
             }
-    
-            // create the configuration object : use the default data provider, then the default configuration, then overwrite with is set in 
-            // the provided configuration object for the corresponding section
-            let autocompleteConfig:AutocompleteConfiguration = {
-              ...AutoCompleteWidget.defaultConfiguration,
-              ...{dataProvider: autocompleteDataProvider},
-              ...this.settings.customization?.autocomplete
-            };
-    
-            // init data provider
-            autocompleteConfig.dataProvider.init(
-              this.settings.language,
-              this.settings.defaultLanguage,
-              this.settings.typePredicate
-            );
-    
-            let autocompleteWidget = new AutoCompleteWidget(
-              this.parentComponent,
-              autocompleteConfig,
-              startClassVal,
-              objectPropVal,
-              endClassVal
-            );
-            let autocompleteResolver = this.#buildLabelResolver(endClassVal.type);
-            autocompleteWidget.setLabelResolver(
-              autocompleteResolver.dataProvider,
-              autocompleteResolver.predicate
-            );
-            return autocompleteWidget;
-    
-            break;
-          case Config.VIRTUOSO_SEARCH_PROPERTY:
-          case Config.GRAPHDB_SEARCH_PROPERTY:
-          case Config.STRING_EQUALS_PROPERTY:
-          case Config.SEARCH_PROPERTY:
-    
-            let configuration:SearchConfiguration = {
-              widgetType: widgetType
-            }
-    
-            return new SearchRegexWidget(
-              configuration,
-              this.parentComponent,
-              startClassVal,
-              objectPropVal,
-              endClassVal
-            );
-            break;
-          case Config.TIME_PROPERTY_YEAR:
-            return new TimeDatePickerWidget(
-              this.parentComponent,
-              "year",
-              startClassVal,
-              objectPropVal,
-              endClassVal,
-              this.specProvider
-            );
-            break;
-          case Config.TIME_PROPERTY_DATE:
-            return new TimeDatePickerWidget(
-              this.parentComponent,
-              "day",
-              startClassVal,
-              objectPropVal,
-              endClassVal,
-              this.specProvider
-            );
-            break;
-          case Config.TIME_PROPERTY_PERIOD:
-            console.warn(Config.TIME_PROPERTY_PERIOD+" is not implement yet");
-            break;
-          case Config.NON_SELECTABLE_PROPERTY:
-            return new NoWidget(this.parentComponent);
-            break;
-          case Config.BOOLEAN_PROPERTY:
-            
-          let booleanConfig:BooleanConfiguration = {
-              existNotExist: !this.specProvider.getEntity(endClassVal.type).isLiteralEntity()
-            }
+          } else {
+            // if we have a datasource, possibly the default one, provide a config based
+            // on a SparqlTemplate, otherwise use the handler provided
+            listDataProvider = new SparqlListDataProvider(
+              // endpoint URL
+              this.sparqlHandlerFactory.buildSparqlHandler(
+                datasource.sparqlEndpointUrl != null
+                  ? [datasource.sparqlEndpointUrl]
+                  : this.settings.endpoints,
+              ),
 
-            return new BooleanWidget(
-              this.parentComponent,
-              booleanConfig,
-              startClassVal,
-              objectPropVal,
-              endClassVal
-            );
-            break;
-          case Config.TREE_PROPERTY:
-            var theSpecProvider = this.specProvider;
-    
-            // determine custom roots datasource
-            var treeRootsDatasource =
-              this.specProvider.getProperty(objectPropVal.type).getTreeRootsDatasource();
-    
-            if (treeRootsDatasource == null) {
-              // datasource still null
-              // if a default endpoint was provided, provide default datasource
-              if (this.settings.endpoints) {
-                treeRootsDatasource = Datasources.DATASOURCES_CONFIG.get(
-                  Datasources.TREE_ROOT_SKOSTOPCONCEPT
-                );
-              }
-            }
-    
-            // determine custom children datasource
-            var treeChildrenDatasource =
-              this.specProvider.getProperty(objectPropVal.type).getTreeChildrenDatasource();
-    
-            if (treeChildrenDatasource == null) {
-              // datasource still null
-              // if a default endpoint was provided, provide default datasource
-              if (this.settings.endpoints) {
-                treeChildrenDatasource = Datasources.DATASOURCES_CONFIG.get(
-                  Datasources.TREE_CHILDREN_SKOSNARROWER
-                );
-              }
-            }
-    
-            let treeDataProvider:TreeDataProviderIfc = new NoOpTreeDataProvider();
-    
-            if (treeRootsDatasource != null && treeChildrenDatasource != null) {
-              // if we have a datasource, possibly the default one, provide a config based
-              // on a SparqlTemplate, otherwise use the handler provided
-    
-              treeDataProvider = new SparqlTreeDataProvider(
-    
-                // endpoint URL
-                // we read it on the roots datasource
-                this.sparqlHandlerFactory.buildSparqlHandler(
-                    treeRootsDatasource.sparqlEndpointUrl != null
-                    ? [treeRootsDatasource.sparqlEndpointUrl]
-                    : this.settings.endpoints
-                ),
-    
-                new TreeSparqlTemplateQueryBuilder(
-                  // sparql query (with labelPath interpreted)
-                  this.#getFinalQueryString(treeRootsDatasource),
-                  this.#getFinalQueryString(treeChildrenDatasource),
+              new ListSparqlTemplateQueryBuilder(
+                // sparql query (with labelPath interpreted)
+                this.#getFinalQueryString(datasource),
 
-                  // sparqlPostProcessor
-                  this.sparqlPostProcessor
-                ),
+                // sparqlPostProcessor
+                this.sparqlPostProcessor,
+              ),
 
-                // forwarded as is
-                this.queryPatternProvider
-              );
-            }
-    
-            // create the configuration object : use the default data provider, then the default configuration, then overwrite with is set in 
-            // the provided configuration object for the corresponding section
-            let treeConfig:TreeConfiguration = {
-              ...TreeWidget.defaultConfiguration,
-              ...{
-                  dataProvider: treeDataProvider,
-                  maxSelectedItems: this.settings.maxOr
-              },
-              ...this.settings.customization?.tree
-            };
-    
-            // wrap inside a sort data provider if needed
-            if(!(treeChildrenDatasource.noSort == true)) {
-              treeConfig.dataProvider = new SortTreeDataProvider(treeConfig.dataProvider);
-            }
-    
-            // init data provider
-            treeConfig.dataProvider.init(
-              this.settings.language,
-              this.settings.defaultLanguage,
-              this.settings.typePredicate
+              // forwarded as is
+              this.queryPatternProvider,
             );
-          
-            let treeWidget = new TreeWidget(
-              this.parentComponent,
-              treeConfig,
-              startClassVal,
-              objectPropVal,
-              endClassVal
-            );
-            let treeResolver = this.#buildLabelResolver(endClassVal.type);
-            treeWidget.setLabelResolver(
-              treeResolver.dataProvider,
-              treeResolver.predicate
-            );
-            return treeWidget;
 
-          case Config.MAP_PROPERTY:
-            let mapConfig:MapConfiguration = {
-              ...MapWidget.defaultConfiguration,
-              ...this.settings.customization?.map
-            };
-    
-            let mapWidget = new MapWidget(
-              mapConfig,
-              this.parentComponent,
-              startClassVal,
-              objectPropVal,
-              endClassVal
-            );
-            let mapResolver = this.#buildLabelResolver(endClassVal.type);
-            mapWidget.setLabelResolver(
-              mapResolver.dataProvider,
-              mapResolver.predicate
-            );
-            return mapWidget.render();
-          
-          case Config.NUMBER_PROPERTY:
-    
-            let thisNumberConfig:NumberConfiguration = {
-              min: this.specProvider.getProperty(objectPropVal.type).getMinValue(),
-              max: this.specProvider.getProperty(objectPropVal.type).getMaxValue(),
+            // if we need to sort things, add an explicit wrapper around the data provider
+            if (!(datasource.noSort == true)) {
+              listDataProvider = new SortListDataProvider(listDataProvider);
             }
-    
-            let numberConfig:NumberConfiguration = {
-              ...NumberWidget.defaultConfiguration,
-              ...thisNumberConfig,
-              ...this.settings.customization?.number
-            };
-    
-            return new NumberWidget(
-              this.parentComponent,
-              numberConfig,
-              startClassVal,
-              objectPropVal,
-              endClassVal
-            ).render();
-    
-          default:
-            throw new Error(`WidgetType for ${widgetType} not recognized`);
+          }
         }
+
+        // create the configuration object : use the default configuration, then the generated data provider, then overwrite with
+        // what is set in the provided configuration object for the corresponding section
+        let listConfig: ListConfiguration = {
+          ...ListWidget.defaultConfiguration,
+          ...{
+            dataProvider: listDataProvider,
+            values: this.specProvider
+              .getProperty(objectPropVal.type)
+              .getValues(),
+            // lets the widget know if the other lines changed since its last load
+            queryPatternProvider: this.queryPatternProvider,
+          },
+          ...this.settings.customization?.list,
+        };
+
+        // init data provider
+        listConfig.dataProvider.init(
+          this.settings.language,
+          this.settings.defaultLanguage,
+          this.settings.typePredicate,
+        );
+
+        // Determine which widget to create based on widgetType
+        let finalWidget = new ListWidget(
+          this.parentComponent,
+          listConfig,
+          startClassVal,
+          objectPropVal,
+          endClassVal,
+        );
+
+        let listResolver = this.#buildLabelResolver(endClassVal.type);
+        finalWidget.setLabelResolver(
+          listResolver.dataProvider,
+          listResolver.predicate,
+        );
+        return finalWidget;
+
+      case Config.AUTOCOMPLETE_PROPERTY:
+        // to be passed in anonymous functions
+        var theSpecProvider = this.specProvider;
+
+        // determine custom datasource
+        var datasource: IDatasource = this.specProvider
+          .getProperty(objectPropVal.type)
+          .getDatasource();
+
+        if (datasource == null) {
+          // datasource still null
+          // if a default endpoint was provided, provide default datasource
+          if (this.settings.endpoints) {
+            if (
+              this.specProvider.getEntity(endClassVal.type).isLiteralEntity()
+            ) {
+              datasource = Datasources.DATASOURCES_CONFIG.get(
+                Datasources.SEARCH_LITERAL_CONTAINS,
+              );
+            } else {
+              // if there is a default label property on the end class, use it to search in the autocomplete
+              if (
+                this.specProvider
+                  .getEntity(endClassVal.type)
+                  .getDefaultLabelProperty()
+              ) {
+                datasource = {
+                  queryTemplate:
+                    Datasources.QUERY_STRINGS_BY_QUERY_TEMPLATE.get(
+                      Datasources.QUERY_SEARCH_LABEL_CONTAINS,
+                    ),
+                  labelProperty: this.specProvider
+                    .getEntity(endClassVal.type)
+                    .getDefaultLabelProperty(),
+                };
+              } else {
+                // otherwise just search on the URI
+                datasource = Datasources.DATASOURCES_CONFIG.get(
+                  Datasources.SEARCH_URI_CONTAINS,
+                );
+              }
+            }
+          }
+        }
+
+        let autocompleteDataProvider: AutocompleteDataProviderIfc =
+          new NoOpAutocompleteProvider();
+        if (datasource != null) {
+          // build a SPARQL data provider function using the SPARQL query of the datasource
+          autocompleteDataProvider = new SparqlAutocompleDataProvider(
+            // endpoint URL
+            this.sparqlHandlerFactory.buildSparqlHandler(
+              datasource.sparqlEndpointUrl != null
+                ? [datasource.sparqlEndpointUrl]
+                : this.settings.endpoints,
+            ),
+
+            new AutocompleteSparqlTemplateQueryBuilder(
+              // sparql query (with labelPath interpreted)
+              this.#getFinalQueryString(datasource),
+
+              // sparqlPostProcessor
+              this.sparqlPostProcessor,
+            ),
+
+            // forwarded as is
+            this.queryPatternProvider,
+          );
+        }
+
+        // create the configuration object : use the default data provider, then the default configuration, then overwrite with is set in
+        // the provided configuration object for the corresponding section
+        let autocompleteConfig: AutocompleteConfiguration = {
+          ...AutoCompleteWidget.defaultConfiguration,
+          ...{ dataProvider: autocompleteDataProvider },
+          ...this.settings.customization?.autocomplete,
+        };
+
+        // init data provider
+        autocompleteConfig.dataProvider.init(
+          this.settings.language,
+          this.settings.defaultLanguage,
+          this.settings.typePredicate,
+        );
+
+        let autocompleteWidget = new AutoCompleteWidget(
+          this.parentComponent,
+          autocompleteConfig,
+          startClassVal,
+          objectPropVal,
+          endClassVal,
+        );
+        let autocompleteResolver = this.#buildLabelResolver(endClassVal.type);
+        autocompleteWidget.setLabelResolver(
+          autocompleteResolver.dataProvider,
+          autocompleteResolver.predicate,
+        );
+        return autocompleteWidget;
+
+        break;
+      case Config.VIRTUOSO_SEARCH_PROPERTY:
+      case Config.GRAPHDB_SEARCH_PROPERTY:
+      case Config.STRING_EQUALS_PROPERTY:
+      case Config.SEARCH_PROPERTY:
+        let configuration: SearchConfiguration = {
+          widgetType: widgetType,
+        };
+
+        return new SearchRegexWidget(
+          configuration,
+          this.parentComponent,
+          startClassVal,
+          objectPropVal,
+          endClassVal,
+        );
+        break;
+      case Config.TIME_PROPERTY_YEAR:
+        return new TimeDatePickerWidget(
+          this.parentComponent,
+          "year",
+          startClassVal,
+          objectPropVal,
+          endClassVal,
+          this.specProvider,
+        );
+        break;
+      case Config.TIME_PROPERTY_DATE:
+        return new TimeDatePickerWidget(
+          this.parentComponent,
+          "day",
+          startClassVal,
+          objectPropVal,
+          endClassVal,
+          this.specProvider,
+        );
+        break;
+      case Config.TIME_PROPERTY_PERIOD:
+        console.warn(Config.TIME_PROPERTY_PERIOD + " is not implement yet");
+        break;
+      case Config.NON_SELECTABLE_PROPERTY:
+        return new NoWidget(this.parentComponent);
+        break;
+      case Config.BOOLEAN_PROPERTY:
+        let booleanConfig: BooleanConfiguration = {
+          existNotExist: !this.specProvider
+            .getEntity(endClassVal.type)
+            .isLiteralEntity(),
+        };
+
+        return new BooleanWidget(
+          this.parentComponent,
+          booleanConfig,
+          startClassVal,
+          objectPropVal,
+          endClassVal,
+        );
+        break;
+      case Config.TREE_PROPERTY:
+        var theSpecProvider = this.specProvider;
+
+        // determine custom roots datasource
+        var treeRootsDatasource = this.specProvider
+          .getProperty(objectPropVal.type)
+          .getTreeRootsDatasource();
+
+        if (treeRootsDatasource == null) {
+          // datasource still null
+          // if a default endpoint was provided, provide default datasource
+          if (this.settings.endpoints) {
+            treeRootsDatasource = Datasources.DATASOURCES_CONFIG.get(
+              Datasources.TREE_ROOT_SKOSTOPCONCEPT,
+            );
+          }
+        }
+
+        // determine custom children datasource
+        var treeChildrenDatasource = this.specProvider
+          .getProperty(objectPropVal.type)
+          .getTreeChildrenDatasource();
+
+        if (treeChildrenDatasource == null) {
+          // datasource still null
+          // if a default endpoint was provided, provide default datasource
+          if (this.settings.endpoints) {
+            treeChildrenDatasource = Datasources.DATASOURCES_CONFIG.get(
+              Datasources.TREE_CHILDREN_SKOSNARROWER,
+            );
+          }
+        }
+
+        let treeDataProvider: TreeDataProviderIfc = new NoOpTreeDataProvider();
+
+        if (treeRootsDatasource != null && treeChildrenDatasource != null) {
+          // if we have a datasource, possibly the default one, provide a config based
+          // on a SparqlTemplate, otherwise use the handler provided
+
+          treeDataProvider = new SparqlTreeDataProvider(
+            // endpoint URL
+            // we read it on the roots datasource
+            this.sparqlHandlerFactory.buildSparqlHandler(
+              treeRootsDatasource.sparqlEndpointUrl != null
+                ? [treeRootsDatasource.sparqlEndpointUrl]
+                : this.settings.endpoints,
+            ),
+
+            new TreeSparqlTemplateQueryBuilder(
+              // sparql query (with labelPath interpreted)
+              this.#getFinalQueryString(treeRootsDatasource),
+              this.#getFinalQueryString(treeChildrenDatasource),
+
+              // sparqlPostProcessor
+              this.sparqlPostProcessor,
+            ),
+
+            // forwarded as is
+            this.queryPatternProvider,
+          );
+        }
+
+        // create the configuration object : use the default data provider, then the default configuration, then overwrite with is set in
+        // the provided configuration object for the corresponding section
+        let treeConfig: TreeConfiguration = {
+          ...TreeWidget.defaultConfiguration,
+          ...{
+            dataProvider: treeDataProvider,
+            maxSelectedItems: this.settings.maxOr,
+          },
+          ...this.settings.customization?.tree,
+        };
+
+        // wrap inside a sort data provider if needed
+        if (!(treeChildrenDatasource.noSort == true)) {
+          treeConfig.dataProvider = new SortTreeDataProvider(
+            treeConfig.dataProvider,
+          );
+        }
+
+        // init data provider
+        treeConfig.dataProvider.init(
+          this.settings.language,
+          this.settings.defaultLanguage,
+          this.settings.typePredicate,
+        );
+
+        let treeWidget = new TreeWidget(
+          this.parentComponent,
+          treeConfig,
+          startClassVal,
+          objectPropVal,
+          endClassVal,
+        );
+        let treeResolver = this.#buildLabelResolver(endClassVal.type);
+        treeWidget.setLabelResolver(
+          treeResolver.dataProvider,
+          treeResolver.predicate,
+        );
+        return treeWidget;
+
+      case Config.MAP_PROPERTY:
+        let mapConfig: MapConfiguration = {
+          ...MapWidget.defaultConfiguration,
+          ...this.settings.customization?.map,
+        };
+
+        let mapWidget = new MapWidget(
+          mapConfig,
+          this.parentComponent,
+          startClassVal,
+          objectPropVal,
+          endClassVal,
+        );
+        let mapResolver = this.#buildLabelResolver(endClassVal.type);
+        mapWidget.setLabelResolver(
+          mapResolver.dataProvider,
+          mapResolver.predicate,
+        );
+        return mapWidget.render();
+
+      case Config.NUMBER_PROPERTY:
+        let thisNumberConfig: NumberConfiguration = {
+          min: this.specProvider.getProperty(objectPropVal.type).getMinValue(),
+          max: this.specProvider.getProperty(objectPropVal.type).getMaxValue(),
+        };
+
+        let numberConfig: NumberConfiguration = {
+          ...NumberWidget.defaultConfiguration,
+          ...thisNumberConfig,
+          ...this.settings.customization?.number,
+        };
+
+        return new NumberWidget(
+          this.parentComponent,
+          numberConfig,
+          startClassVal,
+          objectPropVal,
+          endClassVal,
+        ).render();
+
+      default:
+        throw new Error(`WidgetType for ${widgetType} not recognized`);
+    }
+  }
+
+  /**
+   * Builds the final query string from a query source, by injecting
+   * labelPath/property and childrenPath/property
+   **/
+  #getFinalQueryString(datasource: any) {
+    if (datasource.queryString != null) {
+      return datasource.queryString;
+    } else {
+      var sparql = datasource.queryTemplate;
+
+      if (datasource.labelPath != null || datasource.labelProperty) {
+        var theLabelPath = datasource.labelPath
+          ? datasource.labelPath
+          : "<" + datasource.labelProperty + ">";
+        var reLabelPath = new RegExp("\\$labelPath", "g");
+        sparql = sparql.replace(reLabelPath, theLabelPath);
       }
 
-    /**
-     * Builds the final query string from a query source, by injecting
-     * labelPath/property and childrenPath/property
-     **/
-    #getFinalQueryString(datasource: any) {
-        if (datasource.queryString != null) {
-          return datasource.queryString;
-        } else {
-          var sparql = datasource.queryTemplate;
+      if (datasource.childrenPath != null || datasource.childrenProperty) {
+        var theChildrenPath = datasource.childrenPath
+          ? datasource.childrenPath
+          : "<" + datasource.childrenProperty + ">";
+        var reChildrenPath = new RegExp("\\$childrenPath", "g");
+        sparql = sparql.replace(reChildrenPath, theChildrenPath);
+      }
 
-          if (datasource.labelPath != null || datasource.labelProperty) {
-              var theLabelPath = datasource.labelPath
-              ? datasource.labelPath
-              : "<" + datasource.labelProperty + ">";
-              var reLabelPath = new RegExp("\\$labelPath", "g");
-              sparql = sparql.replace(reLabelPath, theLabelPath);
-          }
+      return sparql;
+    }
+  }
 
-          if (datasource.childrenPath != null || datasource.childrenProperty) {
-              var theChildrenPath = datasource.childrenPath
-              ? datasource.childrenPath
-              : "<" + datasource.childrenProperty + ">";
-              var reChildrenPath = new RegExp("\\$childrenPath", "g");
-              sparql = sparql.replace(reChildrenPath, theChildrenPath);
-          }
+  // Builds the URI label resolver injected into URI widgets (list,
+  // autocomplete, map, tree) for on-demand label resolution.
+  #buildLabelResolver(endClassType: string): {
+    dataProvider: SparqlSinglePredicateDataProvider;
+    predicate: string;
+  } {
+    let entity = this.specProvider.getEntity(endClassType);
 
-          return sparql;
-        }
+    // Label predicate cascade (same as the list/autocomplete datasources):
+    // default label property -> skos:prefLabel if SKOS -> rdfs:label|skos:prefLabel.
+    let labelProperty = entity.getDefaultLabelProperty();
+    let predicate: string;
+    if (labelProperty) {
+      predicate = "<" + labelProperty + ">";
+    } else if (entity.couldBeSkosConcept()) {
+      predicate = "<" + SKOS.PREF_LABEL.value + ">";
+    } else {
+      predicate = "<" + RDFS.LABEL.value + ">|<" + SKOS.PREF_LABEL.value + ">";
     }
 
-    // Builds the URI label resolver injected into URI widgets (list,
-    // autocomplete, map, tree) for on-demand label resolution.
-    #buildLabelResolver(endClassType: string): {
-        dataProvider: SparqlSinglePredicateDataProvider;
-        predicate: string;
-    } {
-        let entity = this.specProvider.getEntity(endClassType);
+    let dataProvider = new SparqlSinglePredicateDataProvider(
+      this.sparqlHandlerFactory.buildSparqlHandler(this.settings.endpoints),
+      new SinglePredicateSparqlQueryBuilder(this.sparqlPostProcessor),
+    );
+    dataProvider.init(this.settings.language, this.settings.defaultLanguage);
 
-        // Label predicate cascade (same as the list/autocomplete datasources):
-        // default label property -> skos:prefLabel if SKOS -> rdfs:label|skos:prefLabel.
-        let labelProperty = entity.getDefaultLabelProperty();
-        let predicate: string;
-        if (labelProperty) {
-            predicate = "<" + labelProperty + ">";
-        } else if (entity.couldBeSkosConcept()) {
-            predicate = "<" + SKOS.PREF_LABEL.value + ">";
-        } else {
-            predicate = "<" + RDFS.LABEL.value + ">|<" + SKOS.PREF_LABEL.value + ">";
-        }
-
-        let dataProvider = new SparqlSinglePredicateDataProvider(
-            this.sparqlHandlerFactory.buildSparqlHandler(this.settings.endpoints),
-            new SinglePredicateSparqlQueryBuilder(this.sparqlPostProcessor)
-        );
-        dataProvider.init(
-            this.settings.language,
-            this.settings.defaultLanguage
-        );
-
-        return {
-            dataProvider,
-            predicate,
-        };
-    }
-
+    return {
+      dataProvider,
+      predicate,
+    };
+  }
 }
