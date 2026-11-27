@@ -1,6 +1,6 @@
 _[Accueil](index.html) > Intégration JavaScript_
 
-Cette page a été traduite automatiquement à partir de la [page d'origine en anglais](../Javascript-integration.md) - le 19/11/2026
+Voir aussi la [référence en anglais](../Javascript-integration.md). Les exemples LDForge sont maintenus avec cette version.
 
 
 # Intégration JavaScript et référence des paramètres
@@ -17,7 +17,7 @@ Sparnatural est inséré en tant qu'élément HTML personnalisé nommé `spar-na
     defaultLang="en"
     limit="1000"
     debug="true"
-  />
+  ></spar-natural>
 ```
 
 ## Référence des attributs HTML
@@ -46,7 +46,7 @@ Ensuite, la page HTML doit écouter des événements spécifiques déclenchés p
 
 ```javascript
 const sparnatural = document.querySelector("spar-natural");
- 
+
 // triggered as soon there is a modification in the query
 sparnatural.addEventListener("queryUpdated", (event) => {
   // do something with the query
@@ -54,7 +54,7 @@ sparnatural.addEventListener("queryUpdated", (event) => {
 
 // triggered when submit button is called
 sparnatural.addEventListener("submit", (event) => {
-    // so something
+  // so something
 });
 
 // triggered when reset button is clicked
@@ -65,35 +65,37 @@ sparnatural.addEventListener("reset", (event) => {
 
 Voir ci-dessous la référence complète des événements disponibles.
 
-Une intégration typique dans une page web ressemble à ceci :
+Les exemples actuels utilisent [LDForge](LDForge-integration.md). Après avoir
+chargé les bundles et leurs styles, créez une seule intégration :
+
+```html
+<div id="ldforge"></div>
+<div id="ldforge-results"></div>
+<input type="hidden" id="query-json">
+```
 
 ```javascript
 const sparnatural = document.querySelector("spar-natural");
-
+const integration = SparnaturalLDForge.createSparnaturalLDForge(
+  sparnatural,
+  document.getElementById("ldforge"),
+  { resultsContainer: document.getElementById("ldforge-results") },
+);
 sparnatural.addEventListener("queryUpdated", (event) => {
-  // expand query to replace identifiers with content of sparqlScript annotation
-  console.log(event.detail.queryString);
-  console.log(event.detail.queryJson);
-  console.log(event.detail.querySparqlJs);
-  queryString = sparnatural.expandSparql(event.detail.queryString);
-  // set query on YasQE
-  yasqe.setValue(queryString);
-
-  // save JSON query
-  document.getElementById('query-json').value = JSON.stringify(event.detail.queryJson);
+  document.getElementById("query-json").value = JSON.stringify(
+    event.detail.queryJson,
+  );
 });
-
-sparnatural.addEventListener("submit", (event) => {
-  // enable loader on button
-  sparnatural.disablePlayBtn() ; 
-  // trigger the query from YasQE
-  yasqe.query();
-});
-
-sparnatural.addEventListener("reset", (event) => {
-  yasqe.setValue("");
-});
+// Appeler integration.destroy() avant de démonter le composant.
 ```
+
+L'intégration développe la requête avec `expandSparql()` et gère déjà sa
+synchronisation, son exécution et sa réinitialisation. N'ajoutez pas un second
+gestionnaire qui exécute la même requête. Sans `resultsContainer`, l'éditeur et
+les résultats partagent le même conteneur. La disposition séparée est disponible
+dans `@ldforge/editor@^1.5.1`, publié sur npm et requis par cette intégration.
+
+<a id="queryupdated-event"></a>
 
 ### Événement "queryUpdated"
 
@@ -110,6 +112,8 @@ sparnatural.addEventListener("queryUpdated", (event) => {
 });
 ```
 
+<a id="submit-event"></a>
+
 ### Événement "submit"
 
 L'événement `submit` est déclenché lorsque le bouton de soumission est cliqué.
@@ -118,53 +122,45 @@ Dans des intégrations typiques, l'état du bouton de soumission peut être mis 
   - `sparnatural.disablePlayBtn()`
   - `sparnatural.enablePlayBtn()`
 
-`disablePlayBtn()` doit être appelé lors de l'événement `submit` et `enablePlayBtn()` lorsque la requête est terminée. Dans une intégration typique avec YasGUI, cela ressemble à ceci :
+L'intégration LDForge appelle ces méthodes pendant l'exécution, y compris en
+cas d'erreur ou d'annulation. Par défaut, elle utilise
+`sparnatural.executeSparql()` : le catalogue, les gestionnaires personnalisés et
+les en-têtes configurés restent donc utilisés. `enablePlayBtn()` retire
+l'indicateur de chargement ; le constructeur visuel garde la décision de
+réactiver son bouton.
+
+Pour exécuter la requête depuis un autre contrôle de l'application :
 
 ```javascript
-const sparnatural = document.querySelector("spar-natural");
-
-sparnatural.addEventListener("queryUpdated", (event) => {
-  queryString = sparnatural.expandSparql(event.detail.queryString);
-  yasqe.setValue(queryString);
-});
-
-sparnatural.addEventListener("submit", (event) => {
-  // disable the button and show a spinning loader
-  sparnatural.disablePlayBtn() ; 
-  // trigger the query from YasQE
-  yasqe.query();
-});
-
-const yasqe = new Yasqe(document.getElementById("yasqe"));
-const yasr = new Yasr(document.getElementById("yasr"));
-
-yasqe.on("queryResponse", function(_yasqe, response, duration) {
-  // print the responses in YASR
-  yasr.setResponse(response, duration);
-  // re-enable play button in Sparnatural
-  sparnatural.enablePlayBtn() ;
-}); 
+await integration.editor.run();
 ```
+
+<a id="reset-event"></a>
 
 ### Événement "reset"
 
-L'événement `submit` est déclenché lorsque le bouton de réinitialisation est cliqué. Il peut être utilisé pour vider ou réinitialiser d'autres parties de la page, typiquement YasQE. Une intégration typique est la suivante :
+L'événement `reset` est déclenché par le bouton de réinitialisation. L'intégration
+annule la requête en cours, vide l'éditeur et retire les métadonnées de la requête
+visuelle. Pour demander une réinitialisation normale :
 
 ```javascript
-sparnatural.addEventListener("reset", (event) => {
-  yasqe.setValue("");
-});
+sparnatural.clear();
 ```
+
+<a id="init-event"></a>
 
 ### Événement "init"
 
-L'événement `init` est déclenché lorsque Sparnatural a fini de lire sa configuration. Écoutez cet événement pour passer une personnalisation JSON supplémentaire avec `sparnatural.customization = { ... }` (voir ci-dessous).
+L'événement `init` est déclenché lorsque Sparnatural a fini de lire sa configuration. Écoutez cet événement pour passer une personnalisation JSON supplémentaire avec `sparnatural.customization` (voir ci-dessous).
 
 
 ```javascript
 sparnatural.addEventListener("init", (event) => {
   console.log("Sparnatural is initialized");
-  // sparnatural.customization = { ... }
+  sparnatural.customization = {
+    ...sparnatural.customization,
+    autocomplete: { ...sparnatural.customization.autocomplete, maxItems: 40 },
+  };
 });
 ```
 
@@ -183,25 +179,27 @@ Le tableau ci-dessous résume les différentes fonctions qui peuvent être appel
 
 ## Liaisons Sparnatural
 
-À partir de la version 9.1, les versions de Sparnatural incluent un fichier JavaScript [`sparnatural-bindings.js`](https://github.com/sparna-git/Sparnatural/blob/master/src/sparnatural-bindings.js) qui peut être utilisé pour faciliter l'intégration des événements et des fonctions de Sparnatural dans des scénarios d'intégration typiques.
+Utilisez `createSparnaturalLDForge()` du bundle optionnel ou de l'entrée ESM
+`sparnatural/ldforge`. Cette fonction gère les événements et fournit `editor`,
+`setQueryVisible()`, `isQueryVisible()` et `destroy()`. Voir le
+[guide LDForge](LDForge-integration.md) pour les options et les vues de résultats.
 
-En particulier, pour un scénario où Sparnatural est intégré avec YasQE en tant que visualiseur de requêtes en lecture seule et YasR, et où Sparnatural est responsable de l'exécution de la requête, vous pouvez appeler les fonctions suivantes :
-
-```javascript
-// binds Sparnatural with the YasR plugins
-bindSparnaturalWithYasrPlugins(sparnatural, yasr);
-// binds Sparnatural with itself for the query execution and integration with yasqe and yasr
-bindSparnaturalWithItself(sparnatural, yasqe, yasr);
-```
+Le constructeur reste utilisable sans éditeur : observez `queryUpdated`, puis
+appelez `expandSparql()` avant d'envoyer le texte à votre propre système.
+Les fonctions de `sparnatural-bindings.js` restent disponibles pour les
+[anciennes intégrations Yasgui](archives/Javascript-integration-yasgui.md).
 
 ## Personnalisation du comportement de Sparnatural
 
-Le comportement de Sparnatural peut être encore ajusté avec l'objet `customization` : `sparnatural.customization = { ... }`. Cet appel doit être effectué dans l'écouteur d'événements `init`, après que Sparnatural ait terminé de lire son fichier de spécification initial.
+Le comportement de Sparnatural peut être encore ajusté avec l'objet `customization` : `sparnatural.customization`. Cet appel doit être effectué dans l'écouteur d'événements `init`, après que Sparnatural ait terminé de lire son fichier de spécification initial.
 
 ```javascript
 sparnatural.addEventListener("init", (event) => {
   console.log("Sparnatural is initialized");
-  sparnatural.customization = { ... }
+  sparnatural.customization = {
+    ...sparnatural.customization,
+    autocomplete: { ...sparnatural.customization.autocomplete, maxItems: 40 },
+  };
 });
 ```
 
@@ -303,44 +301,51 @@ export class RDFTerm {
 ### Exemple de spécification d'une fonction de fournisseur de données personnalisée
 
 ```javascript
-sparnatural.addEventListener("init", (event) => {  
+sparnatural.addEventListener("init", (event) => {
   sparnatural.customization = {
     autocomplete: {
       dataProvider: {
-        getAutocompleteSuggestions: function(
-        domain,
-        predicate,
-        range,
-        key,
-        lang,
-        defaultLang,
-        typePredicate,
-        callback,
-        errorCallback
-      ) {
-        // build the list of autocomplete items to show
-        console.log("domain,predicate,range : "+domain+" "+predicate+" "+range);
-        let items = [
-          {
-            term: {
-              type:"IRI",
-              value:"http://exemple.fr/1"
+        getAutocompleteSuggestions: function (
+          domain,
+          predicate,
+          range,
+          key,
+          lang,
+          defaultLang,
+          typePredicate,
+          callback,
+          errorCallback,
+        ) {
+          // build the list of autocomplete items to show
+          console.log(
+            "domain,predicate,range : " +
+              domain +
+              " " +
+              predicate +
+              " " +
+              range,
+          );
+          let items = [
+            {
+              term: {
+                type: "IRI",
+                value: "http://exemple.fr/1",
+              },
+              label: key + " : suggestion 1",
             },
-            label: key+" : suggestion 1" 
-          },
-          {
-            term: {
-              type:"IRI",
-              value:"http://exemple.fr/2"
+            {
+              term: {
+                type: "IRI",
+                value: "http://exemple.fr/2",
+              },
+              label: key + " : suggestion 2",
             },
-            label: key+" : suggestion 2" 
-          }
-        ];
-        // call the callback function with the list of items
-        callback(items);
-      }
-      }
-    }
+          ];
+          // call the callback function with the list of items
+          callback(items);
+        },
+      },
+    },
   };
 });
 ```
@@ -352,9 +357,9 @@ Pour définir les en-têtes des requêtes effectuées par Sparnatural, utilisez 
 ```javascript
 sparnatural.addEventListener("init", (event) => {
   sparnatural.customization = {
-    headers: { 
-      "User-Agent" : "This is Sparnatural calling"
-    }
-  }
+    headers: {
+      "X-Application-Name": "Sparnatural",
+    },
+  };
 });
 ```

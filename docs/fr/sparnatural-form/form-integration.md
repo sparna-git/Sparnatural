@@ -1,6 +1,6 @@
 _[Accueil](../index.html) > Sparnatural form > intégration du formulaire_
 
-Cette page a été traduite automatiquement à partir de la [page d'origine en anglais](../../sparnatural-form/form-integration.md) - le 19/11/2026
+Voir aussi la [référence en anglais](../../sparnatural-form/form-integration.md). Les exemples LDForge sont maintenus avec cette version.
 
 
 # Intégration de Sparnatural Form et référence des paramètres
@@ -19,7 +19,7 @@ Sparnatural Form s'insère sous forme d'élément HTML personnalisé nommé `spa
   defaultLang="en"
   limit="1000"
   debug="true"
-/>
+></sparnatural-form>
 ```
 
 ## Référence des attributs HTML
@@ -33,16 +33,41 @@ En résumé, Sparnatural Form nécessite 4 éléments à configurer :
 
 | Attribut       | Description                                                                                                                                                                                                                                                            | Valeur par défaut | Obligatoire/Optionnel |
 | --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- | --------------------- |
-| `src`           | identique à l'attribut équivalent [de Sparnatural](../fr/Javascript-integration.md)                                                                                                                                                                                      | `undefined` | Obligatoire          |
-| `endpoint`      | identique à l'attribut équivalent [de Sparnatural](../fr/Javascript-integration.md)                                                                                                                                                                                      | `undefined` | Obligatoire          |
+| `src`           | identique à l'attribut équivalent [de Sparnatural](../Javascript-integration.md)                                                                                                                                                                                      | `undefined` | Obligatoire          |
+| `endpoint`      | identique à l'attribut équivalent [de Sparnatural](../Javascript-integration.md)                                                                                                                                                                                      | `undefined` | Obligatoire          |
 | `form`          | URL d'un fichier JSON donnant la spécification des champs du formulaire, suivant la [structure de spécification du formulaire](form-configuration.md)                                                                                                                                    | `undefined` | Obligatoire          |
-| `query`         | URL d'un fichier JSON donnant la structure de la requête finale que le formulaire exécutera, avec les variables liées aux valeurs fournies dans le formulaire. Ce fichier suit la [structure de requête Sparnatural v12](../fr/archives/Query-JSON-format-v12.md) (`branches` / `line`). | `undefined` | Obligatoire          |
-| `catalog`       | identique à l'attribut équivalent [de Sparnatural](../fr/Javascript-integration.md)                                                                                                                                                                                      | aucun        | Optionnel           |
-| `defaultLang`   | identique à l'attribut équivalent [de Sparnatural](../fr/Javascript-integration.md)                                                                                                                                                                                      | `en` | Recommandé |
-| `lang`          | identique à l'attribut équivalent [de Sparnatural](../fr/Javascript-integration.md)                                                                                                                                                                                      | `en` | Recommandé |
-| `limit`         | identique à l'attribut équivalent [de Sparnatural](../fr/Javascript-integration.md)                                                                                                                                                                                      | `-1`        | Optionnel           |
-| `prefixes`      | identique à l'attribut équivalent [de Sparnatural](../fr/Javascript-integration.md)                                                                                                                                                                                      | `aucun`      | Optionnel           |
+| `query`         | URL d'un fichier JSON donnant la structure de la requête finale que le formulaire exécutera, avec les variables liées aux valeurs fournies dans le formulaire. Ce fichier suit la [structure de requête Sparnatural v12](../../archives/Query-JSON-format-v12.md) (`branches` / `line`). | `undefined` | Obligatoire          |
+| `catalog`       | identique à l'attribut équivalent [de Sparnatural](../Javascript-integration.md)                                                                                                                                                                                      | aucun        | Optionnel           |
+| `defaultLang`   | identique à l'attribut équivalent [de Sparnatural](../Javascript-integration.md)                                                                                                                                                                                      | `en` | Recommandé |
+| `lang`          | identique à l'attribut équivalent [de Sparnatural](../Javascript-integration.md)                                                                                                                                                                                      | `en` | Recommandé |
+| `limit`         | identique à l'attribut équivalent [de Sparnatural](../Javascript-integration.md)                                                                                                                                                                                      | `-1`        | Optionnel           |
+| `prefixes`      | identique à l'attribut équivalent [de Sparnatural](../Javascript-integration.md)                                                                                                                                                                                      | `aucun`      | Optionnel           |
 | `typePredicate` | Le prédicat de type à utiliser pour générer le critère de type. Par défaut rdf:type, mais pourrait être changé par exemple en `<http://www.wikidata.org/prop/direct/P31>+` pour l'intégration avec Wikidata, ou `<http://www.w3.org/2000/01/rdf-schema#subClassOf>+` pour interroger des modèles de style OWL.  | `rdf:type`  | Optionnel           |
+
+## Intégration avec LDForge
+
+Chargez le composant Sparnatural Form séparément, ainsi que le bundle et les
+styles de l'intégration LDForge de Sparnatural. Un formulaire exposant
+`expandSparql()`, `executeSparql()`, `disablePlayBtn()` et `enablePlayBtn()` peut
+être utilisé comme source. L'intégration gère `queryUpdated`, `submit`, `reset`
+et `resetEditor` ; n'ajoutez pas de deuxième gestionnaire d'exécution.
+
+```html
+<div id="ldforge"></div>
+<div id="ldforge-results"></div>
+```
+
+```javascript
+const sparnaturalForm = document.querySelector("sparnatural-form");
+const integration = SparnaturalLDForge.createSparnaturalLDForge(
+  sparnaturalForm,
+  document.getElementById("ldforge"),
+  { resultsContainer: document.getElementById("ldforge-results") },
+);
+// On host/component unmount: integration.destroy().
+```
+
+Voir le [guide LDForge](../LDForge-integration.md) pour les prérequis et le transport. Les résultats séparés utilisent la version publiée `@ldforge/editor@^1.5.1`.
 
 ## Événements de Sparnatural Form
 
@@ -69,19 +94,19 @@ Dans les intégrations typiques, l'état du bouton de soumission peut être mis 
 - `sparnaturalForm.disablePlayBtn()`
 - `sparnaturalForm.enablePlayBtn()`
 
-`disablePlayBtn()` doit être appelé lors de l'événement submit et `enablePlayBtn()` lorsque la requête a retourné des résultats.
+LDForge gère ces appels, y compris en cas d’erreur ou d’annulation. `enablePlayBtn()` retire le chargement ; le formulaire décide de la disponibilité de son bouton.
 
 ### Événement "init"
 
 L'événement `init` est déclenché lorsque le formulaire Sparnatural a terminé son initialisation.
 
-Voir [l'événement correspondant dans Sparnatural](../fr/Javascript-integration.html#init-event).
+Voir [l'événement correspondant dans Sparnatural](../Javascript-integration.html#init-event).
 
 ### Événement "reset"
 
-L'événement `reset` est déclenché lorsque le bouton de réinitialisation est cliqué. Il peut être utilisé pour vider ou réinitialiser d'autres parties de la page, typiquement YasQE.
+L'événement `reset` est déclenché par le bouton de réinitialisation. LDForge annule l'exécution et vide l'éditeur. L'intégration gère aussi `resetEditor` si le formulaire émet cet événement.
 
-Voir [l'événement correspondant dans Sparnatural](../fr/Javascript-integration.html#reset-event).
+Voir [l'événement correspondant dans Sparnatural](../Javascript-integration.html#reset-event).
 
 ## Pré-remplissage du formulaire
 

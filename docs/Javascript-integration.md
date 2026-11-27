@@ -3,6 +3,10 @@ _[Home](index.html) > Javascript integration_
 
 # Javascript integration and parameters reference
 
+Sparnatural is an editor-independent query builder. The supplied examples use the optional [LDForge integration](LDForge-integration.md) for SPARQL editing, execution and results. See the [legacy reference](archives/Javascript-integration-yasgui.md) for existing Yasgui applications.
+
+The separate-results examples use the published `@ldforge/editor@^1.5.1`; see the [version and setup reference](LDForge-integration.md#editor-version-and-optional-local-development).
+
 
 ## Constructor
 
@@ -16,7 +20,7 @@ Sparnatural is inserted as custom HTML element named `spar-natural` (note the da
     defaultLang="en"
     limit="1000"
     debug="true"
-  />
+  ></spar-natural>
 ```
 
 ## HTML attributes reference
@@ -47,7 +51,7 @@ Then the HTML page needs to listen to specific events triggered by Sparnatural, 
 
 ```javascript
 const sparnatural = document.querySelector("spar-natural");
- 
+
 // triggered as soon there is a modification in the query
 sparnatural.addEventListener("queryUpdated", (event) => {
   // do something with the query
@@ -55,7 +59,7 @@ sparnatural.addEventListener("queryUpdated", (event) => {
 
 // triggered when submit button is called
 sparnatural.addEventListener("submit", (event) => {
-    // so something
+  // so something
 });
 
 // triggered when reset button is clicked
@@ -66,35 +70,37 @@ sparnatural.addEventListener("reset", (event) => {
 
 See below for the complete reference of the available events.
 
-A typical integration in a web page looks like this :
+A typical browser-bundle integration uses separate hosts for the query editor and
+results. Load `sparnatural.js`, `sparnatural-ldforge.js` and their styles as shown
+in the [setup guide](LDForge-integration.md#browser-bundles), then mount once:
+
+```html
+<div id="ldforge"></div>
+<div id="ldforge-results"></div>
+<input type="hidden" id="query-json">
+```
 
 ```javascript
 const sparnatural = document.querySelector("spar-natural");
+const integration = SparnaturalLDForge.createSparnaturalLDForge(
+  sparnatural,
+  document.getElementById("ldforge"),
+  { resultsContainer: document.getElementById("ldforge-results") },
+);
 
+// The integration already expands/synchronizes queries and handles submit/reset.
+// Add an observer only for application-specific work such as saving query JSON.
 sparnatural.addEventListener("queryUpdated", (event) => {
-  // expand query to replace identifiers with content of sparqlScript annotation
-  console.log(event.detail.queryString);
-  console.log(event.detail.queryJson);
-  console.log(event.detail.querySparqlJs);
-  queryString = sparnatural.expandSparql(event.detail.queryString);
-  // set query on YasQE
-  yasqe.setValue(queryString);
-
-  // save JSON query
-  document.getElementById('query-json').value = JSON.stringify(event.detail.queryJson);
+  document.getElementById("query-json").value = JSON.stringify(
+    event.detail.queryJson,
+  );
 });
 
-sparnatural.addEventListener("submit", (event) => {
-  // enable loader on button
-  sparnatural.disablePlayBtn() ; 
-  // trigger the query from YasQE
-  yasqe.query();
-});
-
-sparnatural.addEventListener("reset", (event) => {
-  yasqe.setValue("");
-});
+// In a single-page application, call integration.destroy() before unmounting.
 ```
+
+Omit `resultsContainer` for a combined editor and results component. To hide the
+query text while keeping results visible, call `integration.setQueryVisible(false)`.
 
 ### "queryUpdated" event
 
@@ -119,47 +125,35 @@ In typical integrations, the state of the submit button can be updated upon subm
   - `sparnatural.disablePlayBtn()`
   - `sparnatural.enablePlayBtn()`
 
-`disablePlayBtn()` should be called on `submit` event and `enablePlayBtn()` when the query has returned. In a typical integration with YasGUI this looks like this:
+The LDForge integration handles loading for execution from either the visual
+builder or the editor, including errors and cancellation. Its default transport
+calls `sparnatural.executeSparql()`, so endpoint catalogs, custom handlers and
+configured headers also apply to the final query.
+
+`enablePlayBtn()` removes the loading spinner; it does not independently override
+the visual builder's policy for enabling its submit button. Applications using
+the integration should not add a second `submit` listener to execute the same
+query again. To run the current editor text from another application control:
 
 ```javascript
-const sparnatural = document.querySelector("spar-natural");
-
-sparnatural.addEventListener("queryUpdated", (event) => {
-  queryString = sparnatural.expandSparql(event.detail.queryString);
-  yasqe.setValue(queryString);
-});
-
-sparnatural.addEventListener("submit", (event) => {
-  // disable the button and show a spinning loader
-  sparnatural.disablePlayBtn() ; 
-  // trigger the query from YasQE
-  yasqe.query();
-});
-
-const yasqe = new Yasqe(document.getElementById("yasqe"));
-const yasr = new Yasr(document.getElementById("yasr"));
-
-yasqe.on("queryResponse", function(_yasqe, response, duration) {
-  // print the responses in YASR
-  yasr.setResponse(response, duration);
-  // re-enable play button in Sparnatural
-  sparnatural.enablePlayBtn() ;
-}); 
+await integration.editor.run();
 ```
 
 ### "reset" event
 
-The `submit` event is triggered when the reset button is clicked. It can be used to empty or reset other part of the page, typically YasQE. A typical integration is the following:
+The `reset` event is triggered when the reset button is clicked. LDForge cancels
+the active request, clears its query and discards visual-query metadata through
+the integration. Trigger the visual builder's normal reset with:
 
 ```javascript
-sparnatural.addEventListener("reset", (event) => {
-  yasqe.setValue("");
-});
+sparnatural.clear();
 ```
+
+Other application state can be cleared in an additional `reset` observer.
 
 ### "init" event
 
-The `init` event is triggered when Sparnatural has finished reading its configuration. Listen to this event to pass additional JSON customization with `sparnatural.customization = { ... }` (see below).
+The `init` event is triggered when Sparnatural has finished reading its configuration. Listen to this event to pass additional JSON customization with `sparnatural.customization` (see below).
 
 The `init` event includes the Sparnatural configuration object in the `detail.config` variable, to be passed to other components that would need it.
 
@@ -167,7 +161,10 @@ The `init` event includes the Sparnatural configuration object in the `detail.co
 ```javascript
 sparnatural.addEventListener("init", (event) => {
   console.log("Sparnatural is initialized");
-  // sparnatural.customization = { ... }
+  sparnatural.customization = {
+    ...sparnatural.customization,
+    autocomplete: { ...sparnatural.customization.autocomplete, maxItems: 40 },
+  };
   console.log(event.detail.config);
 });
 ```
@@ -188,25 +185,29 @@ The table below summarizes the various functions that can be called on the Sparn
 
 ## Sparnatural bindings
 
-Starting from 9.1, releases of Sparnatural include a [`sparnatural-bindings.js`](https://github.com/sparna-git/Sparnatural/blob/master/src/sparnatural-bindings.js) Javascript file that can be used to facilitate the integration of the events and functions of Sparnatural in typical integration scenarios.
+For current examples, use `createSparnaturalLDForge()` from the optional browser
+bundle or the `sparnatural/ldforge` ESM entry. It handles `init`, `queryUpdated`,
+`submit`, `reset` and the form's `resetEditor` event, and provides `editor`,
+`setQueryVisible()`, `isQueryVisible()` and `destroy()`.
 
-In particular for a scenario when Sparnatural is integrated with YasQE as a read-only query viewer and YasR, and where Sparnatural is responsible for executing the query, you can call the following functions:
-
-```javascript
-// binds Sparnatural with the YasR plugins
-bindSparnaturalWithYasrPlugins(sparnatural, yasr);
-// binds Sparnatural with itself for the query execution and integration with yasqe and yasr
-bindSparnaturalWithItself(sparnatural, yasqe, yasr);
-```
+The core component can also be used without any editor or result viewer: listen
+to `queryUpdated` and use `expandSparql()` before sending the text to another
+system. Existing `sparnatural-bindings.js` helpers remain available for
+[legacy Yasgui applications](archives/Javascript-integration-yasgui.md#sparnatural-bindings).
+See [LDForge integration](LDForge-integration.md) for transport options, result
+renderers and lifecycle cleanup.
 
 ## Sparnatural behavior customization
 
-The behavior of Sparnatural can be further adjusted with the `customization` object : `sparnatural.customization = { ... }`. That call must be done within the `init` event listener, after Sparnatural has finished reading its initial specification file.
+The behavior of Sparnatural can be further adjusted with the `customization` object : `sparnatural.customization`. That call must be done within the `init` event listener, after Sparnatural has finished reading its initial specification file.
 
 ```javascript
 sparnatural.addEventListener("init", (event) => {
   console.log("Sparnatural is initialized");
-  sparnatural.customization = { ... }
+  sparnatural.customization = {
+    ...sparnatural.customization,
+    autocomplete: { ...sparnatural.customization.autocomplete, maxItems: 40 },
+  };
 });
 ```
 
@@ -315,44 +316,51 @@ export class RDFTerm {
 ### Example of custom data provider function
 
 ```javascript
-sparnatural.addEventListener("init", (event) => {  
+sparnatural.addEventListener("init", (event) => {
   sparnatural.customization = {
     autocomplete: {
       dataProvider: {
-        getAutocompleteSuggestions: function(
-        domain,
-        predicate,
-        range,
-        key,
-        lang,
-        defaultLang,
-        typePredicate,
-        callback,
-        errorCallback
-      ) {
-        // build the list of autocomplete items to show
-        console.log("domain,predicate,range : "+domain+" "+predicate+" "+range);
-        let items = [
-          {
-            term: {
-              type:"IRI",
-              value:"http://exemple.fr/1"
+        getAutocompleteSuggestions: function (
+          domain,
+          predicate,
+          range,
+          key,
+          lang,
+          defaultLang,
+          typePredicate,
+          callback,
+          errorCallback,
+        ) {
+          // build the list of autocomplete items to show
+          console.log(
+            "domain,predicate,range : " +
+              domain +
+              " " +
+              predicate +
+              " " +
+              range,
+          );
+          let items = [
+            {
+              term: {
+                type: "IRI",
+                value: "http://exemple.fr/1",
+              },
+              label: key + " : suggestion 1",
             },
-            label: key+" : suggestion 1" 
-          },
-          {
-            term: {
-              type:"IRI",
-              value:"http://exemple.fr/2"
+            {
+              term: {
+                type: "IRI",
+                value: "http://exemple.fr/2",
+              },
+              label: key + " : suggestion 2",
             },
-            label: key+" : suggestion 2" 
-          }
-        ];
-        // call the callback function with the list of items
-        callback(items);
-      }
-      }
-    }
+          ];
+          // call the callback function with the list of items
+          callback(items);
+        },
+      },
+    },
   };
 });
 ```
@@ -364,16 +372,16 @@ To set the headers of requests made by Sparnatural, use the customization objet 
 ```javascript
 sparnatural.addEventListener("init", (event) => {
   sparnatural.customization = {
-    headers: { 
-      "User-Agent" : "This is Sparnatural calling"
-    }
-  }
+    headers: {
+      "X-Application-Name": "Sparnatural",
+    },
+  };
 });
 ```
 
 ### Example of custom SPARQL handler
 
-```javascript
+```typescript
 sparnatural.addEventListener("init", (event) => {
   sparnatural.customization = {
     sparqlHandler: { 
@@ -385,7 +393,7 @@ sparnatural.addEventListener("init", (event) => {
           console.log("Received SPARQL "+sparql);
           // ... execute SPARQL ...
           // fire callback with SPARQL results
-          callback({});
+          callback({ head: { vars: [] }, results: { bindings: [] } });
       }
     }
   }

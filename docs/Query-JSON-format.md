@@ -4,7 +4,7 @@ _[Home](index.html) > Query JSON format_
 
 ## How it works : onQueryUpdated / loadQuery
 
-Sparnatural emits the [`queryUpdated` event](http://docs.sparnatural.eu/Javascript-integration.html#queryupdated-event) each time the query is modified. This event contains 3 files : the generated SPARQL query string, the SPARQL query in JSON in the sparqljs syntax, and a custom JSON data structure that encodes the query. This custom JSON data structure is specific to Sparnatural, and enables it to **load previously generated query**, using the method [**`sparnatural.loadQuery(jsonQuery)`**](http://docs.sparnatural.eu/Javascript-integration.html#sparnatural-element-api).
+Sparnatural emits the [`queryUpdated` event](Javascript-integration.md#queryupdated-event) each time the query is modified. This event contains 3 files : the generated SPARQL query string, the SPARQL query in JSON in the sparqljs syntax, and a custom JSON data structure that encodes the query. This custom JSON data structure is specific to Sparnatural, and enables it to **load previously generated query**, using the method [**`sparnatural.loadQuery(jsonQuery)`**](Javascript-integration.md#sparnatural-element-api).
 
 This allows to implement 2 important features to showcase your knowledge graph :
 
@@ -13,39 +13,34 @@ This allows to implement 2 important features to showcase your knowledge graph :
 
 This is illustrated in the following code snippet :
 
+Load the [LDForge browser bundle and styles](LDForge-integration.md#browser-bundles) first, and provide `ldforge`, `query-json` and `select-examples` HTML elements. This example assumes the host has loaded JsonUrl and a `sampleQueries` mapping. Loading a query does not execute it.
+
 ```javascript
-$(document).ready(function ($) {
-  const sparnatural = document.querySelector("spar-natural");
-
-  sparnatural.addEventListener("queryUpdated", (event) => {
-    // here we get the SPARQL query string and the JSON data structure
-    // if integrating with YasQE we set the value :
-    queryString = sparnatural.expandSparql(event.detail.queryString);
-    yasqe.setValue(queryString);
-
-    // and we could save the JSON query for later, e.g. to pass it as a parameter in a URL
-    document.getElementById("query-json").value = JSON.stringify(
-      event.detail.queryJson,
-    );
-  });
-
-  // if we have received a JSON data structure as a URL parameter "?query="
-  // then uncompress it, and pass it to the loadQuery() function of Sparnatural
-  var UrlString = window.location.search;
-  var urlParams = new URLSearchParams(UrlString);
-  if (urlParams.has("query") === true) {
-    var compressedJson = urlParams.get("query");
-    var compressCodec = JsonUrl("lzma");
-    compressCodec.decompress(compressedJson).then((json) => {
-      sparnatural.loadQuery(JSON.parse(json));
-    });
-  }
+const sparnatural = document.querySelector("spar-natural");
+const integration = SparnaturalLDForge.createSparnaturalLDForge(
+  sparnatural,
+  document.getElementById("ldforge"),
+);
+sparnatural.addEventListener("queryUpdated", (event) => {
+  // Save visual-query JSON, not the editor's SPARQL text.
+  document.getElementById("query-json").value = JSON.stringify(
+    event.detail.queryJson,
+  );
 });
-
-// if we have a dropdown to select example query from...
-document.getElementById("select-examples").onchange = function () {
-  var key = $("#select-examples option:selected").val();
-  sparnatural.loadQuery(sampleQueries[key]);
+sparnatural.addEventListener(
+  "init",
+  () => {
+    const query = new URLSearchParams(location.search).get("query");
+    if (query)
+      JsonUrl("lzma")
+        .decompress(query)
+        .then((json) => sparnatural.loadQuery(JSON.parse(json)));
+  },
+  { once: true },
+);
+document.getElementById("select-examples").onchange = (event) => {
+  const query = sampleQueries[event.target.value];
+  if (query) sparnatural.loadQuery(query);
 };
 ```
 

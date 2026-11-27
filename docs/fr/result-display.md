@@ -1,126 +1,117 @@
-_[Accueil](index.html) > Plugins Sparnatural YASGUI_
+_[Accueil](index.html) > Affichage des résultats_
 
-Cette page a été traduite automatiquement à partir de la [page d'origine en anglais](../result-display.md) - le 19/11/2026
+# Vues de résultats LDForge
 
+Sparnatural construit une requête ; l'intégration LDForge optionnelle permet de
+modifier le SPARQL, de l'exécuter et d'afficher les résultats. Consultez le
+[guide LDForge](LDForge-integration.md) pour l'installation et la
+[référence historique](archives/result-display-yasgui.md) pour une application
+Yasgui existante. Les deux API de plugins ne sont pas interchangeables.
 
-À strictement parler, le rôle de Sparnatural se limite à produire la requête SPARQL générée par le composant. C'est tout. Il n'est pas responsable de l'affichage des résultats de la requête. Cela relève typiquement de [YasGUI](https://triply.cc/docs/yasgui/), et Sparnatural est donc souvent utilisé en combinaison avec ce dernier composant.
+## Tableau avec libellés
 
-YasGUI offre un rendu de base sous forme de tableau des résultats de requête, ce qui est suffisant pour une intégration simpliste. Cependant, pour un meilleur rendu utilisateur, des plugins spécifiques de YasGUI sont fournis pour être utilisés avec Sparnatural. Ces plugins spécifiques ont [leur propre dépôt Github](https://github.com/sparna-git/Sparnatural-yasgui-plugins) à partir duquel vous pouvez télécharger les versions.
+**Labelled table** (`tablex`) affiche `?x_label` à la place de `?x` quand les deux
+colonnes sont présentes. La colonne de libellé est masquée, mais le lien HTTP(S)
+de la ressource est conservé. Les en-têtes peuvent utiliser les libellés de la
+configuration. Le tableau permet le tri et le filtrage.
 
-## Plugin "TableX" : masquer les URI derrière les libellés
+```sparql
+SELECT ?person ?person_label WHERE {
+  VALUES (?person ?person_label) {
+    (<https://example.org/alice> "Alice")
+    (<https://example.org/bob> "Bob")
+  }
+}
+```
 
-### Ce qu'il fait
+Configurez `dash:LabelRole` en SHACL (ou `core:defaultLabelProperty` dans une
+ancienne configuration OWL) pour générer les colonnes de libellé.
+`resultOptions.uriHrefAdapter` personnalise les liens sans modifier les valeurs
+originales du JSON ou du CSV.
 
+## Grid
 
-Il s'agit d'une adaptation du plugin YasR Table original. Son amélioration principale est qu'il peut masquer les colonnes URI "derrière" une colonne de libellé correspondante, **masquant ainsi les URI techniques pour les utilisateurs finaux**. Les URL de lien peuvent également être personnalisées pour naviguer vers une URL différente de l'URI originale.
+**Grid** (`grid`) est la vue d'entités propre à Sparnatural. Elle regroupe les
+lignes par terme RDF racine et conserve les branches imbriquées de la requête
+visuelle : une relation et sa date restent rattachées au même parent. Deux IRI
+avec le même libellé restent deux entités. Les propriétés utilisent les libellés
+de la configuration ; les colonnes supplémentaires restent affichées. Une URL
+d'image HTTP(S) avec une extension courante peut illustrer la carte.
 
-Pour chaque colonne `?xxx_label`, le plugin recherchera une colonne `?xxx` ayant une propriété littérale (par exemple `?Person_1` et `?Person_1_label`), et fusionnera ces colonnes. La fusion est effectuée sur l'ensemble de résultats SPARQL lui-même, en créant un nouveau type de résultat `x-labelled-uri` contenant à la fois l'URI et son libellé. Seule la colonne `?xxx` sera affichée.
+L'intégration transmet automatiquement les métadonnées, en JSON v13 ou ancien
+format. Il n'est plus nécessaire d'appeler `notifyQuery()` ou
+`notifyConfiguration()`. Si la racine n'est pas sélectionnée, la première
+variable affichée sert au regroupement et la présentation est plate. Les
+variables intermédiaires absentes ne permettent pas d'identifier les entités
+liées, mais leurs descendants sélectionnés restent visibles. Après modification
+manuelle du SPARQL, Grid utilise une présentation plate.
 
-Au lieu de ceci :
+Le regroupement ne modifie jamais les lignes du résultat original ou du CSV.
+Grid et Labelled table affichent toutes les lignes ; utilisez LIMIT pour les
+jeux volumineux. Le style exact et les icônes de l'ancien Grid ne sont pas repris.
 
-![YasR sans plugin](/assets/images/yasr-without-plugin.png)
+## Cards
 
-Vous obtiendrez ceci :
+**Cards** (`cards`) est la grille générique de LDForge : une carte par ligne,
+sans regroupement d'entités. Les variables reconnues sont `card_title`,
+`card_text`, `card_image`, `card_button` et `card_button_url`.
+Au moins une doit être sélectionnée. Chaque champ est optionnel par ligne ;
+un bouton nécessite son texte et son URL.
 
-![YasR avec plugin](/assets/images/yasr-with-plugin.png)
+```sparql
+# view=cards
+SELECT ?card_title ?card_text WHERE {
+  VALUES (?card_title ?card_text) { ("Alice" "Premier exemple") }
+}
+```
 
+## Carte géographique
 
-### Configuration dans Sparnatural
+**Map** (`geo`) reconnaît les littéraux `geo:wktLiteral` et les colonnes de
+latitude/longitude d'après leurs noms ou les propriétés configurées. Une requête
+manuelle peut fournir `geometry`, `geometryLabel`, `geoImage`, `geoDescription`
+et `geoLink`.
 
-Les libellés par défaut sont configurés avec l'annotation `core:defaultLabelProperty` de la configuration OWL (voir la [référence de configuration OWL](OWL-based-configuration.md)), ou l'annotation équivalente `dash:propertyRole` avec la valeur `dash:LabelRole` de la configuration SHACL (voir la [référence de configuration SHACL](SHACL-based-configuration.md)). Ces annotations provoqueront l'insertion d'une nouvelle colonne dans l'ensemble de résultats, avec un nom de colonne défini sur `xxx_label`, où `xxx` est le nom de la colonne originale ayant une propriété de libellé par défaut (par exemple `?Person_1` et `?Person_1_label`).
+```sparql
+# view=geo
+SELECT ?geometry ?geometryLabel WHERE {
+  VALUES (?geometry ?geometryLabel) { ("POINT(4.9 52.37)" "Amsterdam") }
+}
+```
 
+Les coordonnées sont WGS84, longitude en premier. Points, lignes, polygones et
+variantes multiples sont disponibles, avec des modes normal, groupé, densité et
+3D. Les géométries invalides sont signalées. La zone recherchée superposée et les
+couches classées par taille de l'ancien plugin ne sont pas reprises. Utilisez
+`resultOptions.geo` pour configurer les bibliothèques, les styles et les tuiles.
 
-### Intégration Javascript
+## Graphiques
 
-Voir [la section correspondante dans la page d'intégration des plugins](YasGUI-plugins-integration.md#tablex-plugin).
+**Charts** (`charts`) adapte le premier agrégat COUNT sélectionné dans la requête
+visuelle et utilise les autres colonnes pour les catégories. Un COUNT seul
+apparaît comme une barre. Pour une requête manuelle :
 
-## Plugin "Grid" : cartes fusionnées élégantes, avec images
+```sparql
+# view=charts; chart=bar
+SELECT ?chart_label ?chart_value WHERE {
+  VALUES (?chart_label ?chart_value) { ("A" 2) ("B" 3) }
+}
+```
 
-### Ce qu'il fait
+Les types disponibles sont barres, lignes, secteurs et anneaux. Les vues numérique
+isolée et polaire de l'ancien Stats ne sont pas reprises. Chart.js est chargé à
+l'activation ; `resultOptions.charts` permet un chargeur personnalisé.
 
-Le plugin Grid fonctionne en conjonction avec Sparnatural, et non pour n'importe quelle requête SPARQL. Il doit être notifié de la requête Sparnatural originale et de la configuration Sparnatural originale.
+## Table native, JSON et CSV
 
-Le plugin Grid :
+**Table** (`table`) offre les détails RDF et l'inspection des ressources.
+**JSON** (`json`) affiche les résultats normalisés, sans reproduire la réponse
+HTTP brute. ASK utilise la vue booléenne ; les résultats de graphe nécessitent un
+transport adapté. Le CSV télécharge les données originales complètes, indépendamment
+du regroupement visuel de Grid.
 
-- recherche une colonne de titre principal pour chaque entité
-- fusionne les lignes dans l'ensemble de résultats ayant le même titre
-- affiche les autres colonnes dans chaque carte en répliquant la structure de requête originale de Sparnatural
-- peut rechercher une colonne d'image (contenant des URI se terminant par .png ou .jpg)
-
-Voici à quoi cela ressemble avec une colonne d'image sélectionnée :
-
-![Plugin Grid](https://github.com/sparna-git/Sparnatural-yasgui-plugins/raw/main/docs/images/grid-1.png)
-
-La requête originale était la suivante : _(Tous les présidents des groupes politiques de l'UE, avec dates de présidence et image, basées sur les ensembles de données du Portail de données ouvertes du Parlement européen)_
-
-![Requête du plugin Grid](https://github.com/sparna-git/Sparnatural-yasgui-plugins/raw/main/docs/images/grid-3.png)
-
-L'ensemble de résultats original était le suivant - remarquez comment chaque personne est dupliquée autant de fois qu'elle a été présidente d'un groupe, avec des dates différentes :
-
-![Tableau de résultats original du plugin Grid](https://github.com/sparna-git/Sparnatural-yasgui-plugins/raw/main/docs/images/grid-4.png)
-
-Voici un focus sur une carte, remarquez comment les lignes correspondant à la même entité ont été fusionnées, et comment la structure de requête originale est répliquée à l'intérieur de la carte :
-
-![Carte du plugin Grid](https://github.com/sparna-git/Sparnatural-yasgui-plugins/raw/main/docs/images/grid-2.png)
-
-### Configuration dans Sparnatural
-
-_Aucune configuration spécifique nécessaire dans Sparnatural_
-
-### Intégration
-
-Voir [la section correspondante dans la page d'intégration des plugins](YasGUI-plugins-integration.md#grid-plugin).
-
-## Plugin Stats
-
-### Ce qu'il fait
-
-Le plugin Stats peut :
-- afficher une simple requête COUNT, avec seulement un résultat entier :
-
-![](https://github.com/sparna-git/Sparnatural-yasgui-plugins/raw/main/docs/images/stats-1.png)
-
-- générer des diagrammes circulaires ou en barres simples à partir d'une requête `COUNT` + `GROUP BY`
-
-![](https://github.com/sparna-git/Sparnatural-yasgui-plugins/raw/main/docs/images/stats-2.png)
-
-
-![](https://github.com/sparna-git/Sparnatural-yasgui-plugins/raw/main/docs/images/stats-3.png)
-
-
-### Configuration
-
-Aucune configuration spécifique nécessaire dans Sparnatural, il vous suffit d'émettre une requête "count", typiquement avec d'autres colonnes comme colonnes "group by".
-
-### Intégration
-
-Voir [la section correspondante dans la page d'intégration des plugins](YasGUI-plugins-integration.md#stats-plugin).
-
-
-## Plugin Map : Points et Polygones
-
-### Ce qu'il fait
-
-Le plugin Map :
-
-- Lit les colonnes avec un type de données `geo:wktLiteral`
-- Ou lit 2 colonnes issues d'une propriété dont l'URI contient (en ignorant la casse) `lat` et `long`
-- Peut afficher des Points et des Polygones. Les MultiPolygones ne sont actuellement pas pris en charge
-- Affiche la zone de requête originale provenant de la requête, si présente
-- Affiche des bulles d'information en lisant toutes les colonnes de l'ensemble de résultats
-- Divise les polygones en différentes couches selon leur taille, afin que l'utilisateur puisse réduire le nombre de polygones affichés sur la carte pour plus de clarté
-- Peut avertir les utilisateurs si certaines lignes de l'ensemble de résultats n'ont pas leurs coordonnées remplies
-
-Voici un exemple :
-
-![Plugin Map](https://github.com/sparna-git/Sparnatural-yasgui-plugins/raw/main/docs/images/map-1.png)
-
-### Configuration
-
-Aucune configuration spécifique nécessaire dans Sparnatural, il vous suffit d'émettre une requête qui soit :
-- retourne un `geo:wktLiteral` dans une colonne
-- ou retourne 2 colonnes issues de 2 propriétés qui contiennent respectivement `lat` et `long` dans leur URI.
-
-### Intégration
-
-Voir [la section correspondante dans la page d'intégration des plugins](YasGUI-plugins-integration.md#map-plugin).
+Les messages de Labelled table et Grid sont actuellement en anglais. Les contrôles
+natifs LDForge sont disponibles en anglais et néerlandais ; les libellés de la
+configuration Sparnatural conservent leur langue. Consultez la
+[référence LDForge](https://github.com/mightymax/ldforge/blob/main/docs/renderers.md)
+pour les contrats complets et les options d'hébergement des bibliothèques.

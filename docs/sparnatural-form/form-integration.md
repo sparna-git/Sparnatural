@@ -16,7 +16,7 @@ Sparnatural Form is inserted as custom HTML element named `sparnatural-form`, wi
   defaultLang="en"
   limit="1000"
   debug="true"
-/>
+></sparnatural-form>
 ```
 
 ## HTML attributes reference
@@ -30,16 +30,41 @@ In a nutshell, Sparnatural Form requires 4 things to be configured:
 
 | Attribute       | Description                                                                                                                                                                                                                                                            | Default     | Mandatory/Optional |
 | --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- | ------------------ |
-| `src`           | identical to the equivalent [Sparnatural attribute](../javascript-integration.md)                                                                                                                                                                                      | `undefined` | Mandatory          |
-| `endpoint`      | identical to the equivalent [Sparnatural attribute](../javascript-integration.md)                                                                                                                                                                                      | `undefined` | Mandatory          |
+| `src`           | identical to the equivalent [Sparnatural attribute](../Javascript-integration.md)                                                                                                                                                                                      | `undefined` | Mandatory          |
+| `endpoint`      | identical to the equivalent [Sparnatural attribute](../Javascript-integration.md)                                                                                                                                                                                      | `undefined` | Mandatory          |
 | `form`          | URL of a JSON file giving the specification of the form fields, following the [form specification structure](form-configuration.md)                                                                                                                                    | `undefined` | Mandatory          |
 | `query`         | URL of a JSON file giving the structure of the final query that the form will execute, with variables bounded to the values provided in the form. This file follows the [v12 Sparnatural query structure](../archives/Query-JSON-format-v12.md) (`branches` / `line`). | `undefined` | Mandatory          |
-| `catalog`       | identical to the equivalent [Sparnatural attribute](../javascript-integration.md)                                                                                                                                                                                      | none        | Optional           |
-| `defaultLang`   | identical to the equivalent [Sparnatural attribute](../javascript-integration.md) `en`                                                                                                                                                                                 | Recommended |
-| `lang`          | identical to the equivalent [Sparnatural attribute](../javascript-integration.md) `en`                                                                                                                                                                                 | Recommended |
-| `limit`         | identical to the equivalent [Sparnatural attribute](../javascript-integration.md)                                                                                                                                                                                      | `-1`        | Optional           |
-| `prefixes`      | identical to the equivalent [Sparnatural attribute](../javascript-integration.md)                                                                                                                                                                                      | `none`      | Optional           |
+| `catalog`       | identical to the equivalent [Sparnatural attribute](../Javascript-integration.md)                                                                                                                                                                                      | none        | Optional           |
+| `defaultLang`   | identical to the equivalent [Sparnatural attribute](../Javascript-integration.md) `en`                                                                                                                                                                                 | Recommended |
+| `lang`          | identical to the equivalent [Sparnatural attribute](../Javascript-integration.md) `en`                                                                                                                                                                                 | Recommended |
+| `limit`         | identical to the equivalent [Sparnatural attribute](../Javascript-integration.md)                                                                                                                                                                                      | `-1`        | Optional           |
+| `prefixes`      | identical to the equivalent [Sparnatural attribute](../Javascript-integration.md)                                                                                                                                                                                      | `none`      | Optional           |
 | `typePredicate` | The type predicate to use to generate the type criteria. Defaults to rdf:type, but could be changed to e.g. `<http://www.wikidata.org/prop/direct/P31>+` for Wikidata integration, or `<http://www.w3.org/2000/01/rdf-schema#subClassOf>+` to query OWL-style models.  | `rdf:type`  | Optional           |
+
+## LDForge integration
+
+Load the separately distributed Sparnatural Form component, plus Sparnatural's
+LDForge integration bundle and styles. A form exposing `expandSparql()`,
+`executeSparql()`, `disablePlayBtn()` and `enablePlayBtn()` can be used as a source.
+The integration handles `queryUpdated`, `submit`, `reset` and `resetEditor`;
+do not add a second submit handler that executes the same query.
+
+```html
+<div id="ldforge"></div>
+<div id="ldforge-results"></div>
+```
+
+```javascript
+const sparnaturalForm = document.querySelector("sparnatural-form");
+const integration = SparnaturalLDForge.createSparnaturalLDForge(
+  sparnaturalForm,
+  document.getElementById("ldforge"),
+  { resultsContainer: document.getElementById("ldforge-results") },
+);
+// On host/component unmount: integration.destroy().
+```
+
+See the [LDForge guide](../LDForge-integration.md) for setup and transport. Separate results are supported by the required published `@ldforge/editor@^1.5.1`.
 
 ## Sparnatural Form events
 
@@ -66,7 +91,7 @@ In typical integrations, the state of the submit button can be updated upon subm
 - `sparnaturalForm.disablePlayBtn()`
 - `sparnaturalForm.enablePlayBtn()`
 
-`disablePlayBtn()` should be called on submit event and `enablePlayBtn()` when the query has returned.
+The LDForge integration manages these calls on success, error and cancellation. `enablePlayBtn()` removes loading; the form controls its own availability policy.
 
 ### "init" event
 
@@ -76,7 +101,7 @@ See the [corresponding event in Sparnatural](../Javascript-integration.html#init
 
 ### "reset" event
 
-The `submit` event is triggered when the reset button is clicked. It can be used to empty or reset other part of the page, typically YasQE.
+The `reset` event is triggered when the reset button is clicked. The LDForge integration cancels execution and clears the editor. It also handles `resetEditor` from form implementations that emit that event.
 
 See the [corresponding event in Sparnatural](../Javascript-integration.html#reset-event).
 

@@ -1,6 +1,6 @@
 _[Accueil](index.html) > Interrogation de plusieurs points d'accès_
 
-Cette page a été traduite automatiquement à partir de la [page d'origine en anglais](../Querying-multiple-endpoints.md) - le 19/11/2026
+Voir aussi la [référence en anglais](../Querying-multiple-endpoints.md). Les exemples LDForge sont maintenus avec cette version.
 
 
 # Prise en charge de la requête de plusieurs points d'accès
@@ -145,46 +145,24 @@ Lorsqu'il est configuré avec plus d'un point de terminaison, Sparnatural se com
 
 
 
-## Exécution de la requête SPARQL finale contre tous les points de terminaison
+## Exécution de la requête finale sur plusieurs points d'accès
 
-Sparnatural peut gérer la population des listes déroulantes et des champs d'autocomplétion contre plusieurs points de terminaison. Vous devez également exécuter la requête finale retournée par Sparnatural contre tous les points de terminaison. Pour ce faire, vous pouvez appeler la méthode `executeSparql()` sur Sparnatural, qui se chargera de :
-1. envoyer la requête SPARQL à tous les points de terminaison du catalogue
-2. fusionner les résultats, en ajoutant une colonne supplémentaire pour la source
-3. retourner le résultat fusionné
-
-
-L'intégration complète ressemble à ceci :
+L'[intégration LDForge](LDForge-integration.md) utilise par défaut
+`sparnatural.executeSparql()`. Sparnatural interroge son catalogue et fusionne les
+résultats, avec une colonne indiquant leur source, avant leur affichage.
 
 ```javascript
-    sparnatural.addEventListener("queryUpdated", (event) => {
-      queryString = sparnatural.expandSparql(event.detail.queryString);
-      yasqe.setValue(queryString);
-    });
-
-    sparnatural.addEventListener("submit", (event) => {
-      // enable loader on button
-      sparnatural.disablePlayBtn() ;
-
-      let finalResult = sparnatural.executeSparql(
-        yasqe.getValue(),
-        (finalResult) => {
-          // send final result to YasR
-          yasr.setResponse(finalResult);
-          // re-enable submit button
-          sparnatural.enablePlayBtn();
-        },
-        (error) => {
-          console.error("Got an error when executing SPARQL in Sparnatural");
-          console.dir(error);
-        }
-      );
-    });
-
-    sparnatural.addEventListener("reset", (event) => {
-      yasqe.setValue("");
-    });
+const sparnatural = document.querySelector("spar-natural");
+const integration = SparnaturalLDForge.createSparnaturalLDForge(
+  sparnatural,
+  document.getElementById("ldforge"),
+  { resultsContainer: document.getElementById("ldforge-results") },
+);
 ```
 
-Le point de terminaison source est ajouté en tant que colonne supplémentaire :
-
-![liste de résultats avec une colonne supplémentaire montrant la source](/assets/images/result-table-with-source-column.png)
+Chargez les bundles et les styles et fournissez les deux conteneurs comme dans
+l'[exemple JavaScript](Javascript-integration.md). La disposition séparée utilise
+la version publiée `@ldforge/editor@^1.5.1`.
+Aucun autre gestionnaire `submit` n'est nécessaire. Un `createHttpExecutor()`
+explicite contourne le catalogue et n'interroge qu'un point d'accès.
+La colonne de source reste accessible dans les tableaux, JSON et l'export CSV.

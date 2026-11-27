@@ -1,0 +1,50 @@
+.sparnatural-query-hidden {
+  .ldforge-code,
+  .ldforge-toolbar,
+  .ldforge-editor-resize {
+    display: none;
+  }
+}
+.sparnatural-result-filter {
+  margin-bottom: 1em;
+  max-width: 100%;
+}
+.sparnatural-result-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  th,
+  td {
+    padding: 0.5em;
+    text-align: left;
+    vertical-align: top;
+    overflow-wrap: anywhere;
+    border-bottom: 1px solid var(--ldforge-border, #ddd);
+  }
+  th button {
+    color: inherit;
+    background: transparent;
+    border: 0;
+    text-align: left;
+    font-weight: bold;
+  }
+}
+.sparnatural-result-grid {
+  .ldforge-card {
+    min-width: 0;
+  }
+  dt {
+    margin-top: 0.5em;
+  }
+  dd {
+    margin-left: 1em;
+    overflow-wrap: anywhere;
+  }
+  dd dl {
+    border-left: 2px solid var(--ldforge-border, #ddd);
+    padding-left: 0.5em;
+  }
+  h3 {
+    overflow-wrap: anywhere;
+  }
+}

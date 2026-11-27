@@ -44,6 +44,10 @@ Sparnatural is configured by a configuration file expressed in SHACL. The config
 
 ### 4. Integrating Sparnatural in HTML / React
 
+- [Hello Sparnatural tutorial](hello-sparnatural/Hello-Sparnatural.md) - Set up the query builder, LDForge and your dataset.
+
+- [LDForge editor and results](LDForge-integration.md) - Setup, Grid cards, result views and migration from Yasgui.
+
 - [**HTML page and Javascript integration**](Javascript-integration.md) - The reference page to understand how the `<spar-natural` web component can be integrated in your webpage
 - [Customize colors](Customize-colors.md) - How to customize colors of Sparnatural
 
@@ -94,7 +98,8 @@ Historically, Sparnatural also supported configuration specified in OWL :
 ## Sparnatural results display plugins
 
 - [Reference documentation of result display plugins](result-display.md) : the specific ways to display search results after a query has been written, beyond classical table display.
-- [YasGUI plugins integration](YasGUI-plugins-integration.md) - Read to understand how to integrate the [Sparnatural specific plugins](result-display.md) in your HTML/javascript code
+- [LDForge integration](LDForge-integration.md) - Current editor/result setup, separate hosts and migration options.
+- [Legacy Yasgui plugins](YasGUI-plugins-integration.md) - Retained for existing applications.
 
 ## Sparnatural history
 

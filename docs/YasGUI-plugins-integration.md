@@ -1,10 +1,12 @@
+> **Legacy Yasgui integration.** Current examples use [LDForge](LDForge-integration.md) and its [result views](result-display.md). This page is retained for existing Yasgui applications.
+
 _[Home](index.html) > YASGUI plugin integration_
 
-_For how-to integrate Sparnatural with YasQE and YasR, please refer to the [Javascript integration](Javascript-integration.md) documentation._
+_For how-to integrate Sparnatural with YasQE and YasR, please refer to the [Javascript integration](archives/Javascript-integration-yasgui.md) documentation._
 
-# YASGUI plugins integration
+# Legacy Yasgui plugins integration
 
-The features of the custom result display plugins are documented in the [result display plugins reference page](result-display.md). This page gives the details of how to integrate them in Javascript.
+The features of the custom result display plugins are documented in the [result display plugins reference page](archives/result-display-yasgui.md). This page gives the details of how to integrate them in Javascript.
 
 ## How to use the plugins
 

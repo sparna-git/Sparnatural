@@ -1,99 +1,90 @@
-_[Accueil](index.html) > Utiliser Sparnatural dans React_
+_[Accueil](index.html) > Intégration React_
 
-Cette page a été traduite automatiquement à partir de la [page d'origine en anglais](../react-integration.md) - le 19/11/2026
+# Utiliser Sparnatural et LDForge dans React
 
+Sparnatural est un composant web. Montez l'intégration LDForge après la création
+des références DOM React, puis appelez `destroy()` dans le nettoyage de l'effet.
+L'éditeur peut être placé à côté du constructeur, avec les résultats en pleine
+largeur dessous.
 
-# Utiliser Sparnatural dans React
-Sparnatural n'est pas publié en tant que composant React séparé, mais il est toujours possible de l'utiliser. Cependant, il y a quelques points importants à prendre en compte :
-- Sparnatural utilise toujours un peu de JQuery, les tests actuels n'ont montré aucun problème mais soyez vigilant.
-- Sparnatural pourrait rencontrer des problèmes de CSS lors du redimensionnement. Il est préférable de le maintenir dans une taille de fenêtre fixe.
+## Installation
 
-Si vous découvrez des problèmes, faites-le nous savoir !
+Suivez le [guide LDForge](LDForge-integration.md) pour les dépendances optionnelles.
+Cette documentation décrit l'intégration de cette branche, qui doit être publiée
+avant de pouvoir être installée depuis le registre. La disposition séparée utilise
+`@ldforge/editor@^1.5.1`, publié sur npm, sans archive locale requise.
 
-## Exigences
-- Téléchargez la dernière version de Sparnatural avec `npm install sparnatural`
+Servez la configuration à `/config.ttl`. Copiez les fichiers `dist/browser` du
+package dans `public/vendor/sparnatural`, puis chargez
+`/vendor/sparnatural/sparnatural.css` dans la page HTML. Ajoutez le thème et les
+icônes comme dans l'exemple navigateur. Le composant importe la feuille de style
+de l'intégration ; l'ancien chemin `sparnatural/dist/sparnatural.css` n'est pas
+un export public du package.
 
-## Utilisation
+## Composant
 
-### Intégration JSX (sans YASGUI)
+`createElement()` rend la balise personnalisée sans déclaration de type JSX
+supplémentaire. Les autres balises JSX sont des éléments DOM React ordinaires.
 
-```typescript
-import './App.css';
-import { useEffect, useRef } from 'react';
-import "sparnatural"
-import "sparnatural/dist/sparnatural.css"
+```tsx
+import { createElement, useEffect, useRef } from "react";
+import "sparnatural";
+import type { SparnaturalElement } from "sparnatural";
+import { createSparnaturalLDForge } from "sparnatural/ldforge";
+import "sparnatural/ldforge/styles.css";
 
-// import the JSON-LD config file
-import config from "./config.json"
+export default function App() {
+  const builder = useRef<SparnaturalElement | null>(null);
+  const queryHost = useRef<HTMLDivElement | null>(null);
+  const resultsHost = useRef<HTMLDivElement | null>(null);
 
-interface  SparnaturalEvent extends Event {
-  detail?:{
-    queryString:string,
-    queryJson:string,
-    querySparqlJs:string
-  }
-}
-
-function App() {  
-   const sparnaturalRef = useRef<HTMLElement>(null);
-   useEffect(
-    () => {
-      sparnaturalRef?.current?.addEventListener("queryUpdated", (event:SparnaturalEvent) => {
-        console.log(event?.detail?.queryString);
-        console.log(event?.detail?.queryJson);
-        console.log(event?.detail?.querySparqlJs);
-        // here : don't forget to call expandSparql so that core:sparqlString annotation is taken into account
-     });
-    },
-    [],
-  );
+  useEffect(() => {
+    if (!builder.current || !queryHost.current || !resultsHost.current) return;
+    const integration = createSparnaturalLDForge(
+      builder.current,
+      queryHost.current,
+      { resultsContainer: resultsHost.current },
+    );
+    return () => integration.destroy();
+  }, []);
 
   return (
-    <div className="App">
-      {/*FontAwesome is only needed when the fontawesome features is used to display icons*/}
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"  />
-      <div id="ui-search" style={{width:"auto"}}>
-        <spar-natural 
-          ref={sparnaturalRef}
-          src={JSON.stringify(config)} 
-          lang={'en'}
-          defaultLang={'en'}
-          endpoint={'https://fr.dbpedia.org/sparql'} 
-          distinct={'true'} 
-          limit={'100'}
-          prefix={"skos:http://www.w3.org/2004/02/skos/core# rico:https://www.ica.org/standards/RiC/ontology#"} 
-          debug={"true"}
-        />
+    <main>
+      <div className="query-layout">
+        {createElement("spar-natural", {
+          ref: builder,
+          src: "/config.ttl",
+          endpoint: "https://dbpedia.org/sparql",
+          lang: "en",
+          defaultLang: "en",
+          distinct: "true",
+          limit: "100",
+        })}
+        <div ref={queryHost} />
       </div>
-    </div>
+      <div ref={resultsHost} />
+    </main>
   );
 }
-
-export default App;
-
-```
-### Ajouter un fichier de déclaration pour JSX (uniquement pour Typescript)
-
-Ceci est uniquement nécessaire lorsque vous utilisez React avec Typescript. <br>
-Le fichier de déclaration doit s'appeler `declaration.d.ts` et être situé au niveau racine du dossier src/.
-
-```typescript
-namespace JSX {
-    interface IntrinsicElements {
-        "spar-natural": SparnaturalAttributes;
-    }
-
-    interface SparnaturalAttributes {
-        ref:React.RefObject<HTMLElement>
-        src: string;
-        lang: string;
-        endpoint: string;
-        distinct: string;
-        limit: string;
-        prefix: string;
-        debug:string
-    }
-}
 ```
 
-Cela montre de manière exemplaire comment intégrer Sparnatural à l'intérieur d'un composant React. Pour plus d'informations sur la configuration, consultez [Intégration Javascript v8](Javascript-integration)
+Exemple de disposition responsive :
+
+```css
+.query-layout { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 1rem; }
+@media (max-width: 800px) { .query-layout { grid-template-columns: 1fr; } }
+```
+
+L'intégration gère déjà `queryUpdated`, `submit` et la réinitialisation. Ajoutez
+uniquement les observateurs propres à votre application et retirez-les dans le
+nettoyage de l'effet. Sans éditeur, observez `queryUpdated` et appelez
+`expandSparql()` avant d'utiliser le texte.
+
+Le nettoyage convient aussi au cycle supplémentaire du mode strict en développement.
+Voir les références officielles [useEffect](https://react.dev/reference/react/useEffect)
+et [createElement](https://react.dev/reference/react/createElement).
+Gardez les paramètres stables ou recréez volontairement l'intégration quand leur
+configuration change. Voir la [référence JavaScript](Javascript-integration.md).
+
+Ce composant nécessite un navigateur. En rendu côté serveur, utilisez le mécanisme
+client uniquement de votre framework pour charger Sparnatural et ce composant.
