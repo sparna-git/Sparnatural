@@ -1,13 +1,15 @@
+> **Intégration Yasgui historique.** Pour les exemples actuels, utilisez [LDForge](LDForge-integration.md) et les [vues de résultats](result-display.md).
+
 _[Accueil](index.html) > Intégration des plugins YASGUI_
 
-Cette page a été traduite automatiquement à partir de la [page d'origine en anglais](../YasGUI-plugins-integration.md) - le 19/11/2026
+Voir aussi la [référence en anglais](../YasGUI-plugins-integration.md). Les exemples LDForge sont maintenus avec cette version.
 
 
-_Pour savoir comment intégrer Sparnatural avec YasQE et YasR, veuillez vous référer à la [documentation d'intégration Javascript](Javascript-integration.md)._
+_Pour savoir comment intégrer Sparnatural avec YasQE et YasR, veuillez vous référer à la [documentation d'intégration Javascript](archives/Javascript-integration-yasgui.md)._
 
-# Intégration des plugins YASGUI
+# Intégration des anciens plugins Yasgui
 
-Les fonctionnalités des plugins d'affichage de résultats personnalisés sont documentées dans la [page de référence des plugins d'affichage de résultats](result-display.md). Cette page donne les détails de la manière de les intégrer en Javascript.
+Les fonctionnalités des plugins d'affichage de résultats personnalisés sont documentées dans la [page de référence des plugins d'affichage de résultats](archives/result-display-yasgui.md). Cette page donne les détails de la manière de les intégrer en Javascript.
 
 ## Comment utiliser les plugins
 

@@ -21,7 +21,7 @@ To configure Sparnatural to query multiple endpoints, you need to:
 
 1. Provide a space-separated list of endpoints URL in the `endpoint` attribute of the `spar-natural` element. The URLs given here must correspond to the `endpointURL` of the catalog entries (see below)
 2. Provide the URL of the catalog file to be loaded in the `catalog` attribute of the `spar-natural` HTML element. The catalog may contain more entries than the ones actually passed in the `endpoint` attribute.
-3. Deal yourself with the execution of the final query against the list of selected endpoints (see below)
+3. Keep the integration's default Sparnatural executor for final-query execution (see below).
 
 Here is an example:
 
@@ -151,44 +151,26 @@ When configured with more than one endpoint, Sparnatural will behave this way:
 
 ## Executing the final SPARQL query against all endpoints
 
-Sparnatural can deal with the population of dropdown lists and autocomplete fields against multiple endpoints. You also need to execute the final query returned by Sparnatural against all endpoints. In order to do this you can call the `executeSparql()` method on Sparnatural, which will take care of:
-1. sending the SPARQL query to all endpoints in the catalog
-2. merging the results, adding an extra column for the source
-3. returning the merged result
-
-
-The full integration looks like this:
+Mount the [LDForge integration](LDForge-integration.md) after loading its browser
+bundle and styles. Its default executor calls `sparnatural.executeSparql()`.
+Sparnatural therefore sends the final query to its endpoint catalog and merges
+the bindings, including the source column, before LDForge displays the result.
 
 ```javascript
-    sparnatural.addEventListener("queryUpdated", (event) => {
-      queryString = sparnatural.expandSparql(event.detail.queryString);
-      yasqe.setValue(queryString);
-    });
-
-    sparnatural.addEventListener("submit", (event) => {
-      // enable loader on button
-      sparnatural.disablePlayBtn() ;
-
-      let finalResult = sparnatural.executeSparql(
-        yasqe.getValue(),
-        (finalResult) => {
-          // send final result to YasR
-          yasr.setResponse(finalResult);
-          // re-enable submit button
-          sparnatural.enablePlayBtn();
-        },
-        (error) => {
-          console.error("Got an error when executing SPARQL in Sparnatural");
-          console.dir(error);
-        }
-      );
-    });
-
-    sparnatural.addEventListener("reset", (event) => {
-      yasqe.setValue("");
-    });
+const sparnatural = document.querySelector("spar-natural");
+const integration = SparnaturalLDForge.createSparnaturalLDForge(
+  sparnatural,
+  document.getElementById("ldforge"),
+  { resultsContainer: document.getElementById("ldforge-results") },
+);
 ```
 
-The source endpoint is added as an extra column:
+Provide both HTML hosts as in the [JavaScript example](Javascript-integration.md).
+The separate-host API currently requires the [local LDForge extension](LDForge-integration.md#testing-the-unpublished-ldforge-extension).
+No additional query or submit listeners are required. If you supply an explicit
+`createHttpExecutor()`, you bypass the catalog: that executor addresses one
+endpoint rather than performing Sparnatural's multi-endpoint merge.
 
-![result list with extra column showing source](/assets/images/result-table-with-source-column.png)
+The source column remains available in the labelled table, native Table, JSON
+and CSV export. See the [legacy integration](archives/Javascript-integration-yasgui.md)
+when maintaining an existing Yasgui application.

@@ -1,44 +1,58 @@
-_[Accueil](index.html) > Interrogation d'un point d'accès SPARQL protégé par mot de passe_
+_[Accueil](index.html) > Point d'accès SPARQL protégé_
 
-Cette page a été traduite automatiquement à partir de la [page d'origine en anglais](../Querying-a-password-protected-SPARQL-endpoint.md) - le 19/11/2026
+# Interroger un point d'accès SPARQL protégé
 
+## Transport partagé avec LDForge
 
-# Interrogation d'un point d'accès SPARQL protégé par mot de passe
-
-## Le problème
-
-Certains points d'accès SPARQL peuvent être protégés par mot de passe. Cela nécessite l'envoi d'entêtes supplémentaires dans les requêtes.
-
-## La solution : ajout d'entêtes supplémentaires à Sparnatural et YasQE
-
-Vous devez ajouter des entêtes supplémentaires à deux endroits : dans Sparnatural et dans YasQE (si vous utilisez YasQE), qui enverront la requête finale au triplestore.
-
-### Ajouter des entêtes supplémentaires à Sparnatural
-
-Ajoutez le code suivant à votre code d'initialisation de Sparnatural pour transmettre des entêtes supplémentaires à Sparnatural :
+Configurez les en-têtes d'authentification dans `sparnatural.customization`.
+L'[intégration LDForge](LDForge-integration.md) utilise par défaut
+`sparnatural.executeSparql()` : la configuration s'applique aux suggestions des
+widgets et à la requête finale. Il n'y a pas de deuxième configuration Yasqe.
 
 ```javascript
-sparnatural.addEventListener("init", (event) => {
-  sparnatural.headers = {
-    "User-Agent" : "This is Sparnatural calling",
-    "Authorization" : "Bearer token"
-    // add other headers as necessary
+const sparnatural = document.querySelector("spar-natural");
+sparnatural.addEventListener("init", () => {
+  sparnatural.customization = {
+    ...sparnatural.customization,
+    headers: {
+      ...sparnatural.customization.headers,
+      Authorization: "Bearer REPLACE_WITH_YOUR_TOKEN",
+    },
   };
+});
+const integration = SparnaturalLDForge.createSparnaturalLDForge(
+  sparnatural,
+  document.getElementById("ldforge"),
+);
+```
+
+Chargez d'abord les bundles et les styles. Le gestionnaire `init` doit être ajouté
+avant la fin du chargement de la configuration. Si le composant est déjà prêt,
+appliquez directement la personnalisation. Les identifiants proviennent de votre
+application ; l'intégration ne les conserve pas. Un jeton écrit dans le code d'une
+page publique n'est pas secret. Le serveur doit autoriser l'origine et les
+en-têtes utilisés dans sa politique CORS. Voir [proxy SPARQL](SPARQL-proxy.md).
+
+## Transport HTTP explicite
+
+Un exécuteur HTTP LDForge explicite contourne le catalogue et le gestionnaire
+personnalisé de Sparnatural. Configurez alors ses en-têtes séparément :
+
+```javascript
+import { createHttpExecutor } from "@ldforge/core";
+import { createSparnaturalLDForge } from "sparnatural/ldforge";
+
+const headers = { Authorization: "Bearer REPLACE_WITH_YOUR_TOKEN" };
+sparnatural.customization = { ...sparnatural.customization, headers };
+const integration = createSparnaturalLDForge(sparnatural, container, {
+  executor: createHttpExecutor({
+    endpoint: sparnatural.getAttribute("endpoint"),
+    method: "POST",
+    headers,
+  }),
 });
 ```
 
-Sparnatural prendra en compte ces entêtes lors de l'envoi des requêtes pour peupler les listes déroulantes, les champs d'autocomplétion ou les widgets d'arborescence.
-
-### Faire en sorte que YasQE interroge un point d'accès SPARQL protégé par mot de passe
-
-Pour les pages de démonstration utilisant l'ancienne version de YASGUI, la documentation archivée correspondante se trouve à l'adresse https://web.archive.org/web/20190216123103/http://yasqe.yasgui.org/doc, et la fonction JQuery correcte est à l'adresse https://stackoverflow.com/a/5507289/189723
-
-```javascript
-var yasqe = YASQE.fromTextArea(document.getElementById("yasqe"), {
-        sparql : {
-          showQueryButton : true,
-          endpoint : $('#endpoint').text(),
-          beforeSend: function(xhr) { xhr.setRequestHeader("Authorization", "Basic " + btoa(username + ":" + password)); };
-        }
-      });
-```
+Appliquez la personnalisation après l'initialisation. Un nouveau jeton doit aussi
+être transmis à l'exécuteur explicite ; modifier uniquement les en-têtes
+Sparnatural ne modifie pas cet exécuteur indépendant.

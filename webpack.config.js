@@ -1,15 +1,51 @@
 const webpack = require("webpack");
 const path = require("path");
+const fs = require("fs");
 const WriteFilePlugin = require("write-file-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const DashboardPlugin = require("webpack-dashboard/plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 const FileManagerPlugin = require("filemanager-webpack-plugin");
+const { LicenseWebpackPlugin } = require("license-webpack-plugin");
 
-module.exports = {
+// Scope-hoisted modules are not all discovered by the license plugin. Include
+// the optional integration's runtime dependency tree explicitly in its notices.
+function ldforgeLicenseModules() {
+  const modules = new Map();
+  function visit(name, from = __dirname) {
+    let current = from;
+    let directory;
+    while (true) {
+      const candidate = path.join(current, "node_modules", name);
+      if (fs.existsSync(path.join(candidate, "package.json"))) {
+        directory = candidate;
+        break;
+      }
+      const parent = path.dirname(current);
+      if (parent === current) throw new Error(`Cannot locate license metadata for ${name}`);
+      current = parent;
+    }
+    if (modules.has(directory)) return;
+    modules.set(directory, { name, directory });
+    const manifest = JSON.parse(fs.readFileSync(path.join(directory, "package.json"), "utf8"));
+    Object.keys(manifest.dependencies || {}).forEach(dependency => visit(dependency, directory));
+  }
+  ["@ldforge/core", "@ldforge/editor", "@ldforge/renderers", "@ldforge/geo", "@ldforge/charts"].forEach(name => visit(name));
+  return [...modules.values()];
+}
+
+module.exports = (_env, argv = {}) => ({
   entry: {
     sparnatural: ["./src/SparnaturalElement.ts", "./scss/sparnatural.scss"],
+    "sparnatural-ldforge": {
+      import: [
+        "@ldforge/editor/styles.css",
+        "./scss/sparnatural-ldforge.scss",
+        "./src/integrations/ldforge/index.ts",
+      ],
+      library: { name: "SparnaturalLDForge", type: "umd" },
+    },
   },
   output: {
     path: path.resolve(__dirname, "./dist/browser"),
@@ -17,6 +53,11 @@ module.exports = {
   },
   module: {
     rules: [
+      {
+        // Explicit host loaders below replace the Vite-specific dynamic imports.
+        test: /node_modules[\\/]@ldforge[\\/](geo|charts)[\\/]dist[\\/].*\.js$/,
+        parser: { exprContextCritical: false },
+      },
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
@@ -83,6 +124,12 @@ module.exports = {
     extensions: [".tsx", ".ts", ".js"],
   },
   plugins: [
+    ...(argv.mode === "production" ? [new LicenseWebpackPlugin({
+      perChunkOutput: false,
+      outputFilename: "sparnatural-third-party.js.LICENSE.txt",
+      addBanner: true,
+      additionalModules: ldforgeLicenseModules(),
+    })] : []),
     new HtmlWebpackPlugin({
       filename: "dev-page/index.html", // Pour la page principale
       template: __dirname + "/dev-page/index.html",
@@ -139,9 +186,10 @@ module.exports = {
     // so that stream works properly, necessary for RDFSpec provider
     // see https://stackoverflow.com/questions/68542553/webpack-5process-is-not-defined-triggered-by-stream-browserify
     new webpack.ProvidePlugin({
-      process: "process/browser",
+      process: "process/browser.js",
     }),
-    new FileManagerPlugin({
+    // Archive only production output; the persistent dev server must not rewrite release ZIPs.
+    ...(argv.mode === "production" ? [new FileManagerPlugin({
       events: {
         onEnd: [
           // Copy the themes CSS directly as static files in a themes subfolder
@@ -166,7 +214,7 @@ module.exports = {
           {
             copy: [
               {
-                source: "./dist/browser/sparnatural.js",
+                source: "./dist/browser/*.js*",
                 destination: "./dist/hello-sparnatural/",
                 options: { overwrite: true },
               },
@@ -175,25 +223,7 @@ module.exports = {
           {
             copy: [
               {
-                source: "./dist/browser/sparnatural.css",
-                destination: "./dist/hello-sparnatural/",
-                options: { overwrite: true },
-              },
-            ],
-          },
-          {
-            copy: [
-              {
-                source: "./dist/browser/sparnatural.js.map",
-                destination: "./dist/hello-sparnatural/",
-                options: { overwrite: true },
-              },
-            ],
-          },
-          {
-            copy: [
-              {
-                source: "./dist/browser/sparnatural.css.map",
+                source: "./dist/browser/*.css*",
                 destination: "./dist/hello-sparnatural/",
                 options: { overwrite: true },
               },
@@ -223,8 +253,8 @@ module.exports = {
           {
             copy: [
               {
-                source: "./dist/browser/sparnatural.js",
-                destination: "./dist/sparnatural-starter/js/",
+                source: "./dist/browser/*.js*",
+                destination: "./dist/sparnatural-starter/assets/js/",
                 options: { overwrite: true },
               },
             ],
@@ -232,26 +262,8 @@ module.exports = {
           {
             copy: [
               {
-                source: "./dist/browser/sparnatural.css",
-                destination: "./dist/sparnatural-starter/css/",
-                options: { overwrite: true },
-              },
-            ],
-          },
-          {
-            copy: [
-              {
-                source: "./dist/browser/sparnatural.js.map",
-                destination: "./dist/sparnatural-starter/js/",
-                options: { overwrite: true },
-              },
-            ],
-          },
-          {
-            copy: [
-              {
-                source: "./dist/browser/sparnatural.css.map",
-                destination: "./dist/sparnatural-starter/css/",
+                source: "./dist/browser/*.css*",
+                destination: "./dist/sparnatural-starter/assets/css/",
                 options: { overwrite: true },
               },
             ],
@@ -278,15 +290,17 @@ module.exports = {
           },
         ],
       },
-    }),
+    })] : []),
   ],
   devServer: {
+    client: { overlay: { errors: true, warnings: false } },
     static: {
       directory: path.resolve(__dirname, "./dev-page"),
+      publicPath: ["/", "/dev-page"],
     },
     historyApiFallback: true,
     hot: true,
     open: ["/dev-page"],
   },
   devtool: "source-map",
-};
+});

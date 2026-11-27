@@ -1,6 +1,6 @@
 _[Accueil](index.html) > Format JSON de la requête_
 
-Cette page a été traduite automatiquement à partir de la [page d'origine en anglais](../Query-JSON-format.md) - le 19/11/2026
+Voir aussi la [référence en anglais](../Query-JSON-format.md). Les exemples LDForge sont maintenus avec cette version.
 
 
 # Format JSON de la requête Sparnatural
@@ -8,7 +8,7 @@ Cette page a été traduite automatiquement à partir de la [page d'origine en a
 
 ## Comment ça marche : onQueryUpdated / loadQuery
 
-Sparnatural émet l'événement [`queryUpdated`](http://docs.sparnatural.eu/Javascript-integration.html#queryupdated-event) à chaque fois que la requête est modifiée. Cet événement contient 3 fichiers : la chaîne de requête SPARQL générée, la requête SPARQL en JSON dans la syntaxe sparqljs, et une structure de données JSON personnalisée qui encode la requête. Cette structure de données JSON personnalisée est spécifique à Sparnatural, et lui permet de **charger une requête précédemment générée**, en utilisant la méthode [**`sparnatural.loadQuery(jsonQuery)`**](http://docs.sparnatural.eu/Javascript-integration.html#sparnatural-element-api).
+Sparnatural émet l'événement [`queryUpdated`](Javascript-integration.md#queryupdated-event) à chaque fois que la requête est modifiée. Cet événement contient 3 fichiers : la chaîne de requête SPARQL générée, la requête SPARQL en JSON dans la syntaxe sparqljs, et une structure de données JSON personnalisée qui encode la requête. Cette structure de données JSON personnalisée est spécifique à Sparnatural, et lui permet de **charger une requête précédemment générée**, en utilisant la méthode [**`sparnatural.loadQuery(jsonQuery)`**](Javascript-integration.md#sparnatural-element-api).
 
 Cela permet de mettre en œuvre 2 fonctionnalités importantes pour présenter votre graphe de connaissances :
 
@@ -18,45 +18,40 @@ Cela permet de mettre en œuvre 2 fonctionnalités importantes pour présenter v
 Cela est illustré dans l'extrait de code suivant :
 
 
+Chargez les [bundles et styles LDForge](LDForge-integration.md), JsonUrl et les requêtes exemples. Fournissez les éléments HTML `ldforge`, `query-json` et `select-examples`. Charger une requête ne l’exécute pas.
+
 ```javascript
-$( document ).ready(function($) {          
-
-        const sparnatural = document.querySelector("spar-natural");
-        
-        sparnatural.addEventListener("queryUpdated", (event) => {
-                // here we get the SPARQL query string and the JSON data structure
-                // if integrating with YasQE we set the value :
-                queryString = sparnatural.expandSparql(event.detail.queryString);
-                yasqe.setValue(queryString);
-
-                // and we could save the JSON query for later, e.g. to pass it as a parameter in a URL
-                document.getElementById('query-json').value = JSON.stringify(event.detail.queryJson);
-        });
-
-
-        // if we have received a JSON data structure as a URL parameter "?query="
-        // then uncompress it, and pass it to the loadQuery() function of Sparnatural
-      var UrlString = window.location.search;
-      var urlParams = new URLSearchParams(UrlString);
-      if (urlParams.has("query") === true) {
-        var compressedJson = urlParams.get("query") ;
-        var compressCodec = JsonUrl('lzma');
-        compressCodec.decompress(compressedJson).then(json => {
-          sparnatural.loadQuery(JSON.parse(json)) ;
-        });
-      }
+const sparnatural = document.querySelector("spar-natural");
+const integration = SparnaturalLDForge.createSparnaturalLDForge(
+  sparnatural,
+  document.getElementById("ldforge"),
+);
+sparnatural.addEventListener("queryUpdated", (event) => {
+  document.getElementById("query-json").value = JSON.stringify(
+    event.detail.queryJson,
+  );
 });
-
-
-// if we have a dropdown to select example query from...
-document.getElementById('select-examples').onchange = function() {
-        var key = $('#select-examples option:selected').val();
-        sparnatural.loadQuery(sampleQueries[key]) ;
-}
-
+// Restaurer uniquement après l'initialisation de la configuration.
+sparnatural.addEventListener(
+  "init",
+  () => {
+    const query = new URLSearchParams(location.search).get("query");
+    if (query)
+      JsonUrl("lzma")
+        .decompress(query)
+        .then((json) => sparnatural.loadQuery(JSON.parse(json)));
+  },
+  { once: true },
+);
+document.getElementById("select-examples").onchange = (event) => {
+  const query = sampleQueries[event.target.value];
+  if (query) sparnatural.loadQuery(query);
+};
 ```
 
 ## Exemple de requête JSON
+
+Cet exemple utilise le format v13, comme la [référence en anglais](../Query-JSON-format.md). Les anciennes requêtes `branches` / `line` restent prises en charge par l’intégration ; voir le [format historique](../archives/Query-JSON-format-v12.md).
 
 La requête suivante dans Sparnatural (_Toutes les œuvres d'art exposées dans des musées français ou italiens, et créées au XIXe siècle, avec leur date de création_) :
 
@@ -66,75 +61,120 @@ Est modélisée dans la structure de données JSON suivante :
 
 ```json
 {
-  "distinct": true,
+  "type": "query",
+  "subType": "SELECT",
   "variables": [
     {
-      "termType": "Variable",
+      "type": "term",
+      "subType": "variable",
       "value": "Artwork_1"
     },
     {
-      "termType": "Variable",
+      "type": "term",
+      "subType": "variable",
       "value": "Date_6"
     }
   ],
-  "order": null,
-  "branches": [
-    {
-      "line": {
-        "s": "Artwork_1",
-        "p": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#displayedAt",
-        "o": "Museum_2",
-        "sType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Artwork",
-        "oType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Museum",
-        "values": []
-      },
-      "children": [
-        {
-          "line": {
-            "s": "Museum_2",
-            "p": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#country",
-            "o": "Country_4",
-            "sType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Museum",
-            "oType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Country",
-            "values": [
-              {
-                "label": "France (3987)",
-                "rdfTerm": {
-                  "type": "uri",
-                  "value": "http://fr.dbpedia.org/resource/France"
-                }
-              },
-              {
-                "label": "Italy (1091)",
-                "rdfTerm": {
-                  "type": "uri",
-                  "value": "http://fr.dbpedia.org/resource/Italie"
-                }
-              }
-            ]
-          },
-          "children": []
-        }
-      ]
-    },
-    {
-      "line": {
-        "s": "Artwork_1",
-        "p": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#creationYear",
-        "o": "Date_6",
-        "sType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Artwork",
-        "oType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Date",
-        "values": [
-          {
-            "label": "from 1800 to 1901",
-            "start": "1799-12-31T23:50:40.000Z",
-            "stop": "1901-12-31T23:50:38.000Z"
-          }
-        ]
-      },
-      "children": []
+  "distinct": true,
+  "solutionModifiers": {
+    "limitOffset": {
+      "type": "solutionModifier",
+      "subType": "limitOffset",
+      "limit": 1000
     }
-  ]
+  },
+  "where": {
+    "type": "pattern",
+    "subType": "bgpSameSubject",
+    "subject": {
+      "type": "term",
+      "subType": "variable",
+      "value": "Artwork_1",
+      "rdfType": "https://data.mydomain.com/ontologies/sparnatural-config/Artwork"
+    },
+    "predicateObjectPairs": [
+      {
+        "type": "predicateObjectPair",
+        "predicate": {
+          "type": "term",
+          "subType": "namedNode",
+          "value": "https://data.mydomain.com/ontologies/sparnatural-config/Artwork_displayedAt"
+        },
+        "object": {
+          "type": "objectCriteria",
+          "variable": {
+            "type": "term",
+            "subType": "variable",
+            "value": "Museum_2",
+            "rdfType": "https://data.mydomain.com/ontologies/sparnatural-config/Museum"
+          },
+          "filters": [],
+          "predicateObjectPairs": [
+            {
+              "type": "predicateObjectPair",
+              "predicate": {
+                "type": "term",
+                "subType": "namedNode",
+                "value": "https://data.mydomain.com/ontologies/sparnatural-config/Museum_country"
+              },
+              "object": {
+                "type": "objectCriteria",
+                "variable": {
+                  "type": "term",
+                  "subType": "variable",
+                  "value": "Country_4",
+                  "rdfType": "https://data.mydomain.com/ontologies/sparnatural-config/Country"
+                },
+                "filters": [],
+                "values": [
+                  {
+                    "type": "term",
+                    "subType": "namedNode",
+                    "value": "http://dbpedia.org/resource/France",
+                    "label": "France"
+                  },
+                  {
+                    "type": "term",
+                    "subType": "namedNode",
+                    "value": "http://dbpedia.org/resource/Italy",
+                    "label": "Italy"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "predicateObjectPair",
+        "predicate": {
+          "type": "term",
+          "subType": "namedNode",
+          "value": "https://data.mydomain.com/ontologies/sparnatural-config/Artwork_creationYear"
+        },
+        "object": {
+          "type": "objectCriteria",
+          "variable": {
+            "type": "term",
+            "subType": "variable",
+            "value": "Date_6",
+            "rdfType": "https://data.mydomain.com/ontologies/sparnatural-config/Date"
+          },
+          "filters": [
+            {
+              "type": "labelledFilter",
+              "label": "between 1800 and 1901",
+              "filter": {
+                "type": "numberFilter",
+                "min": 1800,
+                "max": 1901
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
 }
 ```
 

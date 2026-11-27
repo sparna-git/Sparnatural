@@ -2,41 +2,59 @@ _[Home](index.html) > Querying a password-protected SPARQL endpoint_
 
 # Querying a password-protected SPARQL endpoint
 
-## The problem
+## Shared transport with LDForge
 
-Some SPARQL endpoints might be password-protected. This requires extra-headers to be passed in requests.
-
-## The solution : adding extra headers to Sparnatural and YasQE
-
-You need to pass extra headers at two places : in Sparnatural and in YasQE (if you use YasQE), that will send the final query to the triplestore.
-
-### Add extra headers to Sparnatural
-
-Add the following code to your Sparnatural initialization code to pass extra headers to Sparnatural:
+Set authentication headers through `sparnatural.customization`. The default
+[LDForge integration](LDForge-integration.md) calls `sparnatural.executeSparql()`,
+so the same configuration applies to widget suggestions and the final query.
+There is no second Yasqe request configuration to maintain.
 
 ```javascript
-sparnatural.addEventListener("init", (event) => {
-  sparnatural.headers = {
-    "User-Agent" : "This is Sparnatural calling",
-    "Authorization" : "Bearer token"
-    // add other headers as necessary
+const sparnatural = document.querySelector("spar-natural");
+sparnatural.addEventListener("init", () => {
+  sparnatural.customization = {
+    ...sparnatural.customization,
+    headers: {
+      ...sparnatural.customization.headers,
+      Authorization: "Bearer REPLACE_WITH_YOUR_TOKEN",
+    },
   };
+});
+const integration = SparnaturalLDForge.createSparnaturalLDForge(
+  sparnatural,
+  document.getElementById("ldforge"),
+);
+```
+
+Load the browser bundles and styles first. Attach the `init` listener before the
+configuration finishes loading. If the component is already initialized, apply
+the customization immediately. Supply credentials from your host application;
+the integration does not persist them. A public browser application cannot keep
+a hardcoded token secret. Configure the endpoint's CORS policy for the application's
+origin and the headers it sends; see [SPARQL proxy](SPARQL-proxy.md).
+
+## Explicit HTTP executor
+
+An explicit LDForge HTTP executor bypasses Sparnatural's catalog and custom
+handler. In that case configure its headers too:
+
+```javascript
+import { createHttpExecutor } from "@ldforge/core";
+import { createSparnaturalLDForge } from "sparnatural/ldforge";
+
+const headers = { Authorization: "Bearer REPLACE_WITH_YOUR_TOKEN" };
+sparnatural.customization = { ...sparnatural.customization, headers };
+const integration = createSparnaturalLDForge(sparnatural, container, {
+  executor: createHttpExecutor({
+    endpoint: sparnatural.getAttribute("endpoint"),
+    method: "POST",
+    headers,
+  }),
 });
 ```
 
-Sparnatural will honor these headers when sending requests to populate the dropdown lists, autocomplete fields, or tree widgets.
-
-### Make YasQE query a password-protected SPARQL-endpoint
-
-For demo pages using the old version of YASGUI, the corresponding archived documentation is at https://web.archive.org/web/20190216123103/http://yasqe.yasgui.org/doc, and the correct JQuery function is at https://stackoverflow.com/a/5507289/189723
-
-```javascript
-var yasqe = YASQE.fromTextArea(document.getElementById("yasqe"), {
-        sparql : {
-          showQueryButton : true,
-          endpoint : $('#endpoint').text(),
-          beforeSend: function(xhr) { xhr.setRequestHeader("Authorization", "Basic " + btoa(username + ":" + password)); };
-        }
-      });
-```
-
+Apply the customization after initialization. A changed token must also be
+provided to the explicit executor; updating Sparnatural's headers alone does not
+update that independently configured executor. See the
+[legacy JavaScript reference](archives/Javascript-integration-yasgui.md) when
+maintaining an existing Yasgui application.

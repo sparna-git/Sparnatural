@@ -41,34 +41,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // =============================================================================
-  // 3. YASQE SETUP
+  // 3. OPTIONAL LDFORGE EDITOR AND RESULTS
   // =============================================================================
-  const yasqe = new Yasqe(document.getElementById("yasqe"), {
-    requestConfig: {
-      endpoint: sparnatural.getAttribute("endpoint"),
-      method: "GET",
-    },
-    copyEndpointOnNewTab: false,
-  });
-
-  // =============================================================================
-  // 4. YASR SETUP
-  // =============================================================================
-  Yasr.registerPlugin("TableX", SparnaturalYasguiPlugins.TableX);
-  Yasr.registerPlugin("Grid", SparnaturalYasguiPlugins.GridPlugin);
-  // Yasr.registerPlugin("Map", SparnaturalYasguiPlugins.MapPlugin);
-  Yasr.registerPlugin("StatsPlugin", SparnaturalYasguiPlugins.StatsPlugin);
-  delete Yasr.plugins["table"];
-
-  const yasr = new Yasr(document.getElementById("yasr"), {
-    pluginOrder: ["TableX", "Grid", "StatsPlugin", "response"],
-    defaultPlugin: "TableX",
-  });
-
-  // Link YASQE response to YASR
-  yasqe.on("queryResponse", (_, response, duration) => {
-    yasr.setResponse(response, duration);
-    sparnatural.enablePlayBtn();
+  const integration = SparnaturalLDForge.createSparnaturalLDForge(
+    sparnatural, document.getElementById("ldforge"), { queryVisible: false, resultsContainer: document.getElementById("ldforge-results") },
+  );
+  window.addEventListener("pagehide", event => {
+    if (!event.persisted) integration.destroy();
   });
 
   // =============================================================================
@@ -77,13 +56,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- Init ---
   sparnatural.addEventListener("init", () => {
-    // Configure YASR plugins
-    for (const plugin in yasr.plugins) {
-      yasr.plugins[plugin]?.notifyConfiguration?.(
-        sparnatural.sparnatural.specProvider,
-      );
-    }
-
     // Configure history & text query components
     historyComponent?.notifyConfiguration(sparnatural.sparnatural.specProvider);
     //sparnaturalTextQuery?.notifyConfiguration(
@@ -96,13 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- Query Updated ---
   sparnatural.addEventListener("queryUpdated", (event) => {
-    yasqe.setValue(sparnatural.expandSparql(event.detail.queryString));
     lastQueryJson = event.detail.queryJson;
-
-    // Notify YASR plugins
-    for (const plugin in yasr.plugins) {
-      yasr.plugins[plugin]?.notifyQuery?.(event.detail.queryJson);
-    }
 
     // Save query JSON
     document.getElementById("query-json").value = JSON.stringify(
@@ -112,8 +78,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- Submit ---
   sparnatural.addEventListener("submit", () => {
-    sparnatural.disablePlayBtn();
-    yasqe.query();
     if (lastQueryJson) {
       historyComponent?.saveQuery(lastQueryJson);
     }
@@ -126,9 +90,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- Toggle SPARQL ---
   document.getElementById("sparql-toggle")?.addEventListener("click", (e) => {
     e.preventDefault();
-    const yasqeEl = document.getElementById("yasqe");
-    yasqeEl.style.display = yasqeEl.style.display === "none" ? "block" : "none";
-    yasqe.refresh();
+    integration.setQueryVisible(!integration.isQueryVisible());
+    e.currentTarget.setAttribute("aria-expanded", String(integration.isQueryVisible()));
   });
 
   // --- Share ---
@@ -245,25 +208,10 @@ document.addEventListener("DOMContentLoaded", () => {
       const queryJson = JSON.parse(json);
 
       sparnatural.loadQuery(queryJson);
-      sparnatural.disablePlayBtn();
-
-      yasqe.setValue(
-        sparnatural.expandSparql(
-          sparnatural.sparnatural.queryBuilder.buildQuery(queryJson),
-        ),
+      integration.editor.setQuery(
+        sparnatural.expandSparql(sparnatural.sparnatural.queryBuilder.buildQuery(queryJson)),
       );
-
-      sparnatural.executeSparql(
-        yasqe.getValue(),
-        (finalResult) => {
-          yasr.setResponse(finalResult);
-          sparnatural.enablePlayBtn();
-        },
-        (error) => {
-          console.error("Error executing SPARQL from shared URL", error);
-          sparnatural.enablePlayBtn();
-        },
-      );
+      void integration.editor.run();
     });
   }
 

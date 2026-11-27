@@ -1,97 +1,15 @@
-//
-// Place any custom JS here
-//
-
-// reference to the sparnatural webcomponent
+// The optional integration owns query execution and result rendering.
 const sparnatural = document.querySelector("spar-natural");
-
-// display on the page the endpoint URL with which sparnatural is configured
-document.querySelector("#displayEndpoint").setAttribute("href", sparnatural.getAttribute("endpoint"));
-document.querySelector("#displayEndpoint").textContent = sparnatural.getAttribute("endpoint");
-
-// init yasQE query editor
-const yasqe = new Yasqe(document.getElementById("yasqe"), {
-	requestConfig: {
-	  // make sure the endpoint is the same as sparnatural
-	  endpoint: sparnatural.getAttribute("endpoint"),
-	  method: "GET",
-	  header: {}
-	},
-	copyEndpointOnNewTab: false  
+const endpoint = document.getElementById("displayEndpoint");
+endpoint.href = sparnatural.getAttribute("endpoint");
+endpoint.textContent = endpoint.href;
+const integration = SparnaturalLDForge.createSparnaturalLDForge(
+  sparnatural, document.getElementById("ldforge"), { queryVisible: false, resultsContainer: document.getElementById("ldforge-results") },
+);
+document.getElementById("sparql-toggle").onclick = function () {
+  integration.setQueryVisible(!integration.isQueryVisible());
+  this.setAttribute("aria-expanded", String(integration.isQueryVisible()));
+};
+window.addEventListener("pagehide", event => {
+  if (!event.persisted) integration.destroy();
 });
-
-// init yasR result display
-// register a specific plugin that is capable of displaying clikable label + URI
-Yasr.registerPlugin("TableX",SparnaturalYasguiPlugins.TableX);
-Yasr.registerPlugin("Grid",SparnaturalYasguiPlugins.GridPlugin);
-delete Yasr.plugins['table'];
-
-const yasr = new Yasr(document.getElementById("yasr"), {
-	pluginOrder: ["TableX", "Grid", "response"],
-	defaultPlugin: "TableX"
-});
-
-// link yasqe and yasr
-yasqe.on("queryResponse", function(_yasqe, response, duration) {
-	yasr.setResponse(response, duration);
-	// when response is received, enable the button
-	sparnatural.enablePlayBtn();
-});
-
-
-sparnatural.addEventListener("init", (event) => {
-	// notify the specification to yasr plugins
-	for (const plugin in yasr.plugins) {
-	  if (yasr.plugins[plugin].notifyConfiguration) {
-	    yasr.plugins[plugin].notifyConfiguration(
-	      event.detail.config
-	    );
-	  }
-	}
-});
-
-// listener when sparnatural updates the query
-// see http://docs.sparnatural.eu/Javascript-integration.html#sparnatural-events
-sparnatural.addEventListener("queryUpdated", (event) => {
-	// get the SPARQL query string, and pass it to yasQE
-	queryString = sparnatural.expandSparql(event.detail.queryString);
-	yasqe.setValue(queryString);
-	// display the JSON query on the console
-	console.log("Sparnatural JSON query structure:");
-	console.dir(event.detail.queryJson);
-
-	// notify the query to yasr plugins
-	for (const plugin in yasr.plugins) {
-	  if (yasr.plugins[plugin].notifyQuery) {
-	    yasr.plugins[plugin].notifyQuery(event.detail.queryJson);
-	  }
-	}
-});
-
-// listener when the sparnatural submit button is clicked
-// see http://docs.sparnatural.eu/Javascript-integration.html#sparnatural-events
-sparnatural.addEventListener("submit", (event) => {
-	// enable loader on button
-	sparnatural.disablePlayBtn() ; 
-	// trigger the query from YasQE
-	yasqe.query();
-});
-
-// listener when the sparnatural reset button is clicked
-// see http://docs.sparnatural.eu/Javascript-integration.html#sparnatural-events
-sparnatural.addEventListener("reset", (event) => {
-	// empties the SPARQL query on yasQE
-	yasqe.setValue("");
-});
-
-// hide/show yasQE
-document.getElementById('sparql-toggle').onclick = function() {
-	if(document.getElementById('yasqe').style.display == 'none') {
-	  document.getElementById('yasqe').style.display = 'block';
-	  yasqe.setValue(yasqe.getValue());
-	  yasqe.refresh();
-	} else {
-	  document.getElementById('yasqe').style.display = 'none';
-	}
-	return false;        
-} ;

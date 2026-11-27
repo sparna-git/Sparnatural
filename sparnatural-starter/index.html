@@ -17,12 +17,8 @@
 
     <!-- Leaflet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-
-    <!-- YASGUI CSS -->
-    <link
-      href="https://unpkg.com/@triply/yasgui/build/yasgui.min.css"
-      rel="stylesheet"
-    />
+    <!-- Optional LDForge integration -->
+    <link rel="stylesheet" href="assets/css/sparnatural-ldforge.css" />
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="assets/fa/css/all.min.css" />
@@ -46,18 +42,10 @@
         z-index: 1040 !important; /* L'overlay doit avoir un z-index inferieur*/
       }
 
-      .yasqe .CodeMirror {
-        font-size: 0.8em;
-      }
-
       #sparnatural-section {
         padding-top: 40px;
         height: auto;
         overflow: visible;
-      }
-
-      #yasqe {
-        display: none;
       }
     </style>
   </head>
@@ -254,7 +242,7 @@
         <div class="row">
           <div class="col-md-6">
             <span style="font-style: italic; font-size: 0.9em">
-              <a href="#" id="sparql-toggle">
+              <a href="#" id="sparql-toggle" role="button" aria-controls="ldforge" aria-expanded="false">
                 <i id="sparql-toggle-icon" class="fad fa-eye fa-fw"></i>
                 <span data-i18n="toggleSparql">Toggle SPARQL</span>
               </a>
@@ -301,15 +289,8 @@
         </div>
       </section>
 
-      <!-- ================= YASQE ================= -->
-      <section class="container mt-3">
-        <div id="yasqe"></div>
-      </section>
-
-      <!-- ================= YASR ================= -->
-      <section class="container mb-4">
-        <div id="yasr"></div>
-      </section>
+      <!-- LDForge query editor and results -->
+      <section class="container my-4"><div id="ldforge"></div><div id="ldforge-results" class="mt-3"></div></section>
     </main>
 
     <!-- ================= MODALS ================= -->
@@ -467,12 +448,9 @@
       crossorigin="anonymous"
     ></script>
 
-    <!-- YASGUI -->
-    <script src="https://unpkg.com/@triply/yasgui/build/yasgui.min.js"></script>
-
     <!-- Sparnatural -->
     <script src="assets/js/sparnatural.js"></script>
-    <script src="assets/js/sparnatural-yasgui-plugins.js"></script>
+    <script src="assets/js/sparnatural-ldforge.js"></script>
     <script src="assets/js/sparnatural-history.js"></script>
     <script src="assets/js/sample-queries.js"></script>
 

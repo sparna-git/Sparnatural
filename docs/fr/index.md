@@ -1,4 +1,4 @@
-Cette page a été traduite automatiquement à partir de la [page d'origine en anglais](../index.md) - le 19/11/2026
+Voir aussi la [référence en anglais](../index.md). Les exemples LDForge sont maintenus avec cette version.
 
 # Portail de documentation de Sparnatural
 
@@ -30,7 +30,7 @@ _Pour des exemples de fonctionnement de Sparnatural et de sa configuration, cons
 
 Sparnatural est configuré par un fichier de configuration exprimé en SHACL. Le fichier de configuration peut être édité dans une feuille de calcul Excel.
 
-- **[Comment configurer en SHACL](how-to-configure-shacl/How-to-configure-Sparnatural-shacl.html)** : une documentation détaillée pour configurer Sparnatural dans un tableur. Commencez ici pour apprendre les différentes options de configuration de Sparnatural.
+- **[Comment configurer en SHACL](../how-to-configure-shacl/How-to-configure-Sparnatural-shacl.html)** : une documentation détaillée pour configurer Sparnatural dans un tableur. Commencez ici pour apprendre les différentes options de configuration de Sparnatural.
 - [Page de référence de la configuration SHACL](SHACL-based-configuration.md) : la liste de toutes les constructions SHACL que Sparnatural comprend
 - [Configuration des sources de données](datasources-configuration.md) : une page de référence de toutes les sources de données incluses et comment écrire votre propre source de données
 - [Configuration des modèles](templates-configuration.md) : comment fournir des modèles personnalisés pour les listes, l'autocomplétion et les arbres, afin d'afficher par exemple des définitions supplémentaires associées aux valeurs, ou tout autre type d'informations supplémentaires du graphe de connaissances
@@ -45,6 +45,8 @@ Sparnatural est configuré par un fichier de configuration exprimé en SHACL. Le
 - [Intégration avec GraphDB Lucene Connector](Integration-with-GraphDB-Lucene-Connector.md) - Configuration spéciale pour interagir avec un index Lucene de GraphDB
 
 ### 4. Intégration de Sparnatural en HTML / React
+
+- [Tutoriel Hello Sparnatural](../hello-sparnatural/Hello-Sparnatural.md) - Configuration du constructeur et de LDForge (anglais).
 
 - [**Page HTML et intégration Javascript**](Javascript-integration.md) - La page de référence pour comprendre comment le composant web `<spar-natural` peut être intégré dans votre page web
 - [Personnaliser les couleurs](Customize-colors.md) - Comment personnaliser les couleurs de Sparnatural
@@ -75,29 +77,30 @@ Sparnatural est configuré par un fichier de configuration exprimé en SHACL. Le
 
 **Configuration JSON obsolète**
 
-- [Configurer en JSON(-LD)](archives/JSON-based-configuration.md)
-- [Configurer les sources de données en JSON](archives/JSON-based-configuration-datasources.md)
+- [Configurer en JSON(-LD)](../archives/JSON-based-configuration.md)
+- [Configurer les sources de données en JSON](../archives/JSON-based-configuration-datasources.md)
 
 **Configuration OWL obsolète**
 
 Historiquement, Sparnatural prenait également en charge une configuration spécifiée en OWL :
 
-- [Comment configurer en OWL](how-to-configure-owl/How-to-configure-Sparnatural.md) : une documentation détaillée pour configurer Sparnatural dans un tableur OWL (qui est converti en un fichier de configuration OWL). Ceci est obsolète et est maintenant remplacé par le guide de configuration SHACL.
+- [Comment configurer en OWL](../how-to-configure-owl/How-to-configure-Sparnatural.md) : une documentation détaillée pour configurer Sparnatural dans un tableur OWL (qui est converti en un fichier de configuration OWL). Ceci est obsolète et est maintenant remplacé par le guide de configuration SHACL.
 - [Configurer en OWL en utilisant Protégé](OWL-based-configuration.md) : une page de référence de tous les axiomes et annotations OWL utiles pour configurer Sparnatural avec OWL
 - [Configurer des sources de données en OWL](OWL-based-configuration-datasources.md) : une page de référence de toutes les sources de données incluses et comment écrire votre propre source de données
 
 **Format de requête JSON jusqu'à la v12**
 
-- [Format de requête JSON v12](archives/Query-JSON-format-v12.md)
+- [Format de requête JSON v12](../archives/Query-JSON-format-v12.md)
 
 **Page d'intégration Javascript v7 obsolète**
 
-- [Intégration Javascript v7 (ancienne)](archives/Javascript-integration-v7.md) - Page de référence pour l'intégration Javascript et les paramètres de l'ancienne version 7
+- [Intégration Javascript v7 (ancienne)](../archives/Javascript-integration-v7.md) - Page de référence pour l'intégration Javascript et les paramètres de l'ancienne version 7
 
 ## Plugins d'affichage des résultats Sparnatural
 
 - [Documentation de référence des plugins d'affichage des résultats](result-display.md) : les différentes façons d'afficher les résultats de recherche après qu'une requête a été écrite, au-delà de l'affichage tabulaire classique.
-- [Intégration des plugins YasGUI](YasGUI-plugins-integration.md) - À lire pour comprendre comment intégrer [les plugins spécifiques à Sparnatural](result-display.md) dans votre code HTML/javascript
+- [LDForge : éditeur, résultats et migration](LDForge-integration.md) - Intégration actuelle, disposition séparée et options.
+- [Anciens plugins Yasgui](YasGUI-plugins-integration.md) - Référence conservée pour les applications existantes.
 
 ## Historique Sparnatural
 

@@ -9,6 +9,10 @@ You can play with **online demos at http://sparnatural.eu#demos**.
 
 # Getting Started
 
+The development page and supplied starter examples use the optional LDForge query editor and result views, including an entity-aware Grid. Sparnatural itself remains editor-independent. See the [LDForge integration and migration guide](docs/LDForge-integration.md).
+
+The separate-results examples on this branch require an unpublished LDForge extension. Run `npm install`, follow the [local archive setup](docs/LDForge-integration.md#testing-the-unpublished-ldforge-extension), then use `npm run dev` and open <http://127.0.0.1:4174/dev-page/>. These examples must use a compatible released editor before publication.
+
 To get started :
 
 1. Read the following README;
@@ -356,7 +360,8 @@ Sparnatural works in combination with other components:
 
 | Component | Description | Documentation |
 |-----------|-------------|---------------|
-|[Query results display plugins](https://github.com/sparna-git/sparnatural-yasgui-plugins)|Display the SPARQL query results in table, charts, cards, timeline, maps|[documentation](https://docs.sparnatural.eu/#sparnatural-results-display-plugins)|
+|[LDForge](https://github.com/mightymax/ldforge)|Optional SPARQL editor and result views, including Sparnatural entity Grid, tables, maps and charts|[integration](docs/LDForge-integration.md), [result views](docs/result-display.md)|
+|[Legacy Yasgui plugins](https://github.com/sparna-git/sparnatural-yasgui-plugins)|Previous result plugin integration for existing applications|[legacy documentation](docs/YasGUI-plugins-integration.md)|
 |[Query history](https://github.com/sparna-git/Sparnatural-history)|Tracks the history of queries so that they can be reloaded easily|[documentation](https://docs.sparnatural.eu/#sparnatural-history)|
 |[Query form](https://github.com/sparna-git/Sparnatural-form)|A simple facet-like search component based on a Sparnatural configuration and a predefined query|[documentation](https://docs.sparnatural.eu/#sparnatural-form)|
 

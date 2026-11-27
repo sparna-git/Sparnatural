@@ -14,13 +14,6 @@
       rel="stylesheet"
     />
 
-    <!-- YASGUI stuff -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/@triply/yasgui/build/yasgui.min.css"
-      rel="stylesheet"
-      type="text/css"
-    />
-
     <!-- FONTAWESOME-->
     <link
       rel="stylesheet"
@@ -30,14 +23,6 @@
     <title>SPARnatural - test page</title>
 
     <style>
-      .yasqe .CodeMirror {
-        font-size: 0.8em;
-        height: 380px;
-      }
-
-      .yasr_header {
-        display: none;
-      }
     </style>
 
     <!-- Webpack CSS -->
@@ -126,14 +111,14 @@
             />-->
 
             <spar-natural
-                    src="configs/nakala/nakala-shacl-filtered.ttl configs/nakala/nakala-statistics.ttl configs/nakala/edm.owl.rdf configs/nakala/ore-terms.rdf configs/nakala/dcterms_2012-06-14.n3 configs/nakala/nakala-labels.ttl"
-                    endpoint="https://nakala.fr/sparql"
-                    prefixes="skos:http://www.w3.org/2004/02/skos/core# dct:http://purl.org/dc/terms/"
-                    lang="fr"
-                    defaultLang="fr"
-                    distinct="true"
-                    debug="true"
-                    facetedBrowsing="true"
+              src="configs/sparnatural-config-dbpedia-en.ttl"
+              endpoint="https://dbpedia.org/sparql"
+              lang="en"
+              defaultLang="en"
+              distinct="true"
+              limit="1000"
+              debug="true"
+              facetedBrowsing="true"
             ></spar-natural>
 
             <!--
@@ -149,7 +134,7 @@
             ></spar-natural>
             -->
 
-            <!--       
+            <!--
         <spar-natural
             id="sparnatural"
             src="https://xls2rdf.sparna.fr/rest/convert?noPostProcessings=true&url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2F1X6GqNxMBVkflrJGj2kAm-wYz0Ey7nEOt%2Fexport%3Fformat%3Dxlsx"
@@ -177,22 +162,22 @@
             <div class="col-md-12">
               <span style="font-size: 90%">
                 Les requêtes sont envoyées à
-                <a id="endpoint" href="https://nakala.fr/sparql"
-                  >https://nakala.fr/sparql</a
+                <a id="endpoint" href="https://dbpedia.org/sparql"
+                  >https://dbpedia.org/sparql</a
                 >
               </span>
             </div>
           </div>
           <div class="row">
             <div class="col-md-12">
-              <div id="yasqe"></div>
+              <div id="ldforge"></div>
             </div>
           </div>
         </div>
       </div>
       <div class="row justify-content-center">
-        <div class="col-md-12">
-          <div id="yasr"></div>
+        <div class="col-md-12 mt-3">
+          <div id="ldforge-results"></div>
         </div>
       </div>
     </div>
@@ -283,19 +268,6 @@
 
     <!-- Tableau pour comparer SPARQL -->
     <div class="container mt-4">
-      <h2>Comparaison SPARQL</h2>
-      <table class="table table-bordered">
-        <thead>
-          <tr>
-            <th>Ancien SPARQL</th>
-            <th>Nouveau SPARQL</th>
-            <th>État</th>
-          </tr>
-        </thead>
-        <tbody id="sparql-comparison-table">
-          <!-- Les lignes seront ajoutées ici par JavaScript -->
-        </tbody>
-      </table>
     </div>
 
     <footer id="footer" style="margin-top: 30px; text-align: center">
@@ -376,13 +348,10 @@
       crossorigin="anonymous"
     ></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- YASGUI stuff -->
-    <script src="https://cdn.jsdelivr.net/npm/@triply/yasgui/build/yasgui.min.js"></script>
 
     <!-- Webpack JS -->
     <%= js %>
 
-    <script src="sparnatural-yasgui-plugins.js"></script>
     <script src="scripts/init.js"></script>
   </body>
 </html>

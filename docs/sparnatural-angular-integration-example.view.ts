@@ -1,3 +1,5 @@
+// Historical, application-specific Yasgui example. For current LDForge integration
+// use Javascript-integration.md and destroy the integration on host teardown.
 import { MetaModel, SparqlEndpoint } from '@/common';
 import { CommonModule } from '@angular/common';
 import {
