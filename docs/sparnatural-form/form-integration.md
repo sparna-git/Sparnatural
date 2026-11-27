@@ -64,7 +64,7 @@ const integration = SparnaturalLDForge.createSparnaturalLDForge(
 // On host/component unmount: integration.destroy().
 ```
 
-See the [LDForge guide](../LDForge-integration.md) for setup, transport and the current unpublished separate-results API prerequisite.
+See the [LDForge guide](../LDForge-integration.md) for setup and transport. Separate results are supported by the required published `@ldforge/editor@^1.5.1`.
 
 ## Sparnatural Form events
 

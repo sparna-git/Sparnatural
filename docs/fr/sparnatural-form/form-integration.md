@@ -67,7 +67,7 @@ const integration = SparnaturalLDForge.createSparnaturalLDForge(
 // On host/component unmount: integration.destroy().
 ```
 
-Voir le [guide LDForge](../LDForge-integration.md) pour les prérequis et le transport. La disposition séparée nécessite encore une version locale non publiée de LDForge.
+Voir le [guide LDForge](../LDForge-integration.md) pour les prérequis et le transport. Les résultats séparés utilisent la version publiée `@ldforge/editor@^1.5.1`.
 
 ## Événements de Sparnatural Form
 

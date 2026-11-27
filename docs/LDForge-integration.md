@@ -8,12 +8,34 @@ The development page, Hello Sparnatural example and starter use an optional
 `<spar-natural>` component does not import LDForge. Existing Yasgui applications
 can continue using `sparnatural-bindings.js`; those functions are unchanged.
 
-> This guide describes the integration on this branch; the Sparnatural integration
-> must be published before it can be installed from the registry.
-> This working branch uses the unpublished LDForge separate-results API in its
-> examples. Before building, follow [local archive setup](#testing-the-unpublished-ldforge-extension).
-> A released editor version containing this API must be required before merging
-> or publishing these examples.
+> This guide describes the Sparnatural integration on this branch, which must be
+> published before it can be installed from the registry. LDForge itself is
+> available from npm: this integration requires `@ldforge/editor@^1.5.1`, including
+> the separate-results API. No local LDForge archive is needed for normal setup.
+
+## Why LDForge
+
+The [TriplyDB Yasgui repository](https://github.com/TriplyDB/Yasgui) was archived
+on April 20, 2026. Its [Yasqe editor depends on CodeMirror 5](https://github.com/TriplyDB/Yasgui/blob/master/packages/yasqe/package.json),
+whose [upstream repository](https://github.com/codemirror/codemirror5) identifies
+it as legacy and was archived on April 16, 2026. These upstream lifecycle changes
+are a reason to evaluate a maintained replacement rather than build additional
+integration work around the old stack. They do not establish a specific security
+problem in an existing deployment.
+
+LDForge uses CodeMirror 6 and a typed, modular editor/executor/renderer API.
+It provides SPARQL diagnostics, contextual completion, formatting and keyboard
+controls, while letting Sparnatural retain its own query generation and transport.
+Its separate-results API preserves the existing full-width result layout.
+The dedicated Grid adapter preserves entity grouping and nested query relationships,
+instead of substituting generic cards for Sparnatural's result model.
+
+This creates an explicit route for further editor development, with an optional
+integration that can be evaluated without changing the query-builder core.
+It is not a complete Yasr plugin compatibility layer: the migration differences
+below remain part of the review. Existing bindings are retained so adoption can
+be gradual. Future maintenance and migration costs still need to be assessed by
+Sparnatural's maintainers.
 
 ## Browser bundles
 
@@ -55,7 +77,7 @@ Do not load Triply Yasgui or `sparnatural-yasgui-plugins.js` in these migrated p
 Install the optional peers only when using the integration:
 
 ```sh
-npm install sparnatural @ldforge/core@^1.0.2 @ldforge/editor@^1.4.1 \
+npm install sparnatural @ldforge/core@^1.0.2 @ldforge/editor@^1.5.1 \
   @ldforge/renderers@^1.1.2 @ldforge/geo@^1.1.2 @ldforge/charts@^1.0.2
 ```
 
@@ -261,25 +283,22 @@ the combined layout. Both hosts must belong to the same document. The integratio
 stylesheet styles both; place custom CSS variables on a shared ancestor or both
 hosts. `destroy()` cleans up owned content in both while preserving the hosts.
 
-### Testing the unpublished LDForge extension
+### Editor version and optional local development
 
-The separate-container API is currently a local LDForge change; the published
-`@ldforge/editor@1.4.1` does not contain it. The dependency range is retained for
-review, and separate-host use reports a clear error on an older editor. Before
-merging/publishing the migrated examples, require the released editor version
-that contains this API and validate using that registry package.
+The integration requires the published `@ldforge/editor@^1.5.1`, including support
+for `resultsContainer`. Install the declared registry dependencies with
+`npm install`; no local checkout or archive is required to build the examples.
+An older editor that lacks the API produces a clear capability error.
 
-For now, install a real npm archive of the local editor (including its built
-styles/types) without committing absolute paths or changing dependency manifests:
+When deliberately testing unpublished LDForge changes, the optional helper can
+still build and install an archive from a local editor checkout:
 
 ```sh
 node scripts/use-local-ldforge.mjs ~/Code/LDMax/LDForge
 npm run dev
 ```
 
-The helper builds and packs only the editor, installs it with `--no-save
---package-lock=false`, and never publishes or changes versions. Restart an already
-running dev server after installing. The archive remains in the temporary path
-printed by the helper. Re-run the helper after LDForge source changes; `npm install`
-restores registry dependencies. Other LDForge dependencies use the declared
-registry versions. No local links, vendored bundles or tarballs belong in the PR.
+It installs with `--no-save --package-lock=false`, never publishes and does not
+change dependency manifests. Restart a running dev server after using it.
+`npm install` restores the declared registry dependencies. Local archives and
+absolute dependency paths do not belong in the PR.

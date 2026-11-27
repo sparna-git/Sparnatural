@@ -161,8 +161,8 @@ const integration = SparnaturalLDForge.createSparnaturalLDForge(
 ```
 
 Chargez les bundles et les styles et fournissez les deux conteneurs comme dans
-l'[exemple JavaScript](Javascript-integration.md). La disposition séparée requiert
-pour l'instant [l'extension locale LDForge](../LDForge-integration.md#testing-the-unpublished-ldforge-extension).
+l'[exemple JavaScript](Javascript-integration.md). La disposition séparée utilise
+la version publiée `@ldforge/editor@^1.5.1`.
 Aucun autre gestionnaire `submit` n'est nécessaire. Un `createHttpExecutor()`
 explicite contourne le catalogue et n'interroge qu'un point d'accès.
 La colonne de source reste accessible dans les tableaux, JSON et l'export CSV.

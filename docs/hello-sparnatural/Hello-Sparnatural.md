@@ -8,8 +8,8 @@ and result views. You will serve the example locally, connect an endpoint,
 configure two related classes, and inspect the generated query and results.
 
 > These instructions describe the LDForge-enabled example in this branch, not an
-> already published release. The separate-results layout currently requires the
-> [local LDForge extension](../LDForge-integration.md#testing-the-unpublished-ldforge-extension).
+> already published Sparnatural release. The separate-results layout uses the
+> published `@ldforge/editor@^1.5.1`; no local LDForge build is needed.
 > The [October 2024 tutorial](Hello-Sparnatural-yasgui.md), its
 > [PDF](Hello-Sparnatural.pdf) and [Word file](Hello-Sparnatural.docx) are historical
 > Yasgui versions, not instructions for the current editor.
@@ -27,13 +27,12 @@ From the repository containing this integration:
 
 ```sh
 npm install
-node scripts/use-local-ldforge.mjs /path/to/LDForge
 npm run build
 ```
 
-The helper installs a local editor archive without publishing packages or changing
-the dependency manifest. The [integration guide](../LDForge-integration.md)
-explains that temporary prerequisite and how to restore registry dependencies.
+The declared dependencies install the published LDForge editor. The
+[integration guide](../LDForge-integration.md) explains its version requirements
+and the optional helper for testing local editor changes.
 Extract `dist/hello-sparnatural.zip` into a working directory. When a release
 containing the LDForge integration becomes available, its matching archive can
 be used instead. An older Yasgui release does not have these new bundle files.

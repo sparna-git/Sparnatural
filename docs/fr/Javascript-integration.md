@@ -92,9 +92,8 @@ sparnatural.addEventListener("queryUpdated", (event) => {
 L'intégration développe la requête avec `expandSparql()` et gère déjà sa
 synchronisation, son exécution et sa réinitialisation. N'ajoutez pas un second
 gestionnaire qui exécute la même requête. Sans `resultsContainer`, l'éditeur et
-les résultats partagent le même conteneur. La disposition séparée nécessite
-[l'extension LDForge locale](../LDForge-integration.md#testing-the-unpublished-ldforge-extension)
-tant que celle-ci n'est pas publiée.
+les résultats partagent le même conteneur. La disposition séparée est disponible
+dans `@ldforge/editor@^1.5.1`, publié sur npm et requis par cette intégration.
 
 <a id="queryupdated-event"></a>
 

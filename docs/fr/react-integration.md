@@ -11,9 +11,8 @@ largeur dessous.
 
 Suivez le [guide LDForge](LDForge-integration.md) pour les dépendances optionnelles.
 Cette documentation décrit l'intégration de cette branche, qui doit être publiée
-avant de pouvoir être installée depuis le registre. La disposition séparée
-requiert également [l'extension locale LDForge](../LDForge-integration.md#testing-the-unpublished-ldforge-extension)
-tant qu'une version compatible n'est pas publiée.
+avant de pouvoir être installée depuis le registre. La disposition séparée utilise
+`@ldforge/editor@^1.5.1`, publié sur npm, sans archive locale requise.
 
 Servez la configuration à `/config.ttl`. Copiez les fichiers `dist/browser` du
 package dans `public/vendor/sparnatural`, puis chargez

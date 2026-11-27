@@ -83,7 +83,7 @@
     "@babel/preset-react": "^7.0.0",
     "@ldforge/charts": "^1.0.2",
     "@ldforge/core": "^1.0.2",
-    "@ldforge/editor": "^1.4.1",
+    "@ldforge/editor": "^1.5.1",
     "@ldforge/geo": "^1.1.2",
     "@ldforge/renderers": "^1.1.2",
     "@types/awesomplete": "^1.1.15",
@@ -156,7 +156,7 @@
   "peerDependencies": {
     "@ldforge/charts": "^1.0.2",
     "@ldforge/core": "^1.0.2",
-    "@ldforge/editor": "^1.4.1",
+    "@ldforge/editor": "^1.5.1",
     "@ldforge/geo": "^1.1.2",
     "@ldforge/renderers": "^1.1.2"
   },

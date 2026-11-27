@@ -12,9 +12,8 @@ width below them.
 Use the [LDForge installation guide](LDForge-integration.md#bundler-integration)
 for the Sparnatural package and its optional peers. These docs describe this
 branch's integration; it must be published before the examples can be installed
-from the registry. The separate-results layout also needs the
-[local LDForge extension](LDForge-integration.md#testing-the-unpublished-ldforge-extension)
-until a supporting editor release exists.
+from the registry. The separate-results layout uses the published
+`@ldforge/editor@^1.5.1`; no local editor archive is required.
 
 Serve your configuration as `/config.ttl`. Copy the package's `dist/browser`
 assets into your application's `public/vendor/sparnatural` directory and load

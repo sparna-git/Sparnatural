@@ -13,7 +13,7 @@ been published. Package versions are assigned by the maintainer's release workfl
 - Make current English/French integration guides and the Hello Sparnatural tutorial
   use LDForge, with historical Yasgui references kept separately.
 - Update React lifecycle, authentication and multi-endpoint examples; document the
-  unpublished separate-results dependency before release.
+  published LDForge editor requirement (`^1.5.1`).
 
 Existing Yasgui bindings remain available. Applications adopting LDForge should
 replace the Yasgui scripts/styles and result containers, then mount the new
@@ -21,4 +21,4 @@ integration as described in [LDForge integration](../LDForge-integration.md).
 That guide lists plugin differences, optional dependency versions, transport and
 localization limits, and configuration for self-hosted visualization libraries.
 
-The LDForge adapter also supports a separate `resultsContainer`. Development pages restore full-width results below both columns; Hello Sparnatural and starter examples keep results visible when the query is hidden. Grid entity grouping and nested relations remain intact. The separate-host examples require the unpublished LDForge extension for now: use the documented local archive helper, then require the released editor version before merging/publishing.
+The LDForge adapter also supports a separate `resultsContainer`. Development pages restore full-width results below both columns; Hello Sparnatural and starter examples keep results visible when the query is hidden. Grid entity grouping and nested relations remain intact. The separate-host examples require the published `@ldforge/editor@^1.5.1`; registry dependencies are sufficient for normal builds. The local archive helper is optional for editor development.

@@ -5,7 +5,7 @@ _[Home](index.html) > Javascript integration_
 
 Sparnatural is an editor-independent query builder. The supplied examples use the optional [LDForge integration](LDForge-integration.md) for SPARQL editing, execution and results. See the [legacy reference](archives/Javascript-integration-yasgui.md) for existing Yasgui applications.
 
-The separate-results examples on this branch require the [unpublished LDForge extension](LDForge-integration.md#testing-the-unpublished-ldforge-extension).
+The separate-results examples use the published `@ldforge/editor@^1.5.1`; see the [version and setup reference](LDForge-integration.md#editor-version-and-optional-local-development).
 
 
 ## Constructor

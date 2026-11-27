@@ -200,7 +200,7 @@ export function createSparnaturalLDForge(
     if (typeof editor.setResultsContainer !== "function") {
       editor.destroy();
       throw new Error(
-        "Separate results require an LDForge editor build with resultsContainer support. See docs/LDForge-integration.md for local preview setup."
+        "Separate results require @ldforge/editor >=1.5.1 with resultsContainer support. Install the declared registry dependencies; see docs/LDForge-integration.md."
       );
     }
   }

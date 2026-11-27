@@ -11,7 +11,7 @@ You can play with **online demos at http://sparnatural.eu#demos**.
 
 The development page and supplied starter examples use the optional LDForge query editor and result views, including an entity-aware Grid. Sparnatural itself remains editor-independent. See the [LDForge integration and migration guide](docs/LDForge-integration.md).
 
-The separate-results examples on this branch require an unpublished LDForge extension. Run `npm install`, follow the [local archive setup](docs/LDForge-integration.md#testing-the-unpublished-ldforge-extension), then use `npm run dev` and open <http://127.0.0.1:4174/dev-page/>. These examples must use a compatible released editor before publication.
+The separate-results examples use the published `@ldforge/editor@^1.5.1`. Run `npm install` and `npm run dev`, then open <http://127.0.0.1:4174/dev-page/>. See the [integration guide](docs/LDForge-integration.md) for setup and migration details.
 
 To get started :
 

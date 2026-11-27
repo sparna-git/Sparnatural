@@ -6,16 +6,32 @@ Sparnatural construit des requêtes indépendamment de leur éditeur et de leur
 visualisation. Les exemples de cette branche utilisent une intégration LDForge
 optionnelle ; le composant principal n'importe pas LDForge.
 
-> La séparation de l'éditeur et des résultats utilise encore une extension locale
-> non publiée de LDForge. Suivez la [préparation locale](../LDForge-integration.md#testing-the-unpublished-ldforge-extension)
-> avant de construire les exemples. Une version publiée compatible doit être
-> requise avant leur publication. Cette intégration Sparnatural doit elle aussi
-> être publiée avant d'être installable depuis le registre.
+> Les exemples utilisent `@ldforge/editor@^1.5.1`, publié sur npm et compatible
+> avec les résultats séparés. Aucune archive locale LDForge n'est requise.
+> L'intégration Sparnatural de cette branche doit encore être publiée avant de
+> pouvoir être installée depuis le registre.
+
+## Pourquoi LDForge
+
+Le [dépôt Yasgui de TriplyDB](https://github.com/TriplyDB/Yasgui) a été archivé
+le 20 avril 2026. Yasqe utilise CodeMirror 5, dont le
+[dépôt historique](https://github.com/codemirror/codemirror5) a été archivé le
+16 avril 2026. Cela motive l'évaluation d'une solution maintenue pour les nouveaux
+développements, sans présumer une vulnérabilité particulière d'une installation.
+
+LDForge utilise CodeMirror 6 et une API typée et modulaire. Diagnostics SPARQL,
+complétion, formatage et contrôles clavier accompagnent une séparation explicite
+entre éditeur, exécution et renderers. Sparnatural conserve son constructeur et
+son transport ; son Grid conserve les regroupements d'entités et les relations
+imbriquées. Les résultats séparés gardent la disposition pleine largeur.
+Les différences de plugins restent documentées ; les anciens bindings permettent
+une adoption progressive. Le coût et le suivi de la migration restent à évaluer
+par les mainteneurs.
 
 ## Bundles pour le navigateur
 
-À partir de la branche contenant l'intégration, installez les dépendances,
-appliquez si nécessaire l'archive LDForge locale, puis exécutez `npm run build`.
+À partir de la branche contenant l'intégration, exécutez `npm install` puis
+`npm run build`. Les dépendances déclarées incluent l'éditeur publié.
 Les archives `hello-sparnatural.zip` et `sparnatural-starter.zip` incluent les
 styles, les notices de licence et les fragments JavaScript différés. Pour une
 autre page, copiez tous les fichiers de `dist/browser` en conservant leurs noms
@@ -48,8 +64,8 @@ nécessaires dans ces pages.
 
 L'entrée ESM est `sparnatural/ldforge`, avec la feuille de style
 `sparnatural/ldforge/styles.css`. Installez les dépendances optionnelles uniquement
-si vous utilisez cette entrée. Les versions de base et les prérequis non publiés
-sont précisés dans le [guide technique anglais](../LDForge-integration.md#bundler-integration).
+si vous utilisez cette entrée. Les versions requises, dont `@ldforge/editor@^1.5.1`,
+sont précisées dans le [guide technique anglais](../LDForge-integration.md#bundler-integration).
 TypeScript doit utiliser une résolution compatible avec les exports du package.
 
 ```javascript

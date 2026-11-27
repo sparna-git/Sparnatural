@@ -166,7 +166,7 @@ const integration = SparnaturalLDForge.createSparnaturalLDForge(
 ```
 
 Provide both HTML hosts as in the [JavaScript example](Javascript-integration.md).
-The separate-host API currently requires the [local LDForge extension](LDForge-integration.md#testing-the-unpublished-ldforge-extension).
+The separate-host API is included in the required published `@ldforge/editor@^1.5.1`.
 No additional query or submit listeners are required. If you supply an explicit
 `createHttpExecutor()`, you bypass the catalog: that executor addresses one
 endpoint rather than performing Sparnatural's multi-endpoint merge.
